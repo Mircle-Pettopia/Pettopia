@@ -1,5 +1,6 @@
 package com.yedam.pettopia;
 
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,5 +21,9 @@ public class MvcConfig implements WebMvcConfigurer {
 		
 		//회원가입페이지
 		registry.addViewController("/signUp").setViewName("signUp");
+		
+		
+		registry.addViewController("/productMag").setViewName("admin/productMag");
+		
 	}
 }
