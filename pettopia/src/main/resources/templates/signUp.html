@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Rafle">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pettopia Sign Up</title>
+
+    <!-- Bootstrap CSS v4.1.x -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Fontsawesome CDN -->
+    <script src="https://use.fontawesome.com/e69b0efea7.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
+    <!--kakao addr API-->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- Refle CSS -->
+    <link rel="stylesheet" href="css/refle.css">
+    <style>
+        .aaaa{
+            font-size: 13px !important;
+            margin-bottom: 10px;
+            width:25%;
+            height:calc(2.25rem + 2px);
+            padding:.375rem .75rem;
+            line-height:1.5;
+            background-color:#e9e9e9;
+            background-clip:padding-box;
+            border:1px solid #ced4da;
+            border-radius:.25rem;
+            transition:border-color .15s ease-in-out,
+            box-shadow .15s ease-in-out
+        }
+        .bbbb{
+            margin-bottom: 10px;
+            width:64%;
+            height:calc(2.25rem + 2px);
+            padding:.375rem .75rem;
+            font-size:1rem;
+            line-height:1.5;
+            background-color:#e9e9e9;
+            background-clip:padding-box;
+            border:1px solid #ced4da;
+            border-radius:.25rem;
+            transition:border-color .15s ease-in-out,
+            box-shadow .15s ease-in-out
+        }
+        #btnStyle{
+            border: none;
+            width: 8%;
+            padding: 7px;
+            border-radius:.25rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="refle-login">
+    <section class="h-100">
+        <div class="container h-100">
+            <div class="row justify-content-md-center h-100">
+                <div class="card-wrapper">
+                    <h2 class="title text-center">
+                        Pettopia
+                    </h2>
+                    <div class="card fat">
+                        <div class="card-body">
+                            <div class="card-title">Sign Up</div>
+                            <form method="post" class="needs-validation" novalidate>
+                                <div class="form-group">
+                                    <label for="id">아이디</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button class="btn btn-primary" type="button" style="padding: 3px 3px 3px 3px !important; font-size: small;">중복검사</button>
+                                    <input id="id" type="text" class="form-control" name="id" autocomplete="off"
+                                        placeholder="example@company.com" value="" required autofocus>
+                                    <div class="invalid-feedback">
+                                        아이디를 입력하세요.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">비밀번호</label>
+                                    <div class="input-group mb-3">
+                                        <input id="password" type="password" class="form-control" name="password"
+                                            autocomplete="off" placeholder="********" required>
+                                        <div class="input-group-append">
+                                            <span class="btn btn-primary text-white input-group-text">
+                                                <i id="#password" class="toggle-password fa fa-eye"></i>
+                                            </span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            비밀번호를 입력해주세요.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">비밀번호 확인</label>
+                                    <div class="input-group mb-3">
+                                        <input id="passwordChk" type="password" class="form-control" name="passwordChk"
+                                            placeholder="********" required>
+                                        <div class="input-group-append">
+                                            <span class="btn btn-primary text-white input-group-text">
+                                                <i id="#passwordChk" class="toggle-password fa fa-eye"></i>
+                                            </span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            비밀번호 확인란이 비어있습니다.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">이름</label>
+                                    <input id="name" type="text" class="form-control" name="name" value="" autocomplete="off" required autofocus>
+                                    <div class="invalid-feedback">
+                                        이름을 입력해주세요.
+                                    </div>
+                                </div>
+                                <!--연락처-->
+                                <div class="form-group">
+                                    <label for="phone">연락처</label>
+                                    <input id="phone" type="text" class="form-control" name="phone"
+                                        autocomplete="off" placeholder="01012345678" value="" required autofocus>
+                                    <div class="invalid-feedback">
+                                        연락처를 입력해주세요.
+                                    </div>
+                                </div>
+                                <!--주소-->
+                                <div class="form-group">
+                                    <label for="addr">주소</label>
+                                    <br/>
+                                    <input class="aaaa" type="text" id="post" name="post" placeholder="우편번호" autocomplete="off"> 
+                                    <input class="bbbb" type="text" id="addr" name="addr" placeholder="주소" autocomplete="off">
+                                    <button type="button" id="btnStyle" class="btn-primary" onclick="sample6_execDaumPostcode()" autocomplete="off">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
+                                    <input style="margin-bottom: 10px;" id="addrref" type="text" class="form-control" autocomplete="off" name="addrref" placeholder="참고항목" value="" required autofocus>
+                                    <input id="addrDtl" type="text" class="form-control" name="addrDtl" placeholder="상세주소란" autocomplete="off" value="" required autofocus>
+                                    <div class="invalid-feedback">
+                                        주소를 입력해주세요.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-sm btn-primary btn-block" >
+                                        가입완료
+                                    </button>
+                                    <button class="btn btn-sm btn-primary btn-block"
+                                            style="background-color: rgb(139, 137, 137); border: 1px solid rgb(139, 137, 137);"
+                                            type="button">취소</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        Copyright &copy; 2020 &mdash; Your Company
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.5.0.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/refle.js"></script>
+    <script>
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        document.getElementById("addrref").value = extraAddr;
+                    
+                    } else {
+                        document.getElementById("addrref").value = '';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('post').value = data.zonecode;
+                    document.getElementById("addr").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("addrDtl").focus();
+                }
+            }).open();
+        }
+    </script>
+</body>
+
+</html>
