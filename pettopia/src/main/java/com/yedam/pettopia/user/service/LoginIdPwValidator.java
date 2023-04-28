@@ -1,4 +1,4 @@
-package com.yedam.pettopia;
+package com.yedam.pettopia.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,18 +22,18 @@ public class LoginIdPwValidator implements UserDetailsService{
     private UserMapper mapper;
 	
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserVO user =  mapper.getId(email);
+	public UserDetails loadUserByUsername(String meId) throws UsernameNotFoundException {
+		UserVO user =  mapper.getId(meId);
 		
 		if (user == null) {
             return null;
         }
 		
-		String pw = user.getPw(); //"d404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db"
-        String roles = user.getRole(); //"USER"
+		String pw = user.getPw(); 		//비밀빈호 암호화
+        String roles = user.getRole(); //권한 = "USER"
         
         return User.builder()
-                .username(email)
+                .username(meId)
                 .password(pw)
                 .roles(roles)
                 .build();
