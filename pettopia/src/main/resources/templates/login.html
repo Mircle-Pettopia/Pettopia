@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <!-- <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"> 
-    <csrf disabled="true" /> -->
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <title>Pettopia Login</title>
+    <script src="js/jquery-3.5.0.min.js"></script>
     <!-- Refle CSS -->
     <link rel="stylesheet" type="text/css" href="/css/refle.css">
     <!-- Bootstrap CSS v4.1.x -->
@@ -33,11 +33,19 @@
                     </h2>
                     <div class="card fat">
                         <div class="card-body">
+                        <div th:if="${param.error}">
+                            에러났다.
+                        </div>
+                        <div th:if="${param.logout}">
+                            로그아웃했다.
+                        </div>
                             <div class="card-title">Login</div>
-                            <form method="post" class="needs-validation" novalidate action="/login">
+                            <form th:action="@{/login_proc}" method="post" class="needs-validation" > <!--novalidate-->
+                                <!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
+                                
                                 <div class="form-group">
-                                    <label for="email">ID</label>
-                                    <input id="email" type="email" class="form-control" name="email"
+                                    <label for="meId">Email</label>
+                                    <input id="meId" type="email" class="form-control" name="meId"
                                         placeholder="example@company.com" value="" required autofocus>
                                     <div class="invalid-feedback">
                                         email is invalid
@@ -61,10 +69,11 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-primary btn-block" id="loginBtn">
+                                    <button type="submit" class="btn btn-sm btn-primary btn-block">
                                         Login
                                     </button>
                                 </div>
+                            </form>
                                 <div style="text-align: center;">
                                     <img class="apiBnt"  src="/img/산부인과-포해피우먼-문의-카카오플러스친구-버튼.webp" width="50px">
                                     <img class="apiBnt" src="/img/btnG_아이콘원형.png" width="50px">
@@ -73,7 +82,6 @@
                                 <br/>
                                     회원가입이 필요하신가요?<a href="/signUp"> 회원가입하기</a>
                                 </div>
-                            </form>
                         </div>
                     </div>
                     <div class="footer">

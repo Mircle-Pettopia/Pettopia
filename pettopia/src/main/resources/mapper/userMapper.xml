@@ -3,31 +3,23 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="com.yedam.pettopia.user.mapper.UserMapper">
- 	<select id="getUserList" resultType="UserVO">
-        SELECT *
-        FROM member
+    <select id="getUserAccount" resultType="UserVO">
+    SELECT *
+    FROM member
+    WHERE me_id = #{meId}
     </select>
- 	
- 	<!-- 회원가입 -->
- 	<!-- sign_path : 가입경로 -->
-    <insert id="insertUser">
-        INSERT INTO member
-            (email, pw, name, phone, post, addr, addr_detail, sign_path, outYn, role)
-        VALUES
-            (#{email}, #{pw}, #{phone}, #{post}, #{addr}, #{addrDetail}, #{signPath}, 'N', #{USER})
+    
+    <select id="idChk" resultType="int" parameterType="String">
+    SELECT count(*) id_chk
+	FROM member
+	where me_id = #{meId}
+    </select>
+    
+    <insert id="saveUser" parameterType="UserVO">
+   	INSERT INTO member
+   	(me_id, pw, name, phone, post, addr, addr_detail, role, sign_dt)
+   	VALUES(#{meId}, #{pw}, #{name}, #{phone}, #{post}, 
+   			#{addr}, #{addrDetail}, #{role}, sysdate
+   	)
     </insert>
-    
-    <!-- 회원 정보 가져오기 -->
-    <select id="getUserByEmail" resultType="UserVO">
-        SELECT *
-        FROM member
-        WHERE email = #{email}
-    </select>
-    
-    <select id="getUserById" resultType="UserVO">
-        SELECT *
-        FROM member
-        WHERE id = #{id}
-    </select>
-    
  </mapper>

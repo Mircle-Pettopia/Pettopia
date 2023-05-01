@@ -1,64 +1,67 @@
 package com.yedam.pettopia.user.web;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.apache.catalina.connector.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.user.UserVO;
-import com.yedam.pettopia.user.service.UserService;
+import com.yedam.pettopia.user.service.UserServiceImpl;
 
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController { 
-	@Autowired
-	private UserService service;
+	
+	private final UserServiceImpl service;
 	
 	@GetMapping("/")
-    public String home(Model model) { // 인증된 사용자의 정보를 보여줌
-        /*Long id = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-        // token에 저장되어 있는 인증된 사용자의 id 값
-        
-        UserVO userVo = service.getMeId(id);
-        userVo.setPw(null); // password는 보이지 않도록 null로 설정
-        model.addAttribute("user", userVo);*/
-        return "index";
-    }
-	
-	//어드민 회원관리 정보인가?
-	@GetMapping("/userList")
-    public String getUserList(Model model) { // User 테이블의 전체 정보를 보여줌
-        List<UserVO> userList = service.getUserList();
-        model.addAttribute("list", userList);
-        return "userListPage";
-    }
-	
-	//로그인페이지
-	@GetMapping("/login")
-	public String loginPage() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof AnonymousAuthenticationToken)
-            return "login";
-        return "redirect:/";
+	public String main(Model model, Authentication authentication){
+		//Authentication 객체를 통해 유저 정보를 가져올 수 있다.
+        /*UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        model.addAttribute("info", userVo.getMeId() +"의 "+ userVo.getName()+ "님");      //유저 아이디*/
+		return "index";
 	}
 	
-	@PostMapping("/signup")
-    public String signup(UserVO userVo) { // 회원 가입
-        try {
-        	service.signup(userVo);
-        } catch (DuplicateKeyException e) {
-            return "redirect:/signup?error_code=-1";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "redirect:/signup?error_code=-99";
-        }
-        return "redirect:/login";
+	@GetMapping("/login")
+    public String login(){
+        return "login";
+    };
+    
+    @GetMapping("/signUp")
+    public String signUp() {
+        return "signUp";
+    };
+	
+	@PostMapping("/signUp")
+	@ResponseBody
+    public Boolean signUp(@RequestBody UserVO userVo) {
+		Boolean result = false;
+		
+		if(service.joinUser(userVo) > 0) {
+			result = true;
+		};
+		
+        return result;
+    };
+    
+    //아이디 중복체크
+    @PostMapping("/idChk")
+    public @ResponseBody int idChk(String meId) {
+    	int result = service.idChk(meId);
+    	return result;
     }
+    
+    
 }
