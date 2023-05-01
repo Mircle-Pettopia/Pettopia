@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"> 
+    <csrf disabled="true" /> -->
     <title>Pettopia Login</title>
     <!-- Refle CSS -->
     <link rel="stylesheet" type="text/css" href="/css/refle.css">
@@ -31,13 +34,13 @@
                     <div class="card fat">
                         <div class="card-body">
                             <div class="card-title">Login</div>
-                            <form method="post" class="needs-validation" novalidate>
+                            <form method="post" class="needs-validation" novalidate action="/login">
                                 <div class="form-group">
-                                    <label for="id">ID</label>
-                                    <input id="id" type="email" class="form-control" name="id"
+                                    <label for="email">ID</label>
+                                    <input id="email" type="email" class="form-control" name="email"
                                         placeholder="example@company.com" value="" required autofocus>
                                     <div class="invalid-feedback">
-                                        Email is invalid
+                                        email is invalid
                                     </div>
                                 </div>
 
@@ -57,12 +60,8 @@
                                     </div>
                                 </div>
 
-                                <!--<a href="forgot.html" class="forgot-password float-right">
-                                    Forgot Password?
-                                </a>-->
-
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-primary btn-block">
+                                    <button type="submit" class="btn btn-sm btn-primary btn-block" id="loginBtn">
                                         Login
                                     </button>
                                 </div>
@@ -87,10 +86,53 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" th:src="@{/js/jquery-3.5.0.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/refle.js}"></script>
+    <!-- <script type="text/javascript" src=/js/jquery-3.5.0.min.js"></script> -->
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/refle.js"></script>
+    <script>
+        /*var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });*/
+        /*var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
+        console.log(header);
+        console.log(token);
+
+        $().ready(() => {
+            $('#loginBtn').on('click',()=>{
+                test();
+            })
+        })
+
+        const test = ()=>{
+            let id = $('#id').val();
+            let pw = $('#password').val();
+            $.ajax({
+                url : "login",
+                data : {meId : id, pw : pw},
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: 'JSON',
+                type : "POST",
+                success : (data)=>{
+                    console.log(data);
+
+                    if(data.code == "200"){
+					// 정상 처리 된 경우
+                        window.location = response.item.url;	//이전페이지로 돌아가기
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error : (rej) => {
+                    console.log(rej);
+                }
+            })
+        }*/
+
+    </script>
 </body>
 
 </html>

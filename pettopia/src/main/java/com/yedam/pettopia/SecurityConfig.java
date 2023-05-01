@@ -19,24 +19,30 @@ public class SecurityConfig {
 	}
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+			/*.authorizeHttpRequests()
+			(requests) -> requests*/
+		 		.authorizeRequests()
+				.antMatchers("/**").permitAll() //"",
+				.antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+				//.anyRequest().authenticated()
+				.and()
+			.formLogin(login -> login
+					.loginPage("/login")			//따로 로그인페이지를 설정해준다.
+					.loginProcessingUrl("/auth")
+					.usernameParameter("email")	//html input name을 따로 설정해준다.
+					.passwordParameter("password")
+					.defaultSuccessUrl("/")
+					.permitAll()
+					)
+			
+			.logout()
+			//.logoutUrl("/logout")
+			.logoutSuccessUrl("/")
+			.invalidateHttpSession(true)
+			.permitAll();
 		
-		http.authorizeHttpRequests((requests) -> requests
-							.antMatchers("/").permitAll() //"",
-							.antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-							.anyRequest().authenticated())
-	
-		.formLogin(login -> login
-				.loginPage("/login")			//따로 로그인페이지를 설정해준다.
-				.usernameParameter("id")		//html input name을 따로 설정해준다.
-				.passwordParameter("password")	//위와 동일하다.
-				.defaultSuccessUrl("/")
-				.permitAll()
-				)
-	
-		.logout()
-				//.logoutUrl("/logout")
-				.logoutSuccessUrl("/")
-				.permitAll();
+		
 		
 		return http.build();
 	}

@@ -22,4 +22,6 @@ public class UserVO {
 	private String signPath;
 	private String outYn;
 	private String role;
+	
+	private String email;
 }
