@@ -201,13 +201,13 @@
                     })
                     e.preventDefault();   //form 막기
                     return;
-            } else if($('#idDuplication').val() != 'idCheck'){
+            } /*else if($('#idDuplication').val() != 'idCheck'){
                 Swal.fire({
                         icon: 'warning',
                         title: '아이디 중복체크 미확인',
                         text: '아이디 중복체크는 필수입니다.',
                     })
-            } else {
+            } */else {
                 let data = {
                     meId : id,
                     pw : pw,
@@ -226,6 +226,7 @@
                     contentType : "application/json",
                     success : function(data) {
                         //console.log(data);
+                        //확인이 눌리기도 전에 알림창이 사라진다.
                         Swal.fire({
                             icon: 'success',
                             title: '가입완료',
@@ -241,6 +242,8 @@
         }); //end login
 
         //중복검사 이벤트
+        //제대로 작동되지 않음
+        //input value 바꿀 때 마다 login page도 같이 불려지는 느낌이다.
         $('#meId').keyup(function(){
             let id = $('#meId').val();
 
