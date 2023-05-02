@@ -133,70 +133,49 @@
           <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50">
             <div class="m-l-25 m-r--38 m-lr-0-xl">
               <div class="wrap-table-shopping-cart">
-                <table class="table-shopping-cart" id="cart-table">
-                  <tbody>
-                    <tr class="table_head">
-                      <th class="column-1">대충상품명</th>
-                      <th class="column-2"></th>
-                      <th class="column-3">가격</th>
-                      <th class="column-4">수량</th>
-                      <th class="column-5">총가격</th>
-                      <th class="column-6">제거</th>
-                    </tr>
+                <table class="table-shopping-cart">
+                  <tr class="table_head">
+                    <th class="column-1">대충상품명</th>
+                    <th class="column-2"></th>
+                    <th class="column-3">가격</th>
+                    <th class="column-4">수량</th>
+                    <th class="column-5">총가격</th>
+                  </tr>
 
-                    <tr class="table_row">
-                      <td class="itemId" style="display:none;">상품번호</td>
-                      <td class="column-1">
-                        <div class="how-itemcart1">
-                          <img src="images/item-cart-04.jpg" alt="IMG" />
-                        </div>
-                      </td>
-                      <td class="column-2">상품명</td>
-                      <td class="column-3">가격</td>
-                      <td class="column-4">
-                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                          <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                            <i class="fs-16 zmdi zmdi-minus"></i>
-                          </div>
+                  <tr class="table_row">
+                    <td class="itemId" style="display:none;">상품번호</td>
+                    <td class="column-1">
+                      <div class="how-itemcart1">
+                        <img src="images/item-cart-04.jpg" alt="IMG" />
+                      </div>
+                    </td>
+                    <td class="column-2">상품명</td>
+                    <td class="column-3">가격</td>
+                    <td class="column-4">
+                      <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1"
+                          value="1" />
+                      </div>
+                    </td>
+                    <td class="column-5">가격</td>
+                  </tr>
 
-                          <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1"
-                            value="1" />
-
-                          <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                            <i class="fs-16 zmdi zmdi-plus"></i>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="column-5">가격</td>
-                      <td class="column-6 row-del-btn"><button>X</button></td>
-                    </tr>
-
-                    <tr class="table_row">
-                      <td class="column-1">
-                        <div class="how-itemcart1">
-                          <img src="images/item-cart-05.jpg" alt="IMG" />
-                        </div>
-                      </td>
-                      <td class="column-2">Lightweight Jacket</td>
-                      <td class="column-3">$ 16.00</td>
-                      <td class="column-4">
-                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                          <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                            <i class="fs-16 zmdi zmdi-minus"></i>
-                          </div>
-
-                          <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product2"
-                            value="1" />
-
-                          <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                            <i class="fs-16 zmdi zmdi-plus"></i>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="column-5">$ 16.00</td>
-                      <td class="column-6 row-del-btn"><button>X</button></td>
-                    </tr>
-                  </tbody>
+                  <tr class="table_row">
+                    <td class="column-1">
+                      <div class="how-itemcart1">
+                        <img src="images/item-cart-05.jpg" alt="IMG" />
+                      </div>
+                    </td>
+                    <td class="column-2">Lightweight Jacket</td>
+                    <td class="column-3">$ 16.00</td>
+                    <td class="column-4">
+                      <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product2"
+                          value="1" />
+                      </div>
+                    </td>
+                    <td class="column-5">$ 16.00</td>
+                  </tr>
                 </table>
               </div>
 
@@ -227,7 +206,7 @@
                 </div>
 
                 <div class="size-209">
-                  <span class="mtext-110 cl2" id="sumPrice"> 18,200원 </span>
+                  <span class="mtext-110 cl2"> 18,200원 </span>
                 </div>
               </div>
 
@@ -237,7 +216,7 @@
                 </div>
 
                 <div class="size-209">
-                  <span class="mtext-110 cl2" id="shipPrice"> 2,500원 </span>
+                  <span class="mtext-110 cl2"> 2,500원 </span>
                 </div>
               </div>
 
@@ -248,13 +227,13 @@
                 </div>
 
                 <div class="size-209 p-t-1">
-                  <span class="mtext-110 cl2" id="totalPrice"> 20,700원 </span>
+                  <span class="mtext-110 cl2"> 20,700원 </span>
                 </div>
               </div>
 
               <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-                onclick="toOrder()">
-                구매하기
+                onclick="requestPay()">
+                결재하기
               </button>
             </div>
           </div>
@@ -271,19 +250,30 @@
 
     <!--test============================ -->
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script th:inline="javascript" type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
     <script>
-      let delTarget = document.getElementsByClassName('row-del-btn');
-
-      for (let i = 0; i < delTarget.length; i++) {
-        delTarget[i].addEventListener('click', function () {
-          this.parentElement.remove();
-        })
-      }
-
-      function toOrder() {
-        alert("주문페이지로.... 구현아직")
-      }
+      var IMP = window.IMP; // 생략가능
+      IMP.init("imp58116322");
+      function requestPay() {
+        IMP.request_pay({
+          pg: "tosspay",//카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
+          pay_method: "card",
+          merchant_uid: "pettopia" + Date(),
+          name: "테스트 결제",
+          amount: 100,
+          buyer_tel: "010-0000-0000",
+        }, function (rsp) { // callback
+          //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+          if (rsp.success) {
+            alert("결제에 성공하였습니다")
+          }
+          else {
+            alert("결제에 실패하였습니다 다시시도해주십시오")
+          }
+        });
+      };
     </script>
     <!--test============================= -->
 
