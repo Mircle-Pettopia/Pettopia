@@ -1,0 +1,6 @@
+.plus_review_num_tit > em,
+.plus_review_grade .grade_star span,
+.plus_review_write .plus_review_write_select select,
+.plus_review_write_select .chosen-single,
+.plus_review_write_select .chosen-container .chosen-results,
+.plus_review_view .star_day_name strong{color:#53b5c6 !important;}

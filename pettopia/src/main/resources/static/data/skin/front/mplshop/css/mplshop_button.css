@@ -1,0 +1,238 @@
+/* 공통 버튼 - 회색버튼 */
+.btn_gray_list{}
+.btn_gray_list a,
+.btn_gray_list button{padding:0 0 0 8px;}
+.btn_gray_list a em,
+.btn_gray_list button em{padding:0px 16px 0 0;}
+.btn_gray_list a span,
+.btn_gray_list button span{padding:0px 10px 0 0;}
+/* --------------------------------
+    상품상세 버튼
+-------------------------------- */
+/* 장바구니,찜하기 공통 버튼 */
+.btn_add_cart,
+.btn_add_wish{width:29%; height:42px; margin:0 1% 0 0; padding:0; font-weight:normal; color:#000; font-size:14px; outline:1px solid #cccccc; border:none;}
+.btn_add_cart:hover,
+.btn_add_wish:hover{
+	color:#000; 
+	border:none;
+	outline:1px solid #333;
+	background: rgb(255,255,255);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 );
+}
+/* 바로구매 버튼 */
+.btn_add_order,
+.btn_add_order_related,
+.btn_add_cart_related{ width:40%; height:42px; margin:0; padding:0; font-weight:normal; font-size:14px; outline:1px solid #363636; border:none; background:#363636;}
+.btn_add_order:hover,
+.btn_add_order_related:hover,
+.btn_add_cart_related:hover{
+	border:none; 
+	color:#333;
+	background: rgb(255,255,255); /* Old browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#ffffff',GradientType=0 );
+}
+/* 구매불가 버튼 */
+.btn_add_soldout{display:initial; width:50%; height:42px; font-size:14px; font-weight:normal; border:1px solid #363636; background:#363636;}
+/* .btn_add_soldout:hover{border:1px solid #9b344a; background:#9b344a;} */
+/* 장바구니 버튼 */
+.btn_add_cart{margin:none;}
+/* 재입고알림 버튼 */
+.btn_restock_notice_v1{width:50%; height:42px; margin-bottom:10px; color:#363636; padding:0; font-size:14px; font-weight:normal; border:1px solid #383838; background:none;}
+.btn_restock_notice_v1:hover{color:#363636; border:1px solid #363636;}
+.btn_restock_notice_v2{ width:32%; height:42px; margin-right:1%; color:#363636; padding:0; font-size:14px; font-weight:normal; border:1px solid #383838; background:none;}
+.btn_restock_notice_v2:hober{color:#363636; border:1px solid #363636;}
+/* 재입고알림 버튼 있을 때 변경되는 버튼 */
+.btn_choice_box .restock{display:block;}
+.btn_choice_box .restock .btn_add_cart,
+.btn_choice_box .restock .btn_add_wish{width:29%; margin:0 1% 0 0;}
+.btn_choice_box .restock .btn_add_order{width:40%; margin:0;}
+/* 상품후기 전체보기, 상품문의 전체보기 */
+.btn_reviews_more,
+.btn_qna_more{min-width:100px; padding:5px 10px 5px 10px; font-weight:normal; color:#3e3d3c; border:1px solid #dcdcdc; font-size:12px;}
+.btn_reviews_more:hover,
+.btn_qna_more:hover{border:1px solid #dcdcdc; background:#fafafa;}
+/* 상품후기 글쓰기, 상품문의 글쓰기 */
+.btn_reviews_write,
+.btn_qna_write{min-width:100px; padding:5px 10px 5px 10px; font-weight:normal; border:1px solid #363636; background:#363636; font-size:12px;}
+.btn_reviews_write:hover,
+.btn_qna_write:hover{border:1px solid #dcdcdc; background:#f2f2f2; color:#3e3d3c;}
+/* 상품후기 전체보기, 상품후기 글쓰기, 상품문의 전체보기, 상품문의 글쓰기 버튼 박스 */
+.btn_reviews_box,
+.btn_qna_box{top:0;}
+/* 추천하기 */
+.btn_comment_best{ font-size:12px; border:1px solid #ddd; background:#fff; color:#000;}
+.btn_comment_best:hover{border:1px solid #383838; background:#383838; color:#fff;}
+/* 검색결과 페이지 검색버튼 */
+.btn_goods_search{font-weight:normal;}
+/* 더보기 */
+.btn_goods_main_more{height:1px; border-top:1px solid #dbdbdb;}
+.btn_goods_main_more .btn_goods_main_view_more{font-size:12px; font-weight:normal;}
+
+
+/* --------------------------------
+    회원가입 버튼
+-------------------------------- */
+/* 이전, 다음 버튼 */
+.btn_member_prev{ font-size:13px;}
+.btn_member_prev:hover{background:#fafafa;}
+.btn_member_next{ font-size:13px; border:1px solid #383838; background:#383838;}
+.btn_member_next:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 로그인, 확인 버튼 */
+.btn_member_ok,
+.btn_member_login{ font-size:13px; border:1px solid #383838; background:#383838;}
+.btn_member_ok:hover,
+.btn_member_login:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 아이디 찾기 버튼 */
+.btn_member_id{font-size:14px;}
+/* 비밀번호 찾기, 로그인하기 버튼 */
+.btn_member_white:hover{background:#fafafa;}
+/* 회원가입 등등 */
+.btn_member_black{font-size:13px; border:1px solid #383838; background:#383838;}
+.btn_member_black:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 취소*/
+.btn_member_cancel:hover{background:#fafafa;}
+/* 회원가입, 휴먼 해제하기 */
+.btn_member_join{font-size:13px; background:#383838;}
+.btn_member_join:hover{border:1px solid #bbbbbb; background:#fff; color:#3e3d3c;}
+.btn_comfirm{font-size:13px; border:1px solid #383838; background:#383838;}
+.btn_comfirm:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+@media screen and (max-width:700px){
+	.btn_member_prev,.btn_member_next,.btn_member_ok,
+	.btn_member_white,.btn_member_black,.btn_member_cancel,.btn_comfirm,
+	.btn_member_join{ width:85px; height:40px; font-size:12px;}
+
+	.btn_member_prev,.btn_member_next,.btn_member_ok,.btn_member_login,.btn_member_black {margin:15px 0 0 0;}
+}
+
+/* --------------------------------
+    마이페이지 버튼
+-------------------------------- */
+/* 더보기 버튼 */
+.mypage_lately_info .btn_board_more{top:24px; width:48px; height:16px; background:url('../_mplshop/images/ico_more.png') no-repeat; font-size:0;}
+.mypage_lately_info .btn_board_more:hover{text-decoration:none; background:url('../_mplshop/images/ico_more_o.png') no-repeat;}
+/* 구매확정, 리뷰쓰기 */
+.btn_buy_ok,
+.btn_review_write{min-width:44px; padding:2px 7px 3px 7px; border:1px solid #383838; background:#383838;}
+.btn_buy_ok em,
+.btn_review_write em{font-weight:normal;}
+@media screen and (max-width:560px){
+	.btn_buy_ok em,
+	.btn_review_write em{font-size:11px;}
+}
+.btn_buy_ok:hover,
+.btn_review_write:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 쇼핑정보 > 취소,확인 */
+.btn_claim_cancel:hover{background:#fafafa;}
+.btn_claim_ok{ border:1px solid #383838; background:#383838;}
+.btn_claim_ok:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+
+/* 찜리스트 장바구니,삭제하기, 선택상품 삭제 */
+.btn_wish_cart{border:1px solid #383838; background:#383838;}
+.btn_wish_cart:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+.btn_wish_del:hover{background:#fafafa;}
+@media screen and (max-width:960px){
+	.btn_wish_del,
+	.btn_wish_cart { margin: 2px 0 2px 0;   padding: 3px 2px 4px 2px;}
+}
+/* 회원 비밀번호 검증 > 취소, 인증하기 */
+.btn_pw_cancel:hover{background:#fafafa;}
+.btn_pw_certify{border:1px solid #383838; background:#383838;}
+.btn_pw_certify:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 배송지 관리 > 새 배송지 추가 */
+@media screen and (max-width:560px){	
+	.btn_add_shipping {top:-34px; height:24px; line-height:22px;}
+}
+/* 1:1 문의 조회버튼 */
+.btn_coupon_register{right:auto; top:15px; left:40px; border:1px solid #cf1830; background:#cf1830}
+.btn_date_check{border:1px solid #383838; background:#383838;}
+.btn_coupon_register:hover,
+.btn_date_check:hover{border:1px solid #383838; background:#383838; color:#fff;}
+.mypage_cont .btn_date_check{border:1px solid #383838; background:#383838;}
+.mypage_cont .btn_date_check:hover{border:1px solid #383838; color:#fff; background:#383838;}
+
+/* --------------------------------
+    주문페이지 버튼
+-------------------------------- */
+/* 선택 상품 삭제, 선택 상품 찜 */
+.btn_order_choice_del,
+.btn_order_choice_wish{min-width:80px;}
+/* 선택 상품 주문 */
+.btn_order_choice_buy{height:45px; font-size:13px;}
+.btn_order_choice_buy:hover{background:#fafafa;}
+/* 전체 상품 주문 */
+.btn_order_whole_buy{height:45px; font-size:13px; border:1px solid #383838; background:#383838;}
+.btn_order_whole_buy:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 결제하기 */
+.btn_order_buy{height:45px; line-height:43px; font-size:15px; border:1px solid #383838; background:#383838;}
+.btn_order_buy:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 주문완료 > 확인 */
+.btn_order_end_ok{height:45px; line-height:43px; font-size:13px; border:1px solid #383838; background:#383838;}
+.btn_order_end_ok:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+@media screen and (max-width:760px){
+	.btn_order_choice_buy,.btn_order_whole_buy{ width:47% !important; margin:0 1% !important; min-width:0px; }
+	.btn_order_choice_del,.btn_order_choice_wish {padding:0 5px 0 5px;}
+}
+
+/* --------------------------------
+    고객센터 버튼
+-------------------------------- */
+.btn_poll_finish,/* 설문 완료 */
+.btn_main_go/* 홈바로가기 */
+{border:1px solid #383838; background:#383838;}
+/* 자주묻는 질문 검색버튼 */
+
+
+/* --------------------------------
+    레이어 버튼
+-------------------------------- */
+/* 검정 버튼 */
+.btn_ly_download, /* 쿠폰 전체 다운받기 버튼 */
+.btn_ly_coupon_apply, /* 쿠폰 적용 */
+.btn_ly_write_ok, /* 등록 */
+.btn_ly_ok, /* 확인 */
+.btn_ly_save, /* 저장 */
+.btn_escrow_go, /* 에스크로 구매확인창 열기 */
+.btn_pg_go /* 결제창 열기 */
+{font-size:13px; border:1px solid #383838; background:#383838; padding:0 5px 0 5px;}
+.btn_ly_download:hover, /* 쿠폰 전체 다운받기 버튼 */
+.btn_ly_coupon_apply:hover, /* 쿠폰 적용 */
+.btn_ly_write_ok:hover, /* 등록 */
+.btn_ly_ok:hover, /* 확인 */
+.btn_ly_save:hover, /* 저장 */
+.btn_escrow_go:hover, /* 에스크로 구매확인창 열기 */
+.btn_pg_go:hover /* 결제창 열기 */
+{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 취소 버튼  */
+.btn_ly_cancel {font-size:13px; width:auto; min-width:112px; padding:0 5px 0 5px;}
+.btn_ly_cancel:hover{background:#fafafa;}
+/* 회원가입 */
+.btn_ly_join{font-size:13px;}
+/* 로그인 */
+.btn_ly_login{font-size:13px;}
+/* 1:1 문의 조회버튼, 미확인 입금자 리스트 검색버튼 */
+.btn_ly_date_check,
+.btn_ly_depositor{ border:1px solid #383838; background:#383838;}
+.btn_ly_date_check:hover,
+.btn_ly_depositor:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+.btn_ly_date_check em,
+.btn_ly_depositor em{padding:0; background-image:none;}
+
+/* 추천하기 */
+.plus_review_look .btn_comment_best{font-size:12px; border:1px solid #383838; background:#383838;}
+.plus_review_look .btn_comment_best:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 세금계산서 발행 */
+.bnt_tax_invoice{ border:1px solid #383838; background:#383838;}
+.bnt_tax_invoice:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+.bnt_tax_invoice em{font-size:13px;}
+.bnt_cash_receipt:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+.bnt_cash_receipt em{font-size:13px;}
+/* PG 결제 취소, 장바구니 이동 */
+.btn_pg_cancel:hover{background:#fafafa;}
+.btn_pg_cartmove{border:1px solid #383838; background:#383838;}
+.btn_pg_cartmove:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
+/* 재입고 알림 레이어 */
+.btn_select:hover,
+.btn_select_cancel:hover{background:#fafafa;}
+.btn_goods_restock{ background:#383838; font-size:13px; border:1px solid #383838; }
+.btn_goods_restock:hover{border:1px solid #383838; background:#fff; color:#3e3d3c;}
