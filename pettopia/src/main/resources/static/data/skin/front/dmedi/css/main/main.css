@@ -1,0 +1,24 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+#container{margin-top:-1px;}
+
+#contents .sub_content{width:100%; margin:0; padding:0;}/* 메인 */
+
+#sd {position:absolute;  width:104px; height:90px; left:50%; bottom:70px;text-align:center; z-index:5; margin:0 0 0 -52px; cursor: pointer; }
+.moveimg1 { position:absolute; top:0px; left:50%; margin:0 0 0 -52px;-webkit-animation: ov_move1 5s infinite;-moz-animation: ov_move1 5s infinite;-o-animation: ov_move1 5s infinite;animation: ov_move1 5s infinite; }
+#sd a{font-size:12px;color:#fff}
+.main_content{ display:table-cell;}
+.main_slide_ban{overflow:hidden; width:1200px; margin:0 auto;}
+.main_slide{float:left; width:610px;}
+.main_banner{float:left; width:589px; padding:0 0 0 1px;}
+.main_ban_img01,
+.main_ban_img02,
+.main_ban_img03{display:inline-block; float:left;}
+.main_ban_img01{padding:0 0 1px 0;}
+.main_ban_img03{padding:0 0 0 1px;}
+
+.main_cont_slide{text-align:center;}
+
+.scroll_wrap{top:806px;}
