@@ -1,0 +1,94 @@
+/* 메인 롤링이미지 */
+/*
+ * jQuery FlexSlider v2.7.1
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 and later license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ */
+.main_visual {width:100%;height:auto;overflow:hidden;margin:0 auto;padding:0 0;}
+/****** 여기서부터 visual.html 파일의 css 입니다.******/
+/* 메인이미지 */
+
+#DB_tab16 .main_slide {position:relative;}
+#DB_tab16 ul, #DB_tab16 li{list-style:none;margin:0;padding:0}
+#DB_tab16 img{border:none}
+#DB_tab16 {width:100%;height:900px;/*이미지높이지정*/position:relative;}
+#DB_tab16 .DB_img{width:100%;height:100%;overflow:hidden;}
+#DB_tab16 .DB_img li{position:relative;width:100%;}
+#DB_tab16 .DB_img li .first {z-index:2;}
+#DB_tab16 .DB_img .slide_img { position:absolute; width:100%; min-width:2000px; transform: translateX(-50%); top:0; left:50%; opacity:1; filter:alpha(opacity=100); }
+#DB_tab16 .DB_img .slide_img img {min-width:100%;min-height:100%;}
+#DB_tab16 .DB_img .slide_img:first-child { opacity:1; filter:alpha(opacity=100); }
+#DB_tab16 .DB_img .flex-active-slide img{ opacity:1; filter:alpha(opacity=100); z-index:2; } 
+#DB_tab16 .DB_img .flex-active-slide .slide_img { opacity:1; filter:alpha(opacity=100); } 
+#DB_tab16 .DB_menu{position:absolute;bottom:10px;width:100%;text-align:center}
+#DB_tab16 .DB_menu li{display:inline;cursor:pointer;margin:0px}
+#DB_tab16 .DB_dirBtn{position:absolute;width:100%;top:1%;/*화살표높이조정*/    z-index: 4;}
+#DB_tab16 .DB_dirBtn .DB_prev{position:absolute;left:10px;cursor:pointer; opacity:0.2;filter:alpha(opacity=20);    padding: 20% 0; }
+#DB_tab16 .DB_dirBtn .DB_next{position:absolute;right:10px;cursor:pointer;opacity:0.2;filter:alpha(opacity=20);    padding: 20% 0; }
+#DB_tab16 .DB_dirBtn .DB_prev:hover ,#DB_tab16 .DB_dirBtn .DB_next:hover {opacity:1;filter:alpha(opacity=100); }
+ 
+/** text_box 스타일1번 **/
+#DB_tab16 .vi-w{padding: 0 4%;}
+
+
+#DB_tab16 .DB_img .text_box.ver1 {position:absolute;top:330px;width:100%;z-index:3; opacity: 0; animation: fadeInText 1s 0.5s ease-out forwards;}
+@keyframes scaleImage { 
+100%{ 
+transform: scale(1);
+ }
+}
+
+
+@keyframes fadeInText {
+    100% {
+        opacity: 1;
+    }
+}
+/* 메인이미지 텍스트 순서대로 */ 
+#DB_tab16 .DB_img .text_box.ver1 .txt1 { font-size:42px; line-height:1.2; font-weight:bold; color:#fff; } 
+#DB_tab16 .DB_img .text_box.ver1 .txt2 { font-size:40px; line-height:1; font-weight:200; color:#fff; text-transform:uppercase; letter-spacing:-3px; }
+#DB_tab16 .DB_img .text_box.ver1 .txt3 { font-size:16px; font-weight:bold; color:#fff; margin-top:20px;}
+/* 메인이미지 버튼 */
+#DB_tab16 .DB_img .text_box.ver1 .btn_more { position:relative; display:block; width:200px; height:32px; margin:50px 0; box-sizing:border-box; text-align:center; line-height:30px; font-size:13px; color:#fff; border:1px solid #fff; }
+#DB_tab16 .DB_img .text_box.ver1 .btn_more:hover { color:#fff; border:1px solid #000; background:#000; }
+
+
+/** text_box 스타일2번 **/
+#DB_tab16 .DB_img .text_box.ver2 {position:absolute; top:300px; width:50%; margin:0 10% 0 10%; z-index:3; opacity: 0; animation: fadeInText 1s 0.5s ease-out forwards;}
+@keyframes scaleImage { 
+100%{ 
+transform: scale(1);
+ }
+}
+
+
+@keyframes fadeInText {
+    100% {
+        opacity: 1;
+    }
+} 
+/* 메인이미지 텍스트 순서대로 */
+#DB_tab16 .DB_img .text_box.ver2  .txt1 { font-size:32px; font-weight:400; color:#fff; } 
+#DB_tab16 .DB_img .text_box.ver2  .txt2 { font-size:60px; line-height:1.2; font-weight:500; color:#fff; text-transform:uppercase; letter-spacing:-3px; }
+#DB_tab16 .DB_img .text_box.ver2  .txt3 { font-size:17px; font-weight:400; color:#fff; }
+/* 메인이미지 버튼 */
+#DB_tab16 .DB_img .text_box.ver2  .btn_more { position:relative; display:block; width:200px; height:32px; margin:50px 0; box-sizing:border-box; text-align:center; line-height:30px; font-size:13px; color:#fff; border:1px solid #000; background:#000; }
+#DB_tab16 .DB_img .text_box.ver2  .btn_more:hover { background:none; border:1px solid #fff; }
+
+
+
+/* ============= 
+ * RESPONSIVE
+ * ============*/
+
+
+@media (max-width:1300px) {  
+
+#DB_tab16 .DB_dirBtn .DB_prev{ padding: 35% 0; }
+#DB_tab16 .DB_dirBtn .DB_next{ padding: 35% 0; }
+}
