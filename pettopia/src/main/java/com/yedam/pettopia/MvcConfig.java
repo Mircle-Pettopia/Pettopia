@@ -18,6 +18,5 @@ public class MvcConfig implements WebMvcConfigurer {
 		//회원가입페이지
 		//registry.addViewController("/signUp").setViewName("signUp");
 		
-		registry.addViewController("/productMag").setViewName("admin/productMag");
 	}
 }
