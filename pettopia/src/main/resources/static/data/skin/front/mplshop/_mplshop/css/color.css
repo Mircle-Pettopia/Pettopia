@@ -1,0 +1,84 @@
+/*
+.order_wrap .order_tit .page_on{ color:#000;}
+.price_sum_cont .price_sum_list dd{color:#000;}
+.price_sum_cont .price_sum_list dd strong{ color:#000;}
+.order_agree_cont strong{color:#ab3e55;}
+.payment_progress .order_zone_tit > p{ color:#000;}
+.payment_final_total dd{ color:#000;}
+.payment_final .form_element label.check_s em b{color:#000;}
+
+.pick_list_num strong{color:#000;}
+.fc_delivery_finish{color:#ab3e55 !important;}
+.fc_refund_finish{color:#ab3e55 !important;}
+.board_list_table .board_tit strong > span{color:#ab3e55;}
+.mypage_table_type td > strong{color:#000;}
+.mypage_top_wallet li strong{ color:#000;}
+.mypage_order_info_cont .order_case_list ul li span > strong{ color:#ab3e55;}
+.mypage_breakdown_tab li a strong{color:#ab3e55;}
+.coupon_before_use{ color:#ab3e55; border:1px solid #ab3e55; }
+.coupon_gift_before_use{ border:1px solid #ab3e55; background:#ab3e55;}
+.my_page_password .id_pw_cont dd strong{color:#000;}
+*/
+/* 포인트 색상 변경 */
+a:active, a:hover {color:#a4a4a4;}
+.item_cont:hover .item_tit_box .item_name,
+.chk_none,
+.sale_clock .sale_buy_num strong,
+.service_main_frame .board_list_faq .icon_qan .icon_qan_a,
+#header .headerContent .headerSearch .popular-line .rank_top_box a:hover, 
+#header .headerContent .headerSearch .popular-wrap .popular-box .popular_color, 
+#header .headerGnb .categorySlide .gnbMenuBox .menuCategory > li:hover > a,
+#header .headerGnb .categorySlide .gnbMenuBox .menuCategory > li a:hover,
+#aside .asideSearch .popular-wrap .popular-box .popular_color,
+#footer .shortcut a span em,
+.sale_clock .sale_buy_num strong{color:#a4a4a4 !important;}
+
+#header .headerTop .headerMember .lineBg,
+#header .headerTop .headerMember > ul > li:hover .accent strong,
+.item_hl_tab_type .goods_tab_cont ul.slick-dots li .lineBg,
+#header .headerTop .headerMember > ul > li:hover #cartCnt:after,
+#header .headerTop .headerMember > ul > li:hover #star-five:before,
+#header .headerTop .headerMember > ul > li:hover #star-five:after,
+.mainSildeWrap .slick-dots li button.tab .lineBg,
+.item_hl_tab_type .goods_tab_tit li .lineBg{background:#a4a4a4 !important;}
+
+#header .headerTop .headerMember > ul > li:hover #star-five {border:2px solid #a4a4a4 !important;}
+#header .headerTop .headerMember > ul > li:hover #cartCnt:before {border:1px solid #a4a4a4 !important;}
+#header .headerGnb .categorySlide .gnbMenuBox .menuCategory > li > a.currentCategory {border-bottom:2px solid #a4a4a4 !important;}
+
+.item_money_box .item_price .dcPrice,
+.item_detail_list .dcPrice {background: #fff; color:#000; border: 1px solid #555; box-shadow: 1.5px 1.5px 1.5px #999;}
+
+/* 테이블 바탕색상 및 회색 바탕색 변경 #fafafa 로 된 추가 css 도 통합해야됨
+*/
+.view_comment_list,
+.board_comment_box,
+.board_comment_write .btn_comment_box,
+.plus_review_info_cont .board_review_num,
+.plus_review_view .option_text_file_box .option_list_cont,
+.plus_review_edit_cont .plus_review_detail_select,
+.plus_review_edit .option_text_file_box .option_list_cont,
+.plus_review_look .option_text_file_box .option_list_cont,
+.plus_review_register .btn_pr_goods:hover,
+.plus_review_register .plus_review_detail_select,
+.qna_new_box,
+.plus_review_num ul,
+.plus_review_write_cont .plus_review_detail_select,
+.poll_info_box,
+.board_faq,
+.adult_wrap .adult_guest_cont .guest_login_wrap,
+.adult_wrap .adult_member_cont .member_login_wrap,
+.board_list_table th,
+.top_table_type th,
+.left_table_type th,
+.select_search_list th,
+.order_select_list th,
+.refund_cause_infor,
+.attend_reply_check .attend_reply_sec table th,
+.mypage_table_type th,
+.mypage_table_type .table_left th,
+.order_table_type th,
+.order_table_type .table_left th,
+.order_table_type tfoot td,
+.bestReviewContainer {background:#fafafa;}
+
