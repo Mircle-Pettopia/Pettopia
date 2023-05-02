@@ -10,113 +10,83 @@
   </head>
   <body>
     <div layout:fragment="content">
-      <h1>상품관리</h1>
       <section class="section">
         <div class="row">
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Horizontal Form</h5>
-
-                <!-- Horizontal Form -->
+                <h5 class="card-title">상품 관리</h5>
+                <div class="col-lg-12 p-4">
+                  <table class="table table-bordered">
+                    <tr class="table-primary">
+                      <td colspan="3">상품 현황</td>
+                    </tr>
+                    <tr class="table-secondary text-center">
+                      <td>전체등록 상품</td>
+                      <td>판매중 상품</td>
+                      <td>판매중지 상품</td>
+                    </tr>
+                    <tr class="text-center">
+                      <td class="text-primary text-decoration-underline fs-3">
+                        30개
+                      </td>
+                      <td class="text-success text-decoration-underline fs-3">
+                        27개
+                      </td>
+                      <td class="text-danger text-decoration-underline fs-3">
+                        3개
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <hr />
                 <form>
-                  <div class="row mb-3">
-                    <label for="inputEmail3" class="col-sm-2 col-form-label"
-                      >Your Name</label
+                  <div class="row mb-3 pt-5">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-1 col-form-label fw-bolder"
+                      >상품명</label
                     >
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" id="inputText" />
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" />
                     </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label for="inputEmail3" class="col-sm-2 col-form-label"
-                      >Email</label
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-1 col-form-label fw-bolder"
+                      >유형</label
                     >
-                    <div class="col-sm-10">
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="inputEmail"
-                      />
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" />
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label"
-                      >Password</label
+                    <label
+                      for="inputPassword3"
+                      class="col-sm-1 col-form-label fw-bolder"
+                      >등록일자</label
                     >
-                    <div class="col-sm-10">
-                      <input
-                        type="password"
-                        class="form-control"
-                        id="inputPassword"
-                      />
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" />
+                    </div>
+
+                    <label
+                      for="inputPassword3"
+                      class="col-sm-1 col-form-label fw-bolder"
+                      >상품상태</label
+                    >
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" />
                     </div>
                   </div>
-                  <fieldset class="row mb-3">
-                    <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                    <div class="col-sm-10">
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="gridRadios"
-                          id="gridRadios1"
-                          value="option1"
-                          checked
-                        />
-                        <label class="form-check-label" for="gridRadios1">
-                          First radio
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="gridRadios"
-                          id="gridRadios2"
-                          value="option2"
-                        />
-                        <label class="form-check-label" for="gridRadios2">
-                          Second radio
-                        </label>
-                      </div>
-                      <div class="form-check disabled">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="gridRadios"
-                          id="gridRadios3"
-                          value="option3"
-                          disabled
-                        />
-                        <label class="form-check-label" for="gridRadios3">
-                          Third disabled radio
-                        </label>
-                      </div>
-                    </div>
-                  </fieldset>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-sm-2">
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="gridCheck1"
-                        />
-                        <label class="form-check-label" for="gridCheck1">
-                          Example checkbox
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary">
-                      Submit
-                    </button>
-                    <button type="reset" class="btn btn-secondary">
-                      Reset
+                  <div class="text-center p-4">
+                    <button type="button" class="btn btn-primary">검색</button>
+                    <button type="button" class="btn btn-secondary">
+                      초기화
                     </button>
                   </div>
+
+                  <div id="test"></div>
+                  <div id="pagination"></div>
                 </form>
                 <!-- End Horizontal Form -->
               </div>
@@ -124,6 +94,75 @@
           </div>
         </div>
       </section>
+      <script>
+        const Grid = tui.Grid;
+        const test = new Grid({
+          el: document.getElementById("test"), // Container element
+          rowHeaders: ["checkbox", "rowNum"],
+          bodyHeight: 420,
+          pageOptions: {
+            useClient: true,
+            perPage: 10,
+          },
+          columns: [
+            {
+              header: "사원ID",
+              name: "employeeId",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "이름",
+              name: "firstName",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "성",
+              name: "lastName",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "입사일",
+              name: "hireDate",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+              formatter: function (e) {
+                return productDate(e.value);
+              },
+            },
+            {
+              header: "급여",
+              name: "salary",
+              align: "center",
+            },
+          ],
+        });
+
+        $.ajax({
+          url: "testList",
+          success: function (data) {
+            test.resetData(data);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        });
+
+        function productDate(timestamp) {
+          let date = new Date(timestamp);
+          let year = date.getFullYear();
+          let month = String(date.getMonth() + 1).padStart(2, "0");
+          let day = String(date.getDate()).padStart(2, "0");
+          let formattedDate = year + "-" + month + "-" + day;
+          return formattedDate;
+        }
+      </script>
     </div>
   </body>
 </html>
