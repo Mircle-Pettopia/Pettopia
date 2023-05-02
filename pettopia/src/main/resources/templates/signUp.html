@@ -125,7 +125,7 @@
                                 <div class="form-group">
                                     <label for="phone">연락처<span class="signUpFontColor"> *</span></label>
                                     <input id="phone" type="text" class="form-control" name="phone"
-                                        autocomplete="off" placeholder="01012345678" value="" autofocus>
+                                        autocomplete="off" placeholder="01012345678" oninput="autoHyphen(this)">
                                 </div>
                                 <!--주소-->
                                 <div class="form-group">
@@ -183,6 +183,15 @@
             //영문, 숫자 포함 6자리 이상
             let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
             
+            //연락처 // 왜 안되냐고
+            function autoHyphen(target){
+                console.log(target);
+                target.value = target.value
+                                .replace(/[^0-9]/g, '')
+                                .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3")
+                                .replace(/(\-{1,2})$/g, "");
+            };
+            
             //빈칸 검사
             if(id == '' || pw == '' || name == '' || 
                 phone == '' || post == '' || addr == '' || pwChk == ''){
@@ -193,12 +202,15 @@
                     })
                     e.preventDefault();   //form 막기
                     return;
+            //비밀번호 유효성검사
             } else if (!regPass.test(pwChk) || !regPass.test(pw) || pwChk.length < 6 || pw.length < 6){
                 Swal.fire({
                     icon: 'warning',
                     title: '입력오류',
                     text: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.',
                 });
+                return;
+            //비밀번호 불일치 확인
             } else if(pw != pwChk){
                 Swal.fire({
                     icon: 'warning',
@@ -207,6 +219,7 @@
                 });
                 e.preventDefault();   //form 막기
                 return;
+            //아이디 중복 확인
             } else if($("#id_feedback").val('이미 사용중인 아이디입니다.')) {
                 Swal.fire({
                     icon: 'warning',
@@ -215,7 +228,10 @@
                 });
                 e.preventDefault();   //form 막기
                 return;
-            }else {
+            //연락처 숫자만 들어갈 수 있도록 한다.
+            } /*else if() {
+
+            } */else {
                 let data = {
                     meId : id,
                     pw : pw,
