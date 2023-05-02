@@ -9,21 +9,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 
 	public void addViewControllers(ViewControllerRegistry registry) {
-		//registry.addViewController("/homeTest").setViewName("homeTest");
-		
 		//메인페이지
-		registry.addViewController("/").setViewName("index");
-		
-		//registry.addViewController("/hello").setViewName("hello");
+		//registry.addViewController("/").setViewName("index");
 		
 		//로그인페이지
-		registry.addViewController("/login").setViewName("login");
+		//registry.addViewController("/login").setViewName("login");
 		
 		//회원가입페이지
-		registry.addViewController("/signUp").setViewName("signUp");
-		
+		//registry.addViewController("/signUp").setViewName("signUp");
 		
 		registry.addViewController("/productMag").setViewName("admin/productMag");
-		
 	}
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,14 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!-- Refle CSS -->
     <link rel="stylesheet" href="css/refle.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
+        .signUpFontColor{
+            color: rgb(233, 90, 168);
+            font-size: large;
+        }
         .aaaa{
             font-size: 13px !important;
             margin-bottom: 10px;
@@ -67,21 +74,27 @@
                     <div class="card fat">
                         <div class="card-body">
                             <div class="card-title">Sign Up</div>
-                            <form method="post" class="needs-validation" novalidate>
+                            <form class="needs-validation" id="myForm" > <!--novalidate , th:action="@{/signUp}", method="post"-->
                                 <div class="form-group">
-                                    <label for="id">아이디</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button class="btn btn-primary" type="button" style="padding: 3px 3px 3px 3px !important; font-size: small;">중복검사</button>
-                                    <input id="id" type="text" class="form-control" name="id" autocomplete="off"
-                                        placeholder="example@company.com" value="" required autofocus>
+                                    <label for="meId">아이디<span class="signUpFontColor"> *</span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <!--<button class="btn btn-primary" type="button"
+                                            style="padding: 3px 3px 3px 3px !important; font-size: small;"
+                                            id="signChkBtn">
+                                        중복검사
+                                    </button>
+                                    <input type="hidden" name="idDuplication" id="idDuplication" value="idUncheck">-->
+                                    <input id="meId" type="email" class="form-control" name="meId" autocomplete="off"
+                                        placeholder="example@company.com" value="" autofocus> <!--required-->
+                                    <div><font id="id_feedback" size="2"></font></div>
                                     <div class="invalid-feedback">
                                         아이디를 입력하세요.
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">비밀번호</label>
+                                    <label for="pw">비밀번호<span class="signUpFontColor"> *</span></label>
                                     <div class="input-group mb-3">
-                                        <input id="password" type="password" class="form-control" name="password"
-                                            autocomplete="off" placeholder="********" required>
+                                        <input id="pw" type="password" class="form-control" name="pw"
+                                            autocomplete="off" placeholder="********" >
                                         <div class="input-group-append">
                                             <span class="btn btn-primary text-white input-group-text">
                                                 <i id="#password" class="toggle-password fa fa-eye"></i>
@@ -93,10 +106,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">비밀번호 확인</label>
+                                    <label for="password">비밀번호 확인<span class="signUpFontColor"> *</span></label>
                                     <div class="input-group mb-3">
                                         <input id="passwordChk" type="password" class="form-control" name="passwordChk"
-                                            placeholder="********" required>
+                                            placeholder="********" >
                                         <div class="input-group-append">
                                             <span class="btn btn-primary text-white input-group-text">
                                                 <i id="#passwordChk" class="toggle-password fa fa-eye"></i>
@@ -108,38 +121,38 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">이름</label>
-                                    <input id="name" type="text" class="form-control" name="name" value="" autocomplete="off" required autofocus>
+                                    <label for="name">이름<span class="signUpFontColor"> *</span></label>
+                                    <input id="name" type="text" class="form-control" name="name" value="" autocomplete="off" autofocus>
                                     <div class="invalid-feedback">
                                         이름을 입력해주세요.
                                     </div>
                                 </div>
                                 <!--연락처-->
                                 <div class="form-group">
-                                    <label for="phone">연락처</label>
+                                    <label for="phone">연락처<span class="signUpFontColor"> *</span></label>
                                     <input id="phone" type="text" class="form-control" name="phone"
-                                        autocomplete="off" placeholder="01012345678" value="" required autofocus>
+                                        autocomplete="off" placeholder="01012345678" value="" autofocus>
                                     <div class="invalid-feedback">
                                         연락처를 입력해주세요.
                                     </div>
                                 </div>
                                 <!--주소-->
                                 <div class="form-group">
-                                    <label for="addr">주소</label>
+                                    <label for="addr">주소<span class="signUpFontColor"> *</span></label>
                                     <br/>
                                     <input class="aaaa" type="text" id="post" name="post" placeholder="우편번호" autocomplete="off"> 
                                     <input class="bbbb" type="text" id="addr" name="addr" placeholder="주소" autocomplete="off">
                                     <button type="button" id="btnStyle" class="btn-primary" onclick="sample6_execDaumPostcode()" autocomplete="off">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </button>
-                                    <input style="margin-bottom: 10px;" id="addrref" type="text" class="form-control" autocomplete="off" name="addrref" placeholder="참고항목" value="" required autofocus>
-                                    <input id="addrDtl" type="text" class="form-control" name="addrDtl" placeholder="상세주소란" autocomplete="off" value="" required autofocus>
+                                    <input style="margin-bottom: 10px;" id="addrref" type="text" class="form-control" autocomplete="off" name="addrref" placeholder="참고항목" value="" autofocus>
+                                    <input id="addrDtl" type="text" class="form-control" name="addrDtl" placeholder="상세주소란" autocomplete="off" value="" autofocus>
                                     <div class="invalid-feedback">
                                         주소를 입력해주세요.
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-primary btn-block" >
+                                    <button type="button" class="btn btn-sm btn-primary btn-block" id="signBtn">
                                         가입완료
                                     </button>
                                     <button class="btn btn-sm btn-primary btn-block"
@@ -163,7 +176,100 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/refle.js"></script>
-    <script>
+    <script type="text/javascript" th:inline="javascript"> 
+        //login
+        $('#signBtn').click(function(e){
+            let id = $('#meId').val();      //아이디
+            let pw = $('#pw').val();        //비밀번호
+            let name = $('#name').val();    //이름
+            let phone = $('#phone').val();  //연락처
+            let post = $('#post').val();    //우편번호
+            //주소 가공
+            let addr = $('#addr').val();
+            let addr2 = $('#addrref').val();
+            let realAddr = addr + " " + addr2;      //주소 + 참고항목
+
+            let addrDetail = $('#addrDtl').val();   //상세주소란
+
+            //빈칸 검사
+            if(id == '' || pw == '' || name == '' || 
+                phone == '' || post == '' || addr == ''){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '필수입력 항목 미확인',
+                        text: '필수입력란을 확인해주세요.',
+                    })
+                    e.preventDefault();   //form 막기
+                    return;
+            } /*else if($('#idDuplication').val() != 'idCheck'){
+                Swal.fire({
+                        icon: 'warning',
+                        title: '아이디 중복체크 미확인',
+                        text: '아이디 중복체크는 필수입니다.',
+                    })
+            } */else {
+                let data = {
+                    meId : id,
+                    pw : pw,
+                    name : name,
+                    phone : phone,
+                    post : post,
+                    addr : realAddr,
+                    addrDetail : addrDetail
+                }
+                
+                //ajax
+                $.ajax({
+                    type : "POST",
+                    url : "/signUp",
+                    data :  JSON.stringify(data),
+                    contentType : "application/json",
+                    success : function(data) {
+                        //console.log(data);
+                        //확인이 눌리기도 전에 알림창이 사라진다.
+                        Swal.fire({
+                            icon: 'success',
+                            title: '가입완료',
+                            text: '환영합니다 :) !!!!',
+                        });
+                        $(location).attr("href", "/login");
+                    },
+                    error : function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }); //end login
+
+        //중복검사 이벤트
+        //제대로 작동되지 않음
+        //input value 바꿀 때 마다 login page도 같이 불려지는 느낌이다.
+        $('#meId').keyup(function(){
+            let id = $('#meId').val();
+
+            $.ajax({
+                url: "/idChk",
+                type : "POST",
+                data : {meId : id},
+                dataType : 'JSON',
+                success : function(data){
+                    console.log(data);
+                    if(data == 1){
+                        $("#id_feedback").html('이미 사용중인 아이디입니다.');
+                        $("#id_feedback").attr('color','#dc3545');
+                    } else {
+                        $("#id_feedback").html('사용할 수 있는 아이디입니다.');
+                        $("#id_feedback").attr('color','#2fb380');
+                    }
+                },
+                error : function(rej){
+                    console.log(rej);
+                }
+            })
+        });
+        
+
+        //다음 API
         function sample6_execDaumPostcode() {
             new daum.Postcode({
                 oncomplete: function(data) {
@@ -210,7 +316,9 @@
                     document.getElementById("addrDtl").focus();
                 }
             }).open();
-        }
+        }; // END 다음 카카오 API 
+
+        
     </script>
 </body>
 

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <title>Pettopia Login</title>
+    <script src="js/jquery-3.5.0.min.js"></script>
     <!-- Refle CSS -->
     <link rel="stylesheet" type="text/css" href="/css/refle.css">
     <!-- Bootstrap CSS v4.1.x -->
@@ -30,14 +33,22 @@
                     </h2>
                     <div class="card fat">
                         <div class="card-body">
+                        <div th:if="${param.error}">
+                            에러났다.
+                        </div>
+                        <div th:if="${param.logout}">
+                            로그아웃했다.
+                        </div>
                             <div class="card-title">Login</div>
-                            <form method="post" class="needs-validation" novalidate>
+                            <form th:action="@{/login_proc}" method="post" class="needs-validation" > <!--novalidate-->
+                                <!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
+                                
                                 <div class="form-group">
-                                    <label for="email">E-mail</label>
-                                    <input id="email" type="email" class="form-control" name="email"
+                                    <label for="meId">Email</label>
+                                    <input id="meId" type="email" class="form-control" name="meId"
                                         placeholder="example@company.com" value="" required autofocus>
                                     <div class="invalid-feedback">
-                                        Email is invalid
+                                        email is invalid
                                     </div>
                                 </div>
 
@@ -57,15 +68,12 @@
                                     </div>
                                 </div>
 
-                                <!--<a href="forgot.html" class="forgot-password float-right">
-                                    Forgot Password?
-                                </a>-->
-
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-sm btn-primary btn-block">
                                         Login
                                     </button>
                                 </div>
+                            </form>
                                 <div style="text-align: center;">
                                     <img class="apiBnt"  src="/img/산부인과-포해피우먼-문의-카카오플러스친구-버튼.webp" width="50px">
                                     <img class="apiBnt" src="/img/btnG_아이콘원형.png" width="50px">
@@ -74,7 +82,6 @@
                                 <br/>
                                     회원가입이 필요하신가요?<a href="/signUp"> 회원가입하기</a>
                                 </div>
-                            </form>
                         </div>
                     </div>
                     <div class="footer">
@@ -87,10 +94,53 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" th:src="@{/js/jquery-3.5.0.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/refle.js}"></script>
+    <!-- <script type="text/javascript" src=/js/jquery-3.5.0.min.js"></script> -->
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/refle.js"></script>
+    <script>
+        /*var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });*/
+        /*var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
+        console.log(header);
+        console.log(token);
+
+        $().ready(() => {
+            $('#loginBtn').on('click',()=>{
+                test();
+            })
+        })
+
+        const test = ()=>{
+            let id = $('#id').val();
+            let pw = $('#password').val();
+            $.ajax({
+                url : "login",
+                data : {meId : id, pw : pw},
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: 'JSON',
+                type : "POST",
+                success : (data)=>{
+                    console.log(data);
+
+                    if(data.code == "200"){
+					// 정상 처리 된 경우
+                        window.location = response.item.url;	//이전페이지로 돌아가기
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error : (rej) => {
+                    console.log(rej);
+                }
+            })
+        }*/
+
+    </script>
 </body>
 
 </html>
