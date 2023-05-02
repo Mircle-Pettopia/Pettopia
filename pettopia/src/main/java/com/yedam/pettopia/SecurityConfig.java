@@ -22,7 +22,7 @@ public class SecurityConfig{
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 	 		.authorizeRequests()
-				.antMatchers("/login","/","/signUp", "/**").permitAll()
+				.antMatchers("/login","/","/signUp","/**").permitAll()
 				.antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
 		.and()

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Rafle">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />-->
     <title>Pettopia Sign Up</title>
 
     <!-- Bootstrap CSS v4.1.x -->
@@ -86,9 +88,9 @@
                                     <input id="meId" type="email" class="form-control" name="meId" autocomplete="off"
                                         placeholder="example@company.com" value="" autofocus> <!--required-->
                                     <div><font id="id_feedback" size="2"></font></div>
-                                    <div class="invalid-feedback">
+                                    <!--<div class="invalid-feedback">
                                         아이디를 입력하세요.
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="form-group">
                                     <label for="pw">비밀번호<span class="signUpFontColor"> *</span></label>
@@ -100,41 +102,30 @@
                                                 <i id="#password" class="toggle-password fa fa-eye"></i>
                                             </span>
                                         </div>
-                                        <div class="invalid-feedback">
-                                            비밀번호를 입력해주세요.
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">비밀번호 확인<span class="signUpFontColor"> *</span></label>
+                                    <label for="pwChk">비밀번호 확인<span class="signUpFontColor"> *</span></label>
                                     <div class="input-group mb-3">
-                                        <input id="passwordChk" type="password" class="form-control" name="passwordChk"
+                                        <input id="pwChk" type="password" class="form-control" name="pwChk"
                                             placeholder="********" >
                                         <div class="input-group-append">
                                             <span class="btn btn-primary text-white input-group-text">
                                                 <i id="#passwordChk" class="toggle-password fa fa-eye"></i>
                                             </span>
                                         </div>
-                                        <div class="invalid-feedback">
-                                            비밀번호 확인란이 비어있습니다.
-                                        </div>
                                     </div>
+                                    <div><font id="pw_feedback" size="2"></font></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="name">이름<span class="signUpFontColor"> *</span></label>
                                     <input id="name" type="text" class="form-control" name="name" value="" autocomplete="off" autofocus>
-                                    <div class="invalid-feedback">
-                                        이름을 입력해주세요.
-                                    </div>
                                 </div>
                                 <!--연락처-->
                                 <div class="form-group">
                                     <label for="phone">연락처<span class="signUpFontColor"> *</span></label>
                                     <input id="phone" type="text" class="form-control" name="phone"
                                         autocomplete="off" placeholder="01012345678" value="" autofocus>
-                                    <div class="invalid-feedback">
-                                        연락처를 입력해주세요.
-                                    </div>
                                 </div>
                                 <!--주소-->
                                 <div class="form-group">
@@ -147,9 +138,6 @@
                                     </button>
                                     <input style="margin-bottom: 10px;" id="addrref" type="text" class="form-control" autocomplete="off" name="addrref" placeholder="참고항목" value="" autofocus>
                                     <input id="addrDtl" type="text" class="form-control" name="addrDtl" placeholder="상세주소란" autocomplete="off" value="" autofocus>
-                                    <div class="invalid-feedback">
-                                        주소를 입력해주세요.
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-sm btn-primary btn-block" id="signBtn">
@@ -157,7 +145,7 @@
                                     </button>
                                     <button class="btn btn-sm btn-primary btn-block"
                                             style="background-color: rgb(139, 137, 137); border: 1px solid rgb(139, 137, 137);"
-                                            type="button">취소</button>
+                                            type="button" onclick="location.href='/'">취소</button>
                                 </div>
                             </form>
                         </div>
@@ -176,24 +164,28 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/refle.js"></script>
-    <script type="text/javascript" th:inline="javascript"> 
-        //login
+    <script type="text/javascript" th:inline="javascript">
+        //signUp
         $('#signBtn').click(function(e){
             let id = $('#meId').val();      //아이디
             let pw = $('#pw').val();        //비밀번호
+            let pwChk = $('#pwChk').val();  //비밀번호 확인
             let name = $('#name').val();    //이름
             let phone = $('#phone').val();  //연락처
             let post = $('#post').val();    //우편번호
-            //주소 가공
+            //주소 가공-------------
             let addr = $('#addr').val();
             let addr2 = $('#addrref').val();
             let realAddr = addr + " " + addr2;      //주소 + 참고항목
-
+            //---------------------
             let addrDetail = $('#addrDtl').val();   //상세주소란
 
+            //영문, 숫자 포함 6자리 이상
+            let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
+            
             //빈칸 검사
             if(id == '' || pw == '' || name == '' || 
-                phone == '' || post == '' || addr == ''){
+                phone == '' || post == '' || addr == '' || pwChk == ''){
                     Swal.fire({
                         icon: 'warning',
                         title: '필수입력 항목 미확인',
@@ -201,13 +193,29 @@
                     })
                     e.preventDefault();   //form 막기
                     return;
-            } /*else if($('#idDuplication').val() != 'idCheck'){
+            } else if (!regPass.test(pwChk) || !regPass.test(pw) || pwChk.length < 6 || pw.length < 6){
                 Swal.fire({
-                        icon: 'warning',
-                        title: '아이디 중복체크 미확인',
-                        text: '아이디 중복체크는 필수입니다.',
-                    })
-            } */else {
+                    icon: 'warning',
+                    title: '입력오류',
+                    text: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.',
+                });
+            } else if(pw != pwChk){
+                Swal.fire({
+                    icon: 'warning',
+                    title: '비밀번호 불일치',
+                    text: '동일한 비밀번호를 입력해주세요.',
+                });
+                e.preventDefault();   //form 막기
+                return;
+            } else if($("#id_feedback").val('이미 사용중인 아이디입니다.')) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '이미 사용중인 아이디',
+                    text: '다른 아이디로 기재해주세요.',
+                });
+                e.preventDefault();   //form 막기
+                return;
+            }else {
                 let data = {
                     meId : id,
                     pw : pw,
@@ -225,13 +233,15 @@
                     data :  JSON.stringify(data),
                     contentType : "application/json",
                     success : function(data) {
-                        //console.log(data);
                         //확인이 눌리기도 전에 알림창이 사라진다.
-                        Swal.fire({
+                        /*Swal.fire({
+                            position: 'center-end',
                             icon: 'success',
-                            title: '가입완료',
-                            text: '환영합니다 :) !!!!',
-                        });
+                            title: 'Your work has been saved',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })*/
+
                         $(location).attr("href", "/login");
                     },
                     error : function(error) {
@@ -239,33 +249,46 @@
                     }
                 });
             }
-        }); //end login
+        }); //end signUp
+
+        document.getElementById('pwChk').addEventListener("input", (event) => {
+            let pw = $('#pw').val();        //비밀번호
+            let pwChk = $('#pwChk').val();  //비밀번호 확인
+            console.log(pw);
+            console.log(pwChk);
+
+            if(pw != pwChk){
+                console.log(pw != pwChk);
+                $("#pw_feedback").html('비밀번호 불일치');
+                $("#pw_feedback").attr('color','#dc3545');
+            } else {
+                $("#pw_feedback").hide();
+            }
+        });
 
         //중복검사 이벤트
-        //제대로 작동되지 않음
-        //input value 바꿀 때 마다 login page도 같이 불려지는 느낌이다.
-        $('#meId').keyup(function(){
+        $('#meId').on('keyup',function(e){
             let id = $('#meId').val();
-
-            $.ajax({
-                url: "/idChk",
-                type : "POST",
-                data : {meId : id},
-                dataType : 'JSON',
-                success : function(data){
-                    console.log(data);
-                    if(data == 1){
-                        $("#id_feedback").html('이미 사용중인 아이디입니다.');
-                        $("#id_feedback").attr('color','#dc3545');
-                    } else {
-                        $("#id_feedback").html('사용할 수 있는 아이디입니다.');
-                        $("#id_feedback").attr('color','#2fb380');
+            if(e.keyCode==13) {     //엔터키를 눌렀을 때 결과가 나온다.
+                $.ajax({
+                    url: "/idChk",
+                    type : "POST",
+                    data : {meId : id},
+                    success : function(data){
+                        console.log(data);
+                        if(data == 1){
+                            $("#id_feedback").html('이미 사용중인 아이디입니다.');
+                            $("#id_feedback").attr('color','#dc3545');
+                        } else {
+                            $("#id_feedback").html('사용할 수 있는 아이디입니다.');
+                            $("#id_feedback").attr('color','#2fb380');
+                        }
+                    },
+                    error : function(rej){
+                        console.log(rej);
                     }
-                },
-                error : function(rej){
-                    console.log(rej);
-                }
-            })
+                });
+            } 
         });
         
 
