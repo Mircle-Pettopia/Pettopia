@@ -5,10 +5,7 @@
     <meta charset="UTF-8">
     <meta name="author" content="Rafle">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />-->
     <title>Pettopia Sign Up</title>
-
     <!-- Bootstrap CSS v4.1.x -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- Fontsawesome CDN -->
@@ -19,7 +16,7 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!-- Refle CSS -->
     <link rel="stylesheet" href="css/refle.css">
-
+    <!--sweet alert-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
@@ -96,7 +93,7 @@
                                     <label for="pw">비밀번호<span class="signUpFontColor"> *</span></label>
                                     <div class="input-group mb-3">
                                         <input id="pw" type="password" class="form-control" name="pw"
-                                            autocomplete="off" placeholder="********" >
+                                            autocomplete="off" placeholder="********">
                                         <div class="input-group-append">
                                             <span class="btn btn-primary text-white input-group-text">
                                                 <i id="#password" class="toggle-password fa fa-eye"></i>
@@ -108,7 +105,7 @@
                                     <label for="pwChk">비밀번호 확인<span class="signUpFontColor"> *</span></label>
                                     <div class="input-group mb-3">
                                         <input id="pwChk" type="password" class="form-control" name="pwChk"
-                                            placeholder="********" >
+                                            placeholder="********">
                                         <div class="input-group-append">
                                             <span class="btn btn-primary text-white input-group-text">
                                                 <i id="#passwordChk" class="toggle-password fa fa-eye"></i>
@@ -124,8 +121,8 @@
                                 <!--연락처-->
                                 <div class="form-group">
                                     <label for="phone">연락처<span class="signUpFontColor"> *</span></label>
-                                    <input id="phone" type="text" class="form-control" name="phone"
-                                        autocomplete="off" placeholder="01012345678" value="" autofocus>
+                                    <input id="phone" type="text" class="form-control" name="phone" maxlength='13'
+                                        autocomplete="off" placeholder="01012345678" oninput="autoHyphen2(this)">
                                 </div>
                                 <!--주소-->
                                 <div class="form-group">
@@ -151,7 +148,7 @@
                         </div>
                     </div>
                     <div class="footer">
-                        Copyright &copy; 2020 &mdash; Your Company
+                        Copyright &copy; 2023 &mdash; Your Company
                     </div>
                 </div>
             </div>
@@ -160,11 +157,18 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="js/jquery-3.5.0.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/refle.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.5.0.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/refle.js"></script>
     <script type="text/javascript" th:inline="javascript">
+        //연락처 가공
+        const autoHyphen2 = (target) => {
+            target.value = target.value
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+        };
+        
         //signUp
         $('#signBtn').click(function(e){
             let id = $('#meId').val();      //아이디
@@ -179,10 +183,10 @@
             let realAddr = addr + " " + addr2;      //주소 + 참고항목
             //---------------------
             let addrDetail = $('#addrDtl').val();   //상세주소란
-
-            //영문, 숫자 포함 6자리 이상
-            let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
             
+            //비밀번호 : 영문, 숫자 포함 6자리 이상
+            let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
+
             //빈칸 검사
             if(id == '' || pw == '' || name == '' || 
                 phone == '' || post == '' || addr == '' || pwChk == ''){
@@ -193,12 +197,15 @@
                     })
                     e.preventDefault();   //form 막기
                     return;
+            //비밀번호 유효성검사
             } else if (!regPass.test(pwChk) || !regPass.test(pw) || pwChk.length < 6 || pw.length < 6){
                 Swal.fire({
                     icon: 'warning',
-                    title: '입력오류',
+                    title: '입력 오류',
                     text: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.',
                 });
+                return;
+            //비밀번호 불일치 확인
             } else if(pw != pwChk){
                 Swal.fire({
                     icon: 'warning',
@@ -207,15 +214,8 @@
                 });
                 e.preventDefault();   //form 막기
                 return;
-            } else if($("#id_feedback").val('이미 사용중인 아이디입니다.')) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '이미 사용중인 아이디',
-                    text: '다른 아이디로 기재해주세요.',
-                });
-                e.preventDefault();   //form 막기
-                return;
-            }else {
+            //이메일(meId) 유효성검사
+            } else {
                 let data = {
                     meId : id,
                     pw : pw,
@@ -234,15 +234,17 @@
                     contentType : "application/json",
                     success : function(data) {
                         //확인이 눌리기도 전에 알림창이 사라진다.
-                        /*Swal.fire({
+                        Swal.fire({
                             position: 'center-end',
                             icon: 'success',
-                            title: 'Your work has been saved',
+                            title: '회원가입을 축하합니다!',
                             showConfirmButton: false,
                             timer: 1500
-                        })*/
-
-                        $(location).attr("href", "/login");
+                        });
+                        
+                        setTimeout(function() {
+                            $(location).attr("href", "/");						
+                        }, 2000);
                     },
                     error : function(error) {
                         console.log(error);
@@ -250,24 +252,26 @@
                 });
             }
         }); //end signUp
-
-        document.getElementById('pwChk').addEventListener("input", (event) => {
+        
+        //비밀번호 비교 체크
+        $('#pw, #pwChk').on('change',function(){
             let pw = $('#pw').val();        //비밀번호
             let pwChk = $('#pwChk').val();  //비밀번호 확인
             console.log(pw);
             console.log(pwChk);
 
-            if(pw != pwChk){
-                console.log(pw != pwChk);
+            if(pw === pwChk){
+                $("#pw_feedback").html('비밀번호 일치');
+                $("#pw_feedback").attr('color','#2fb380');
+            } else {
                 $("#pw_feedback").html('비밀번호 불일치');
                 $("#pw_feedback").attr('color','#dc3545');
-            } else {
-                $("#pw_feedback").hide();
             }
         });
 
         //중복검사 이벤트
         $('#meId').on('keyup',function(e){
+            let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
             let id = $('#meId').val();
             if(e.keyCode==13) {     //엔터키를 눌렀을 때 결과가 나온다.
                 $.ajax({
@@ -275,14 +279,35 @@
                     type : "POST",
                     data : {meId : id},
                     success : function(data){
-                        console.log(data);
-                        if(data == 1){
-                            $("#id_feedback").html('이미 사용중인 아이디입니다.');
+                        if(!regex.test(id)){
+                            $("#id_feedback").html('형식이 올바르지 않습니다.');
                             $("#id_feedback").attr('color','#dc3545');
+                            //이메일 형식이 아니라면 버튼 비활성화, css 활성화, button 내용 변경
+                            $('#signBtn').attr('disabled', true);
+                            $('#signBtn').css("background-color",'gray');
+                            $('#signBtn').css("color",'black');
+                            $('#signBtn').html('가입불가');
+                            return;
                         } else {
-                            $("#id_feedback").html('사용할 수 있는 아이디입니다.');
-                            $("#id_feedback").attr('color','#2fb380');
-                        }
+                            if(data !== 1){
+                                $("#id_feedback").html('사용할 수 있는 아이디입니다.');
+                                $("#id_feedback").attr('color','#2fb380');
+                                //가입이 가능하면 버튼 활성화, css 제거, button 내용 변경
+                                $('#signBtn').attr('disabled', false);
+                                $('#signBtn').css("background-color",'');
+                                $('#signBtn').css("color",'');
+                                $('#signBtn').html('가입완료');
+                                return;
+                            } else {
+                                $("#id_feedback").html('이미 사용중인 아이디입니다.');
+                                //가입이 불가하면 버튼 비활성화, css 활성화, button 내용 변경
+                                $("#id_feedback").attr('color','#dc3545');
+                                $('#signBtn').attr('disabled', true);
+                                $('#signBtn').css("background-color",'gray');
+                                $('#signBtn').css("color",'black');
+                                $('#signBtn').html('가입불가');
+                            }
+                        };
                     },
                     error : function(rej){
                         console.log(rej);
