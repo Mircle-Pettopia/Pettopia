@@ -309,6 +309,7 @@
         });
 
         $(document).ready(function () {
+          $("#summernote").summernote("code");
           //여기 아래 부분
           $("#summernote").summernote({
             height: 300,
@@ -355,13 +356,13 @@
             contentType: false,
             processData: false,
             success: function (data) {
-              //항상 업로드된 파일의 url이 있어야 한다.
               $(editor).summernote("insertImage", data);
             },
           });
         }
         $(document).on("click", "#insertBtn", function () {
           console.log("등록");
+          console.log($("#summernote").summernote("code"));
 
           // $("#summernote").on("summernote.image.upload", function (we, files) {
           //   // upload image to server and create imgNode...
