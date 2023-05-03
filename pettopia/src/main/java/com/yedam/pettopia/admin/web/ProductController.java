@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.admin.ProductVO;
@@ -19,7 +18,7 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 	
-	@GetMapping("/productMag")
+	@GetMapping("productMag")
 	public String productMagForm(Model model) {
 		model.addAttribute("prdAllCnt", productService.insertPrdCount());
 		model.addAttribute("saleCnt", productService.salePrdCount());
@@ -27,17 +26,25 @@ public class ProductController {
 		return "admin/productMag";
 	}
 	
-	@GetMapping("/productList")
+	@GetMapping("productList")
 	@ResponseBody
 	public List<ProductVO> productList(){
 		return productService.selectPrdAllList();
 	}
 	
-	@PostMapping("/insertPrd")
+	@PostMapping("insertPrd")
 	@ResponseBody
-	public String insertPrd(@RequestBody ProductVO vo) {
+	public String insertPrd(ProductVO vo) {
 		System.out.println(vo);
-//		productService.insertPrd(vo);
+		productService.insertPrd(vo);
 		return "success";
+	}
+	
+	@GetMapping("productDetail")
+	@ResponseBody
+	public ProductVO productDetail() {
+		ProductVO vo = new ProductVO();
+		vo.setPrdtId("PRD1003");
+		return productService.selectDetailList(vo);
 	}
 }

@@ -93,6 +93,7 @@
           </div>
         </div>
       </section>
+      <div id="test"></div>
       <div
         class="modal fade"
         id="insertModal"
@@ -133,7 +134,7 @@
                 <!-- <div class="col-sm-4">
                   <input type="text" class="form-control" />
                 </div> -->
-                <form method="post">
+                <form>
                   <textarea id="summernote" name="editordata"></textarea>
                 </form>
               </div>
@@ -309,7 +310,6 @@
         });
 
         $(document).ready(function () {
-          $("#summernote").summernote("code");
           //여기 아래 부분
           $("#summernote").summernote({
             height: 300,
@@ -322,7 +322,10 @@
               //여기 부분이 이미지를 첨부하는 부분
               onImageUpload: function (files) {
                 console.log(files);
-                uploadSummernoteImageFile(files[0], this);
+                for (var i = files.length - 1; i >= 0; i--) {
+                    uploadSummernoteImageFile(files[i], this);
+                }
+//                 uploadSummernoteImageFile(files[0], this);
               },
               // onPaste: function (e) {
               //   var clipboardData = e.originalEvent.clipboardData;
@@ -362,28 +365,32 @@
         }
         $(document).on("click", "#insertBtn", function () {
           console.log("등록");
-          console.log($("#summernote").summernote("code"));
+          let code = $("#summernote").summernote("code");
+          console.log(code);
 
-          // $("#summernote").on("summernote.image.upload", function (we, files) {
-          //   // upload image to server and create imgNode...
-          //   console.log(files);
-          //   $summernote.summernote("insertNode", imgNode);
-          // });
+          $.ajax({
+            url: "insertPrd",
+            method: "POST",
+            data: { prdtDesct: code },
+            success: function (data) {
+              console.log(data);
+            },
+            error: function (reject) {
+              console.error(reject);
+            },
+          });
+        });
 
-          // $.ajax({
-          //   url: "insertPrd",
-          //   type: "POST",
-          //   enctype: "multipart/form-data",
-          //   processData: false,
-          //   contentType: false,
-          //   data: formData,
-          //   success: function (data) {
-          //     console.log(data);
-          //   },
-          //   error: function (error) {
-          //     console.error(error);
-          //   },
-          // });
+        $.ajax({
+          url: "productDetail",
+          success: function (result) {
+            console.log(result);
+            console.log(result.prdtDesct);
+            $("#test").html(result.prdtDesct);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
         });
 
         // 날짜 변환

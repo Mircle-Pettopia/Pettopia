@@ -39,4 +39,9 @@ public class ProductServiceImpl implements ProductService{
 	public int insertPrd(ProductVO vo) {
 		return productMapper.insertPrd(vo);
 	}
+
+	@Override
+	public ProductVO selectDetailList(ProductVO vo) {
+		return productMapper.selectDetailList(vo);
+	}
 }
