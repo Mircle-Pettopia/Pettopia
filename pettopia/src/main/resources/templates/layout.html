@@ -35,15 +35,37 @@
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	
 <!--===============================================================================================-->
-
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+	<!--눈누 폰트-->
+	<style>
+		@font-face {
+			font-family: 'SUITE-Regular';
+			src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+			font-weight: 400;
+			font-style: normal;
+		}
+
+		.noonnu_font{
+			font-family: 'SUITE-Regular' !important;
+		}
+
+		#wellcomeMag{
+			color: white;
+			font-size: 15px !important;
+			border:none !important;
+			margin-right: 50px;
+			margin-top: 5px;
+		}
+	</style>
+
 </head>
 <body class="animsition">
 <!-- Header -->
 	<header>
 		<!-- Header desktop -->
-		<div class="container-menu-desktop">
+		<div class="container-menu-desktop" >
 			<!-- Topbar -->
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
@@ -52,15 +74,20 @@
 
 					</div>
 
-					<div class="right-top-bar flex-w h-full">
-						<a href="login" class="flex-c-m trans-04 p-lr-25">
-							로그인
+					<div class="right-top-bar flex-w h-full" th:if="${not #strings.isEmpty(id)}">
+						<!--로그인을 했을 때-->
+						<a id="wellcomeMag" class="noonnu_font">
+							<sapn th:text="${name}"></sapn>님 어서오세요!
 						</a>
-
-						<a href="signUp" class="flex-c-m trans-04 p-lr-25">
-							회원가입
-						</a>
+						<a href="logout" class="flex-c-m trans-04 p-lr-25" style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
+						<a href="contact.html" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
 					</div>
+					<!--로그인이 되어있지 않을 때-->
+					<div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
+						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
+						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
+					</div>
+					
 				</div>
 			</div>
 
@@ -68,7 +95,7 @@
 				<nav class="limiter-menu-desktop container">
 
 					<!-- Logo desktop -->
-					<a href="#" class="logo">
+					<a href="/" class="logo">
 						<img src="/images/icons/logoTest1.png" alt="IMG-LOGO">
 					</a>
 
@@ -111,7 +138,7 @@
 
 							</li>
 
-							<li>
+							<!--<li>
 								<a href="contact.html">My Page</a>
 								<ul class="sub-menu">
 									<li><a href="index.html"> 주문관리</a></li>
@@ -123,7 +150,7 @@
 									<li><a href="home-03.html">게시글관리</a></li>
 									<li><a href="home-03.html">반려동물관리</a></li>
 								</ul>
-							</li>
+							</li>-->
 						</ul>
 					</div>
 
