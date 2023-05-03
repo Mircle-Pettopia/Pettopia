@@ -1,0 +1,186 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.pick_list_num strong{color:#000;}
+
+/* 자주묻는 질문 검색 */
+.date_check_box{border:1px solid #eeeeee;}
+.date_check_calendar{width: auto; margin:0 10px 0 10px;}
+
+.fc_delivery_finish{color:#000 !important;}/* 배송완료 */
+.fc_refund_finish{color:#000 !important;}/* 환불완료 */
+
+.mypage_main,
+.mypage_cont{padding:0 0 20px 0;}
+
+/* ------------- 기본 게시판 테이블 리스트  ------------- */
+/* 게시판 제목 */
+.board_list_table .board_tit strong > span{color:#000;}
+
+/* ------------- 테이블 공통(텍스트 센터 기본) ------------- */
+.mypage_table_type td{ height: auto; }
+.mypage_table_type td > strong{color:#000;}
+
+/* 상품 리스트 */
+/* 상품 리스트 이미지 + 내용 */
+.mypage_table_type .pick_add_cont .pick_add_img{ position:relative; width: auto; }
+.mypage_table_type .pick_add_cont .pick_add_img a img{width:100%; max-width:200px; border: 0;}
+.mypage_table_type .order_num_link{color:#329cff;  border-bottom:1px solid #329cff;}
+
+/* 상품 체크박스 */
+/* left type */
+.mypage_table_type .table_left td{height: auto;}
+
+/* ------------- 상단 마이페이지 정보(회원등급, 쿠폰, 마일리지, 예치금) ------------- */
+.mypage_top_info{margin:20px 0; border: 0; outline:1px solid #eaeaea; background:#fdfdfd;}
+.mypage_top_txt{background:#fdfdfd;}
+.mypage_top_txt .grade_txt{ line-height:20px;}
+
+.mypage_top_wallet ul{width: auto;}
+.mypage_top_wallet ul li{border-left:1px solid #eaeaea;}
+.mypage_top_wallet li strong{font-size:20px; color:#000;}
+
+/* 진행 중인 주문 */
+.mypage_order_info_cont ol{width:75%;}
+
+.mypage_order_info_cont .order_case_list{width:24%;}
+.mypage_order_info_cont .order_case_list ul li{border-top:1px solid #eaeaea;}
+.mypage_order_info_cont .order_case_list ul li span > em,
+.mypage_order_info_cont .order_case_list ul li span > strong{color:#000;}
+
+/* ------------- 최근 본 상품 ------------- */
+.mypage_lately_goods{margin:30px 0 0 0;}
+
+/* ------------- 반품신청, 교환신청, 환불신청 ------------- */
+/* 사유,정보 셀렉트 */
+.mypage_claim_select select{width:200px !important;}
+
+/* ------------- 쇼핑정보 관련 페이지 탭 ------------- */
+.mypage_breakdown_tab li{width:35%; max-width:180px; min-width:auto;}
+.mypage_breakdown_tab li.on{z-index:11;}
+.mypage_breakdown_tab li a strong{color:#000;}
+
+/* ------------- 찜리스트------------- */
+.mypage_wish_list .mypage_table_type .icon_time_sale{position:absolute; right:0; top:0; margin: 0;}
+
+/* ------------- 혜택관리 > 쿠폰 ------------- */
+/* 사용전 */
+.coupon_before_use{ color:#000; border:1px solid #000;}
+
+/* ------------- 혜택관리 > 예치금, 마일리지 ------------- */
+.mypage_table_type .td_cash .cash_minus{color:#58a7a7;}
+
+/* ------------- 마이페이지 > 회원 회원정보 ------------- */
+.my_page_password .id_pw_cont{background:#f9f9f9;}
+.my_page_password .id_pw_cont dd strong{color:#000;}
+
+/* ------------- 마이페이지 > 회원탈퇴 ------------- */
+.hack_out .mypage_unregister .unregister_info{border:1px solid #eaeaea;}
+
+/* 계정 연결 정보 */
+.site_sns_info{display:inline-block; padding:7px 10px 7px 10px; margin-bottom:10px; border:1px solid #eaeaea;}
+.site_sns_info .site_sns_list{}
+.site_sns_info .site_sns_list h4{display:inline-block; margin:0 14px 0 0; color:#777777;}
+.site_sns_info .site_sns_list em{display:block; padding:0 0 15px 0;}
+.site_sns_info .site_sns_list span{display:inline-block; margin:0 0 0 0; vertical-align:middle;}
+.site_sns_info .site_sns_list a{display:inline-block; margin:0 6px 10px 0; vertical-align:top; line-height:1;}
+.site_sns_info .site_sns_list a > span{display:block; margin:0 0 0 0; font-size:13px;}
+.site_sns_info .site_sns_list_disconnect span{margin:0 0 0 6px; }
+.site_sns_info .site_sns_list_disconnect a{display:inline-block; width:225px; height:42px; margin:0 6px 0 0; border:1px solid #cfcfcf; background:#fafafa; text-align:center; vertical-align:middle; line-height:1;}
+.site_sns_info .site_sns_list_disconnect a > span{display:block; margin:14px 0 0 0; font-size:13px;}
+.site_sns_info .site_sns_list_disconnect img{margin:0 8px 0 0;}
+
+/* ------------- 마이페이지 > 주문 상세 /상단 수정부분/ ------------- */
+.order_num_view{color:#58a7a7;}
+.base_info_box > span{color:#383838 !important;}
+.mypage_zone_tit {padding:20px 0 15px; font-size: 14px;}
+.hack_out .mypage_unregister .mypage_zone_tit {margin:20px 0 15px; padding:0;}
+
+.my_page_password .mypage_zone_tit,
+.my_page .mypage_zone_tit,
+.hack_out .mypage_zone_tit{padding:20px 0 0 0; margin: 0 0 20px; font-size: 14px; border-bottom: 1px solid #eaeaea;}
+.mypage_zone_tit h2,
+.my_page_password .mypage_zone_tit h2,
+.my_page .mypage_zone_tit h2,
+.hack_out .mypage_zone_tit h2,
+.hack_out .mypage_unregister .mypage_zone_tit h2{ padding: 0 0 8px 0;
+    display: inline-block;
+    color: #333;
+    border-bottom: 3px solid #333;
+	font-size:22px;
+}
+.mypage_zone_tit h3,.mypage_zone_tit h4{color:#000; font-size: 16px; font-weight:bold;}
+.pick_list_num{color:#000; font-size: 16px; font-weight:bold; padding:20px 0 15px 0;}
+@media screen and (max-width:1240px){
+	.my_page_password .mypage_zone_tit,
+	.my_page .mypage_zone_tit,
+	.hack_out .mypage_zone_tit,
+	.hack_out .mypage_unregister .mypage_zone_tit{padding:20px 5px 0;}
+
+	.mypage_zone_tit h3,.pick_list_num {padding-left:5px;}
+}
+@media screen and (max-width:760px){
+	.mypage_zone_tit h2,
+	.my_page_password .mypage_zone_tit h2,
+	.my_page .mypage_zone_tit h2,
+	.hack_out .mypage_zone_tit h2,
+	.hack_out .mypage_unregister .mypage_zone_tit h2{ font-size:18px; }
+
+	.mypage_zone_tit h3,.mypage_zone_tit h4,.pick_list_num{font-size:14px; }
+	.mypage_zone_tit span {display:block; padding:0;}
+
+	.pick_list_num {padding:20px 0 10px 5px; }
+	.pick_list_day {padding:20px 0 10px 5px; }
+
+	/* 자주묻는 질문 검색 */
+	.mypage_main,
+	.mypage_cont{padding:0 0 15px 0;}
+
+	/* ------------- 테이블 공통(텍스트 센터 기본) ------------- */
+	.mypage_table_type td{ padding:10px 0 10px 5px;}
+
+	.mypage_table_type table.Respo th {display:block; padding:10px 0 10px 5px !important;}
+	.mypage_table_type table.Respo td {display:block; padding:10px 0 10px 5px !important;}
+
+	/* ------------- 상단 마이페이지 정보(회원등급, 쿠폰, 마일리지, 예치금) ------------- */
+	.mypage_top_txt {display:block; width:100%; border-bottom:1px solid #eaeaea;}
+	.mypage_top_txt .grade_txt strong{font-size:14px;}
+	.mypage_top_wallet {display:block; width:100%;}
+	.mypage_top_wallet ul{padding:15px 10px 15px 10px;}
+	.mypage_top_wallet ul li{font-size:12px;}
+	.mypage_top_wallet li strong{font-size:15px;}	
+	.mypage_top_wallet li em{padding:10px 0 10px 0;}
+
+	/* 진행 중인 주문 */
+	.mypage_order_info_cont {padding:20px 0 20px 0;}
+	.mypage_order_info_cont ol{display:block; width:100%;}
+	.mypage_order_info_cont ol li {padding:0 10px 0 30px;}
+	.mypage_order_info_cont ol li b {font-size:12px;}
+
+	.mypage_order_info_cont .order_case_list{display:block; width:100%; margin-top:10px; padding-top:10px; border-top:1px solid #eaeaea;}
+
+	/* ------------- 마이페이지 > 회원탈퇴 ------------- */
+	.hack_out {margin:0 0 30px 0;}
+	.hack_out .mypage_unregister .unregister_info{margin:0 0 25px 0;}
+	.hack_out .mypage_unregister .hack_out_list li{width:42%;}
+
+	.my_page_password p strong{font-weight:normal !important;}
+}
+@media screen and (max-width:560px){
+	/* ------------- 테이블 공통(텍스트 센터 기본) ------------- */
+	/* 상품 리스트 이미지 + 내용 */
+	.mypage_table_type .pick_add_cont .pick_add_img{display:block !important;}
+	.mypage_table_type .pick_add_cont .pick_add_info {display:block !important; padding:5px 0;}
+}
+
+@media screen and (max-width:400px){
+	.mypage_zone_tit h2,
+	.my_page_password .mypage_zone_tit h2,
+	.my_page .mypage_zone_tit h2,
+	.hack_out .mypage_zone_tit h2,
+	.hack_out .mypage_unregister .mypage_zone_tit h2{ font-size:16px; }
+
+	/* ------------- 상단 마이페이지 정보(회원등급, 쿠폰, 마일리지, 예치금) ------------- */
+	.mypage_top_wallet li strong{font-size:13px;}	
+}
