@@ -128,8 +128,8 @@
                                 <div class="form-group">
                                     <label for="addr">주소<span class="signUpFontColor"> *</span></label>
                                     <br/>
-                                    <input class="aaaa" type="text" id="post" name="post" placeholder="우편번호" autocomplete="off"> 
-                                    <input class="bbbb" type="text" id="addr" name="addr" placeholder="주소" autocomplete="off">
+                                    <input class="aaaa" type="text" id="post" name="post" placeholder="우편번호" autocomplete="off" readonly> 
+                                    <input class="bbbb" type="text" id="addr" name="addr" placeholder="주소" autocomplete="off" readonly>
                                     <button type="button" id="btnStyle" class="btn-primary" onclick="sample6_execDaumPostcode()" autocomplete="off">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </button>
@@ -171,6 +171,8 @@
         
         //signUp
         $('#signBtn').click(function(e){
+            e.preventDefault();   //form 막기
+
             let id = $('#meId').val();      //아이디
             let pw = $('#pw').val();        //비밀번호
             let pwChk = $('#pwChk').val();  //비밀번호 확인
@@ -195,10 +197,11 @@
                         title: '필수입력 항목 미확인',
                         text: '필수입력란을 확인해주세요.',
                     })
-                    e.preventDefault();   //form 막기
+                    
                     return;
             //비밀번호 유효성검사
-            } else if (!regPass.test(pwChk) || !regPass.test(pw) || pwChk.length < 6 || pw.length < 6){
+            // } else if (!regPass.test(pwChk) || !regPass.test(pw) || pwChk.length < 6 || pw.length < 6){
+            } else if (!regPass.test(pw) || pw.length < 6){
                 Swal.fire({
                     icon: 'warning',
                     title: '입력 오류',
@@ -212,7 +215,6 @@
                     title: '비밀번호 불일치',
                     text: '동일한 비밀번호를 입력해주세요.',
                 });
-                e.preventDefault();   //form 막기
                 return;
             //이메일(meId) 유효성검사
             } else {

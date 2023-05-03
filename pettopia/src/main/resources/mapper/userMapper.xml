@@ -22,4 +22,5 @@
    			#{addr}, #{addrDetail}, #{role}, sysdate
    	)
     </insert>
+    
  </mapper>

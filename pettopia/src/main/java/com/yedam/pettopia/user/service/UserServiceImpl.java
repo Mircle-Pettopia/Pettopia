@@ -2,21 +2,24 @@ package com.yedam.pettopia.user.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.gson.JsonElement;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.mapper.UserMapper;
 
@@ -71,8 +74,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	
 	//kakao login
 	@Override
-	public String getAccessToken(String authorize_code) {
-        /*String access_Token = "";
+	public String getAccessToken(String authorize_code) throws Exception {
+        String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
         
@@ -89,8 +92,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=730975601d99f3b911f8fb8fff4edafa");  //본인이 발급받은 key
-            sb.append("&redirect_uri=http://localhost:8080/login");     // 본인이 설정해 놓은 경로
+            sb.append("&client_id=ac331cbe1745422549605be16be6ce42");  //발급받은 key
+            sb.append("&redirect_uri=http://localhost:81/kakaologin");      //설정해 놓은 경로
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
             bw.flush();
@@ -99,7 +102,7 @@ public class UserServiceImpl implements UserDetailsService, UserService{
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //    요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
             String result = "";
@@ -107,27 +110,92 @@ public class UserServiceImpl implements UserDetailsService, UserService{
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
+            System.out.println("getAccessToken response body : " + result);
 
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
+            /* -->Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성 : Gson이 제대로 작동되지 않아 jackson으로 진행했음.
+             * JsonParser parser = new JsonParser();
+             * JsonElement element = parser.parse(result);
+             * 출처 : https://makeaplayground.tistory.com/m/158
+             */
+            
+            //jackson objectmapper 객체 생성
+            ObjectMapper objectMapper = new ObjectMapper();
+            //JSON String -> Map
+ 			Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
+ 			});
 
-            access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+ 			access_Token = jsonMap.get("access_token").toString();
+			refresh_Token = jsonMap.get("refresh_token").toString();
 
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
+			System.out.println("getAccessToken access_token : " + access_Token);
+			System.out.println("getAccessToken refresh_token : " + refresh_Token);
 
-            br.close();
-            bw.close();
+			br.close();
+			bw.close();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-		}*/
+		}
         
-        
-		return null;
+		return access_Token;
+	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public HashMap<String, Object> getUserInfo(String access_Token) throws Throwable {
+		// 요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
+		HashMap<String, Object> userInfo = new HashMap<String, Object>();
+		String reqURL = "https://kapi.kakao.com/v2/user/me";
+		
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			conn.setRequestMethod("GET");
+			
+			// 요청에 필요한 Header에 포함될 내용
+			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line = "";
+			String result = "";
+
+			while ((line = br.readLine()) != null) {
+				result += line;
+			}
+			System.out.println("response body : " + result);
+			//System.out.println("result type" + result.getClass().getName()); // java.lang.String
+
+			// jackson objectmapper 객체 생성
+			ObjectMapper objectMapper = new ObjectMapper();
+			// JSON String -> Map
+			Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
+			});
+
+			System.out.println(jsonMap.get("properties"));
+			
+			Map<String, String> id = (Map<String, String>) jsonMap.get("id");
+			Map<String, Object> properties = (Map<String, Object>) jsonMap.get("properties");
+			Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
+
+			//System.out.println(properties.get("nickname"));
+			//System.out.println(kakao_account.get("email"));
+			
+			String getId = id.get("id").toString();
+			String nickname = properties.get("nickname").toString();
+			String email = kakao_account.get("email").toString();
+			
+			userInfo.put("id", getId);
+			userInfo.put("nickname", nickname);
+			userInfo.put("email", email);
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return userInfo;
 	};
 	
 }

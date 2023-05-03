@@ -1,6 +1,6 @@
 package com.yedam.pettopia.user.web;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.service.UserServiceImpl;
@@ -43,19 +44,34 @@ public class UserController {
 	@GetMapping("/login")
     public String login(@RequestParam(value="error", required = false) String error,
     					@RequestParam(value="exception", required = false) String exception,
-    					Model model,
-    					@RequestParam(value = "code", required = false) String code) throws Exception {
+    					Model model) {
 
 		/* 에러와 예외를 모델에 담아 view resolve */
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);
 		
-        System.out.println("#########" + code);
-        String access_Token = service.getAccessToken(code);
-        System.out.println("###access_Token#### : " + access_Token);
+    	return "login";
+	};
+	
+	@GetMapping("/kakaologin")
+	public ModelAndView kakaoLogin(@RequestParam(value = "code", required = false) String code) throws Throwable {
+		//카카오 // 1번
+		System.out.println("code:" + code);
 		
-        return "login";
-    };
+		// 2번
+		String access_Token = service.getAccessToken(code);
+		System.out.println("###access_Token#### : " + access_Token);
+		// 위의 access_Token 받는 걸 확인한 후에 밑에 진행
+		
+		// 3번
+		/*HashMap<String, Object> userInfo = service.getUserInfo(access_Token);
+		
+		System.out.println("###id#### : " + userInfo.get("id"));
+		System.out.println("###nickname#### : " + userInfo.get("nickname"));
+		System.out.println("###email#### : " + userInfo.get("email"));*/
+		
+		return null;
+	};
     
     @GetMapping("/signUp")
     public String signUp() {
