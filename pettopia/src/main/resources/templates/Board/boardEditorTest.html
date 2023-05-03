@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{../templates/layout}"> -->
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <div id="app">
+      <div id="container">
+        <input id="no" placeholder="NO">
+        <input id="title" placeholder="TITLE">
+        <hr>
+        <div id="editor">
+        </div>
+        <button onclick="showData()">담긴 데이터 보기</button>
+        <button onclick="insertArticle()">등록하기</button>
+      </div>
+    </div>
+
+    <!-- ==========================ckeditor========================== -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+    <script type="text/javascript" src="CKeditorSuperBuild.js"></script>
+    <!-- ==========================ckeditor END======================= -->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
+    <script>
+      function showData() {
+        let Data = editor.getData();
+        console.log(Data);
+      }
+
+      function insertArticle() {
+        $.ajax({
+          url: "insert",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: {
+            no: no.value,
+            title: title.value,
+            contents: editor.getData(),
+          },
+
+          success: function (data) {
+            console.log(data);
+            alert("데이터 전송");
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("에러");
+          },
+        })
+      }
+
+    </script>
+  </div>
+
+</body>
+
+
+
+</html>
