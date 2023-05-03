@@ -16,7 +16,27 @@ public class ProductServiceImpl implements ProductService{
 	ProductMapper productMapper;
 
 	@Override
-	public List<ProductVO> selectAllList() {
-		return productMapper.selectAllList();
+	public List<ProductVO> selectPrdAllList() {
+		return productMapper.selectPrdAllList();
+	}
+
+	@Override
+	public int insertPrdCount() {
+		return productMapper.insertPrdCount();
+	}
+
+	@Override
+	public int salePrdCount() {
+		return productMapper.salePrdCount();
+	}
+
+	@Override
+	public int stopSalePrdCount() {
+		return productMapper.stopSalePrdCount();
+	}
+
+	@Override
+	public int insertPrd(ProductVO vo) {
+		return productMapper.insertPrd(vo);
 	}
 }

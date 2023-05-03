@@ -28,13 +28,13 @@
                     </tr>
                     <tr class="text-center">
                       <td class="text-primary text-decoration-underline fs-3">
-                        30개
+                        <span th:text="${prdAllCnt}"></span>개
                       </td>
                       <td class="text-success text-decoration-underline fs-3">
-                        27개
+                        <span th:text="${saleCnt}"></span>개
                       </td>
                       <td class="text-danger text-decoration-underline fs-3">
-                        3개
+                        <span th:text="${stopSaleCnt}"></span>개
                       </td>
                     </tr>
                   </table>
@@ -42,39 +42,31 @@
                 <hr />
                 <form>
                   <div class="row mb-3 pt-5">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-1 col-form-label fw-bolder"
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
                       >상품명</label
                     >
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                       <input type="text" class="form-control" />
                     </div>
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-1 col-form-label fw-bolder"
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
                       >유형</label
                     >
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                       <input type="text" class="form-control" />
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label
-                      for="inputPassword3"
-                      class="col-sm-1 col-form-label fw-bolder"
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
                       >등록일자</label
                     >
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                       <input type="text" class="form-control" />
                     </div>
 
-                    <label
-                      for="inputPassword3"
-                      class="col-sm-1 col-form-label fw-bolder"
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
                       >상품상태</label
                     >
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                       <input type="text" class="form-control" />
                     </div>
                   </div>
@@ -84,77 +76,317 @@
                       초기화
                     </button>
                   </div>
-
-                  <div id="test"></div>
-                  <div id="pagination"></div>
                 </form>
-                <!-- End Horizontal Form -->
+                <div class="text-end p-2">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#insertModal"
+                  >
+                    등록
+                  </button>
+                </div>
+                <div id="prdList"></div>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <div
+        class="modal fade"
+        id="insertModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">상품 등록</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품명</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매가</label
+                >
+                <div class="col-sm-4">
+                  <input type="number" min="0" class="form-control" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품설명</label
+                >
+                <!-- <div class="col-sm-4">
+                  <input type="text" class="form-control" />
+                </div> -->
+                <form method="post">
+                  <textarea id="summernote" name="editordata"></textarea>
+                </form>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품분류</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="inlineRadioOptions"
+                      id="inlineRadio1"
+                      value="option1"
+                    />
+                    <label class="form-check-label" for="inlineRadio1"
+                      >사료</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="inlineRadioOptions"
+                      id="inlineRadio2"
+                      value="option2"
+                    />
+                    <label class="form-check-label" for="inlineRadio2"
+                      >간식</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="inlineRadioOptions"
+                      id="inlineRadio3"
+                      value="option3"
+                    />
+                    <label class="form-check-label" for="inlineRadio3"
+                      >장난감</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품옵션</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >이미지</label
+                >
+                <div class="col-sm-6">
+                  <input type="file" class="form-control" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매상태</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="salePrd"
+                      id="saleCheck"
+                      value="sale"
+                    />
+                    <label class="form-check-label" for="saleCheck"
+                      >판매함</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="salePrd"
+                      id="stopCheck"
+                      value="stop"
+                    />
+                    <label class="form-check-label" for="stopCheck"
+                      >판매안함</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                닫기
+              </button>
+              <button type="button" class="btn btn-primary" id="insertBtn">
+                등록
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Modal Dialog Scrollable-->
       <script>
         const Grid = tui.Grid;
-        const test = new Grid({
-          el: document.getElementById("test"), // Container element
+        // const Editor = toastui.Editor;
+
+        const prdList = new Grid({
+          el: document.getElementById("prdList"), // Container element
           rowHeaders: ["checkbox", "rowNum"],
-          bodyHeight: 420,
+          bodyHeight: 400,
           pageOptions: {
             useClient: true,
             perPage: 10,
           },
           columns: [
             {
-              header: "사원ID",
-              name: "employeeId",
+              header: "상품ID",
+              name: "prdtId",
               align: "center",
               sortingType: "asc",
               sortable: true,
             },
             {
-              header: "이름",
-              name: "firstName",
+              header: "상품명",
+              name: "prdtNm",
               align: "center",
               sortingType: "asc",
               sortable: true,
             },
             {
-              header: "성",
-              name: "lastName",
+              header: "상품가격",
+              name: "prdtPrc",
               align: "center",
               sortingType: "asc",
               sortable: true,
             },
             {
-              header: "입사일",
-              name: "hireDate",
+              header: "판매상태",
+              name: "saleSt",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "등록일자",
+              name: "regDt",
               align: "center",
               sortingType: "asc",
               sortable: true,
               formatter: function (e) {
-                return productDate(e.value);
+                return formattedDate(e.value);
               },
-            },
-            {
-              header: "급여",
-              name: "salary",
-              align: "center",
             },
           ],
         });
 
         $.ajax({
-          url: "testList",
+          url: "productList",
           success: function (data) {
-            test.resetData(data);
+            prdList.resetData(data);
           },
           error: function (reject) {
             console.log(reject);
           },
         });
 
-        function productDate(timestamp) {
+        $(document).ready(function () {
+          //여기 아래 부분
+          $("#summernote").summernote({
+            height: 300,
+            minHeight: null,
+            maxHeight: null,
+            focus: true,
+            lang: "ko-KR",
+            placeholder: "최대 2048자까지 쓸 수 있습니다",
+            callbacks: {
+              //여기 부분이 이미지를 첨부하는 부분
+              onImageUpload: function (files) {
+                console.log(files);
+                uploadSummernoteImageFile(files[0], this);
+              },
+              // onPaste: function (e) {
+              //   var clipboardData = e.originalEvent.clipboardData;
+              //   if (
+              //     clipboardData &&
+              //     clipboardData.items &&
+              //     clipboardData.items.length
+              //   ) {
+              //     var item = clipboardData.items[0];
+              //     if (
+              //       item.kind === "file" &&
+              //       item.type.indexOf("image/") !== -1
+              //     ) {
+              //       e.preventDefault();
+              //     }
+              //   }
+              // },
+            },
+          });
+        });
+        function uploadSummernoteImageFile(file, editor) {
+          let formData = new FormData();
+          formData.append("uploadfile", file);
+          console.log(formData);
+          console.log(file);
+          console.log(editor);
+          $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/uploadFile",
+            contentType: false,
+            processData: false,
+            success: function (data) {
+              //항상 업로드된 파일의 url이 있어야 한다.
+              $(editor).summernote("insertImage", data);
+            },
+          });
+        }
+        $(document).on("click", "#insertBtn", function () {
+          console.log("등록");
+
+          // $("#summernote").on("summernote.image.upload", function (we, files) {
+          //   // upload image to server and create imgNode...
+          //   console.log(files);
+          //   $summernote.summernote("insertNode", imgNode);
+          // });
+
+          // $.ajax({
+          //   url: "insertPrd",
+          //   type: "POST",
+          //   enctype: "multipart/form-data",
+          //   processData: false,
+          //   contentType: false,
+          //   data: formData,
+          //   success: function (data) {
+          //     console.log(data);
+          //   },
+          //   error: function (error) {
+          //     console.error(error);
+          //   },
+          // });
+        });
+
+        // 날짜 변환
+        function formattedDate(timestamp) {
           let date = new Date(timestamp);
           let year = date.getFullYear();
           let month = String(date.getMonth() + 1).padStart(2, "0");

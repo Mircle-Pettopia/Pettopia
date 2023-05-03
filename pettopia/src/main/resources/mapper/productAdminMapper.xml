@@ -3,10 +3,66 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.pettopia.admin.mapper.ProductMapper">
-	<select id="selectAllList" resultType="ProductVO">
-		SELECT *
-		FROM employees
-		ORDER BY 1
+	
+	<!-- 전체 상품 조회 -->
+	<select id="selectPrdAllList" resultType="ProductVO">
+		SELECT 	prdt_id,
+				prdt_nm,
+				prdt_desct,
+				prdt_prc,
+				sale_st,
+				reg_dt,
+				mod_dt,
+				s_cat_id,
+				l_cat_id
+		FROM 	product
+		ORDER BY prdt_id
 	</select>
-
+	
+	<!-- 전체등록 상품 조회 -->
+	<select id="insertPrdCount" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM product
+	</select>
+	
+	<!-- 판매중 상품 조회 -->
+	<select id="salePrdCount" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM product
+		WHERE sale_st = '판매함'
+	</select>
+	
+	<!-- 판매중지 상품 조회 -->
+	<select id="stopSalePrdCount" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM product
+		WHERE sale_st = '판매안함'
+	</select>
+	
+	<!-- 상품등록 -->
+	<insert id="insertPrd" parameterType="ProductVO">
+		<selectKey keyProperty="prdtId" resultType="String" order="BEFORE">
+			SELECT 'PRD' || TO_CHAR(NVL(MAX(SUBSTR(prdt_id, 4)),999) + 1)
+			FROM 	product
+		</selectKey>
+		INSERT INTO product ( prdt_id,
+							  prdt_nm,
+							  prdt_desct,
+							  prdt_prc,
+							  sale_st,
+							  reg_dt,
+							  mod_dt,
+							  s_cat_id,
+							  l_cat_id)
+					 VALUES ( prdtId,
+					 		  prdtNm,
+					 		  prdtDesct
+					 		  prdtPrc,
+					 		  saleSt,
+					 		  regDt,
+					 		  modDt,
+					 		  sCatId,
+					 		  lCatId)
+	
+	</insert>
 </mapper>
