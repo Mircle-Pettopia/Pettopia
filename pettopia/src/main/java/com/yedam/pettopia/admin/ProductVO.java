@@ -1,21 +1,41 @@
 package com.yedam.pettopia.admin;
 
+import java.util.Base64;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
 @Data
 public class ProductVO {
-	private int employeeId;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String phoneNumber;
-	private Date hireDate;
-	private String jobId;
-	private double salary;
-	private double commissionPct;
-	private int managerId;
-	private int departmentId;
+	private String prdtId;
+	private String prdtNm;
+	@JsonFormat(shape=JsonFormat.Shape.STRING)
+	private byte[] prdtDesct;
+	private int prdtPrc;
+	private String saleSt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date regDt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date modDt;
+	private String sCatId;
+	private String lCatId;
+	
+	private int cnt; // 상품 개수
+
+	public void setPrdtDesctFromBase64(String base64) {
+        this.prdtDesct = Base64.getDecoder().decode(base64);
+    }
+
+//	// getter/setter 메소드
+//	public byte[] getPrdtImg() {
+//		return prdtImg;
+//	}
+//	public void setPrdtImg(byte[] prdtImg) {
+//		this.prdtImg = prdtImg;
+//	}
 
 }
