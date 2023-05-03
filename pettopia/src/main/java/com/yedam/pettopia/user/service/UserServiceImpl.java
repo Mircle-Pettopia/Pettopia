@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	public UserVO loadUserByUsername(String meId) throws UsernameNotFoundException {
 		//여기서 받은 유저 패스워드와 비교하여 로그인 인증
 		UserVO vo = mapper.getUserAccount(meId);
-		System.out.println(vo);
 		
         if (vo == null){
             throw new UsernameNotFoundException("User not authorized.");
@@ -73,11 +72,11 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	//kakao login
 	@Override
 	public String getAccessToken(String authorize_code) {
-        String access_Token = "";
+        /*String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
         
-        /*try {
+        try {
 			URL url = new URL(reqURL);
 			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -125,6 +124,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}*/
+        
+        
 		return null;
 
 	};
