@@ -10,5 +10,13 @@ public class QnaController {
 	public String QnaList(Model model) {
 		return "qna/qna";
 	}
-
+	
+	@GetMapping("QnaForm")
+	public String QnaForm(Model model) {
+		return "qna/qnaForm";
+	}
+	@GetMapping("QnaDetail")
+	public String QnaDetail(Model model) {
+		return "qna/qnaDetail";
+	}
 }

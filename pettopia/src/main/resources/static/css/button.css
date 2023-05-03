@@ -286,3 +286,6 @@
 #goodsRestock .btn_select,
 #goodsRestock .btn_select_cancel {width:33%; margin:0; font-size:12px;}
 #goodsRestock .btn_goods_restock {width:50%; font-size:12px;}
+em {
+  margin-left: 20px;
+}
