@@ -23,4 +23,18 @@
    	)
     </insert>
     
+    <!-- 카카오 토큰 확인 -->
+    <select id="snsIdTokenChk" resultType="UserVO">
+    SELECT me_sns_token FROM member WHERE me_sns_token = #{meSnsToken}
+    </select>
+    
+    <!-- 카카오 회원가입 -->
+    <insert id="kakaosaveUser" parameterType="UserVO">
+    INSERT
+    INTO member
+        (me_id, pw, name, sign_dt, sign_path, role, me_sns_token)
+    VALUES
+        (#{meId}, #{pw}, #{name}, sysdate, '카카오', 'USER', #{meSnsToken})
+    </insert>
+    
  </mapper>

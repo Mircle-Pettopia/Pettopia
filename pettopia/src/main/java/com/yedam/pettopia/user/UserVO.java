@@ -24,7 +24,7 @@ public class UserVO implements UserDetails{
 	private String signPath;
 	private String outYn;
 	private String role;
-	private Long meSnsToken;
+	private int meSnsToken;
 	
 	private int idChk;
 	@Override
@@ -62,13 +62,5 @@ public class UserVO implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
-
-	public UserVO orElse(Object object) {
-		return null;
-	}
-
-	public static Object builder() {
-		return null;
 	}
 }

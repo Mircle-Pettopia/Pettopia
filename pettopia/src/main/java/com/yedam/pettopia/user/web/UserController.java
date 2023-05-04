@@ -3,6 +3,7 @@ package com.yedam.pettopia.user.web;
 import java.util.HashMap;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,24 +54,59 @@ public class UserController {
     	return "login";
 	};
 	
+	//카카오
 	@GetMapping("/kakaologin")
 	public ModelAndView kakaoLogin(@RequestParam(value = "code", required = false) String code) throws Throwable {
-		//카카오 // 1번
-		System.out.println("code:" + code);
+		// 1번
+		//System.out.println("code:" + code);
 		
 		// 2번
 		String access_Token = service.getAccessToken(code);
-		System.out.println("###access_Token#### : " + access_Token);
+		//System.out.println("###access_Token#### : " + access_Token);
 		// 위의 access_Token 받는 걸 확인한 후에 밑에 진행
 		
 		// 3번
-		/*HashMap<String, Object> userInfo = service.getUserInfo(access_Token);
+		HashMap<String, Object> userInfo = service.getUserInfo(access_Token);
 		
 		System.out.println("###id#### : " + userInfo.get("id"));
-		System.out.println("###nickname#### : " + userInfo.get("nickname"));
-		System.out.println("###email#### : " + userInfo.get("email"));*/
+		//System.out.println("###nickname#### : " + userInfo.get("nickname"));
+		//System.out.println("###email#### : " + userInfo.get("email"));
 		
-		return null;
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		Object nickname = userInfo.get("nickname");
+		Object id = userInfo.get("id");
+		Object email = userInfo.get("email");
+		
+		
+		ModelAndView mv = new ModelAndView();
+		UserVO kakaoMember = service.snsIdTokenChk(id);
+		
+		//DB에 해당되는 카카오 아이디 토큰이 없을 경우 회원가입 시켜버린다.
+		if(kakaoMember == null) {
+			System.out.println("아이디가 없다");
+			
+			CharSequence password = id + "kakao";
+			String encodedPassword = passwordEncoder.encode(password);
+			
+			 UserVO vos= new UserVO();
+			 
+			 //이메일이 없을 경우 아이디 토큰으로 대체
+			 if(email == null) {				 
+				 vos.setMeId(String.valueOf(id));
+			 //이메일이 존재하면 이메일로 가입진행
+			 } else {
+				 vos.setMeId(String.valueOf(email));
+			 };			 
+			 vos.setPw(String.valueOf(encodedPassword));//비밀번호 암호화
+			 vos.setName(String.valueOf(nickname));		//카카오별명
+			 vos.setMeSnsToken(Integer.parseInt(String.valueOf(id)));	//아이디토큰 int 강제변환
+			
+			service.kakaosaveUser(kakaoMember);
+		}
+		
+		mv.setViewName("/main"); 		// 뷰의 이름
+		//mv.addObject("data", userInfo); // 뷰로 보낼 데이터 값
+		return mv;
 	};
     
     @GetMapping("/signUp")

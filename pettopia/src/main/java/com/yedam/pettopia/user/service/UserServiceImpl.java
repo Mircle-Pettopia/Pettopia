@@ -155,8 +155,9 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 			// 요청에 필요한 Header에 포함될 내용
 			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
-			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
+			//상태코드 확인 : 200
+			//int responseCode = conn.getResponseCode();
+			//System.out.println("responseCode : " + responseCode); 
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String line = "";
@@ -170,32 +171,63 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 
 			// jackson objectmapper 객체 생성
 			ObjectMapper objectMapper = new ObjectMapper();
+			
 			// JSON String -> Map
 			Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
 			});
-
-			System.out.println(jsonMap.get("properties"));
 			
-			Map<String, String> id = (Map<String, String>) jsonMap.get("id");
+			//System.out.println("----------"+String.valueOf(jsonMap.get("id")));
+			//System.out.println("----------"+jsonMap.get("properties"));
+			//System.out.println("----------"+jsonMap.get("kakao_account"));
+			
+			String id_2 = String.valueOf(jsonMap.get("id"));	//2774080852
+			String id = "{\"id\":" + "\""+id_2+"\"}";			//{"id":"2774080852"}
+			String obj = "{id=" + id_2 + "}";					//{id=2774080852}
 			Map<String, Object> properties = (Map<String, Object>) jsonMap.get("properties");
 			Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
-
-			//System.out.println(properties.get("nickname"));
-			//System.out.println(kakao_account.get("email"));
 			
-			String getId = id.get("id").toString();
+			/*System.out.println("id===" + id_2);
+			System.out.println("별명===" + properties.get("nickname"));
+			System.out.println("이메일===" + kakao_account.get("email"));*/
+			
 			String nickname = properties.get("nickname").toString();
-			String email = kakao_account.get("email").toString();
+			String email = String.valueOf(kakao_account.get("email"));
+			if("null".equals(email)) {
+				//System.out.println("없음");
+				email = "null";
+			} else {
+				//System.out.println(email);
+				email = kakao_account.get("email").toString();
+			}
 			
-			userInfo.put("id", getId);
+			userInfo.put("id", id_2);
 			userInfo.put("nickname", nickname);
 			userInfo.put("email", email);
-
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return userInfo;
+	}
+
+	//DB에 해당되는 카카오 아이디 토큰이 있는지 없는지 확인하기
+	@Override
+	public UserVO snsIdTokenChk(Object id) {
+		return mapper.snsIdTokenChk(id);
+	}
+	
+	//카카오 회원가입
+	@Override
+	public int kakaosaveUser(UserVO vo) {
+		/*BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		vo.setPw(passwordEncoder.encode(vo.getPassword()));*/
+		
+		int result = mapper.kakaosaveUser(vo);
+		if(result < 1) {
+			result = -1;
+		};
+		
+		return result;
 	};
 	
 }
