@@ -30,10 +30,20 @@ public class ProductCategoryController {
 	public String ProductDetail(Model model) {
 		return "product/ProductDetail";
 	}
-	@GetMapping("/index")
-	@ResponseBody
-	public List<Product1VO> productList(){
-		return productService.selectPrdAllList();
+
+	/*
+	 * @GetMapping("index")
+	 * 
+	 * @ResponseBody public List<Product1VO> productList(){ return
+	 * productService.selectPrdAllList(); }
+	 */
+	@GetMapping("/")
+	public String productList(Model model) {
+		
+		 System.out.println("여기 출력 " + productService.selectPrdAllList());
+		 model.addAttribute("index", productService.selectPrdAllList());
+		 
+		return "index";
 	}
 	
 

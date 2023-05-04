@@ -2,6 +2,7 @@ package com.yedam.pettopia.user.web;
 
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.service.UserServiceImpl;
 
@@ -24,10 +26,15 @@ public class UserController {
 	
 	private final UserServiceImpl service;
 	
-	@GetMapping("/")
-	public String main(Model model, Authentication authentication){
-		return "index";
-	}
+	@Autowired
+	ProductService1 productService;
+	
+	/*
+	 * @GetMapping("/") public String main(Model model, Authentication
+	 * authentication){
+	 * 
+	 * return "index"; }
+	 */
 	
 	@GetMapping("/main")
 	public String mainLogin(Model model, Authentication authentication){
