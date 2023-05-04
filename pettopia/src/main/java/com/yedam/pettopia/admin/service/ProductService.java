@@ -23,5 +23,8 @@ public interface ProductService {
 
 	// 상품 상세 조회
 	public ProductVO selectDetailList(ProductVO vo);
+	
+	// 이미지 등록
+//	public int insertImg(ProductVO vo);
 
 }

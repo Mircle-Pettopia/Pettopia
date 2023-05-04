@@ -3,7 +3,7 @@ package com.yedam.pettopia.admin;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -22,5 +22,12 @@ public class ProductVO {
 	private String lCatId;
 	
 	private int cnt; // 상품 개수
+	
+	// 이미지
+	private MultipartFile[] img;
+	private MultipartFile imgMain;
+	private String imgId;
+	private String prdtImg;
+	private String isMain;
 
 }

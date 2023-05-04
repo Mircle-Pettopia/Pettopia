@@ -220,10 +220,24 @@
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >이미지(메인)</label
+                >
+                <div class="col-sm-6">
+                  <input type="file" class="form-control" id="imgMain" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >이미지</label
                 >
                 <div class="col-sm-6">
-                  <input type="file" class="form-control" id="img" multiple />
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="img"
+                    name="img"
+                    multiple
+                  />
                 </div>
               </div>
               <div class="row mb-4">
@@ -346,7 +360,7 @@
             maxHeight: null,
             focus: true,
             lang: "ko-KR",
-            placeholder: "최대 2048자까지 쓸 수 있습니다",
+            placeholder: "상품설명, 이미지 넣어주세요",
             callbacks: {
               onImageUpload: function (files) {
                 console.log(files);
@@ -358,7 +372,7 @@
           });
         });
 
-        // 이미지 업로드
+        // 이미지 업로드(summernote)
         function uploadSummernoteImageFile(file, editor) {
           let formData = new FormData();
           formData.append("uploadfile", file);
@@ -381,6 +395,9 @@
 
         // 상품 등록
         $(document).on("click", "#insertBtn", function () {
+          let formData = new FormData();
+
+          // formData string 파라미터 담기
           let prdtNm = $("#prdtNm").val();
           let prdtPrc = $("#prdtPrc").val();
           let code = $("#summernote").summernote("code");
@@ -388,18 +405,21 @@
           let lCatId = $("input[name=lCatId]:checked").val();
           let saleSt = $("input[name=saleSt]:checked").val();
           let upimg = $("#img").get(0).files;
+          let mainImg = $("#imgMain").get(0).files;
 
-          console.log(prdtNm);
-          console.log(prdtPrc);
-          console.log(code);
-          console.log(sCatId);
-          console.log(lCatId);
-          console.log(saleSt);
-          console.log(upimg);
+          formData.append("prdtNm", prdtNm);
+          formData.append("prdtPrc", prdtPrc);
+          formData.append("prdtDesct", code);
+          formData.append("sCatId", sCatId);
+          formData.append("lCatId", lCatId);
+          formData.append("saleSt", saleSt);
 
+          // 대표 이미지 담기
+          formData.append("imgMain", mainImg[0]);
+
+          // 일반 이미지 담기
           for (let i = 0; i < upimg.length; i++) {
-            let a = uploadSummernoteImageFile(upimg[i]);
-            console.log(a);
+            formData.append("img", upimg[i]);
           }
           Swal.fire({
             title: "등록하시겠습니까?",
@@ -414,14 +434,9 @@
               $.ajax({
                 url: "insertPrd",
                 method: "POST",
-                data: {
-                  prdtNm: prdtNm,
-                  prdtPrc: prdtPrc,
-                  sCatId: sCatId,
-                  lCatId: lCatId,
-                  saleSt: saleSt,
-                  prdtDesct: code,
-                },
+                contentType: false,
+                processData: false,
+                data: formData,
                 success: function (result) {
                   console.log(result);
                   location.reload();
