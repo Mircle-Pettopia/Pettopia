@@ -58,8 +58,8 @@
 					 		  #{prdtNm},
 					 		  #{prdtPrc},
 					 		  #{saleSt},
-					 		  #{regDt},
-					 		  #{modDt},
+					 		  sysdate,
+					 		  sysdate,
 					 		  #{sCatId},
 					 		  #{lCatId},
 					 		  #{prdtDesct})
@@ -80,4 +80,27 @@
 		FROM 	product
 		WHERE	prdt_id = #{prdtId}
 	</select>
+	
+	<!-- 상품 이미지 등록 -->
+	<insert id="insertImg" parameterType="ProductVO">
+		<selectKey keyProperty="imgId" resultType="String" order="BEFORE">
+			SELECT 'IMG' || TO_CHAR(NVL(MAX(SUBSTR(img_id, 4)),999) + 1)
+			FROM 	product_img
+		</selectKey>
+		INSERT INTO product_img ( img_id,
+								  prdt_id,
+								  prdt_img
+								  <if test="isMain != null and !isMain.equals('')">
+    								,is_main
+								  </if>
+								  )
+						 VALUES ( #{imgId},
+						 		  #{prdtId},
+						 		  #{prdtImg}
+						 		  <if test="isMain != null and !isMain.equals('')">
+    								,#{isMain}
+								  </if>
+								  )
+
+	</insert>
 </mapper>
