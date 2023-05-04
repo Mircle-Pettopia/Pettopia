@@ -11,4 +11,24 @@
 		insert into board_test
 		values(#{no},#{title},#{contents})
 	</insert>
+	
+	<insert id="insertKnowhowArticle"
+		parameterType="BoardTestVO">
+		insert into knowhow_board
+		(BO_NO,TITLE,SUBJECT,ME_ID)
+		values(
+		(select TO_NUMBER(NVL(MAX(BO_NO),0))+1 BO_NO from knowhow_board)
+		,#{title}
+		,#{subject}
+		,#{meId})
+	</insert>
+	
+	<select id="knowHowList">
+		select RN,BO_NO,TITLE,SUBJECT,REG_DT,VIEW_CNT,ME_ID
+		from (
+			select rownum as rn,BO_NO,TITLE,SUBJECT,REG_DT,VIEW_CNT,ME_ID 
+				from knowhow_board 
+				order by bo_no desc)
+		where RN between 1 and 11;	
+	</select>
 </mapper>

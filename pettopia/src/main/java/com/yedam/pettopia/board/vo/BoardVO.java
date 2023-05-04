@@ -8,9 +8,8 @@ import lombok.Data;
 public class BoardVO {
 	private int boNo;
 	private String title;
-	private String content;
+	private String subject;
 	private Date regDt;
 	private int viewCnt;
 	private String meId;
-
 }
