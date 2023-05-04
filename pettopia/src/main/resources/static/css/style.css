@@ -224,7 +224,6 @@ a {
 }
 
 .board_write .info {
-  border-top: 1px dashed #ddd;
   border-bottom: 1px solid #000;
   font-size: 0;
 }
