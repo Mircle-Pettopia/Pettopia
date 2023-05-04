@@ -31,18 +31,23 @@ public class UserController {
 		String result = "";
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 		
-		UserVO vo = new UserVO();
-		
-        if(principal.getUser().getSignPath() == null) {
-        	result = result + "Form 로그인 : " + principal;
+		System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
+		//카카오는 잘 들어가지는데 자사 폼으로 로그인하면 페이지 이동이되지 않음
+        if(principal.getUser().getSignPath() == "company") {
+        	result += principal;
             System.out.println("form로그인===" + result);
-            model.addAttribute("formResult", result);
+            //model.addAttribute("formResult", result);
+            
+            model.addAttribute("id", principal.getUser().getMeId());
+            model.addAttribute("name", principal.getUser().getName());
             
             System.out.println(model);
         }else{
-        	result = result + "OAuth2 로그인 : " + principal;
+        	result += principal;
             System.out.println("OAuth2로그인===" + result);
-            model.addAttribute("QAuth2Result", result);
+            
+            model.addAttribute("id", principal.getUser().getMeId());
+            model.addAttribute("name", principal.getUser().getName());
         }
         
 		return "index";
