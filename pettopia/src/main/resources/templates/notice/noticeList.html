@@ -69,7 +69,7 @@
 							<div th:each = " notice : ${noticeList}">
 							<div class="num" th:text="${notice.noNo }"></div>
 							<div class="title">
-								<a th:href="@{${noticeDetail}(noNo=${notice.noNo})}">[[${notice.title }]]</a>
+								<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title }]]</a>
 							</div>
 							<div class="date">  [[ ${#dates.format(notice.rDate, 'yyyy/MM/dd')}]]</div>
 							<div class="count">[[${notice.viewCnt }]]</div>
@@ -88,7 +88,7 @@
 							href="#" class="bt last">>></a>
 					</div>
 					<div class="bt_wrap">
-						<a href="noticeInsert" class="on">등록</a>
+						<a href="noticeInsertForm" class="on">등록</a>
 						<a href="noticedelete">삭제</a>
 					</div>
 				</div>
