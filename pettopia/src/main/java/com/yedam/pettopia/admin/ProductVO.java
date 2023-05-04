@@ -23,12 +23,4 @@ public class ProductVO {
 	
 	private int cnt; // 상품 개수
 
-//	// getter/setter 메소드
-//	public byte[] getPrdtImg() {
-//		return prdtImg;
-//	}
-//	public void setPrdtImg(byte[] prdtImg) {
-//		this.prdtImg = prdtImg;
-//	}
-
 }

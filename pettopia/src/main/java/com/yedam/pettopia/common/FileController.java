@@ -18,27 +18,22 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
 	@ResponseBody
-	public String uploadFile(
-	    @RequestParam("uploadfile") MultipartFile uploadfile) {
+	public String uploadFile(@RequestParam("uploadfile") MultipartFile uploadfile) {
+		
 		String filename;
-	  try {
-	    // Get the filename and build the local file path (be sure that the 
-	    // application have write permissions on such directory)
-		  filename = uploadfile.getOriginalFilename();
-	    String directory = "D:\\upload";
-	    String filepath = Paths.get(directory, filename).toString();
-	    
-	    // Save the file locally
-	    BufferedOutputStream stream =
-	        new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-	    stream.write(uploadfile.getBytes());
-	    stream.close();
-	  }
-	  catch (Exception e) {
-	    System.out.println(e.getMessage());
-	    return "error";
-	  }
-	  
-	  return "/download/"+filename;
-	} // method uploadFile
+		try {
+			filename = uploadfile.getOriginalFilename();
+			String directory = "C:\\upload";
+			String filepath = Paths.get(directory, filename).toString();
+
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+			stream.write(uploadfile.getBytes());
+			stream.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "error";
+		}
+
+		return "/download/" + filename;
+	}
 }

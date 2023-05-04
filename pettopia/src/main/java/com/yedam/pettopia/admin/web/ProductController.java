@@ -3,6 +3,7 @@ package com.yedam.pettopia.admin.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,6 @@ public class ProductController {
 	@PostMapping("insertPrd")
 	@ResponseBody
 	public String insertPrd(ProductVO vo) {
-		System.out.println(vo);
 		productService.insertPrd(vo);
 		return "success";
 	}

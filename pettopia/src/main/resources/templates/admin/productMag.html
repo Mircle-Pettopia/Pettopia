@@ -118,38 +118,67 @@
                   >상품명</label
                 >
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" />
+                  <input type="text" class="form-control" id="prdtNm" />
                 </div>
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >판매가</label
                 >
                 <div class="col-sm-4">
-                  <input type="number" min="0" class="form-control" />
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    id="prdtPrc"
+                  />
                 </div>
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >상품설명</label
                 >
-                <!-- <div class="col-sm-4">
-                  <input type="text" class="form-control" />
-                </div> -->
                 <form>
                   <textarea id="summernote" name="editordata"></textarea>
                 </form>
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >상품분류</label
+                  >상품분류(대)</label
                 >
                 <div class="col-sm-6 mt-2">
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
                       type="radio"
-                      name="inlineRadioOptions"
+                      name="lCatId"
+                      value="고양이"
+                      id="Radio1"
+                    />
+                    <label class="form-check-label" for="Radio1">고양이</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="lCatId"
+                      value="강아지"
+                      id="Radio2"
+                    />
+                    <label class="form-check-label" for="Radio2">강아지</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품분류(소)</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="sCatId"
+                      value="사료"
                       id="inlineRadio1"
-                      value="option1"
                     />
                     <label class="form-check-label" for="inlineRadio1"
                       >사료</label
@@ -159,9 +188,9 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      name="inlineRadioOptions"
+                      name="sCatId"
+                      value="간식"
                       id="inlineRadio2"
-                      value="option2"
                     />
                     <label class="form-check-label" for="inlineRadio2"
                       >간식</label
@@ -171,9 +200,9 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      name="inlineRadioOptions"
+                      name="sCatId"
+                      value="장난감"
                       id="inlineRadio3"
-                      value="option3"
                     />
                     <label class="form-check-label" for="inlineRadio3"
                       >장난감</label
@@ -194,7 +223,7 @@
                   >이미지</label
                 >
                 <div class="col-sm-6">
-                  <input type="file" class="form-control" />
+                  <input type="file" class="form-control" id="img" multiple />
                 </div>
               </div>
               <div class="row mb-4">
@@ -206,9 +235,9 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      name="salePrd"
+                      name="saleSt"
                       id="saleCheck"
-                      value="sale"
+                      value="판매함"
                     />
                     <label class="form-check-label" for="saleCheck"
                       >판매함</label
@@ -218,9 +247,9 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      name="salePrd"
+                      name="saleSt"
                       id="stopCheck"
-                      value="stop"
+                      value="판매안함"
                     />
                     <label class="form-check-label" for="stopCheck"
                       >판매안함</label
@@ -244,15 +273,14 @@
           </div>
         </div>
       </div>
-      <!-- End Modal Dialog Scrollable-->
       <script>
         const Grid = tui.Grid;
-        // const Editor = toastui.Editor;
 
+        // 상품 관리 리스트(그리드)
         const prdList = new Grid({
-          el: document.getElementById("prdList"), // Container element
+          el: document.getElementById("prdList"),
           rowHeaders: ["checkbox", "rowNum"],
-          bodyHeight: 400,
+          bodyHeight: 430,
           pageOptions: {
             useClient: true,
             perPage: 10,
@@ -299,6 +327,7 @@
           ],
         });
 
+        // 상품 리스트
         $.ajax({
           url: "productList",
           success: function (data) {
@@ -310,7 +339,7 @@
         });
 
         $(document).ready(function () {
-          //여기 아래 부분
+          // summernote
           $("#summernote").summernote({
             height: 300,
             minHeight: null,
@@ -319,39 +348,21 @@
             lang: "ko-KR",
             placeholder: "최대 2048자까지 쓸 수 있습니다",
             callbacks: {
-              //여기 부분이 이미지를 첨부하는 부분
               onImageUpload: function (files) {
                 console.log(files);
                 for (var i = files.length - 1; i >= 0; i--) {
-                    uploadSummernoteImageFile(files[i], this);
+                  uploadSummernoteImageFile(files[i], this);
                 }
-//                 uploadSummernoteImageFile(files[0], this);
               },
-              // onPaste: function (e) {
-              //   var clipboardData = e.originalEvent.clipboardData;
-              //   if (
-              //     clipboardData &&
-              //     clipboardData.items &&
-              //     clipboardData.items.length
-              //   ) {
-              //     var item = clipboardData.items[0];
-              //     if (
-              //       item.kind === "file" &&
-              //       item.type.indexOf("image/") !== -1
-              //     ) {
-              //       e.preventDefault();
-              //     }
-              //   }
-              // },
             },
           });
         });
+
+        // 이미지 업로드
         function uploadSummernoteImageFile(file, editor) {
           let formData = new FormData();
           formData.append("uploadfile", file);
-          console.log(formData);
-          console.log(file);
-          console.log(editor);
+
           $.ajax({
             data: formData,
             type: "POST",
@@ -359,34 +370,76 @@
             contentType: false,
             processData: false,
             success: function (data) {
+              console.log(data);
               $(editor).summernote("insertImage", data);
+            },
+            error: function (reject) {
+              console.log(reject);
             },
           });
         }
-        $(document).on("click", "#insertBtn", function () {
-          console.log("등록");
-          let code = $("#summernote").summernote("code");
-          console.log(code);
 
-          $.ajax({
-            url: "insertPrd",
-            method: "POST",
-            data: { prdtDesct: code },
-            success: function (data) {
-              console.log(data);
-            },
-            error: function (reject) {
-              console.error(reject);
-            },
+        // 상품 등록
+        $(document).on("click", "#insertBtn", function () {
+          let prdtNm = $("#prdtNm").val();
+          let prdtPrc = $("#prdtPrc").val();
+          let code = $("#summernote").summernote("code");
+          let sCatId = $("input[name=sCatId]:checked").val();
+          let lCatId = $("input[name=lCatId]:checked").val();
+          let saleSt = $("input[name=saleSt]:checked").val();
+          let upimg = $("#img").get(0).files;
+
+          console.log(prdtNm);
+          console.log(prdtPrc);
+          console.log(code);
+          console.log(sCatId);
+          console.log(lCatId);
+          console.log(saleSt);
+          console.log(upimg);
+
+          for (let i = 0; i < upimg.length; i++) {
+            let a = uploadSummernoteImageFile(upimg[i]);
+            console.log(a);
+          }
+          Swal.fire({
+            title: "등록하시겠습니까?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "등록",
+            cancelButtonText: "취소",
+          }).then((result) => {
+            if (result.value) {
+              $.ajax({
+                url: "insertPrd",
+                method: "POST",
+                data: {
+                  prdtNm: prdtNm,
+                  prdtPrc: prdtPrc,
+                  sCatId: sCatId,
+                  lCatId: lCatId,
+                  saleSt: saleSt,
+                  prdtDesct: code,
+                },
+                success: function (result) {
+                  console.log(result);
+                  location.reload();
+                },
+                error: function (reject) {
+                  console.error(reject);
+                },
+              });
+            }
           });
         });
 
+        // 상품 상세 조회
         $.ajax({
           url: "productDetail",
           success: function (result) {
             console.log(result);
-            console.log(result.prdtDesct);
-            $("#test").html(result.prdtDesct);
+            // $("#test").html(result.prdtDesct);
           },
           error: function (reject) {
             console.log(reject);
