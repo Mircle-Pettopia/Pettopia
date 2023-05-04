@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.service.UserServiceImpl;
 
@@ -25,11 +26,15 @@ import lombok.RequiredArgsConstructor;
 public class UserController { 
 	
 	private final UserServiceImpl service;
+
 	
-	@GetMapping("/")
-	public String main(){
-		return "index";
-	}
+	/*
+	 * @GetMapping("/") public String main(Model model, Authentication
+	 * authentication){
+	 * 
+	 * return "index"; }
+	 */
+   
 	
 	@GetMapping("/main")
 	public String mainLogin(Model model, Authentication authentication){

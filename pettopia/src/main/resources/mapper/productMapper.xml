@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.pettopia.product.mapper.ProductMapper1">
+  
+  <!-- 전체상품 리스트 4개만 가져옴-->
+  
+<select id="selectPrdAllList" resultType="Product1VO">
+  SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
+  FROM (
+    SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
+    FROM product
+    ORDER BY prdt_id
+  )
+  WHERE ROWNUM &lt;= 4
+</select>
+  
+  </mapper>
