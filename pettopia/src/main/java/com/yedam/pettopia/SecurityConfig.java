@@ -75,7 +75,8 @@ public class SecurityConfig {
                 "/fonts/**"
                 
         );
-    }
+    };
+	
 	
 	/*@Bean
 	public UserDetailsService userDetailsService() {

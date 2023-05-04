@@ -2,7 +2,10 @@ package com.yedam.pettopia.user.web;
 
 import java.util.HashMap;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.service.UserServiceImpl;
@@ -25,7 +27,7 @@ public class UserController {
 	private final UserServiceImpl service;
 	
 	@GetMapping("/")
-	public String main(Model model, Authentication authentication){
+	public String main(){
 		return "index";
 	}
 	
@@ -56,7 +58,8 @@ public class UserController {
 	
 	//카카오
 	@GetMapping("/kakaologin")
-	public ModelAndView kakaoLogin(@RequestParam(value = "code", required = false) String code) throws Throwable {
+	public String kakaoLogin(@RequestParam(value = "code", required = false) String code,
+			AuthenticationManager authenticationManager	) throws Throwable {
 		// 1번
 		//System.out.println("code:" + code);
 		
@@ -76,10 +79,15 @@ public class UserController {
 		Object nickname = userInfo.get("nickname");
 		Object id = userInfo.get("id");
 		Object email = userInfo.get("email");
+		Object emailChk = String.valueOf(userInfo.get("email"));
 		
+		System.out.println("이메일:" + email);
+		System.out.println("emailChk:" + emailChk);
 		
-		ModelAndView mv = new ModelAndView();
+		//ModelAndView mv = new ModelAndView();
 		UserVO kakaoMember = service.snsIdTokenChk(id);
+		
+		UserVO vos= new UserVO();
 		
 		//DB에 해당되는 카카오 아이디 토큰이 없을 경우 회원가입 시켜버린다.
 		if(kakaoMember == null) {
@@ -87,26 +95,35 @@ public class UserController {
 			
 			CharSequence password = id + "kakao";
 			String encodedPassword = passwordEncoder.encode(password);
-			
-			 UserVO vos= new UserVO();
 			 
-			 //이메일이 없을 경우 아이디 토큰으로 대체
-			 if(email == null) {				 
-				 vos.setMeId(String.valueOf(id));
-			 //이메일이 존재하면 이메일로 가입진행
-			 } else {
-				 vos.setMeId(String.valueOf(email));
-			 };			 
-			 vos.setPw(String.valueOf(encodedPassword));//비밀번호 암호화
-			 vos.setName(String.valueOf(nickname));		//카카오별명
-			 vos.setMeSnsToken(Integer.parseInt(String.valueOf(id)));	//아이디토큰 int 강제변환
+			//이메일이 없을 경우 아이디 토큰으로 대체
+			if(emailChk == "null") {
+				System.out.println("이메일없다");
+				vos.setMeId(id.toString());
+			//이메일이 존재하면 이메일로 가입진행
+			} else {
+				System.out.println("이메일있다");
+				vos.setMeId(String.valueOf(email));
+			};	
 			
-			service.kakaosaveUser(kakaoMember);
+			vos.setPw(String.valueOf(encodedPassword));  //비밀번호 암호화
+			vos.setName(String.valueOf(nickname));		//카카오별명
+			vos.setMeSnsToken(id.toString());
+			 
+			service.kakaosaveUser(vos);
 		}
 		
-		mv.setViewName("/main"); 		// 뷰의 이름
+		
+		// 로그인 처리
+        Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(vos.getMeId(), vos.getPw());
+        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		//ModelAndView
+		//mv.setViewName("/main"); 		   // 뷰의 이름
 		//mv.addObject("data", userInfo); // 뷰로 보낼 데이터 값
-		return mv;
+		
+		return "redirect:/main";
 	};
     
     @GetMapping("/signUp")
