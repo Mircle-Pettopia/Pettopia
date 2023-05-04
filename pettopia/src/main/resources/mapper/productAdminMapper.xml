@@ -47,22 +47,37 @@
 		</selectKey>
 		INSERT INTO product ( prdt_id,
 							  prdt_nm,
-							  prdt_desct,
 							  prdt_prc,
 							  sale_st,
 							  reg_dt,
 							  mod_dt,
 							  s_cat_id,
-							  l_cat_id)
-					 VALUES ( prdtId,
-					 		  prdtNm,
-					 		  prdtDesct
-					 		  prdtPrc,
-					 		  saleSt,
-					 		  regDt,
-					 		  modDt,
-					 		  sCatId,
-					 		  lCatId)
+							  l_cat_id,
+							  prdt_desct)
+					 VALUES ( #{prdtId},
+					 		  #{prdtNm},
+					 		  #{prdtPrc},
+					 		  #{saleSt},
+					 		  #{regDt},
+					 		  #{modDt},
+					 		  #{sCatId},
+					 		  #{lCatId},
+					 		  #{prdtDesct})
 	
 	</insert>
+	
+	<!-- 상품 상세 조회 -->
+	<select id="selectDetailList" resultType="ProductVO">
+		SELECT 	prdt_id,
+				prdt_nm,
+				prdt_desct,
+				prdt_prc,
+				sale_st,
+				reg_dt,
+				mod_dt,
+				s_cat_id,
+				l_cat_id
+		FROM 	product
+		WHERE	prdt_id = #{prdtId}
+	</select>
 </mapper>

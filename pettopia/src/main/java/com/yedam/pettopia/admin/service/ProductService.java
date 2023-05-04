@@ -21,4 +21,7 @@ public interface ProductService {
 	// 상품 등록
 	public int insertPrd(ProductVO vo);
 
+	// 상품 상세 조회
+	public ProductVO selectDetailList(ProductVO vo);
+
 }
