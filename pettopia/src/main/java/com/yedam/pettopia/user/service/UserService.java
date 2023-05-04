@@ -6,7 +6,8 @@ import com.yedam.pettopia.user.UserVO;
 
 public interface UserService {
 	public UserVO getUserAccount(String meId);
-	public UserVO snsIdTokenChk(Object meSnsToken);
+	public UserVO snsIdTokenChk(String meSnsToken);
+	public UserVO snsIdToKenInfo(String meSnsToken);
 	public int kakaosaveUser(UserVO vo);	//카카오 획원가입
 	
 	//kakao login

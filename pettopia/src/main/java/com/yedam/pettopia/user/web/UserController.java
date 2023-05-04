@@ -1,13 +1,7 @@
 package com.yedam.pettopia.user.web;
 
-import java.util.HashMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.yedam.pettopia.user.UserVO;
+import com.yedam.pettopia.user.auth.PrincipalDetails;
 import com.yedam.pettopia.user.service.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -23,29 +19,32 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class UserController { 
-	
-	private final AuthenticationManager authenticationManager;
 	private final UserServiceImpl service;
-
 	
-	/*
-	 * @GetMapping("/") public String main(Model model, Authentication
-	 * authentication){
-	 * 
-	 * return "index"; }
-	 */
-   
-	
+	//, Authentication authentication
 	@GetMapping("/main")
-	public String mainLogin(Model model, Authentication authentication){
+	public String mainLogin(@AuthenticationPrincipal PrincipalDetails principalDetails,
+							Authentication authentication, Model model){
 		//Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         
-        model.addAttribute("id", userVo.getMeId());      //유저 아이디*/
-        model.addAttribute("name", userVo.getName());     //유저 이름*/
         
-        System.out.println(model);
+		String result = "";
+		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 		
+		UserVO vo = new UserVO();
+		
+        if(principal.getUser().getSignPath() == null) {
+        	result = result + "Form 로그인 : " + principal;
+            System.out.println("form로그인===" + result);
+            model.addAttribute("formResult", result);
+            
+            System.out.println(model);
+        }else{
+        	result = result + "OAuth2 로그인 : " + principal;
+            System.out.println("OAuth2로그인===" + result);
+            model.addAttribute("QAuth2Result", result);
+        }
+        
 		return "index";
 	};
 	
@@ -61,80 +60,61 @@ public class UserController {
     	return "login";
 	};
 	
-	//카카오
-	@GetMapping("/kakaologin")
-	public String kakaoLogin(@RequestParam(value = "code", required = false) String code) throws Throwable {
-		// 1번
-		//System.out.println("code:" + code);
-		
-		// 2번
-		String access_Token = service.getAccessToken(code);
-		//System.out.println("###access_Token#### : " + access_Token);
-		// 위의 access_Token 받는 걸 확인한 후에 밑에 진행
-		
-		// 3번
-		HashMap<String, Object> userInfo = service.getUserInfo(access_Token);
-		
-		System.out.println("###id#### : " + userInfo.get("id"));
-		//System.out.println("###nickname#### : " + userInfo.get("nickname"));
-		//System.out.println("###email#### : " + userInfo.get("email"));
-		
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		Object nickname = userInfo.get("nickname");
-		Object id = userInfo.get("id");
-		Object email = userInfo.get("email");
-		Object emailChk = String.valueOf(userInfo.get("email"));
-		
-		System.out.println("이메일:" + email);
-		System.out.println("emailChk:" + emailChk);
-		
-		//ModelAndView mv = new ModelAndView();
-		UserVO kakaoMember = service.snsIdTokenChk(id);
-		
-		UserVO vos= new UserVO();
-		
-		//DB에 해당되는 카카오 아이디 토큰이 없을 경우 회원가입 시켜버린다.
-		if(kakaoMember == null) {
-			System.out.println("아이디가 없다");
-			
-			CharSequence password = id + "kakao";
-			String encodedPassword = passwordEncoder.encode(password);
-			 
-			//이메일이 없을 경우 아이디 토큰으로 대체
-			if(emailChk == "null") {
-				System.out.println("이메일없다");
-				vos.setMeId(id.toString());
-			//이메일이 존재하면 이메일로 가입진행
-			} else {
-				System.out.println("이메일있다");
-				vos.setMeId(String.valueOf(email));
-			};	
-			
-			vos.setPw(String.valueOf(encodedPassword));  //비밀번호 암호화
-			vos.setName(String.valueOf(nickname));		//카카오별명
-			vos.setMeSnsToken(id.toString());
-			 
-			service.kakaosaveUser(vos);
-		}
-		
-		
-		// 로그인 처리
-        Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(vos.getMeId(), vos.getPw());
-        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    /*// !!!! OAuth로 로그인 시 이 방식대로 하면 CastException 발생함
+    @GetMapping("/form/loginInfo")
+    @ResponseBody
+    public String formLoginInfo(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-		//ModelAndView
-		//mv.setViewName("/main"); 		   // 뷰의 이름
-		//mv.addObject("data", userInfo); // 뷰로 보낼 데이터 값
-		
-		return "redirect:/main";
-	};
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        UserVO user = principal.getUser();
+        System.out.println(user);
+        //User(id=2, username=11, password=$2a$10$m/1Alpm180jjsBpYReeml.AzvGlx/Djg4Z9/JDZYz8TJF1qUKd1fW, email=11@11, role=ROLE_USER, createTime=2022-01-30 19:07:43.213, provider=null, providerId=null)
+
+        UserVO user1 = principalDetails.getUser();
+        System.out.println(user1);
+        //User(id=2, username=11, password=$2a$10$m/1Alpm180jjsBpYReeml.AzvGlx/Djg4Z9/JDZYz8TJF1qUKd1fW, email=11@11, role=ROLE_USER, createTime=2022-01-30 19:07:43.213, provider=null, providerId=null)
+        //user == user1
+
+        return user.toString();
+   }
     
+    @GetMapping("/oauth/loginInfo")
+    @ResponseBody
+    public String oauthLoginInfo(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2UserPrincipal){
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        System.out.println(attributes);
+        // PrincipalOauth2UserService의 getAttributes내용과 같음
+
+        Map<String, Object> attributes1 = oAuth2UserPrincipal.getAttributes();
+        // attributes == attributes1
+
+       return attributes.toString();     //세션에 담긴 user가져올 수 있음음
+    }*/
+    
+    @GetMapping("/loginInfo")
+    @ResponseBody
+    public String loginInfo(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String result = "";
+
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        if(principal.getUser().getProvider() == null) {
+            result = result + "Form 로그인 : " + principal;
+            System.out.println("form로그인===" + result);
+        }else{
+            result = result + "OAuth2 로그인 : " + principal;
+            System.out.println("OAuth2로그인===" + result);
+        }
+        return result; 
+    }
+	
+    //회원가입페이지
     @GetMapping("/signUp")
     public String signUp() {
         return "signUp";
     };
 	
+    //자사기준 회원가입처리
 	@PostMapping("/signUp")
 	@ResponseBody
     public Boolean signUp(@RequestBody UserVO userVo) {

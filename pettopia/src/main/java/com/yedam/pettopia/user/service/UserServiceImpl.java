@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 			Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
 			
 			/*System.out.println("id===" + id_2);
-			System.out.println("별명===" + properties.get("nickname"));
+			System.out.println("별명===" + properties.ge t("nickname"));
 			System.out.println("이메일===" + kakao_account.get("email"));*/
 			
 			String nickname = properties.get("nickname").toString();
@@ -209,12 +209,6 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		}
 		return userInfo;
 	}
-
-	//DB에 해당되는 카카오 아이디 토큰이 있는지 없는지 확인하기
-	@Override
-	public UserVO snsIdTokenChk(Object id) {
-		return mapper.snsIdTokenChk(id);
-	}
 	
 	//카카오 회원가입
 	@Override
@@ -228,6 +222,17 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		};
 		
 		return result;
+	}
+
+	//DB 정보 확인
+	@Override
+	public UserVO snsIdTokenChk(String meSnsToken) {
+		return mapper.snsIdTokenChk(meSnsToken);
+	}
+
+	@Override
+	public UserVO snsIdToKenInfo(String meSnsToken) {
+		return mapper.snsIdToKenInfo(meSnsToken);
 	};
 	
 }
