@@ -13,7 +13,7 @@
 
 	<!-- 단건조회 -->
 	<select id="selectNoticeDetail" resultType="NoticeVO">
-		SELECT *
+		SELECT no_no, title, rdate, view_cnt, contents
 		FROM notice
 		WHERE no_no = #{noNo}
 	</select>
@@ -23,19 +23,19 @@
 		INSERT INTO notice (
 		no_no
 		, title
-		, content
+		, contents
 		, rdate
 		, view_cnt
-		, file
+		, files
 		, me_id
 		)
 		VALUES (
-		(SELECT NVL(MAX(noNo), 0) + 1 FROM notice)
+		(SELECT NVL(MAX(no_No), 0) + 1 FROM notice)
 		, #{title}
-		, #{content}
+		, #{contents}
 		, sysdate
 		, #{viewCnt}
-		, #{file}
+		, #{files}
 		, #{meId}
 		)
 	</insert>
