@@ -24,6 +24,7 @@ public class UserVO implements UserDetails{
 	private String signPath;
 	private String outYn;
 	private String role;
+	private int meSnsToken;
 	
 	private int idChk;
 	@Override
