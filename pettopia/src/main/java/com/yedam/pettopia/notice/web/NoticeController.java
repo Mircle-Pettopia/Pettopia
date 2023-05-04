@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.notice.service.NoticeService;
@@ -28,17 +29,18 @@ import com.yedam.pettopia.notice.service.NoticeService;
 		}
 		
 		
-		@GetMapping("noticeInsert")
+		@GetMapping("noticeInsertForm")
 		public String noticeInsertForm(Model model) {
 			model.addAttribute("noticeVO", new NoticeVO());
 			return "notice/noticeInsert";
 		}
 		
-
-		
-		@GetMapping("noticeUpdate")
-		public String noticeUpdateForm(Model model) {
-			return "notice/noticeUpdate";
+		@PostMapping("noticeInsert")
+		public String noticeInsert(NoticeVO noticeVO) {
+			System.out.println("여기 출력 " + noticeVO);
+			noticeService.insertNotice(noticeVO);
+			return "redirect:noticeList";
 		}
+		
 
 	}

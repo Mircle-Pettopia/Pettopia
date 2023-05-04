@@ -37,4 +37,5 @@
         (#{meId}, #{pw}, #{name}, sysdate, '카카오', 'USER', #{meSnsToken})
     </insert>
     
+    
  </mapper>
