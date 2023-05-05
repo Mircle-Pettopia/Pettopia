@@ -452,10 +452,45 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
+	<script th:inline="javascript">
 
-	<script>
+		/*<![CDATA[*/
+		$().ready(() =>{
+			const token = /*[[${token}]]*/
+			//카카오나 네이버로 회원가입 후 메인페이지로 이동하면 알림창 띄워주기
+			if(token){
+				$.ajax({
+					url: '/snsTokenChk',
+					type : 'POST',
+					data: {meSnsToken : token},
+					success: function(data){	//sns로 회원가입 했을 때 상세정보가 없으면 알림창 띄우기
+						if(data){
+							Swal.fire({
+								title: '확인',
+								text: "확인되지 않는 정보가 있습니다",
+								icon: 'info',
+								showCancelButton: true,
+								confirmButtonColor: '#C65FF9',
+								cancelButtonColor: '#E782FF',
+								confirmButtonText: '정보수정하기',
+								cancelButtonText: '확인',
+								reverseButtons: true, // 버튼 순서 거꾸로
+							}).then((result) => {
+								if (result.isConfirmed) {
+									//location.href = '';
+								}
+							});
+						};
+					},
+					error : function(error){
+						console.log(error);
+					}
+				});
+			};
+		})
+		/*]]>*/
+
 		$(".js-select2").each(function () {
 			$(this).select2({
 				minimumResultsForSearch: 20,
@@ -478,6 +513,7 @@
 
 		$('.js-addwish-b2').on('click', function (e) {
 			e.preventDefault();
+			console.log("TEST")
 		});
 
 		$('.js-addwish-b2').each(function () {
@@ -524,7 +560,7 @@
 			})
 		});
 	</script>
-
+</div>
 </body>
 
 </html>

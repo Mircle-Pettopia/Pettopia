@@ -21,37 +21,30 @@ import lombok.RequiredArgsConstructor;
 public class UserController { 
 	private final UserServiceImpl service;
 	
-	//, Authentication authentication
-	@GetMapping("/main")
+	/*@GetMapping("/main")
 	public String mainLogin(@AuthenticationPrincipal PrincipalDetails principalDetails,
 							Authentication authentication, Model model){
 		//Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        
-        
 		String result = "";
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 		
-		System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
-		//카카오는 잘 들어가지는데 자사 폼으로 로그인하면 페이지 이동이되지 않음
+		//System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
+		//카카오는 잘 들어가지는데 자사 폼으로 로그인하면 페이지 이동이 되지않음
         if(principal.getUser().getSignPath() == "company") {
         	result += principal;
-            System.out.println("form로그인===" + result);
-            //model.addAttribute("formResult", result);
-            
             model.addAttribute("id", principal.getUser().getMeId());
             model.addAttribute("name", principal.getUser().getName());
             
             System.out.println(model);
         }else{
         	result += principal;
-            System.out.println("OAuth2로그인===" + result);
-            
             model.addAttribute("id", principal.getUser().getMeId());
             model.addAttribute("name", principal.getUser().getName());
+            model.addAttribute("token", principal.getUser().getMeSnsToken());
         }
         
 		return "index";
-	};
+	};*/
 	
 	@GetMapping("/login")
     public String login(@RequestParam(value="error", required = false) String error,
@@ -105,10 +98,10 @@ public class UserController {
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         if(principal.getUser().getProvider() == null) {
             result = result + "Form 로그인 : " + principal;
-            System.out.println("form로그인===" + result);
+            //System.out.println("form로그인===" + result);
         }else{
             result = result + "OAuth2 로그인 : " + principal;
-            System.out.println("OAuth2로그인===" + result);
+            //System.out.println("OAuth2로그인===" + result);
         }
         return result; 
     }
@@ -139,5 +132,26 @@ public class UserController {
     	return result;
     };
     
+    @PostMapping("/snsTokenChk")
+    @ResponseBody
+    public Boolean snsTokenChk(@RequestParam(value = "meSnsToken", required = false) String meSnsToken) {
+    	Boolean result = false;
+    	UserVO info = service.snsGetNullInfo(meSnsToken);
+    	String a = info.getAddr();
+    	String b = info.getPost();
+    	String c = info.getPhone();
+    	//주소 상세는 없을 수 있기 때문에 뺐다.
+    	if(a == "null" || b == "null" || c == "null") {
+    		//정보가 없을 때 트루를 반환한다.
+    		result = true;
+    	};
+    	//System.out.println("두구두구 result!! =====" + result);
+    	/*System.out.println("info===" + info);
+    	System.out.println("a======" + a);
+    	System.out.println(b);
+    	System.out.println(c);*/
+    	
+    	return result;
+    };
     
 }

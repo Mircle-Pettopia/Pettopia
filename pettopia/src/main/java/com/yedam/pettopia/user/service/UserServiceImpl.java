@@ -1,26 +1,15 @@
 package com.yedam.pettopia.user.service;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yedam.pettopia.user.UserVO;
+import com.yedam.pettopia.user.auth.PrincipalDetails;
 import com.yedam.pettopia.user.mapper.UserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -51,29 +40,30 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	};
 	
 	@Override
-	public UserVO loadUserByUsername(String meId) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String meId) throws UsernameNotFoundException {
 		//여기서 받은 유저 패스워드와 비교하여 로그인 인증
-		UserVO vo = mapper.getUserAccount(meId);
+		UserVO byUsername = mapper.getUserAccount(meId);
 		
-        if (vo == null){
-            throw new UsernameNotFoundException("User not authorized.");
+        if (byUsername != null){
+        	return new PrincipalDetails(byUsername);
         };
         
-		return vo;
+        return byUsername;
 	};
-	
-	//아이디 중복확인
-	public int idChk(String meId) {
-		return mapper.idChk(meId);
-	}
 
 	@Override
 	public UserVO getUserAccount(String meId) {
 		return mapper.getUserAccount(meId);
 	}
 	
+
+	//아이디 중복확인
+	public int idChk(String meId) {
+		return mapper.idChk(meId);
+	}
+	
 	//kakao login
-	@Override
+	/*@Override
 	public String getAccessToken(String authorize_code) throws Exception {
         String access_Token = "";
         String refresh_Token = "";
@@ -112,11 +102,11 @@ public class UserServiceImpl implements UserDetailsService, UserService{
             }
             System.out.println("getAccessToken response body : " + result);
 
-            /* -->Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성 : Gson이 제대로 작동되지 않아 jackson으로 진행했음.
-             * JsonParser parser = new JsonParser();
-             * JsonElement element = parser.parse(result);
-             * 출처 : https://makeaplayground.tistory.com/m/158
-             */
+            // * -->Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성 : Gson이 제대로 작동되지 않아 jackson으로 진행했음.
+            // * JsonParser parser = new JsonParser();
+            // * JsonElement element = parser.parse(result);
+            // * 출처 : https://makeaplayground.tistory.com/m/158
+             
             
             //jackson objectmapper 객체 생성
             ObjectMapper objectMapper = new ObjectMapper();
@@ -186,9 +176,9 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 			Map<String, Object> properties = (Map<String, Object>) jsonMap.get("properties");
 			Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
 			
-			/*System.out.println("id===" + id_2);
+			System.out.println("id===" + id_2);
 			System.out.println("별명===" + properties.ge t("nickname"));
-			System.out.println("이메일===" + kakao_account.get("email"));*/
+			System.out.println("이메일===" + kakao_account.get("email"));
 			
 			String nickname = properties.get("nickname").toString();
 			String email = String.valueOf(kakao_account.get("email"));
@@ -208,7 +198,7 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 			e.printStackTrace();
 		}
 		return userInfo;
-	}
+	}*/
 	
 	//카카오 회원가입
 	@Override
@@ -233,6 +223,21 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	@Override
 	public UserVO snsIdToKenInfo(String meSnsToken) {
 		return mapper.snsIdToKenInfo(meSnsToken);
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	public UserVO snsGetNullInfo(String meSnsToken) {
+		UserVO result = mapper.snsGetNullInfo(meSnsToken);
+		UserVO vo = new UserVO();
+		
+		if(result == null) {
+			vo.setPhone("null");
+			vo.setPost("null");
+			vo.setAddr("null");
+			vo.setAddrDetail("null");
+		}
+		return vo;
 	};
 	
 }

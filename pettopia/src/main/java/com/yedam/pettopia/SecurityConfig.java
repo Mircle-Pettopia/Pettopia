@@ -41,22 +41,20 @@ public class SecurityConfig {
 					.failureHandler(CustomAuthFailureHandler) 	// 로그인 실패 핸들러
 					.usernameParameter("meId")					// html input name을 따로 설정해준다.
 					.passwordParameter("password")
-					.defaultSuccessUrl("/main")
+					.defaultSuccessUrl("/")
+			.and()
+				.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/")
+				.invalidateHttpSession(true)
+				.permitAll()
 		.and()
 			.oauth2Login()										// OAuth2기반의 로그인인 경우
 					.loginPage("/login")						// 로그인페이지
-					.defaultSuccessUrl("/main")					// 로그인 성공하면 "/main" 으로 이동
+					.defaultSuccessUrl("/")					// 로그인 성공하면 "/main" 으로 이동
 					.failureUrl("/login")						// 로그인 실패 시 /loginForm으로 이동
 					.userInfoEndpoint()							// 로그인 성공 후 사용자정보를 가져온다
 					.userService(principalOauth2UserService);	// 사용자정보를 처리할 때 사용한다
-		http
-			.logout()
-			.logoutUrl("/logout")
-			.logoutSuccessUrl("/")
-			.invalidateHttpSession(true)
-			.permitAll()
-		.and()
-			.csrf().disable();
 		
 		return http.build();
 	}

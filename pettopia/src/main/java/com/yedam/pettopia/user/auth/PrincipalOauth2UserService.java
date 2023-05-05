@@ -20,24 +20,32 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
     
 	@Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        
         OAuth2UserInfo oAuth2UserInfo = null;	//추가
-        String provider = userRequest.getClientRegistration().getRegistrationId();    
+        
+        String username = "";
+        String providerId = "";
+        
+        String provider = userRequest.getClientRegistration().getRegistrationId();
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         
         //추가
         if(provider.equals("kakao")){	//추가
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-        }
+            providerId = oAuth2UserInfo.getProviderId();	//수정
+            
+            username = provider+"_"+providerId;
+            
+        } else if(provider.equals("naver")){
+            oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
+            providerId = oAuth2UserInfo.getProviderId();	//수정
+
+            username = oAuth2UserInfo.getName();
+        };
         
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String providerId = oAuth2UserInfo.getProviderId();	//수정
-        String username = provider+"_"+providerId;
-        
+        /*System.out.println("username===" + username);
         System.out.println("provider===" + provider);
-        System.out.println("providerId===" + providerId);
-        System.out.println("username===" + username);
+        System.out.println("providerId===" + providerId);*/
 
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         String password = bCryptPasswordEncoder.encode("패스워드"+uuid); 
@@ -52,7 +60,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
         UserVO meSnsToken = userRepository.snsIdToKenInfo(providerId);
         
         //DB에 없는 사용자라면 회원가입처리
-        if(meSesTokenChk == null){
+        if(meSesTokenChk == null) {
         	System.out.println("아이디없다");
         	
         	meSnsToken = UserVO.oauth2Register()

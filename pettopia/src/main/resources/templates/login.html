@@ -87,7 +87,9 @@
                                             width="50px">
                                     </a>
                                     <!--naver Login Btn-->
-                                    <img class="apiBnt" src="/img/btnG_아이콘원형.png" width="50px">
+                                    <a id="naverClick">
+                                        <img class="apiBnt" src="/img/btnG_아이콘원형.png" width="50px">
+                                    </a>
                                 </div>
                                 <div class="register-section text-center">
                                 <br/>
@@ -112,69 +114,15 @@
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
     <script> 
+        // 카카오 로그인 또는 회원가입
         $('#kakaoClick').on('click',()=>{
             location.href = "/oauth2/authorization/kakao";
-
-            /*window.open("https://kauth.kakao.com/oauth/authorize"+
-                        "?client_id=ac331cbe1745422549605be16be6ce42"+
-                        "&redirect_uri=http://localhost:81/kakaologin"+
-                        "&response_type=code", "test", 'width=500, height=700');*/
         });
 
-        /*//발급받은 키 중 javascript키를 사용해준다. onclick="kakaoLogin();"
-        Kakao.init('2de6d8c528d54efb1d69a7086ccd36d3'); 
-        //console.log(Kakao.isInitialized()); // sdk초기화여부판단
-        //카카오로그인
-        function kakaoLogin() {
-            Kakao.Auth.login({
-                success: function (response) {
-                    Kakao.API.request({
-                        url: '/v2/user/me',
-                        success: function (response) {
-                            console.log(response);
-                            Kakao.Auth.setAccessToken(response.access_token); // access토큰
-                            
-                            getInfo();
-                        },
-                        fail: function (error) {
-                            console.log(error)
-                        },
-                    })
-                }
-            })
-        };
-
-        // 4. 엑세스 토큰을 발급받고, 아래 함수를 호출시켜서 사용자 정보를 받아옴.
-        function getInfo() {
-            Kakao.API.request({
-                url: '/v2/user/me',
-                success: function (res) {
-                    console.log(res);
-                    // 닉네임, 이메일       //성별, 프로필이미지 
-                    var nickname = res.kakao_account.profile.nickname;
-                    var email = res.kakao_account.email;
-                    //var gender = res.kakao_account.gender;
-                    //var profile_image = res.kakao_account.profile.thumbnail_image_url;
-
-                    console.log(nickname,email);
-                },
-                fail: function (error) {
-                    alert('카카오 로그인에 실패했습니다. 관리자에게 문의하세요.' + JSON.stringify(error));
-                }
-            });
-        };
-
-        // 5. 로그아웃 기능 - 카카오 서버에 접속하는 엑세스 토큰을 만료, 사용자 어플리케이션의 로그아웃은 따로 진행.
-        //<button class="api-btn" onclick="kakaoLogout()">로그아웃</button>
-        function kakaoLogout() {
-            if (!Kakao.Auth.getAccessToken()) {
-                alert('Not logged in.');
-                return;
-            }
-            Kakao.Auth.logout(function() {
-                alert('logout ok\naccess token -> ' + Kakao.Auth.getAccessToken());
-            });
-        }*/
+        // 네이버 로그인 또는 회원가입
+        $('#naverClick').on('click',()=>{
+            location.href = "/oauth2/authorization/naver";
+        });
     </script>
 </body>
 

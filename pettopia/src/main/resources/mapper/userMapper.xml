@@ -41,5 +41,11 @@
         (#{meId}, #{pw}, #{name}, sysdate, #{signPath}, 'USER', #{meSnsToken})
     </insert>
     
+    <!-- sns로 회원가입 했을 때 주소, 폰번호가 없을 때 알림창 띄우기 -->
+    <select id="snsGetNullInfo" resultType="UserVO">
+	SELECT post, addr, addr_detail, phone
+	FROM member
+	WHERE me_sns_token = #{meSnsToken}
+    </select>
     
  </mapper>
