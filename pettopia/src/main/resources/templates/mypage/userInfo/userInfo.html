@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+    <title>Pettopia</title>
+    <meta charset="UTF-8">
+</head>
+<div layout:fragment="content">
+<body>
+        <style>
+            .status {
+                margin-top: 50px;
+            }
+            .status-icons, .status-text, .status-link {
+                display: flex;
+                justify-content: space-around;
+                margin-top: 10px;
+            }
+            .status-icons img {
+                width: 10%;
+                height: 10%;
+            }
+    
+            .search, .search-date {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            .search {
+                padding: 20px 0px;
+                margin: 20px 0px;
+            }
+    
+            #searchBtn {
+                padding: 10px 20px;
+                background-color: grey;
+                color: white;
+                font-weight: bolder;
+            }
+    
+            #searchBtn:hover {
+                background-color: pink;
+            }
+    
+            .itemList {
+                padding: 200px 200px;
+                border: 3px solid red;
+            }
+    
+            .p-r-45, .p-r-0-lg {
+                margin-top: 50px;
+            }
+        </style>
+
+        <div class="container">
+			<div class="row">
+                <div class="col-md-4 col-lg-3 p-b-80 ">
+					<div class="side-menu">
+                        <div class="p-t-55">
+                            <h4 class="mtext-112 cl2 p-b-20">
+                                나의 공간
+                            </h4>
+                
+                            <ul>
+                                <li class="p-b-7">
+                                    <a href="mypage.html" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        주문관리
+                                    </a>
+                                </li>
+
+                                <li class="p-b-7">
+                                    <a href="prodInterest.html" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        관심상품
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="pointList.html" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        적립금
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        후기관리
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        Q&amp;A관리
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        후기관리
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        게시글관리
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        개인정보 수정
+                                    </a>
+                                </li>
+                
+                                <li class="p-b-7">
+                                    <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        출석체크
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+				</div>
+
+                <!--  -->
+				<div class="col-md-8 col-lg-9 p-b-80">
+					<div class="p-r-45 p-r-0-lg">
+						<h1>
+							마이페이지 - 주문관리
+						</h1>
+
+						<!-- 배송 상태 -->
+						<div class="status">
+							<div class="status-icons">
+								<img src="images/icons/check-bill.png" alt="">
+								<img src="images/icons/giftbox.png" alt="">
+								<img src="images/icons/cargo-truck.png" alt="">
+								<img src="images/icons/checked.png" alt="">
+							</div>
+
+							<div class="status-text">
+								<span>결제완료</span>
+								<span>배송전</span>
+								<span>배송중</span>
+								<span>배송완료</span>
+							</div>
+
+							<div class="status-link">
+								<a href="">2</a>
+								<a href="">0</a>
+								<a href="">1</a>
+								<a href="">10</a>
+							</div>
+						</div>
+
+						<!-- 검색 기능 -->
+						<div class="search">
+							<h5>전체 주문처리 상태</h5>
+
+							<div class="search-period">
+								<a href="">1일 | </a>
+								<a href="">1주일 | </a>
+								<a href="">1개월 | </a>
+								<a href="">3개월 | </a>
+								<a href="">6개월</a>
+							</div>
+							
+							<div class="search-date">
+								<input type="date" class="" id="frDt" name="frDt">
+								<span style="margin: 0px 10px;"> - </span>
+								<input type="date" class="" id="toDt" name="toDt">
+							</div>
+
+							<button type="button" id="searchBtn" name="searchBtn">
+									검색
+							</button>
+						</div>
+
+						<!-- 상품주문정보 -->
+						<div class="order">
+							<h5>상품주문정보</h5>
+
+							<div class="itemList">
+								<!-- 여기서 아마 테이블 이용해야 할 듯..? -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+</body>
+</html>

@@ -154,4 +154,9 @@ public class UserController {
     	return result;
     };
     
+    @GetMapping("userInfo")
+    public String userInfo() {
+    	return "mypage/userInfo/userInfo";
+    }
+    
 }
