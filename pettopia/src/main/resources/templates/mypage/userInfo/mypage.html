@@ -8,6 +8,46 @@
 <div layout:fragment="content">
 <body>
         <style>
+            .status {
+                margin-top: 50px;
+            }
+            .status-icons, .status-text, .status-link {
+                display: flex;
+                justify-content: space-around;
+                margin-top: 10px;
+            }
+            .status-icons img {
+                width: 10%;
+                height: 10%;
+            }
+    
+            .search, .search-date {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            .search {
+                padding: 20px 0px;
+                margin: 20px 0px;
+            }
+    
+            #searchBtn {
+                padding: 10px 20px;
+                background-color: grey;
+                color: white;
+                font-weight: bolder;
+            }
+    
+            #searchBtn:hover {
+                background-color: pink;
+            }
+    
+            .itemList {
+                padding: 200px 200px;
+                border: 3px solid red;
+            }
+    
             .p-r-45, .p-r-0-lg {
                 margin-top: 50px;
             }
@@ -72,7 +112,7 @@
                 
                                 <li class="p-b-7">
                                     <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
-                                        정보수정
+                                        개인정보 수정
                                     </a>
                                 </li>
                 
@@ -91,44 +131,68 @@
 				<div class="col-md-8 col-lg-9 p-b-80">
 					<div class="p-r-45 p-r-0-lg">
 						<h1>
-							마이페이지 - 정보수정
+							마이페이지 - 주문관리
 						</h1>
-                        <div id="mypageInfo" style="margin-top: 20px;"></div>
-                        <div id="pagination2" class="tui-pagination"></div>
+
+						<!-- 배송 상태 -->
+						<div class="status">
+							<div class="status-icons">
+								<img src="images/icons/check-bill.png" alt="">
+								<img src="images/icons/giftbox.png" alt="">
+								<img src="images/icons/cargo-truck.png" alt="">
+								<img src="images/icons/checked.png" alt="">
+							</div>
+
+							<div class="status-text">
+								<span>결제완료</span>
+								<span>배송전</span>
+								<span>배송중</span>
+								<span>배송완료</span>
+							</div>
+
+							<div class="status-link">
+								<a href="">2</a>
+								<a href="">0</a>
+								<a href="">1</a>
+								<a href="">10</a>
+							</div>
+						</div>
+
+						<!-- 검색 기능 -->
+						<div class="search">
+							<h4>전체 주문처리 상태</h4>
+
+							<div class="search-period">
+								<a href="">1일 | </a>
+								<a href="">1주일 | </a>
+								<a href="">1개월 | </a>
+								<a href="">3개월 | </a>
+								<a href="">6개월</a>
+							</div>
+							
+							<div class="search-date">
+								<input type="date" class="" id="frDt" name="frDt">
+								<span style="margin: 0px 10px;"> - </span>
+								<input type="date" class="" id="toDt" name="toDt">
+							</div>
+
+							<button type="button" id="searchBtn" name="searchBtn">
+									검색
+							</button>
+						</div>
+
+						<!-- 상품주문정보 -->
+						<div class="order">
+							<h4>상품주문정보</h4>
+
+							<div class="itemList">
+								<!-- 여기서 아마 테이블 이용해야 할 듯..? -->
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-        <script>
-            const Grid = tui.Grid;
-
-            const mypageInfo = new Grid({
-                el: document.getElementById('mypageInfo'),
-                columns: [
-                    {
-                        header : 'test',
-                        name : ''
-                    }
-                ],
-                bodyHeight: 420,
-                /*pageOptions: {
-                    useClient: true,
-                    type: 'scroll',
-                    perPage: 30
-                }*/
-                pageOptions: {
-                    useClient: true,
-                    perPage: 5
-                }
-            });
-
-            var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
-                totalItems: 500,
-                itemsPerPage: 10,
-                visiblePages: 5,
-                centerAlign: true
-            });
-        </script>
-    </body>
-</div>
+    </div>
+</body>
 </html>
