@@ -15,10 +15,9 @@ import com.yedam.pettopia.admin.mapper.ProductMapper;
 import com.yedam.pettopia.admin.service.ProductService;
 import com.yedam.pettopia.common.FileUtil;
 
-
 @Service
-public class ProductServiceImpl implements ProductService{
-	
+public class ProductServiceImpl implements ProductService {
+
 	@Autowired
 	ProductMapper productMapper;
 
@@ -44,31 +43,44 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public int insertPrd(ProductVO vo) {
-	    int result = productMapper.insertPrd(vo);
-	    if(result == 1) {
-	    	if(vo.getImg() != null) {
-	    		for(int i = 0; i < vo.getImg().length; i++) {
-	    			String filename = FileUtil.fileupload(vo.getImg()[i]);
-	    			
-	    			vo.setPrdtImg(filename);
-	    			result = productMapper.insertImg(vo);
-	    		}
-	    	}
-	    	
-	    	// 대표 이미지 업로드
-	    	String filename = FileUtil.fileupload(vo.getImgMain());
-			
-	    	vo.setIsMain("Y");
-			vo.setPrdtImg(filename);
-			System.out.println("여기출력 " + vo);
-			result = productMapper.insertImg(vo);
-	        
-	    } else {
-	        return 0;
-	    }
-	    return 1;
-	}
+		int result = productMapper.insertPrd(vo);
+		if (result == 1) {
+			if (vo.getImg() != null) {
+				for (int i = 0; i < vo.getImg().length; i++) {
+					String filename = FileUtil.fileupload(vo.getImg()[i]);
 
+					vo.setPrdtImg(filename);
+					result = productMapper.insertImg(vo);
+				}
+			}
+
+			// 대표 이미지 업로드
+			String filename = FileUtil.fileupload(vo.getImgMain());
+
+			vo.setIsMain("Y");
+			vo.setPrdtImg(filename);
+			result = productMapper.insertImg(vo);
+
+			// 옵션 insert
+//			if (result == 1) {
+//				if (vo.getOptionArr() != null) {
+//					vo.getOptionArr().
+//					for (int i = 0; i < vo.getOptionArr().length; i++) {
+//						String optNm = vo.getOptionArr()[i];
+//						vo.setOptNm(optNm);
+//						result = productMapper.insertOption(vo);
+//					}
+//				}
+//				
+//				
+//			} else {
+//				return 0;
+//			}
+		} else {
+			return 0;
+		}
+		return 1;
+	}
 
 	@Override
 	public ProductVO selectDetailList(ProductVO vo) {

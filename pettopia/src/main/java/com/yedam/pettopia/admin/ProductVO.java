@@ -29,5 +29,13 @@ public class ProductVO {
 	private String imgId;
 	private String prdtImg;
 	private String isMain;
+	
+	//옵션
+	private String optId;
+	private String optNm;
+	private String optDetaId;
+	private String optDetaNm;
+	private int addPrc;
+	private String[] optionArr;
 
 }

@@ -26,4 +26,10 @@ public interface ProductMapper {
 
 	// 이미지 등록
 	public int insertImg(ProductVO vo);
+	
+	// 옵션 등록
+	public int insertOption(ProductVO vo);
+	
+	// 옵션 디테일 등록
+	public int insertOptionDetail(ProductVO vo);
 }

@@ -214,10 +214,81 @@
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >상품옵션</label
                 >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" />
+                <div class="col-sm-6 mt-2">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="option"
+                      value="사용함"
+                      id="optionRadio1"
+                    />
+                    <label class="form-check-label" for="optionRadio1"
+                      >사용함</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="option"
+                      value="사용안함"
+                      id="optionRadio2"
+                    />
+                    <label class="form-check-label" for="optionRadio2"
+                      >사용안함</label
+                    >
+                  </div>
                 </div>
               </div>
+              <div style="display: none" id="option">
+                <div class="row mb-4 optionInput">
+                  <div class="row mb-4">
+                    <label class="col-sm-2 col-form-label fw-bolder text-center"
+                      >옵션 이름</label
+                    >
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control optionNm" />
+                    </div>
+
+                    <div class="col-sm-2">
+                      <button
+                        class="btn btn-primary text-end btn-md"
+                        id="optionAdd"
+                      >
+                        +
+                      </button>
+                      <button
+                        class="btn btn-danger text-end btn-md"
+                        id="optionDel"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >옵션 값</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control optionVal"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >추가 가격</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control optionPrc"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button id="insert">테스트</button>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >이미지(메인)</label
@@ -288,6 +359,72 @@
         </div>
       </div>
       <script>
+        $(document).ready(function () {
+          // 옵션 값
+          $(document).on("click", "#insert", function () {
+            let chk = true;
+            let options = [];
+            let name = $(".optionNm");
+            for (let i = 0; i < name.length; i++) {
+              console.log(name.eq(i).val());
+            }
+
+            $(".optionInput").each(function () {
+              let values = $(this).find(".optionVal").val().split(",");
+              let prices = $(this).find(".optionPrc").val().split(",");
+
+              if (values.length != prices.length) {
+                Swal.fire({
+                  icon: "error",
+                  title: "옵션 값과 추가 가격이 일치 하지 않습니다.",
+                });
+                chk = false;
+                return;
+              }
+              for (let i = 0; i < values.length; i++) {
+                let obj = {
+                  optDetaNm: values[i].trim().toUpperCase(),
+                  addPrc: parseInt(prices[i].trim()),
+                };
+                options.push(obj);
+              }
+            });
+            if (chk === false) {
+              return;
+            }
+            console.log(options);
+          });
+
+          // 옵션 사용함 하면 input창 뜸
+          $("input[type=radio][name=option]").change(function () {
+            if (this.value === "사용함") {
+              $("#option").show();
+            } else if (this.value === "사용안함") {
+              $("#option").hide();
+            }
+          });
+
+          // + 버튼 클릭
+          $(document).on("click", "#optionAdd", function () {
+            var clone = $(".optionInput").eq(0).clone();
+            clone.find("input").val("");
+            clone.find(".btn").remove();
+            $("#option").append(clone);
+          });
+
+          // - 버튼 클릭
+          $(document).on("click", "#optionDel", function () {
+            if ($(".optionInput").length === 1) {
+              Swal.fire({
+                icon: "error",
+                title: "지울 수 없습니다.",
+              });
+              return;
+            }
+            $(".optionInput").last().remove();
+          });
+        });
+
         const Grid = tui.Grid;
 
         // 상품 관리 리스트(그리드)
@@ -396,6 +533,60 @@
         // 상품 등록
         $(document).on("click", "#insertBtn", function () {
           let formData = new FormData();
+          let optionChk = $("input[name=option]:checked").val();
+          let chk = true;
+
+          if (optionChk === "사용함") {
+            let optNmArr = [];
+            // 옵션 값 담기
+            let name = $(".optionNm");
+            for (let i = 0; i < name.length; i++) {
+              let obj = {
+                optNm: name.eq(i).val(),
+              };
+              optNmArr.push(obj);
+            }
+
+            console.log(optNmArr);
+            // 옵션 디테일 담기
+            let optDetArr = [];
+            $(".optionInput").each(function () {
+              let values = $(this).find(".optionVal").val().split(",");
+              let prices = $(this).find(".optionPrc").val().split(",");
+              if (values.length != prices.length) {
+                Swal.fire({
+                  icon: "error",
+                  title: "옵션 값과 추가 가격이 일치 하지 않습니다.",
+                });
+                chk = false;
+                return;
+              }
+              let detailObj = {
+                optDetaNmArr: [],
+                addPrcArr: [],
+              };
+              for (let i = 0; i < values.length; i++) {
+                detailObj.optDetaNmArr.push(values[i].trim().toUpperCase());
+                detailObj.addPrcArr.push(parseInt(prices[i].trim()));
+              }
+              optDetArr.push(detailObj.optDetaNmArr);
+              optDetArr.push(detailObj.addPrcArr);
+            });
+            console.log(optDetArr);
+          }
+          /* key 확인하기 */
+          // for (let key of formData.keys()) {
+          //   console.log(key);
+          // }
+
+          // /* value 확인하기 */
+          // for (let value of formData.values()) {
+          //   console.log(value);
+          // }
+          chk = false;
+          if (chk === false) {
+            return;
+          }
 
           // formData string 파라미터 담기
           let prdtNm = $("#prdtNm").val();
@@ -421,6 +612,8 @@
           for (let i = 0; i < upimg.length; i++) {
             formData.append("img", upimg[i]);
           }
+
+          console.log(formData);
           Swal.fire({
             title: "등록하시겠습니까?",
             icon: "question",
@@ -438,8 +631,9 @@
                 processData: false,
                 data: formData,
                 success: function (result) {
-                  console.log(result);
-                  location.reload();
+                  if (result === "success") {
+                    location.reload();
+                  }
                 },
                 error: function (reject) {
                   console.error(reject);
