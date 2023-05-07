@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+    <title>Pettopia</title>
+    <meta charset="UTF-8">
+</head>
+<div layout:fragment="content">
+<body>
+    <style>
+    label{
+        font-size: 20px;
+    }
+
+    </style>
+    <div class="container">
+    <div class="row">
+        <!--메뉴-->
+        <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+        <!--End 메뉴-->
+        <!-- 마이페이지 정보수정 -->
+        <div class="col-md-8 col-lg-9 p-b-80">
+            <div class="p-r-45 p-r-0-lg m-t-50">
+                <h1 >
+                    마이페이지 - 정보수정
+                </h1>
+                <div class="d-flex justify-content-center" style="height: 400px; position: relative;">
+                    <div class="align-self-center">
+                        <label for="pwChk" class="noonnu_font">비밀번호 확인</label>
+                        <input type="password" id="pwChk" name="pwChk" placeholder="****" class="input-group-text">
+                        <div style="position: absolute; left: 48%;" >
+                            <button type="button" id="userInfo" class="btn btnPush btnLightBlue">확인</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $('#userInfo').on('click',()=>{
+            //location.href="userInfo";
+            let pw = $('#pwChk').val();
+    
+            $.ajax({
+                url: "/pwChk",
+                type : "POST",
+                data : {pw : pw},
+                success : (data)=>{
+                    console.log(data);
+                },
+                error : (err)=>{
+                    console.log(err);
+                }
+            });
+        })
+
+    </script>
+</body>
+</div>
+</html>

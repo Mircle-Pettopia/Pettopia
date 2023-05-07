@@ -1,7 +1,10 @@
 package com.yedam.pettopia.user.web;
 
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -145,18 +148,69 @@ public class UserController {
     		//정보가 없을 때 트루를 반환한다.
     		result = true;
     	};
-    	//System.out.println("두구두구 result!! =====" + result);
-    	/*System.out.println("info===" + info);
-    	System.out.println("a======" + a);
-    	System.out.println(b);
-    	System.out.println(c);*/
     	
     	return result;
     };
     
     @GetMapping("userInfo")
-    public String userInfo() {
-    	return "mypage/userInfo/userInfo";
+    public String userInfo(Model model,
+			@AuthenticationPrincipal PrincipalDetails principalDetails,
+			Authentication authentication) {
+    	String result = "";
+    	
+		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        result += principal;
+        model.addAttribute("id", principal.getUser().getMeId());
+        model.addAttribute("name", principal.getUser().getName());
+        model.addAttribute("info", principal.getUser());
+    	return "mypage/userInfo";
+    }
+    
+    //비밀번호체크
+    @PostMapping("pwChk")
+    @ResponseBody
+    public boolean pwChk(@RequestParam String pw,
+			    		@AuthenticationPrincipal PrincipalDetails principalDetails,
+						Authentication authentication) {
+    	
+		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+    	BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    	
+    	String prinPw = principal.getUser().getPw();
+    	
+    	boolean result = bCryptPasswordEncoder.matches(pw,prinPw);
+    	
+    	return result;
+    };
+    
+    //정보 업데이트
+    @PostMapping("userInfoUpdate")
+    @ResponseBody
+    public Boolean userInfoUpdate(@RequestBody UserVO vo) {
+    	Boolean response = false;
+    	
+    	int result = service.userInfoUpdate(vo); 
+    	
+    	if(result < 1) {
+    		response = false;
+    	}
+    	
+    	return false; //response;
+    }
+    
+    @GetMapping("mypage")
+    public String mypage(Model model,
+			@AuthenticationPrincipal PrincipalDetails principalDetails,
+			Authentication authentication) {
+    	String result = "";
+		//Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	
+		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        result += principal;
+    	model.addAttribute("id", principal.getUser().getMeId());
+        model.addAttribute("name", principal.getUser().getName());
+        
+    	return "mypage/mypage";
     }
     
 }

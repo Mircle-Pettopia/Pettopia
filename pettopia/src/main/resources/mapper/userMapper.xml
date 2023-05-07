@@ -48,4 +48,15 @@
 	WHERE me_sns_token = #{meSnsToken}
     </select>
     
+    <!-- 참고 : https://devfunny.tistory.com/11 -->
+    <update id="userInfoUpdate" parameterType="UserVO">
+    UPDATE member
+	SET
+	    pw = #{pw},
+	    phone = #{phone},
+	    addr = #{addr},
+	    addr_detail = #{addrDetail},
+	    update_dt = sysdate
+	WHERE me_id = #{meId}
+    </update>
  </mapper>

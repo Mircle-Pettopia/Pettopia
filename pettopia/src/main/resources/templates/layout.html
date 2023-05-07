@@ -52,6 +52,7 @@
 	<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
 	<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/css/petcss.css">
 	<!--눈누 폰트-->
 	<style>
 		@font-face {
@@ -91,7 +92,7 @@
 							<sapn th:text="${name}"></sapn>님 어서오세요!
 						</a>
 						<a href="logout" class="flex-c-m trans-04 p-lr-25" style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-						<a href="contact.html" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
+						<a href="mypage" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
 					</div>
 					<!--로그인이 되어있지 않을 때-->
 					<div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
