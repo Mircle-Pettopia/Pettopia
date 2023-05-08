@@ -15,5 +15,15 @@
   )
   WHERE ROWNUM &lt;= 4
 </select>
+
+
+<select id="selectPrdAllList2" resultType="Product1VO">
+  SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
+  FROM (
+    SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
+    FROM product
+    ORDER BY prdt_id
+  )
+</select>
   
   </mapper>
