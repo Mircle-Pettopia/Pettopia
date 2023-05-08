@@ -28,14 +28,35 @@
     SELECT me_sns_token FROM member WHERE me_sns_token = #{meSnsToken}
     </select>
     
+    <select id="snsIdToKenInfo" resultType="UserVO">
+    SELECT * FROM member WHERE me_sns_token = #{meSnsToken}
+    </select>
+    
     <!-- 카카오 회원가입 -->
     <insert id="kakaosaveUser" parameterType="UserVO">
     INSERT
     INTO member
         (me_id, pw, name, sign_dt, sign_path, role, me_sns_token)
     VALUES
-        (#{meId}, #{pw}, #{name}, sysdate, '카카오', 'USER', #{meSnsToken})
+        (#{meId}, #{pw}, #{name}, sysdate, #{signPath}, 'USER', #{meSnsToken})
     </insert>
     
+    <!-- sns로 회원가입 했을 때 주소, 폰번호가 없을 때 알림창 띄우기 -->
+    <select id="snsGetNullInfo" resultType="UserVO">
+	SELECT post, addr, addr_detail, phone
+	FROM member
+	WHERE me_sns_token = #{meSnsToken}
+    </select>
     
+    <!-- 참고 : https://devfunny.tistory.com/11 -->
+    <update id="userInfoUpdate" parameterType="UserVO">
+    UPDATE member
+	SET
+	    pw = #{pw},
+	    phone = #{phone},
+	    addr = #{addr},
+	    addr_detail = #{addrDetail},
+	    update_dt = sysdate
+	WHERE me_id = #{meId}
+    </update>
  </mapper>

@@ -2,12 +2,15 @@ package com.yedam.pettopia.user;
 
 import java.util.Collection;
 import java.util.Collections;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Builder;
 import lombok.Data;
 
+@SuppressWarnings("serial")
 @Data
 public class UserVO implements UserDetails{
 	private String meId;
@@ -25,6 +28,9 @@ public class UserVO implements UserDetails{
 	private String outYn;
 	private String role;
 	private String meSnsToken;
+	
+	private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    private String providerId;  // oauth2를 이용할 경우 아이디값
 	
 	private int idChk;
 	@Override
@@ -63,4 +69,25 @@ public class UserVO implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
+	
+	@Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
+	public UserVO(String name, String pw, String role) {
+		this.name = name;
+		this.pw = pw;
+		this.role = role;
+	}
+	
+	@Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
+	public UserVO(String meId, String pw, String name, String meSnsToken,
+			String signPath, String provider, String providerId) {
+		this.meId = meId;
+		this.pw = pw;
+		this.name = name;
+		this.meSnsToken = meSnsToken;
+		this.signPath = signPath;
+		this.provider = provider;
+        this.providerId = providerId;
+	}
+	
+	public UserVO() {}
 }

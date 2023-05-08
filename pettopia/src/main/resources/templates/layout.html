@@ -33,11 +33,26 @@
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
-	
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
+	<!--sweet alert-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+	<!--===============================================================================================-->
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-
+	<!--===============================================================================================-->
+	<!-- DataPicker -->
+	<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
+	<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+	<!-- Toast UI xlsx -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+	<!-- Toast 페이지네이션-->
+	<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+	<!-- Toast UI -->
+	<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+	<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/css/petcss.css">
 	<!--눈누 폰트-->
 	<style>
 		@font-face {
@@ -70,17 +85,14 @@
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="right-top-bar flex-w h-full">
-
-
 					</div>
-
 					<div class="right-top-bar flex-w h-full" th:if="${not #strings.isEmpty(id)}">
 						<!--로그인을 했을 때-->
 						<a id="wellcomeMag" class="noonnu_font">
 							<sapn th:text="${name}"></sapn>님 어서오세요!
 						</a>
 						<a href="logout" class="flex-c-m trans-04 p-lr-25" style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-						<a href="contact.html" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
+						<a href="mypage" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
 					</div>
 					<!--로그인이 되어있지 않을 때-->
 					<div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
@@ -277,10 +289,10 @@
 		</div>
 	</div>
 	
-	<section>
+	<section class="bg0 p-t-62 p-b-60">
 		<article layout:fragment="content">
-	  		컨텐트영역
-	  	</article>
+			컨텐트영역
+		</article>
 	</section>
 	
 	<!-- Footer -->
