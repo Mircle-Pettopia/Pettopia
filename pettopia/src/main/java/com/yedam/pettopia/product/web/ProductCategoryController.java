@@ -28,6 +28,7 @@ public class ProductCategoryController {
 	
 	@GetMapping("ProductCategory")
 	public String ProductCategory(Model model){
+		model.addAttribute("index", productService.selectPrdAllList2());
 		return"product/ProductCategory";
 	}
 	@GetMapping("ProductDetail")

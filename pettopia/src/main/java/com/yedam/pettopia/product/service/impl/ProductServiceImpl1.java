@@ -27,4 +27,10 @@ public class ProductServiceImpl1 implements ProductService1{
 		return productMapper.insertPrdCount();
 	}
 
+	@Override
+	public List<Product1VO> selectPrdAllList2() {
+
+		return productMapper.selectPrdAllList2();
+	}
+
 }
