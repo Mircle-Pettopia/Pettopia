@@ -31,10 +31,15 @@
   <link rel="stylesheet" type="text/css" href="css/util.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />
   <!--===============================================================================================-->
+  <style>
+    .board_list .title {
+      width: 50%;
+    }
+  </style>
 </head>
 
 
-<body class="animsition">
+<class="animsition">
 
   <div layout:fragment="content">
     <div class="container">
@@ -44,13 +49,13 @@
           <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
 
-        <span class="stext-109 cl4"> 공지사항 </span>
+        <span class="stext-109 cl4"> 지식공유게시판 </span>
       </div>
     </div>
 
     <div class="board_wrap">
       <div class="board_title">
-        <strong>지식게시판</strong>
+        <strong>지식공유게시판</strong>
       </div>
       <div style="margin-bottom: 10px; text-align: end">
         <div class="board_list_wrap">
@@ -58,70 +63,21 @@
             <div class="top">
               <div class="num">번호</div>
               <div class="title">제목</div>
+              <div class="writer">작성자</div>
               <div class="date">작성일</div>
               <div class="count">조회</div>
             </div>
-            <div>
-              <div class="num">5</div>
-              <div class="title">
-                <a href="">글 제목</a>
-              </div>
 
-              <div class="date">2023/04/28</div>
-              <div class="count">5</div>
-            </div>
-            <div>
-              <div class="num">4</div>
-              <div class="title">
-                <a href="">글 제목</a>
-              </div>
+            <div id="lists">
 
-              <div class="date">2023/04/28</div>
-              <div class="count">4</div>
-            </div>
-            <div>
-              <div class="num">3</div>
-              <div class="title">
-                <a href="">글 제목</a>
-              </div>
-
-              <div class="date">2023/04/28</div>
-              <div class="count">3</div>
-            </div>
-            <div>
-              <div class="num">2</div>
-              <div class="title">
-                <a href="">글 제목</a>
-              </div>
-
-              <div class="date">2023/04/28</div>
-              <div class="count">2</div>
-            </div>
-            <div>
-              <div class="num">1</div>
-              <div class="title">
-                <a href="">글 제목</a>
-              </div>
-
-              <div class="date">2023/04/28</div>
-              <div class="count">1</div>
             </div>
           </div>
 
 
-          <div class="board_page">
-            <a href="#" class="bt first"></a>
-            <a href="#" class="bt prev"></a>
-            <a href="#" class="num">1</a>
-            <a href="#" class="num">2</a>
-            <a href="#" class="num">3</a>
-            <a href="#" class="num">4</a>
-            <a href="#" class="num">5</a>
-            <a href="#" class="bt next"></a>
-            <a href="#" class="bt last"></a>
+          <div class="board_page" id="pagenav">
           </div>
           <div class="bt_wrap">
-            <a href="noticeInsert" class="on">등록</a>
+            <a href="knowHowWriter" class="on">등록</a>
           </div>
         </div>
       </div>
@@ -174,6 +130,121 @@
     </script>
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
-</body>
+    <script>
+      showLists();
+      function showLists(page) {
+        if (page == null) {
+          page = 1;
+        }
+        $.ajax({
+          url: "knowhowList",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: { page: page },
+          success: function (data) {
+            console.log(data);
+            lists.innerHTML = '';
+            for (i = 0; i < data.length; i++) {
+              lists.innerHTML += `
+              <div class="num">${data[i].boNo}</div>
+              <div class="title">
+                <a href="showKnowHow?boNo=${data[i].boNo}">${data[i].title}</a>
+              </div>
+              <div class="writer">${data[i].meId}</div>
+              <div class="date" >${dateChange(data[i].regDt)}</div>
+              <div class="count">${data[i].viewCnt}</div>
+              `
+            }
+
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("에러");
+          },
+        })
+
+        $.ajax({
+          url: "knowHowMaxPage",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            paging(data, 10, 5, page)
+
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("에러");
+          },
+        })
+
+      }
+
+
+
+      function paging(totalData, dataPerPage, pageCount, currentPage) {
+        console.log("currentPage : " + currentPage);
+
+        totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
+
+        if (totalPage < pageCount) {
+          pageCount = totalPage;
+        }
+
+        let pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
+        let last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
+
+        if (last > totalPage) {
+          last = totalPage;
+        }
+
+        let first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
+        let next = last + 1;
+        let prev = first - 1;
+
+        let pageHtml = pagenav.innerHTML;
+        pagenav.innerHTML = '';
+        if (prev > 0) {
+          pagenav.innerHTML += `<a href="#" class="bt prev" onclick="showLists(${prev});">＜</a>`;
+        }
+
+        //페이징 번호 표시 
+        for (var i = first; i <= last; i++) {
+          if (currentPage == i) {
+            pagenav.innerHTML +=
+              `<a href="#" class="num on">${i}</a>`;
+          } else {
+            pagenav.innerHTML += `<a href="#" onclick="showLists(${i});" class="num o">${i}</a>`;
+          }
+        }
+
+        if (last < totalPage) {
+          pagenav.innerHTML += `<a href="#" onclick="showLists(${next});" class="bt next">＞</a>`;
+        }
+
+        $("#pagingul").html(pagenav.innerHTML);
+        let displayCount = "";
+        displayCount = "현재 1 - " + totalPage + " 페이지 / " + totalData + "건";
+        $("#displayCount").text(displayCount);
+      }
+
+
+      //날짜 변환함수
+      function dateChange(data) {
+        if (data != null && data != 0) {
+          let newData = new Date(data);
+          let result = newData.getFullYear() + "-" +
+            (newData.getMonth() < 10
+              ? "0" + (newData.getMonth() + 1)
+              : newData.getMonth() + 1) +
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate());
+          return result;
+        }
+        else return null;
+      };
+    </script>
+  </div>
+  </body>
 
 </html>

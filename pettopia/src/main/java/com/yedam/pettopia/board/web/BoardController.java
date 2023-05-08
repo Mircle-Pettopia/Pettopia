@@ -1,11 +1,14 @@
 package com.yedam.pettopia.board.web;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.board.service.BoardService;
@@ -44,8 +47,17 @@ public class BoardController {
 	//======================테스트파트끝================
 	@GetMapping("knowhow")
 	public String knowhow(Model model) {
-		model.addAttribute("Lists");
+		
 		return "board/knowHowList";
+	}
+	
+	@PostMapping("knowhowList")
+	@ResponseBody
+	public List<BoardVO> knowhowList(int page) {
+		if(page==0) {
+		page=1;
+		}
+		return boardService.knowHowList(page);
 	}
 	
 	@PostMapping("insertKnowhow")
@@ -55,9 +67,26 @@ public class BoardController {
 		return boardService.insertKnowhowArticle(vo);
 	}
 	
-	@GetMapping("knowHowWriter")
+	@GetMapping("knowHowMaxPage")
 	@ResponseBody
-	public String knowHowWriter(Model model) {
+	public int knowHowMaxPage() {
+		return boardService.knowHowMaxPage();
+	}
+	
+	@GetMapping("knowHowWriter")
+	public String knowHowWriter() {
 		return "board/knowHowWriter";
+	}
+	
+	@GetMapping("showKnowHow")
+	public String showKnowHow(Model model,@RequestParam("boNo") int boNo) {
+		model.addAttribute("Article",boardService.showKnowHow(boNo));
+		return "board/knowHowArticle";	
+	}
+	
+	@GetMapping("getknowHowReply")
+	@ResponseBody
+	public List<BoardVO> getknowHowReply(Model model,@RequestParam("boNo") int boNo) {
+		return boardService.getknowHowReply(boNo);	
 	}
 }
