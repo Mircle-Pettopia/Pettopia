@@ -40,4 +40,25 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.knowHowList(page);
 	}
 
+	@Override
+	public int knowHowMaxPage() {
+		// TODO Auto-generated method stub
+		return boardMapper.knowHowMaxPage();
+	}
+
+	@Override
+	public BoardVO showKnowHow(int boNo) {
+		// TODO Auto-generated method stub
+		return boardMapper.showKnowHow(boNo);
+	}
+
+	@Override
+	public List<BoardVO> getknowHowReply(int boNo) {
+		// TODO Auto-generated method stub
+		return boardMapper.getknowHowReply(boNo);
+	}
+	
+	
+	
+
 }

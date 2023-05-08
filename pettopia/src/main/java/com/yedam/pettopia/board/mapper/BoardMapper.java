@@ -10,4 +10,7 @@ public interface BoardMapper {
 	public BoardTestVO showArticle(String no);
 	public int insertKnowhowArticle(BoardVO vo);
 	public List<BoardVO> knowHowList (int page);
+	public int knowHowMaxPage();
+	public BoardVO showKnowHow(int boNo);
+	public List<BoardVO> getknowHowReply(int boNo);
 }

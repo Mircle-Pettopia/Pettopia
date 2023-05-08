@@ -23,12 +23,26 @@
 		,#{meId})
 	</insert>
 	
-	<select id="knowHowList">
-		select RN,BO_NO,TITLE,SUBJECT,REG_DT,VIEW_CNT,ME_ID
-		from (
-			select rownum as rn,BO_NO,TITLE,SUBJECT,REG_DT,VIEW_CNT,ME_ID 
-				from knowhow_board 
-				order by bo_no desc)
-		where RN between 1 and 11;	
+	<select id="knowHowList" resultType="BoardVO">
+		select * from (	select rownum as rn,a.*
+				from (select bo_no,title,reg_dt,view_cnt,me_id 
+                from knowhow_board order by bo_no desc) a
+				)
+		where RN between (#{page}-1)*10 and #{page}*10
 	</select>
+	
+	<select id="showKnowHow" resultType="BoardVO">
+		select * from knowhow_board where bo_no=#{boNo}
+	</select>
+	
+	<select id="knowHowMaxPage" resultType="int">
+		select count(*)
+		from knowhow_board 
+	</select>
+	
+	<select id="getknowHowReply" resultType="BoardVO">
+		select * from reply 
+		where DIVISION = 'DR2' and NO=#{boNo} and RE IS NULL
+	</select>
+	
 </mapper>
