@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pettopia</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">회원 관리</h5>
+                <div class="col-lg-12 p-4">
+                  <table class="table table-bordered">
+                    <tr class="table-primary">
+                      <td colspan="3">상품 현황</td>
+                    </tr>
+                    <tr class="table-secondary text-center">
+                      <td>전체등록 상품</td>
+                      <td>판매중 상품</td>
+                      <td>판매중지 상품</td>
+                    </tr>
+                    <tr class="text-center">
+                      <td class="text-primary text-decoration-underline fs-3">
+                        <span th:text="${prdAllCnt}"></span>개
+                      </td>
+                      <td class="text-success text-decoration-underline fs-3">
+                        <span th:text="${saleCnt}"></span>개
+                      </td>
+                      <td class="text-danger text-decoration-underline fs-3">
+                        <span th:text="${stopSaleCnt}"></span>개
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <hr />
+                <form>
+                  <div class="row mb-3 pt-5">
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
+                      >상품명</label
+                    >
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" />
+                    </div>
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
+                      >유형</label
+                    >
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
+                      >등록일자</label
+                    >
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" />
+                    </div>
+
+                    <label class="col-sm-1 col-form-label fw-bolder text-center"
+                      >상품상태</label
+                    >
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="text-center p-4">
+                    <button type="button" class="btn btn-primary">검색</button>
+                    <button type="button" class="btn btn-secondary">
+                      초기화
+                    </button>
+                  </div>
+                </form>
+                <div class="text-end p-2">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#insertModal"
+                  >
+                    등록
+                  </button>
+                  <button type="button" class="btn btn-danger" id="delBtn">
+                    삭제
+                  </button>
+                </div>
+                <div id="prdList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div id="test"></div>
+      <div
+        class="modal fade"
+        id="insertModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">상품 등록</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품명</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="prdtNm" />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매가</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    id="prdtPrc"
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품설명</label
+                >
+                <form>
+                  <textarea id="summernote" name="editordata"></textarea>
+                </form>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품분류(대)</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div
+                    class="form-check form-check-inline"
+                    th:each="lCat : ${lCatList}"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="lCatId"
+                      th:value="${lCat.lCatId}"
+                      th:id="${lCat.lCatId}"
+                    />
+                    <label
+                      class="form-check-label"
+                      th:for="${lCat.lCatId}"
+                      th:text="${lCat.lCatNm}"
+                    ></label>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품분류(소)</label
+                >
+                <div class="col-sm-7 mt-2" id="sCatList"></div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품옵션</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="option"
+                      value="사용함"
+                      id="optionRadio1"
+                    />
+                    <label class="form-check-label" for="optionRadio1"
+                      >사용함</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="option"
+                      value="사용안함"
+                      id="optionRadio2"
+                    />
+                    <label class="form-check-label" for="optionRadio2"
+                      >사용안함</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div style="display: none" id="option">
+                <div class="row mb-4 optionInput">
+                  <div class="row mb-4">
+                    <label class="col-sm-2 col-form-label fw-bolder text-center"
+                      >옵션 이름</label
+                    >
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control optionNm" />
+                    </div>
+
+                    <div class="col-sm-2">
+                      <button
+                        class="btn btn-primary text-end btn-md"
+                        id="optionAdd"
+                      >
+                        +
+                      </button>
+                      <button
+                        class="btn btn-danger text-end btn-md"
+                        id="optionDel"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >옵션 값</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control optionVal"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >추가 가격</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control optionPrc"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >이미지(메인)</label
+                >
+                <div class="col-sm-6">
+                  <input type="file" class="form-control" id="imgMain" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >이미지</label
+                >
+                <div class="col-sm-6">
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="img"
+                    name="img"
+                    multiple
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매상태</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div
+                    class="form-check form-check-inline"
+                    th:each="saleSt : ${saleStList}"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="saleSt"
+                      th:id="${saleSt.codCd}"
+                      th:value="${saleSt.codCd}"
+                    />
+                    <label
+                      class="form-check-label"
+                      th:for="${saleSt.codCd}"
+                      th:text="${saleSt.codTitle}"
+                    ></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                닫기
+              </button>
+              <button type="button" class="btn btn-primary" id="insertBtn">
+                등록
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+    
+      </script>
+    </div>
+  </body>
+</html>
