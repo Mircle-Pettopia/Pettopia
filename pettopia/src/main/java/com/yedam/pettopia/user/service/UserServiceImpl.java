@@ -105,12 +105,19 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	@Override
 	public int userInfoUpdate(UserVO vo) {
 		int result = 0;
+		String pw = "";
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
-		String encPw = passwordEncoder.encode(vo.getPw());
-		vo.setPw(encPw);
+		if(vo.getSignPath() != "company") {
+			result = mapper.userInfoUpdate(vo);
+		}
+		
+		pw = passwordEncoder.encode(vo.getPw());
+		vo.setPw(pw);
 		
 		result = mapper.userInfoUpdate(vo);
+		
+		System.out.println(vo);
 		
 		if(result < 1) {
 			result = -1;

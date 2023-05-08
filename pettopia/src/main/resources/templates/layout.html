@@ -66,6 +66,10 @@
 			font-family: 'SUITE-Regular' !important;
 		}
 
+		*{
+			font-family: 'SUITE-Regular' !important;
+		}
+
 		#wellcomeMag{
 			color: white;
 			font-size: 15px !important;
@@ -88,7 +92,7 @@
 					</div>
 					<div class="right-top-bar flex-w h-full" th:if="${not #strings.isEmpty(id)}">
 						<!--로그인을 했을 때-->
-						<a id="wellcomeMag" class="noonnu_font">
+						<a id="wellcomeMag">
 							<sapn th:text="${name}"></sapn>님 어서오세요!
 						</a>
 						<a href="logout" class="flex-c-m trans-04 p-lr-25" style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>

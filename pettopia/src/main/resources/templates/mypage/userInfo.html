@@ -35,13 +35,13 @@
     }
 </style>
 
-    <div class="container noonnu_font">
+    <div class="container">
         <div class="row">
             <!--메뉴-->
             <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
             <!--End 메뉴-->
             <!-- 마이페이지 주문관리 -->
-            <div class="col-md-8 col-lg-9 p-b-80">
+            <div class="col-md-8 col-lg-10 p-b-80">
                 <div class="p-r-45 p-r-0-lg m-t-50">
                     <h1>
                         마이페이지 - 정보수정
@@ -132,23 +132,21 @@
             });
         });
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
         // 수정할 데이터를 DB로 넘기기 전에 조건문 걸기
         /*<![CDATA[*/
         let path = /*[[${path}]]*/
-        console.log(path == 'company');
         $('#modifyBtn').on('click',()=>{
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'center',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-            
             let name = $('#name').val();
             let id = $('#meId').val();
             let post = $('#post').val();
@@ -160,21 +158,17 @@
             let addrDtl = $('#addrDtl').val();      //상세주소
             let path = $('#path').val();
             let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/; //비밀번호 : 영문, 숫자 포함 6자리 이상
+            let datas;
 
+            //가입경로가 자사일 경우 패스워드까지 update를 진행한다
             if(path == 'company'){
+                //비밀번호, 연락처가 없을 경우 알림 띄우기
                 if(pw=='' || pw.trim() === "") {
                     Toast.fire({
                         icon: 'warning',
                         title: '비밀번호가 입력되지 않았습니다.'
                     });
                     $('#pw').focus();
-                    return;
-                } else if(!pwModify || pwModify.trim() === ""){
-                    Toast.fire({
-                        icon: 'warning',
-                        title: '수정할 비밀번호가 입력되지 않았습니다.'
-                    });
-                    $('#pwModify').focus();
                     return;
                 } else if(!phone || phone.trim() === ""){
                     Toast.fire({
@@ -183,48 +177,97 @@
                     });
                     $('#phone').focus();
                     return;
-                } else if(!regPass.test(pwModify) || pwModify.length < 6){
-                    Toast.fire({
-                        icon: 'warning',
-                        title: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.'
-                    });
-                    $('#pwModify').focus();
-                    return;
-                } else if(pw === pwModify) {
-                    Toast.fire({
-                        icon: 'warning',
-                        title: '현재 비밀번호와 수정할 비밀번호가 동일합니다.'
-                    });
-                    $('#pwModify').focus();
-                    return;
+                //수정할 비밀번호란에 문자열이 있을 경우
+                } else if(pwModify.length > 0){
+                    //수정할 비밀번호, 수정할 비밀번호 확인을 체크한다.
+                    if(!pwModify || pwModify.trim() === ""){
+                        Toast.fire({
+                            icon: 'warning',
+                            title: '수정할 비밀번호가 입력되지 않았습니다.'
+                        });
+                        $('#pwModify').focus();
+                        return;
+                    } else if(!regPass.test(pwModify) || pwModify.length < 6){
+                        Toast.fire({
+                            icon: 'warning',
+                            title: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.'
+                        });
+                        $('#pwModify').focus();
+                        return;
+                    } else if(pw === pwModify) {
+                        Toast.fire({
+                            icon: 'warning',
+                            title: '현재 비밀번호와 수정할 비밀번호가 동일합니다.'
+                        });
+                        $('#pwModify').focus();
+                        return;
+                    } else {
+                        //예외처리를 모두 거치고 수정할 비밀번호를 입력했을 경우 해당 ajax를 실행한다.
+                        datas = {
+                            signPath : path,
+                            name : name,
+                            meId : id,               //아이디
+                            pw : pwModify,           //수정되지 않은 비밀번호
+                            phone : phone,          //연락처
+                            post : post,            //우편번호
+                            addr : addr,            //주소
+                            addrDetail : addrDtl    //상세주소
+                        };
+                        console.log(datas);
+                        $.ajax({
+                            type : "PUT",
+                            url : "/userInfoUpdate",
+                            data :  JSON.stringify(datas),
+                            contentType: "application/json; charset=utf-8",
+                            dataType : 'json',
+                            success : function(data) {
+                                if(data) {
+                                    console.log(data);
+                                    //아이콘 왜 깨지니?
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: '수정완료',
+                                        text: '정보 수정이 완료되었습니다.',
+                                    });
+                                                                setTimeout(function() {
+                                        window.location.reload(true);
+                                    }, 2500);
+                                }
+                            },
+                            error : function(error) {
+                                console.log(error);
+                            }
+                        });
+                    };
+                //비밀번호를 재설정하지않고 다른 내용만 바꿨을 경우 해당 ajax가 실행된다.
                 } else {
-                    const data = {
+                    datas = {
                         signPath : path,
                         name : name,
-                        meId : id,                //아이디
-                        pw : pwModify,           //수정할 비밀번호
+                        meId : id,               //아이디
+                        pw : pw,                //수정할 비밀번호
                         phone : phone,          //연락처
                         post : post,            //우편번호
                         addr : addr,            //주소
                         addrDetail : addrDtl    //상세주소
                     };
-
+                    console.log(datas);
                     $.ajax({
                         type : "PUT",
                         url : "/userInfoUpdate",
-                        data :  JSON.stringify(data),
+                        data :  JSON.stringify(datas),
                         contentType: "application/json; charset=utf-8",
                         dataType : 'json',
                         success : function(data) {
                             if(data) {
+                                console.log(data);
                                 //아이콘 왜 깨지니?
                                 Swal.fire({
                                     icon: 'success',
                                     title: '수정완료',
                                     text: '정보 수정이 완료되었습니다.',
                                 });
-
-                                setTimeout(function() {
+                                                            setTimeout(function() {
                                     window.location.reload(true);
                                 }, 2500);
                             }
@@ -234,6 +277,7 @@
                         }
                     });
                 };
+            ////가입경로가 자사가 아닌 SNS일 때 해당 ajax가 실행된다.
             } else {
                 if(!phone || phone.trim() === ""){
                     Toast.fire({
@@ -243,7 +287,7 @@
                     $('#phone').focus();
                     return;
                 } else {
-                    const datas = {
+                    datas = {
                         signPath : path,
                         name : name,
                         meId : id,               //아이디
@@ -252,7 +296,7 @@
                         addr : addr,            //주소
                         addrDetail : addrDtl    //상세주소
                     };
-
+                    console.log(datas);
                     $.ajax({
                         type : "PUT",
                         url : "/userInfoUpdate",
@@ -261,14 +305,14 @@
                         dataType : 'json',
                         success : function(data) {
                             if(data) {
+                                console.log(data);
                                 //아이콘 왜 깨지니?
                                 Swal.fire({
                                     icon: 'success',
                                     title: '수정완료',
                                     text: '정보 수정이 완료되었습니다.',
                                 });
-
-                                setTimeout(function() {
+                                                            setTimeout(function() {
                                     window.location.reload(true);
                                 }, 2500);
                             }
@@ -277,37 +321,9 @@
                             console.log(error);
                         }
                     });
+
                 };
-            };
-        });
-        /*]]>*/
-        
-        // 수정할 비밀번호 유효성검사
-        $('#pwModify, #pwModifyChk').on('keyup',function(){
-            let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/; //비밀번호 : 영문, 숫자 포함 6자리 이상
-            let pwModify = $('#pwModify').val();                //수정할 비밀번호
-            let pwModifyChk = $('#pwModifyChk').val();          //수정 비밀번호 확인란
-            let pw = $('#pw').val();    //수정할 비밀번호
-            if(!regPass.test(pwModify) || pwModify > 1 || pwModify.length < 6){
-                $('#pwModify_feedback').html('영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.');
-                $("#pwModify_feedback").attr('color','#dc3545');
-                $('#pwModify').focus();
-                return;
-            } else {
-                if(pw === pwModify) {
-                    $('#pwModify_feedback').html('기존 비밀번호와 동일합니다.');
-                    $("#pwModify_feedback").attr('color','#dc3545');
-                } else {
-                    $('#pwModify_feedback').html('사용가능한 비밀번호입니다.');
-                    $("#pwModify_feedback").attr('color','#2fb380');
-                    if(pwModifyChk === pwModify) {
-                        $('#pwModifyChk_feedback').html('비밀번호 일치');
-                        $("#pwModifyChk_feedback").attr('color','#2fb380');
-                    } else {
-                        $('#pwModifyChk_feedback').html('수정하고자하는 비밀번호가 일치하지 않습니다.');
-                        $("#pwModifyChk_feedback").attr('color','#dc3545');
-                    }
-                }
+
             };
         });
         

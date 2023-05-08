@@ -9,39 +9,91 @@
 <div layout:fragment="content">
 <body>
         <style>
-            .status {
-                margin-top: 50px;
+            .status  {
+                margin-top: 30px;
+				background: rgb(248, 245, 250);
+				border-radius: 15px;
+				padding: 15px;
             }
+
+			#backColor{
+				margin-top: 30px;
+				background: rgb(248, 245, 250);
+				padding: 10px 0px 10px 0px !important;
+				border-radius: 15px;
+				padding: 10px;
+			}
             .status-icons, .status-text, .status-link {
                 display: flex;
                 justify-content: space-around;
                 margin-top: 10px;
             }
+
+			.status-link{
+				text-align: center;
+			}
+
             .status-icons img {
-                width: 10%;
+                width: 8%;
                 height: 10%;
-            }
-    
-            .search {
-                justify-content: space-between;
-                align-items: center;
-				padding: 20px 0px;
-                margin: 20px 0px;
             }
 
 			.datePut{
-            display: inline-flex !important;
-            margin-bottom: 10px;
-            font-size: 13px !important;
-			width: 130px;
+				display: inline-flex !important;
+				margin-bottom: 10px;
+				font-size: 15px !important;
+				width: 173px;
+				margin-top: 8px;
+				background-color: rgb(255, 255, 255) !important;
 			}
 
-            a, span{
-                font-size: 15px;
-            }
+			a, span, th, td, tr {
+				font-size: 15px !important;
+				color: black !important;
+			}
+
+			th, td {
+				text-align: center;
+			}
+
+			#allOrderSearch{
+				width: 130px;
+				height: 35px;
+				font-size: 13px !important;
+				margin: 8px 5px 0px 10px;
+			}
 
 			#btnCss{
-				float: right; margin: 0px 0px 0px 10px !important; position: relative; bottom: 10px;
+				float: right;
+				position: relative;
+				bottom: 10px;
+				margin-top: 8px;
+			}
+
+			#filter{
+				margin-top: 8px;
+				text-align: center;
+			}
+
+			#filter li {
+				display: inline-block;
+				padding-top: 10px;
+				border: none;
+				border-radius: 10px;
+				background-color: white;
+				padding: 8px 26px 5px 10px;
+			} 
+
+			.searchA{
+				padding: 8px 40px 5px 0px;
+			}
+
+			tbody img{
+				width: 100px;
+			}
+
+			tbody p {
+				font-size: 13px !important;
 			}
         </style>
 
@@ -50,7 +102,7 @@
                 <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
 
                 <!-- 마이페이지 주문관리 -->
-				<div class="col-md-8 col-lg-9 p-b-80">
+				<div class="col-md-8 col-lg-10 p-b-80">
 					<div class="p-r-45 p-r-0-lg m-t-50">
 						<h1>
 							마이페이지 - 주문관리
@@ -81,34 +133,84 @@
 						</div>
 
 						<!-- 검색 기능 -->
-						<div class="search">
-							<div class="search-period" style="display: inline-flex !important;">
-								<h4>전체 주문처리 상태</h4>&nbsp;&nbsp;&nbsp;&nbsp;
+						<div class="row m-t-20 m-b-20" id="backColor">
+							<div class="col-md-2">
+								<select name="" id="allOrderSearch">
+									<option value="0">전체 주문처리 상태</option>
+									<option>2</option>
+									<option>3</option>
+								</select>
+							</div>
+							<div class="col-md-4">
 								<div id="filter">
-									<a href="">1일 | </a>
-									<a href=""> 1주일 | </a>
-									<a href=""> 1개월 | </a>
-									<a href=""> 3개월 | </a>
-									<a href=""> 6개월</a>
+									<ul>
+										<a href="#"><li>하루</li></a>
+										<a href="#"><li>일개월</li></a>
+										<a href="#"><li>일주일</li></a>
+										<a href="#"><li>삼개월</li></a>
+									</ul>
 								</div>
-								&nbsp;&nbsp;&nbsp;&nbsp;
+							</div>
+							<div class="col-md-5">
 								<input type="date" id="frDt" name="frDt" class="datePut">
 								<span style="margin: 0px 10px;"> - </span>
 								<input type="date" id="toDt" name="toDt" class="datePut">
+							</div>
+							<div class="col-md-1">
 								<div id="btnCss">
 									<button type="button" class="btn btnPush btnLightBlue" name="searchBtn">
-											검색
+										검색
 									</button>
 								</div>
 							</div>
 						</div>
 
+						
 						<!-- 상품주문정보 -->
-						<div class="order">
-							<h4>상품주문정보</h4>
-
+						<div style="height: 800px;">
+							<h4 style="margin-bottom: 20px;">상품주문정보</h4>
+							<!--구매한 주문정보-->
 							<div>
-								<!-- 여기서 아마 테이블 이용해야 할 듯..? -->
+								<table class="table">
+									<colgroup>
+										<col width="20%">
+										<col width="20%">
+										<col width="25%">
+										<col width="15%">
+										<col width="15%">
+										<col width="5%">
+									</colgroup>
+									<thead style="text-align: center;">
+										<tr >
+											<th scope="col">
+												주문일자 <br/>
+												주문번호
+											</th>
+											<th scope="col">이미지</th>
+											<th scope="col">상품정보</th>
+											<th scope="col">상품금액</th>
+											<th scope="col">주문처리상태</th>
+											<th scope="col">취소</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td rowspan="3">
+												<p>2023-04-12</p>
+												<a><p>20230509-1521584</p></a>
+											</td>
+											<td><a href="#"><img src="images/about-01.jpg" rel="product"></a></td>
+											<td>
+												<strong><a href="#">상품이름</a></strong>
+												<div class="option">[옵션 : 블랙/FREE]</div>
+											</td>
+											<td>30,000원</td>
+											<td>결제완료</td>
+											<td>-</td>
+										</tr>
+
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>

@@ -197,13 +197,11 @@ public class UserController {
     @ResponseBody
     public boolean userInfoUpdate(@RequestBody UserVO vo) {
     	boolean response = true;
-    	
 		int result = service.userInfoUpdate(vo);
-		
 		if(result < 0) {
 			response = false;
 		}
-		
+		System.out.println(response);
     	return response;
     }
     
