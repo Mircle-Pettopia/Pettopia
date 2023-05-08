@@ -27,7 +27,6 @@ public class SecurityConfig {
 	private final AuthenticationFailureHandler CustomAuthFailureHandler;
 	@Autowired private PrincipalOauth2UserService principalOauth2UserService;
 	
-	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
@@ -84,7 +83,7 @@ public class SecurityConfig {
                 "/fonts/**"
                 
         );
-    };
+    }
 	
 	
 	/*@Bean

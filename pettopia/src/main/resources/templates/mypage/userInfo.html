@@ -47,7 +47,12 @@
                         마이페이지 - 정보수정
                     </h1>
                     <br/>
-                    <div th:each="user : ${info}" style="height: 650px;">
+                    <div th:each="user : ${info}">
+                        <input id="path" type="hidden" class="form-control customInput" name="path" th:value="${user.signPath}" readonly>
+                        <div class="form-group">
+                            <label for="meId">이름</label>
+                            <input id="name" type="text" class="form-control customInput" name="name" th:value="${user.name}" readonly>
+                        </div>
                         <div class="form-group">
                             <label for="meId">아이디</label>
                             <input id="meId" type="email" class="form-control customInput" name="meId" th:value="${user.meId}" readonly>
@@ -62,6 +67,11 @@
                                 <label for="pwModify">수정할 비밀번호<span class="signUpFontColor"> *</span></label>
                                 <input id="pwModify" type="password" class="form-control customInput" name="pwModify" placeholder="비밀번호를 입력해주세요">
                                 <div><font id="pwModify_feedback" size="2"></font></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwModifyChk">수정할 비밀번호 확인<span class="signUpFontColor"> *</span></label>
+                                <input id="pwModifyChk" type="password" class="form-control customInput" name="pwModifyChk" placeholder="비밀번호를 입력해주세요">
+                                <div><font id="pwModifyChk_feedback" size="2"></font></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -79,26 +89,26 @@
                         </div>
                         <div class="form-group">
                             <label for="addrDtl">상세주소</label>
-                            <input id="addrDtl" type="text" class="form-control customInput" name="addrDtl" placeholder="addrDtl" th:value="${user.addrDetail}">
+                            <input id="addrDtl" type="text" class="form-control customInput" name="addrDtl" placeholder="상세주소" th:value="${user.addrDetail}">
                         </div>
                     </div>
                         <div class="form-group" style="position: absolute; left: 38%;">
                             <button type="button" class="btn btnPush btnBlueGreen formBtn" id="modifyBtn">수정</button>
-                            <button type="button" class="btn btnPush btnRed formBtn">취소</button>
+                            <button type="button" class="btn btnPush btnLightBlue formBtn" onclick="location.href='/'">메인으로</button>
                             <button type="button" class="btn btnPush btnOrange formBtn">회원탈퇴</button>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script th:inline="javascript">
-        const autoHyphen2 = (target) => {
-            target.value = target.value
-            .replace(/[^0-9]/g, '')
-            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
-        };
-        
-        //비밀번호 체크
+        <script th:inline="javascript">
+            const autoHyphen2 = (target) => {
+                target.value = target.value
+                .replace(/[^0-9]/g, '')
+                .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+            };
+            
+            //비밀번호 체크
         $('#pw').on('keyup',function(){
             let pw = $('#pw').val();
             $.ajax({
@@ -123,6 +133,9 @@
         });
 
         // 수정할 데이터를 DB로 넘기기 전에 조건문 걸기
+        /*<![CDATA[*/
+        let path = /*[[${path}]]*/
+        console.log(path == 'company');
         $('#modifyBtn').on('click',()=>{
             const Toast = Swal.mixin({
                 toast: true,
@@ -136,76 +149,165 @@
                 }
             });
             
+            let name = $('#name').val();
+            let id = $('#meId').val();
+            let post = $('#post').val();
             let pw = $('#pw').val();                //DB에 있는 비밀번호
             let pwModify = $('#pwModify').val();    //수정할 비밀번호
+            let pwModifyChk = $('#pwModifyChk').val();
             let phone = $('#phone').val();          //연락처
             let addr = $('#addr').val();            //주소
             let addrDtl = $('#addrDtl').val();      //상세주소
+            let path = $('#path').val();
             let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/; //비밀번호 : 영문, 숫자 포함 6자리 이상
 
-            if(pw=='' || pw.trim() === ""){
-                Toast.fire({
-                    icon: 'warning',
-                    title: '비밀번호가 입력되지 않았습니다.'
-                })
-                $('#pw').focus();
-                return;
-            } else if(!pwModify || pwModify.trim() === ""){
-                Toast.fire({
-                    icon: 'warning',
-                    title: '수정할 비밀번호가 입력되지 않았습니다.'
-                })
-                $('#pwModify').focus();
-                return;
-            } else if(!phone || phone.trim() === ""){
-                Toast.fire({
-                    icon: 'warning',
-                    title: '연락처가 입력되지 않았습니다.'
-                })
-                $('#phone').focus();
-                return;
-            } else if(!regPass.test(pwModify) || pwModify.length < 6){
-                Toast.fire({
-                    icon: 'warning',
-                    title: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.'
-                })
-                $('#pwModify').focus();
-                return;
-            } else {
-                const data = {
-                    pw : pwModify,           //수정할 비밀번호
-                    phone : phone,          //연락처
-                    addr : addr,            //주소
-                    addrDetail : addrDtl    //상세주소
+            if(path == 'company'){
+                if(pw=='' || pw.trim() === "") {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '비밀번호가 입력되지 않았습니다.'
+                    });
+                    $('#pw').focus();
+                    return;
+                } else if(!pwModify || pwModify.trim() === ""){
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '수정할 비밀번호가 입력되지 않았습니다.'
+                    });
+                    $('#pwModify').focus();
+                    return;
+                } else if(!phone || phone.trim() === ""){
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '연락처가 입력되지 않았습니다.'
+                    });
+                    $('#phone').focus();
+                    return;
+                } else if(!regPass.test(pwModify) || pwModify.length < 6){
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.'
+                    });
+                    $('#pwModify').focus();
+                    return;
+                } else if(pw === pwModify) {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '현재 비밀번호와 수정할 비밀번호가 동일합니다.'
+                    });
+                    $('#pwModify').focus();
+                    return;
+                } else {
+                    const data = {
+                        signPath : path,
+                        name : name,
+                        meId : id,                //아이디
+                        pw : pwModify,           //수정할 비밀번호
+                        phone : phone,          //연락처
+                        post : post,            //우편번호
+                        addr : addr,            //주소
+                        addrDetail : addrDtl    //상세주소
+                    };
+
+                    $.ajax({
+                        type : "PUT",
+                        url : "/userInfoUpdate",
+                        data :  JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType : 'json',
+                        success : function(data) {
+                            if(data) {
+                                //아이콘 왜 깨지니?
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '수정완료',
+                                    text: '정보 수정이 완료되었습니다.',
+                                });
+
+                                setTimeout(function() {
+                                    window.location.reload(true);
+                                }, 2500);
+                            }
+                        },
+                        error : function(error) {
+                            console.log(error);
+                        }
+                    });
                 };
-                
-                $.ajax({
-                    type : "POST",
-                    url : "/userInfoUpdate",
-                    data :  JSON.stringify(data),
-                    contentType : "application/json",
-                    success : function(data) {
-                        console.log(data);
-                    },
-                    error : function(error) {
-                        console.log(error);
-                    }
-                });
+            } else {
+                if(!phone || phone.trim() === ""){
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '연락처가 입력되지 않았습니다.'
+                    });
+                    $('#phone').focus();
+                    return;
+                } else {
+                    const datas = {
+                        signPath : path,
+                        name : name,
+                        meId : id,               //아이디
+                        phone : phone,          //연락처
+                        post : post,            //우편번호
+                        addr : addr,            //주소
+                        addrDetail : addrDtl    //상세주소
+                    };
+
+                    $.ajax({
+                        type : "PUT",
+                        url : "/userInfoUpdate",
+                        data :  JSON.stringify(datas),
+                        contentType: "application/json; charset=utf-8",
+                        dataType : 'json',
+                        success : function(data) {
+                            if(data) {
+                                //아이콘 왜 깨지니?
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '수정완료',
+                                    text: '정보 수정이 완료되었습니다.',
+                                });
+
+                                setTimeout(function() {
+                                    window.location.reload(true);
+                                }, 2500);
+                            }
+                        },
+                        error : function(error) {
+                            console.log(error);
+                        }
+                    });
+                };
             };
         });
-
+        /*]]>*/
+        
         // 수정할 비밀번호 유효성검사
-        $('#pwModify').on('keyup',function(){
+        $('#pwModify, #pwModifyChk').on('keyup',function(){
             let regPass = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/; //비밀번호 : 영문, 숫자 포함 6자리 이상
-            let pwModify = $('#pwModify').val();    //수정할 비밀번호
+            let pwModify = $('#pwModify').val();                //수정할 비밀번호
+            let pwModifyChk = $('#pwModifyChk').val();          //수정 비밀번호 확인란
+            let pw = $('#pw').val();    //수정할 비밀번호
             if(!regPass.test(pwModify) || pwModify > 1 || pwModify.length < 6){
                 $('#pwModify_feedback').html('영소문자,숫자로 구성된 6글자 이상으로 조합해주세요.');
                 $("#pwModify_feedback").attr('color','#dc3545');
                 $('#pwModify').focus();
                 return;
             } else {
-                $('#pwModify_feedback').html('사용가능한 비밀번호입니다.');
-                $("#pwModify_feedback").attr('color','#2fb380');
+                if(pw === pwModify) {
+                    $('#pwModify_feedback').html('기존 비밀번호와 동일합니다.');
+                    $("#pwModify_feedback").attr('color','#dc3545');
+                } else {
+                    $('#pwModify_feedback').html('사용가능한 비밀번호입니다.');
+                    $("#pwModify_feedback").attr('color','#2fb380');
+                    if(pwModifyChk === pwModify) {
+                        $('#pwModifyChk_feedback').html('비밀번호 일치');
+                        $("#pwModifyChk_feedback").attr('color','#2fb380');
+                    } else {
+                        $('#pwModifyChk_feedback').html('수정하고자하는 비밀번호가 일치하지 않습니다.');
+                        $("#pwModifyChk_feedback").attr('color','#dc3545');
+                    }
+                }
             };
         });
         
