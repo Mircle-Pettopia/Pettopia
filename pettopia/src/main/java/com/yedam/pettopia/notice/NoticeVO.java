@@ -15,5 +15,4 @@ public class NoticeVO {
 	private int viewCnt;
 	private String files;
 	private String meId;
-
 }
