@@ -1,15 +1,15 @@
 package com.yedam.pettopia.admin.service.impl;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yedam.pettopia.admin.OptionVO;
 import com.yedam.pettopia.admin.ProductVO;
 import com.yedam.pettopia.admin.mapper.ProductMapper;
 import com.yedam.pettopia.admin.service.ProductService;
@@ -42,9 +42,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional
 	public int insertPrd(ProductVO vo) {
+		// 상품 insert
 		int result = productMapper.insertPrd(vo);
 		if (result == 1) {
+			// 이미지 업로드
 			if (vo.getImg() != null) {
 				for (int i = 0; i < vo.getImg().length; i++) {
 					String filename = FileUtil.fileupload(vo.getImg()[i]);
@@ -54,32 +57,43 @@ public class ProductServiceImpl implements ProductService {
 				}
 			}
 
-			// 대표 이미지 업로드
-			String filename = FileUtil.fileupload(vo.getImgMain());
+			if (vo.getImgMain() != null) {
+				// 대표 이미지 업로드
+				String filename = FileUtil.fileupload(vo.getImgMain());
 
-			vo.setIsMain("Y");
-			vo.setPrdtImg(filename);
-			result = productMapper.insertImg(vo);
+				vo.setIsMain("Y");
+				vo.setPrdtImg(filename);
+				result = productMapper.insertImg(vo);
+			}
 
 			// 옵션 insert
-//			if (result == 1) {
-//				if (vo.getOptionArr() != null) {
-//					vo.getOptionArr().
-//					for (int i = 0; i < vo.getOptionArr().length; i++) {
-//						String optNm = vo.getOptionArr()[i];
-//						vo.setOptNm(optNm);
-//						result = productMapper.insertOption(vo);
-//					}
-//				}
-//				
-//				
-//			} else {
-//				return 0;
-//			}
+			if (vo.getOption() != null) {
+				ObjectMapper objectMapper = new ObjectMapper();
+
+				try {
+					OptionVO[] list = objectMapper.readValue(vo.getOption(), OptionVO[].class);
+					System.out.println(list[0]);
+					for (int i = 0; i < list.length; i++) {
+						list[i].setPrdtId(vo.getPrdtId());
+						productMapper.insertOption(list[i]);
+
+						// 옵션 detail insert
+						for (int j = 0; j < list[i].getOptionVal().size(); j++) {
+							list[i].getOptionVal().get(j).setOptId(list[i].getOptId());
+							productMapper.insertOptionDetail(list[i].getOptionVal().get(j));
+						}
+					}
+
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+			}
 		} else {
 			return 0;
 		}
-		return 1;
+		return result;
 	}
 
 	@Override
@@ -87,8 +101,31 @@ public class ProductServiceImpl implements ProductService {
 		return productMapper.selectDetailList(vo);
 	}
 
-//	@Override
-//	public int insertImg(ProductVO vo) {
-//		return productMapper.insertImg(vo);
-//	}
+	@Override
+	@Transactional
+	public int deleteProduct(ProductVO vo) {
+		int result = productMapper.deleteProduct(vo);
+		if (result == 1) {
+			result = productMapper.deletePrdImg(vo);
+			result = productMapper.deleteOptionDetail(vo.getPrdtId());
+			result = productMapper.deleteOption(vo.getPrdtId());
+		}
+		return result;
+	}
+
+	@Override
+	public List<ProductVO> selectSaleSt() {
+		return productMapper.selectSaleSt();
+	}
+
+	@Override
+	public List<ProductVO> selectLcate() {
+		return productMapper.selectLcate();
+	}
+
+	@Override
+	public List<ProductVO> selectScate(ProductVO vo) {
+		return productMapper.selectScate(vo);
+	}
+
 }

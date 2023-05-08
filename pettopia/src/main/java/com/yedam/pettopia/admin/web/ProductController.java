@@ -3,13 +3,12 @@ package com.yedam.pettopia.admin.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.pettopia.admin.ProductVO;
 import com.yedam.pettopia.admin.service.ProductService;
@@ -25,6 +24,8 @@ public class ProductController {
 		model.addAttribute("prdAllCnt", productService.insertPrdCount());
 		model.addAttribute("saleCnt", productService.salePrdCount());
 		model.addAttribute("stopSaleCnt", productService.stopSalePrdCount());
+		model.addAttribute("saleStList", productService.selectSaleSt());
+		model.addAttribute("lCatList", productService.selectLcate());
 		return "admin/productMag";
 	}
 	
@@ -34,11 +35,16 @@ public class ProductController {
 		return productService.selectPrdAllList();
 	}
 	
+	@GetMapping("sCatList")
+	@ResponseBody
+	public List<ProductVO> sCatList(ProductVO vo){
+		return productService.selectScate(vo);
+	}
+	
 	@PostMapping("insertPrd")
 	@ResponseBody
 	public String insertPrd(ProductVO vo) {
-		System.out.println("여기에 출력 " + vo);
-//		productService.insertPrd(vo);
+		productService.insertPrd(vo);
 		return "success";
 	}
 	
@@ -48,5 +54,16 @@ public class ProductController {
 		ProductVO vo = new ProductVO();
 		vo.setPrdtId("PRD1003");
 		return productService.selectDetailList(vo);
+	}
+	
+	@PostMapping("productDel")
+	@ResponseBody
+	public String productDelete(@RequestBody ProductVO[] arr) {
+		if(arr != null) {
+			for(int i = 0; i < arr.length; i++) {
+				productService.deleteProduct(arr[i]);
+			}
+		}
+		return "success";
 	}
 }
