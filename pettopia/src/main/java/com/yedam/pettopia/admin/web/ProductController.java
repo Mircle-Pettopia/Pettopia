@@ -37,7 +37,8 @@ public class ProductController {
 	@PostMapping("insertPrd")
 	@ResponseBody
 	public String insertPrd(ProductVO vo) {
-		productService.insertPrd(vo);
+		System.out.println("여기에 출력 " + vo);
+//		productService.insertPrd(vo);
 		return "success";
 	}
 	

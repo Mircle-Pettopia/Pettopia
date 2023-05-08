@@ -103,4 +103,40 @@
 								  )
 
 	</insert>
+	
+	<!-- 상품 옵션 등록 -->
+	<insert id="insertOption" parameterType="ProductVO">
+		<selectKey keyProperty="optId" resultType="String" order="BEFORE">
+			SELECT 'OPT' || TO_CHAR(NVL(MAX(SUBSTR(opt_id, 4)),999) + 1)
+			FROM 	product_option
+		</selectKey>
+		INSERT INTO product_option ( opt_id,
+								     prdt_id,
+								  	 opt_nm
+								  	)
+							VALUES ( #{optId},
+							 		 #{prdtId},
+							 		 #{optNm}
+									)
+
+	</insert>
+	
+	<!-- 상품 옵션 디테일 등록 -->
+	<insert id="insertOptionDetail" parameterType="ProductVO">
+		<selectKey keyProperty="optDetaId" resultType="String" order="BEFORE">
+			SELECT 'OPTD' || TO_CHAR(NVL(MAX(SUBSTR(opt_deta_id, 5)),999) + 1)
+			FROM 	product_option_detail
+		</selectKey>
+		INSERT INTO product_option_detail (  opt_deta_id,
+										     opt_deta_nm,
+										  	 add_prc,
+										  	 opt_id
+										  	)
+									VALUES ( #{optDetaId},
+									 		 #{optDetaNm},
+									 		 #{addPrc},
+									 		 #{optId}
+											)
+
+	</insert>
 </mapper>
