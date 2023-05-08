@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	
 	@Autowired
     private final UserMapper mapper;
-
+	
 	@Transactional
 	public int joinUser(UserVO vo) {
 		
@@ -101,9 +101,16 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		return vo;
 	}
 
+	//정보 수정
 	@Override
 	public int userInfoUpdate(UserVO vo) {
-		int result = mapper.userInfoUpdate(vo);
+		int result = 0;
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		
+		String encPw = passwordEncoder.encode(vo.getPw());
+		vo.setPw(encPw);
+		
+		result = mapper.userInfoUpdate(vo);
 		
 		if(result < 1) {
 			result = -1;
