@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.pettopia.notice.NoticeVO;
+import com.yedam.pettopia.notice.Criteria;
 import com.yedam.pettopia.notice.mapper.NoticeMapper;
 import com.yedam.pettopia.notice.service.NoticeService;
 
@@ -16,8 +17,8 @@ public class NoticeServiceImpl implements NoticeService {
 	NoticeMapper noticeMapper;
 
 	@Override
-	public List<NoticeVO> getNoticeList() {
-		return noticeMapper.selectNoticeList();
+	public List<NoticeVO> NoticeListWithPaging(Criteria cri) {
+		return noticeMapper.NoticeListWithPaging(cri);
 	}
 
 	@Override
@@ -30,6 +31,16 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeMapper.insertNotice(noticeVO);
 	}
 
+	@Override
+	public int totalCount(Criteria Cri) {
+		return noticeMapper.totalCount(Cri);
+	}
+
+	@Override
+	public void deleteNotice(int noNo) {
+		noticeMapper.deleteNotice(noNo);
+		
+	}
 
 
 }
