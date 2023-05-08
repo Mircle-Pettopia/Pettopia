@@ -51,12 +51,18 @@
     <!-- 참고 : https://devfunny.tistory.com/11 -->
     <update id="userInfoUpdate" parameterType="UserVO">
     UPDATE member
-	SET
+	<set>
+		<if test="pw !=null">
 	    pw = #{pw},
+	    </if>
 	    phone = #{phone},
+	    post = #{post},
 	    addr = #{addr},
+	    <if test="addrDetail !=null">
 	    addr_detail = #{addrDetail},
+	    </if>
 	    update_dt = sysdate
+	</set>
 	WHERE me_id = #{meId}
     </update>
  </mapper>

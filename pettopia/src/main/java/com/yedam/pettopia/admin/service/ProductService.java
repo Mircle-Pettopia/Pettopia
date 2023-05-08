@@ -18,11 +18,22 @@ public interface ProductService {
 	// 판매중지 상품 조회
 	public int stopSalePrdCount();
 
+	// 판매 상태 조회
+	public List<ProductVO> selectSaleSt();
+
+	// 상품분류(대) 조회
+	public List<ProductVO> selectLcate();
+
+	// 상품분류(소) 조회
+	public List<ProductVO> selectScate(ProductVO vo);
+
 	// 상품 등록
 	public int insertPrd(ProductVO vo);
 
 	// 상품 상세 조회
 	public ProductVO selectDetailList(ProductVO vo);
-	
+
+	// 상품 삭제
+	public int deleteProduct(ProductVO vo);
 
 }

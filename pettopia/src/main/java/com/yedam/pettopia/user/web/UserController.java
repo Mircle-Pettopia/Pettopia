@@ -1,7 +1,5 @@
 package com.yedam.pettopia.user.web;
 
-import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -160,9 +159,14 @@ public class UserController {
     	
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         result += principal;
+        
+        String id = principal.getUser().getMeId();
+        
         model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
-        model.addAttribute("info", principal.getUser());
+        model.addAttribute("path", principal.getUser().getSignPath());
+        
+        model.addAttribute("info", service.getUserAccount(id));
     	return "mypage/userInfo";
     }
     
@@ -176,26 +180,31 @@ public class UserController {
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
     	BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     	
-    	String prinPw = principal.getUser().getPw();
+    	String prinId = principal.getUser().getMeId();
     	
-    	boolean result = bCryptPasswordEncoder.matches(pw,prinPw);
+    	//단건조회
+    	UserVO meIdChk = service.getUserAccount(prinId);
+    	String pwchk = meIdChk.getPw();
+    	
+    	//패스워드비교
+    	boolean result = bCryptPasswordEncoder.matches(pw,pwchk);
     	
     	return result;
     };
     
     //정보 업데이트
-    @PostMapping("userInfoUpdate")
+    @PutMapping("userInfoUpdate")
     @ResponseBody
-    public Boolean userInfoUpdate(@RequestBody UserVO vo) {
-    	Boolean response = false;
+    public boolean userInfoUpdate(@RequestBody UserVO vo) {
+    	boolean response = true;
     	
-    	int result = service.userInfoUpdate(vo); 
-    	
-    	if(result < 1) {
-    		response = false;
-    	}
-    	
-    	return false; //response;
+		int result = service.userInfoUpdate(vo);
+		
+		if(result < 0) {
+			response = false;
+		}
+		
+    	return response;
     }
     
     @GetMapping("mypage")

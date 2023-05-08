@@ -6,7 +6,7 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <title>Insert title here</title>
+    <title>Pettopia</title>
   </head>
   <body>
     <div layout:fragment="content">
@@ -86,6 +86,9 @@
                   >
                     등록
                   </button>
+                  <button type="button" class="btn btn-danger" id="delBtn">
+                    삭제
+                  </button>
                 </div>
                 <div id="prdList"></div>
               </div>
@@ -145,25 +148,22 @@
                   >상품분류(대)</label
                 >
                 <div class="col-sm-6 mt-2">
-                  <div class="form-check form-check-inline">
+                  <div
+                    class="form-check form-check-inline"
+                    th:each="lCat : ${lCatList}"
+                  >
                     <input
                       class="form-check-input"
                       type="radio"
                       name="lCatId"
-                      value="고양이"
-                      id="Radio1"
+                      th:value="${lCat.lCatId}"
+                      th:id="${lCat.lCatId}"
                     />
-                    <label class="form-check-label" for="Radio1">고양이</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="lCatId"
-                      value="강아지"
-                      id="Radio2"
-                    />
-                    <label class="form-check-label" for="Radio2">강아지</label>
+                    <label
+                      class="form-check-label"
+                      th:for="${lCat.lCatId}"
+                      th:text="${lCat.lCatNm}"
+                    ></label>
                   </div>
                 </div>
               </div>
@@ -171,44 +171,7 @@
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >상품분류(소)</label
                 >
-                <div class="col-sm-6 mt-2">
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="sCatId"
-                      value="사료"
-                      id="inlineRadio1"
-                    />
-                    <label class="form-check-label" for="inlineRadio1"
-                      >사료</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="sCatId"
-                      value="간식"
-                      id="inlineRadio2"
-                    />
-                    <label class="form-check-label" for="inlineRadio2"
-                      >간식</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="sCatId"
-                      value="장난감"
-                      id="inlineRadio3"
-                    />
-                    <label class="form-check-label" for="inlineRadio3"
-                      >장난감</label
-                    >
-                  </div>
-                </div>
+                <div class="col-sm-7 mt-2" id="sCatList"></div>
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
@@ -288,7 +251,6 @@
                   </div>
                 </div>
               </div>
-              <button id="insert">테스트</button>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
                   >이미지(메인)</label
@@ -316,29 +278,22 @@
                   >판매상태</label
                 >
                 <div class="col-sm-6 mt-2">
-                  <div class="form-check form-check-inline">
+                  <div
+                    class="form-check form-check-inline"
+                    th:each="saleSt : ${saleStList}"
+                  >
                     <input
                       class="form-check-input"
                       type="radio"
                       name="saleSt"
-                      id="saleCheck"
-                      value="판매함"
+                      th:id="${saleSt.codCd}"
+                      th:value="${saleSt.codCd}"
                     />
-                    <label class="form-check-label" for="saleCheck"
-                      >판매함</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="saleSt"
-                      id="stopCheck"
-                      value="판매안함"
-                    />
-                    <label class="form-check-label" for="stopCheck"
-                      >판매안함</label
-                    >
+                    <label
+                      class="form-check-label"
+                      th:for="${saleSt.codCd}"
+                      th:text="${saleSt.codTitle}"
+                    ></label>
                   </div>
                 </div>
               </div>
@@ -360,39 +315,36 @@
       </div>
       <script>
         $(document).ready(function () {
-          // 옵션 값
-          $(document).on("click", "#insert", function () {
-            let chk = true;
-            let options = [];
-            let name = $(".optionNm");
-            for (let i = 0; i < name.length; i++) {
-              console.log(name.eq(i).val());
-            }
+          // 상품분류(대) 선택 하면 상품분류(소) 출력
+          $("input[type=radio][name=lCatId]").change(function () {
+            $.ajax({
+              url: "sCatList",
+              data: { lCatId: this.value },
+              success: function (result) {
+                let sCatList = $("#sCatList");
+                sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
 
-            $(".optionInput").each(function () {
-              let values = $(this).find(".optionVal").val().split(",");
-              let prices = $(this).find(".optionPrc").val().split(",");
-
-              if (values.length != prices.length) {
-                Swal.fire({
-                  icon: "error",
-                  title: "옵션 값과 추가 가격이 일치 하지 않습니다.",
+                $.each(result, function (index, value) {
+                  let radioBtn =
+                    '<div class="form-check form-check-inline">' +
+                    '<input class="form-check-input" type="radio" name="sCatId" value="' +
+                    value.scatId +
+                    '" id="' +
+                    value.scatId +
+                    '">' +
+                    '<label class="form-check-label" for="' +
+                    value.scatId +
+                    '">' +
+                    value.scatNm +
+                    "</label>" +
+                    "</div>";
+                  sCatList.append(radioBtn); // 새 라디오박스 추가
                 });
-                chk = false;
-                return;
-              }
-              for (let i = 0; i < values.length; i++) {
-                let obj = {
-                  optDetaNm: values[i].trim().toUpperCase(),
-                  addPrc: parseInt(prices[i].trim()),
-                };
-                options.push(obj);
-              }
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
             });
-            if (chk === false) {
-              return;
-            }
-            console.log(options);
           });
 
           // 옵션 사용함 하면 input창 뜸
@@ -500,7 +452,6 @@
             placeholder: "상품설명, 이미지 넣어주세요",
             callbacks: {
               onImageUpload: function (files) {
-                console.log(files);
                 for (var i = files.length - 1; i >= 0; i--) {
                   uploadSummernoteImageFile(files[i], this);
                 }
@@ -521,7 +472,6 @@
             contentType: false,
             processData: false,
             success: function (data) {
-              console.log(data);
               $(editor).summernote("insertImage", data);
             },
             error: function (reject) {
@@ -537,53 +487,45 @@
           let chk = true;
 
           if (optionChk === "사용함") {
-            let optNmArr = [];
-            // 옵션 값 담기
-            let name = $(".optionNm");
-            for (let i = 0; i < name.length; i++) {
+            let option = [];
+
+            let optionInput = $(".optionInput");
+            for (let i = 0; i < optionInput.length; i++) {
+              let name = $(".optionNm").eq(i).val();
               let obj = {
-                optNm: name.eq(i).val(),
+                optNm: name,
+                optionVal: [],
               };
-              optNmArr.push(obj);
+
+              option.push(obj);
+
+              let values = $(".optionVal").eq(i);
+              let prices = $(".optionPrc").eq(i);
+              for (let j = 0; j < values.length; j++) {
+                let valueArr = values.eq(j).val().split(",");
+                let priceArr = prices.eq(j).val().split(",");
+                if (valueArr.length != priceArr.length) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "옵션 값과 추가 가격이 일치 하지 않습니다.",
+                  });
+                  chk = false;
+                  return;
+                }
+
+                for (let k = 0; k < valueArr.length; k++) {
+                  let detailObj = {
+                    optDetaNm: valueArr[k].trim().toUpperCase(),
+                    addPrc: parseInt(priceArr[k].trim()),
+                  };
+
+                  obj.optionVal.push(detailObj);
+                }
+              }
             }
-
-            console.log(optNmArr);
-            // 옵션 디테일 담기
-            let optDetArr = [];
-            $(".optionInput").each(function () {
-              let values = $(this).find(".optionVal").val().split(",");
-              let prices = $(this).find(".optionPrc").val().split(",");
-              if (values.length != prices.length) {
-                Swal.fire({
-                  icon: "error",
-                  title: "옵션 값과 추가 가격이 일치 하지 않습니다.",
-                });
-                chk = false;
-                return;
-              }
-              let detailObj = {
-                optDetaNmArr: [],
-                addPrcArr: [],
-              };
-              for (let i = 0; i < values.length; i++) {
-                detailObj.optDetaNmArr.push(values[i].trim().toUpperCase());
-                detailObj.addPrcArr.push(parseInt(prices[i].trim()));
-              }
-              optDetArr.push(detailObj.optDetaNmArr);
-              optDetArr.push(detailObj.addPrcArr);
-            });
-            console.log(optDetArr);
+            formData.append("option", JSON.stringify(option));
           }
-          /* key 확인하기 */
-          // for (let key of formData.keys()) {
-          //   console.log(key);
-          // }
 
-          // /* value 확인하기 */
-          // for (let value of formData.values()) {
-          //   console.log(value);
-          // }
-          chk = false;
           if (chk === false) {
             return;
           }
@@ -597,6 +539,72 @@
           let saleSt = $("input[name=saleSt]:checked").val();
           let upimg = $("#img").get(0).files;
           let mainImg = $("#imgMain").get(0).files;
+
+          if (prdtNm === "") {
+            $("#prdtNm").focus();
+            Swal.fire({
+              icon: "warning",
+              title: "상품명을 입력해주세요.",
+            });
+            return;
+          }
+
+          if (prdtPrc === "") {
+            $("#prdtPrc").focus();
+            Swal.fire({
+              icon: "warning",
+              title: "판매가를 입력해주세요",
+            });
+            return;
+          }
+
+          if (typeof lCatId === "undefined") {
+            Swal.fire({
+              icon: "warning",
+              title: "대분류를 선택해주세요.",
+            });
+            return;
+          }
+
+          if (typeof sCatId === "undefined") {
+            Swal.fire({
+              icon: "warning",
+              title: "소분류를 선택해주세요.",
+            });
+            return;
+          }
+
+          if (typeof optionChk === "undefined") {
+            Swal.fire({
+              icon: "warning",
+              title: "상품옵션을 선택해주세요.",
+            });
+            return;
+          }
+
+          if (mainImg.length < 1) {
+            Swal.fire({
+              icon: "warning",
+              title: "메인 이미지를 입력해주세요",
+            });
+            return;
+          }
+
+          if (upimg.length < 1) {
+            Swal.fire({
+              icon: "warning",
+              title: "이미지를 입력해주세요.",
+            });
+            return;
+          }
+
+          if (typeof saleSt === "undefined") {
+            Swal.fire({
+              icon: "warning",
+              title: "판매상태를 선택해주세요.",
+            });
+            return;
+          }
 
           formData.append("prdtNm", prdtNm);
           formData.append("prdtPrc", prdtPrc);
@@ -613,7 +621,6 @@
             formData.append("img", upimg[i]);
           }
 
-          console.log(formData);
           Swal.fire({
             title: "등록하시겠습니까?",
             icon: "question",
@@ -653,6 +660,63 @@
           error: function (reject) {
             console.log(reject);
           },
+        });
+
+        // 상품 삭제
+        $(document).on("click", "#delBtn", function () {
+          let selectedRows = prdList.getCheckedRows();
+
+          if (selectedRows.length < 1) {
+            Swal.fire({
+              icon: "warning",
+              title: "체크 해주세요",
+            });
+            return;
+          }
+
+          Swal.fire({
+            title: "삭제 하시겠습니까?",
+            text: "복구 할 수 없습니다.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소",
+          }).then((result) => {
+            if (result.value) {
+              $.ajax({
+                url: "productDel",
+                method: "post",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(selectedRows),
+                success: function (result) {
+                  selectedRows.forEach((row) => {
+                    prdList.removeRow(row.rowKey);
+
+                    let Toast = Swal.mixin({
+                      toast: true,
+                      position: "top",
+                      showConfirmButton: false,
+                      timer: 1500,
+                      timerProgressBar: true,
+                      didOpen: (toast) => {
+                        toast.addEventListener("mouseenter", Swal.stopTimer);
+                        toast.addEventListener("mouseleave", Swal.resumeTimer);
+                      },
+                    });
+                    Toast.fire({
+                      icon: "success",
+                      title: "삭제가 정상적으로 되었습니다.",
+                    });
+                  });
+                },
+                error: function (reject) {
+                  console.log(reject);
+                },
+              });
+            }
+          });
         });
 
         // 날짜 변환

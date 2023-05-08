@@ -21,6 +21,14 @@ public class ProductVO {
 	private String sCatId;
 	private String lCatId;
 	
+	// 공통 코드
+	private String codCd;
+	private String codTitle;
+	
+	// 카테고리
+	private String lCatNm;
+	private String sCatNm;
+	
 	private int cnt; // 상품 개수
 	
 	// 이미지
@@ -31,11 +39,6 @@ public class ProductVO {
 	private String isMain;
 	
 	//옵션
-	private String optId;
-	private String optNm;
-	private String optDetaId;
-	private String optDetaNm;
-	private int addPrc;
-	private String[] optionArr;
+	private String option;
 
 }

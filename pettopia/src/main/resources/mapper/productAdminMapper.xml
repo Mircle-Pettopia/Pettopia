@@ -10,7 +10,7 @@
 				prdt_nm,
 				prdt_desct,
 				prdt_prc,
-				sale_st,
+				get_common(sale_st) as saleSt,
 				reg_dt,
 				mod_dt,
 				s_cat_id,
@@ -37,6 +37,30 @@
 		SELECT COUNT(*) as cnt
 		FROM product
 		WHERE sale_st = '판매안함'
+	</select>
+	
+	<!-- 판매 상태 조회 -->
+	<select id="selectSaleSt" resultType="ProductVO">
+		SELECT 	cod_cd,
+				cod_title
+		FROM 	code c JOIN code_detail cd
+		ON 		c.co_cd = cd.co_cd
+		WHERE 	c.co_cd = 'ST'
+	</select>
+	
+	<!-- 상품분류(대) 조회 -->
+	<select id="selectLcate" resultType="ProductVO">
+		SELECT l_cat_id, l_cat_nm
+		FROM product_l_cat
+		WHERE l_cat_st = 'Y'
+	</select>
+	
+	<!-- 상품분류(소) 조회 -->
+	<select id="selectScate" resultType="ProductVO">
+		SELECT 	s_cat_id, s_cat_nm
+		FROM 	product_l_cat l JOIN product_s_cat s
+		ON 		l.l_cat_id = s.l_cat_id
+		WHERE 	l.l_cat_id = #{lCatId}
 	</select>
 	
 	<!-- 상품등록 -->
@@ -105,7 +129,7 @@
 	</insert>
 	
 	<!-- 상품 옵션 등록 -->
-	<insert id="insertOption" parameterType="ProductVO">
+	<insert id="insertOption" parameterType="OptionVO">
 		<selectKey keyProperty="optId" resultType="String" order="BEFORE">
 			SELECT 'OPT' || TO_CHAR(NVL(MAX(SUBSTR(opt_id, 4)),999) + 1)
 			FROM 	product_option
@@ -122,7 +146,7 @@
 	</insert>
 	
 	<!-- 상품 옵션 디테일 등록 -->
-	<insert id="insertOptionDetail" parameterType="ProductVO">
+	<insert id="insertOptionDetail" parameterType="OptionDetailVO">
 		<selectKey keyProperty="optDetaId" resultType="String" order="BEFORE">
 			SELECT 'OPTD' || TO_CHAR(NVL(MAX(SUBSTR(opt_deta_id, 5)),999) + 1)
 			FROM 	product_option_detail
@@ -139,4 +163,30 @@
 											)
 
 	</insert>
+	
+	<!-- 상품 삭제 -->
+	<delete id="deleteProduct" parameterType="ProductVO">
+		DELETE FROM product
+		WHERE prdt_id = #{prdtId}
+	</delete>
+	
+	<!-- 상품 이미지 삭제 -->
+	<delete id="deletePrdImg" parameterType="ProductVO">
+		DELETE FROM product_img
+		WHERE prdt_id = #{prdtId}
+	</delete>
+	
+	<!-- 옵션 삭제 -->
+	<delete id="deleteOption" parameterType="OptionVO">
+		DELETE FROM product_option
+		WHERE prdt_id = #{prdtId}
+	</delete>
+	
+	<!-- 옵션 디테일 삭제 -->
+	<delete id="deleteOptionDetail" parameterType="OptionDetailVO">
+		DELETE FROM product_option_detail
+		WHERE opt_id IN (SELECT opt_id 
+		                   FROM product_option
+                           WHERE prdt_id = #{prdtId})	
+	</delete>
 </mapper>
