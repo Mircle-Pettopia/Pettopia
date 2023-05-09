@@ -1,5 +1,6 @@
 package com.yedam.pettopia.user.service;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	
 	@Autowired
     private final UserMapper mapper;
+	@Autowired
+	private final SqlSession session;
 	
 	@Transactional
 	public int joinUser(UserVO vo) {
@@ -105,16 +108,31 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	@Override
 	public int userInfoUpdate(UserVO vo) {
 		int result = 0;
+		String pw = "";
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
-		String encPw = passwordEncoder.encode(vo.getPw());
-		vo.setPw(encPw);
+		if(vo.getSignPath() != "company") {
+			result = mapper.userInfoUpdate(vo);
+		}
+		
+		pw = passwordEncoder.encode(vo.getPw());
+		vo.setPw(pw);
 		
 		result = mapper.userInfoUpdate(vo);
+		
+		System.out.println(vo);
 		
 		if(result < 1) {
 			result = -1;
 		};
+		
+		return result;
+	}
+
+	//회원탈퇴
+	@Override
+	public int userDelete(String meId) {
+		int result = mapper.userDelete(meId);
 		
 		return result;
 	}
