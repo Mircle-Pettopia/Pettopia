@@ -2,9 +2,10 @@ package com.yedam.pettopia.notice.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 
-import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.notice.Criteria;
+import com.yedam.pettopia.notice.NoticeVO;
 
 public interface NoticeService {
 	//조회(페이징)
@@ -19,6 +20,12 @@ public interface NoticeService {
 	//등록
 	public int insertNotice(NoticeVO noticeVO);
 	
+	//수정
+	public void updateNotice(NoticeVO noticeVO);
+	
 	//삭제
 	public void deleteNotice(int noNo);
+	
+	//조회수
+	public void viewCntUpdate(int noNo);
 }

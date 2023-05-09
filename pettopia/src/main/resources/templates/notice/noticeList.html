@@ -55,99 +55,138 @@
 			<div class="board_title">
 				<strong>공지사항</strong>
 			</div>
-			<div style="margin-bottom: 10px; text-align: end">
-				<div class="board_list_wrap">
-					<div class="board_list">
-						<div class="top">
-						<div class="num">번호</div>
-						<div class="title">제목</div>
-						<div class="date">작성일</div>
-						<div class="count">조회</div>
-						</div>
-						
-						
-							<div th:each = " notice : ${noticeList}">
-							<div class="num" th:text="${notice.noNo }"></div>
-							<div class="title">
-								<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title }]]</a>
-							</div>
-							<div class="date">  [[ ${#dates.format(notice.rDate, 'yyyy/MM/dd')}]]</div>
-							<div class="count">[[${notice.viewCnt }]]</div>
-						</div>
-						
-																<div>
-						<a href="noticeInsertForm"><button type="button" class="btn btnPush btnBlueGreen"  style="float: right; font-size: 13px;">등록</button></a>
+
+
+			<div class="search_wrap">
+				<div class="search_area">
+					<div style="height: 50px;">
+						<button class="btn btnPush btnLightBlue" id="SearchBtn"
+							style="float: right; margin-left: 5px;">
+							<i class="fas fa-search"></i>
+						</button>
+						<input class="form-control" type="text" name="keyword"
+							th:value="${pageMaker.cri.keyword}"
+							style="width: 200px; float: right;">
 					</div>
-			
-
-					</div>
-
-
-			<!--  [[${pageMaker.startPage}]], end=[[${pageMaker.endPage}]] -->
-			<div class="board_page">
-						<a th:href="@{/noticeList?pageNo=1}" class="bt first">&lt;&lt;</a>
-						<a th:if="${pageMaker.prev}" th:href="@{/noticeList?pageNo={page}(page=${pageMaker.startPage-1})}" class="bt prev">&lt;</a>
-						<th:block th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}"
-						th:each="pageButton : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-						<a th:href="@{/noticeList?pageNo={page} (page = ${pageButton})}" th:text="${pageButton}" class="num"></a> 
-						 </th:block>
-						<a th:if="${pageMaker.next}" th:href="@{/noticeList?pageNo={page}(page=${pageMaker.endPage +1})}" class="bt next">&gt;</a>
-						<a th:href="@{/noticeList?pageNo={page} (page = ${pageMaker.endPage})}" class="bt last">&gt;&gt;</a>
-					</div>
-					
-					
-					
-
 				</div>
+
+
+
+				<div style="margin-bottom: 10px; text-align: end">
+					<div class="board_list_wrap">
+						<div class="board_list">
+							<div class="top">
+								<div class="num">번호</div>
+								<div class="title">제목</div>
+								<div class="date">작성일</div>
+								<div class="count">조회</div>
+							</div>
+
+
+							<div th:each=" notice : ${noticeList}">
+								<div class="num" th:text="${notice.noNo }"></div>
+								<div class="title">
+									<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title
+										}]]</a>
+								</div>
+								<div class="date">[[ ${#dates.format(notice.rDate,
+									'yyyy/MM/dd')}]]</div>
+								<div class="count">[[${notice.viewCnt }]]</div>
+							</div>
+
+							<div>
+								<a href="noticeInsertForm"><button type="button"
+										class="btn btnPush btnBlueGreen"
+										style="float: right; font-size: 13px;">등록</button></a>
+							</div>
+
+
+						</div>
+
+
+						<!--  [[${pageMaker.startPage}]], end=[[${pageMaker.endPage}]] -->
+						<div class="board_page">
+							<a th:href="@{/noticeList?pageNo=1}" class="bt first">&lt;&lt;</a>
+							<a th:if="${pageMaker.prev}"
+								th:href="@{/noticeList?pageNo={page}(page=${pageMaker.startPage-1})}"
+								class="bt prev">&lt;</a>
+							<th:block
+								th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}"
+								th:each="pageButton : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+								<a th:href="@{/noticeList?pageNo={page} (page = ${pageButton})}"
+									th:text="${pageButton}" class="num"></a>
+							</th:block>
+							<a th:if="${pageMaker.next}"
+								th:href="@{/noticeList?pageNo={page}(page=${pageMaker.endPage +1})}"
+								class="bt next">&gt;</a> <a
+								th:href="@{/noticeList?pageNo={page} (page = ${pageMaker.endPage})}"
+								class="bt last">&gt;&gt;</a>
+						</div>
+
+					</div>
+				</div>
+
+				<form id="moveForm" method="get">
+					<input type="hidden" name="pageNo" value="${pageMaker.cri.pageNo}">
+					<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+					<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+				</form>
+
 			</div>
-		</div>
 
 
 
-		<!-- Back to top -->
-		<div class="btn-back-to-top" id="myBtn">
-			<span class="symbol-btn-back-to-top"> <i
-				class="zmdi zmdi-chevron-up"></i>
-			</span>
-		</div>
+			<!-- Back to top -->
+			<div class="btn-back-to-top" id="myBtn">
+				<span class="symbol-btn-back-to-top"> <i
+					class="zmdi zmdi-chevron-up"></i>
+				</span>
+			</div>
 
-		<!--===============================================================================================-->
-		<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-		<!--===============================================================================================-->
-		<script src="vendor/animsition/js/animsition.min.js"></script>
-		<!--===============================================================================================-->
-		<script src="vendor/bootstrap/js/popper.js"></script>
-		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-		<!--===============================================================================================-->
-		<script src="vendor/select2/select2.min.js"></script>
-		<script>
-      $(".js-select2").each(function () {
-        $(this).select2({
-          minimumResultsForSearch: 20,
-          dropdownParent: $(this).next(".dropDownSelect2"),
-        });
-      });
-    </script>
-		<!--===============================================================================================-->
-		<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-		<!--===============================================================================================-->
-		<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-		<script>
-      $(".js-pscroll").each(function () {
-        $(this).css("position", "relative");
-        $(this).css("overflow", "hidden");
-        var ps = new PerfectScrollbar(this, {
-          wheelSpeed: 1,
-          scrollingThreshold: 1000,
-          wheelPropagation: false,
-        });
+			<!--===============================================================================================-->
+			<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/animsition/js/animsition.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/bootstrap/js/popper.js"></script>
+			<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/select2/select2.min.js"></script>
+			<script>
+				$(".js-select2").each(function() {
+					$(this).select2({
+						minimumResultsForSearch : 20,
+						dropdownParent : $(this).next(".dropDownSelect2"),
+					});
+				});
+			</script>
+			<!--===============================================================================================-->
+			<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+			<script>
+				$(".js-pscroll").each(function() {
+					$(this).css("position", "relative");
+					$(this).css("overflow", "hidden");
+					var ps = new PerfectScrollbar(this, {
+						wheelSpeed : 1,
+						scrollingThreshold : 1000,
+						wheelPropagation : false,
+					});
 
-        $(window).on("resize", function () {
-          ps.update();
-        });
-      });
-    </script>
-		<!--===============================================================================================-->
-		<script src="js/main.js"></script>
+					$(window).on("resize", function() {
+						ps.update();
+					});
+				});
+
+				$(".search_area button").on("click", function(e) {
+					e.preventDefault();
+					let val = $("input[name='keyword']").val();
+					moveForm.find("input[name='keyword']").val(val);
+					moveForm.submit();
+				});
+			</script>
+			<!--===============================================================================================-->
+			<script src="js/main.js"></script>
 </body>
 </html>

@@ -1,138 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      	layout:decorate="~{layout}">
-  <head>
-    <title>공지사항</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="images/icons/favicon.png" />
-    <link rel="stylesheet" href="css/css.css" />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="vendor/bootstrap/css/bootstrap.min.css"
-    />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"
-    />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="fonts/iconic/css/material-design-iconic-font.min.css"
-    />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="fonts/linearicons-v1.0.0/icon-font.min.css"
-    />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="vendor/css-hamburgers/hamburgers.min.css"
-    />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="vendor/animsition/css/animsition.min.css"
-    />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="vendor/select2/select2.min.css"
-    />
-    <!--===============================================================================================-->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="vendor/perfect-scrollbar/perfect-scrollbar.css"
-    />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/util.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
-    <!--===============================================================================================-->
-  </head>
-  <body class="animsition">
-    <div layout:fragment="content">
-    <div class="container">
-      <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-          Home
-          <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-        </a>
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<title>공지사항</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--===============================================================================================-->
+<link rel="icon" type="image/png" href="images/icons/favicon.png" />
+<link rel="stylesheet" href="css/css.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="vendor/bootstrap/css/bootstrap.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="fonts/iconic/css/material-design-iconic-font.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="fonts/linearicons-v1.0.0/icon-font.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="vendor/css-hamburgers/hamburgers.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="vendor/animsition/css/animsition.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="vendor/select2/select2.min.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+	href="vendor/perfect-scrollbar/perfect-scrollbar.css" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="css/util.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!--===============================================================================================-->
+</head>
+<body class="animsition">
+	<div layout:fragment="content">
+		<div class="container">
+			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+				</a> <span class="stext-109 cl4"> 공지사항 </span>
+			</div>
+		</div>
 
-        <span class="stext-109 cl4"> 공지사항 </span>
-      </div>
-    </div>
-
-       <div class="board_wrap">
-      <div class="board_title">
-        <strong>공지사항</strong>
-      </div>
-      <div class="board_view_wrap">
-        <div class="board_view">
-          <div class="title" id="title">[[${noticeDetail.title }]]</div>
-          <div class="info">
-            <dl>
-              <dt id="noNo">번호</dt>
-              <dd>[[${noticeDetail.noNo }]]</dd>
-            </dl>
-            <dl>
-              <dt id="rDate">작성일</dt>
-              <dd>[[ ${#dates.format(noticeDetail.rDate, 'yyyy/MM/dd')}]]</dd>
-            </dl>
-            <dl>
-              <dt id="viewCnt">조회수</dt>
-              <dd>[[${noticeDetail.viewCnt }]]</dd>
-            </dl>
-        <dl>
-              <dt id="files">첨부파일</dt>
-              <dd>[[${noticeDetail.files }]]</dd>
-            </dl>
-          </div>
-          <div class="cont" id="contents">
-			[[${noticeDetail.contents }]]
-          </div>
-        </div>
-        <div class="bt_wrap">
-          <a href="noticeList"><button type="button" class="btn btnPush btnBlueGreen">수정</button></a>
-          <button type="button" onclick="noticeDelete()" class="btn btnPush btnRed">삭제</button>
-           <input type="hidden" id="noNo" value="${noticeDetail.noNo}">
-        </div>
- 
-    </div>
+		<div class="board_wrap">
+			<div class="board_title">
+				<strong>공지사항</strong>
+			</div>
+			<div class="board_view_wrap">
+				<div class="board_view">
+					<div class="title" id="title">[[${noticeDetail.title }]]</div>
+					<div class="info">
+						<dl>
+							<dt id="noNo">번호</dt>
+							<dd>[[${noticeDetail.noNo }]]</dd>
+						</dl>
+						<dl>
+							<dt id="rDate">작성일</dt>
+							<dd>[[ ${#dates.format(noticeDetail.rDate, 'yyyy/MM/dd')}]]</dd>
+						</dl>
+						<dl>
+							<dt id="viewCnt">조회수</dt>
+							<dd>[[${noticeDetail.viewCnt }]]</dd>
+						</dl>
+						<dl>
+							<dt id="files">첨부파일</dt>
+							<dd>[[${noticeDetail.files }]]</dd>
+						</dl>
+					</div>
+					<div class="cont" id="contents">
+						<pre>[[${noticeDetail.contents }]]</pre>
+					</div>
+				</div>
+				<div class="bt_wrap">
+					<a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
+							type="button" class="btn btnPush btnBlueGreen">수정</button></a> <a
+						th:href="@{noticeDelete(noNo=${noticeDetail.noNo})}"><button
+							type="button" class="btn btnPush btnRed">삭제</button></a>
+				</div>
+			</div>
 
 
 
-    <!-- Back to top -->
-    <div class="btn-back-to-top" id="myBtn">
-      <span class="symbol-btn-back-to-top">
-        <i class="zmdi zmdi-chevron-up"></i>
-      </span>
-    </div>
+			<!-- Back to top -->
+			<div class="btn-back-to-top" id="myBtn">
+				<span class="symbol-btn-back-to-top"> <i
+					class="zmdi zmdi-chevron-up"></i>
+				</span>
+			</div>
 
-    <!--===============================================================================================-->
-    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/animsition/js/animsition.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/bootstrap/js/popper.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/select2/select2.min.js"></script>
-    <script>
+			<!--===============================================================================================-->
+			<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/animsition/js/animsition.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/bootstrap/js/popper.js"></script>
+			<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/select2/select2.min.js"></script>
+			<script>
       $(".js-select2").each(function () {
         $(this).select2({
           minimumResultsForSearch: 20,
@@ -140,13 +113,13 @@
         });
       });
     </script>
-    
-      
-    <!--===============================================================================================-->
-    <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script>
+
+
+			<!--===============================================================================================-->
+			<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+			<!--===============================================================================================-->
+			<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+			<script>
       $(".js-pscroll").each(function () {
         $(this).css("position", "relative");
         $(this).css("overflow", "hidden");
@@ -161,26 +134,11 @@
         });
       });
       
-
-      function noticeDelete() {
-    	  var noNo = document.getElementById("noNo").value;
-    	  var form = document.createElement("form");
-    	  form.action = "/noticeDelete";
-    	  form.method = "POST";
-    	  var input = document.createElement("input");
-    	  input.type = "hidden";
-    	  input.name = "noNo";
-    	  input.value = noNo;
-    	  form.appendChild(input);
-    	  document.body.appendChild(form);
-    	  form.submit();
-    	}
- 
       
     </script>
-    <!--===============================================================================================-->
+			<!--===============================================================================================-->
 
-    
-    <script src="js/main.js"></script>
-  </body>
+
+			<script src="js/main.js"></script>
+</body>
 </html>

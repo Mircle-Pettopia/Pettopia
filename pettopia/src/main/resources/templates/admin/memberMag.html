@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pettopia</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">회원 관리</h5>
+                <div class="col-lg-12 p-4">
+            
+          
+                </div>
+                <div id="memberList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div id="test"></div>
+     
+      <script>
+    
+      const Grid = tui.Grid;
+      const memberList = new Grid({
+        el: document.getElementById("memberList"),
+        rowHeaders: ["checkbox", "rowNum"],
+        bodyHeight: 430,
+        pageOptions: {
+          useClient: true,
+          perPage: 10,
+        },
+        columns: [
+          {
+            header: "아이디",
+            name: "meId",
+            align: "center",
+            sortingType: "asc",
+            sortable: true,
+          },
+          {
+            header: "사용자이름",
+            name: "name",
+            align: "center",
+            sortingType: "asc",
+            sortable: true,
+          },
+          {
+            header: "전화번호",
+            name: "phone",
+            align: "center",
+            sortingType: "asc",
+            sortable: true,
+          },
+          {
+            header: "가입일자",
+            name: "signDt",
+            align: "center",
+            sortingType: "asc",
+            sortable: true,
+            formatter: function (e) {
+              return formattedDate(e.value);
+              },
+          },
+
+        ],
+      });
+      
+      $.ajax({
+          url: "memberList",
+          success: function (data) {
+        	  memberList.resetData(data);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        });
+      
+      
+      // 날짜 변환
+      function formattedDate(timestamp) {
+        let date = new Date(timestamp);
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, "0");
+        let day = String(date.getDate()).padStart(2, "0");
+        let formattedDate = year + "-" + month + "-" + day;
+        return formattedDate;
+      }
+      </script>
+    </div>
+  </body>
+</html>

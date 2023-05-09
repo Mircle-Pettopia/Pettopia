@@ -54,26 +54,34 @@
 			<div class="board_title">
 				<strong>공지사항</strong>
 			</div>
-			<div class="board_write_wrap">
-				<div class="board_write">
-					<div class="title">
-						<dl>
-							<dt>제목</dt>
-							<dd>
-								<input type="text" placeholder="제목 입력" value="">
-							</dd>
-						</dl>
-					</div>
-					<div class="info"></div>
-					<div class="cont">
-						<textarea placeholder="내용 입력">
+			<form th:action="@{noticeUpdate}" method="post"
+				th:object="${noticeDetail}">
+				<div class="board_write_wrap">
+					<div class="board_write">
+						<div class="title">
+							<dl>
+								<dt>제목</dt>
+								<dd>
+									<input type="hidden" name="noNo" th:value="*{noNo}"> <input
+										type="text" name="title" placeholder="제목 입력"
+										th:value="*{title}">
+								</dd>
+							</dl>
+						</div>
+						<div class="info"></div>
+						<div class="cont">
+							<textarea placeholder="내용 입력" name="contents"
+								th:text="*{contents}">
 </textarea>
+						</div>
+					</div>
+					<div class="bt_wrap">
+						<button type="submit" class="btn btnPush btnBlueGreen">수정</button>
+						<a href="javascript:window.history.back();"><button
+								type="button" class="btn btnPush btnRed">취소</button></a>
 					</div>
 				</div>
-				<div class="bt_wrap">
-					<a href="view.html" class="on">수정</a> <a href="view.html">취소</a>
-				</div>
-			</div>
+			</form>
 		</div>
 
 
@@ -94,32 +102,32 @@
 		<!--===============================================================================================-->
 		<script src="vendor/select2/select2.min.js"></script>
 		<script>
-      $(".js-select2").each(function () {
-        $(this).select2({
-          minimumResultsForSearch: 20,
-          dropdownParent: $(this).next(".dropDownSelect2"),
-        });
-      });
-    </script>
+			$(".js-select2").each(function() {
+				$(this).select2({
+					minimumResultsForSearch : 20,
+					dropdownParent : $(this).next(".dropDownSelect2"),
+				});
+			});
+		</script>
 		<!--===============================================================================================-->
 		<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 		<!--===============================================================================================-->
 		<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 		<script>
-      $(".js-pscroll").each(function () {
-        $(this).css("position", "relative");
-        $(this).css("overflow", "hidden");
-        var ps = new PerfectScrollbar(this, {
-          wheelSpeed: 1,
-          scrollingThreshold: 1000,
-          wheelPropagation: false,
-        });
+			$(".js-pscroll").each(function() {
+				$(this).css("position", "relative");
+				$(this).css("overflow", "hidden");
+				var ps = new PerfectScrollbar(this, {
+					wheelSpeed : 1,
+					scrollingThreshold : 1000,
+					wheelPropagation : false,
+				});
 
-        $(window).on("resize", function () {
-          ps.update();
-        });
-      });
-    </script>
+				$(window).on("resize", function() {
+					ps.update();
+				});
+			});
+		</script>
 		<!--===============================================================================================-->
 		<script src="js/main.js"></script>
 </body>
