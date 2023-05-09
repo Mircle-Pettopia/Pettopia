@@ -4,7 +4,7 @@
 
 
 <head>
-  <title>글작성</title>
+  <title>지식공유게시판</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
@@ -29,24 +29,31 @@
               <div id="Viewer" th:utext="${ Article.subject }">
               </div>
               <hr>
+              <div id="ownerOnly">
+                <button type="button" class="btn btnPush btnLightBlue">수정</button>
+                <button type="button" class="btn btnPush btnRed">삭제</button>
+              </div>
             </div>
-            <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50 border">
-              <h4 th:text="댓글"></h4>
+
+            <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-20 border">
+
+              <div id="replyLoginOnly">
+              </div>
               <hr>
               <div id="replys">
-
               </div>
-
             </div>
           </div>
         </div>
       </div>
 
       <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
-      <script>
-      </script>
     </div>
+    <script th:inline="javascript">
+      var ArticleObject = [[${ Article }]];
+    </script>
     <script>
+      console.log(articleObject.meId);
       getReply();
       function getReply() {
         $.ajax({
@@ -60,8 +67,8 @@
             replys.innerHTML = '';
             for (i = 0; i < data.length; i++) {
               replys.innerHTML +=
-                `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50 border">
-                <h5>작성자: ${data[i].meId} / 작성일:${data[i].regDt}</h5>
+                `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
+                <h5>작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5>
                 <hr>
                 <div class="Viewer">${data[i].subject}
                 </div>
@@ -71,10 +78,92 @@
           },
           error: function (reject) {
             console.log(reject);
-            alert("에러");
+            alert("댓글불러오기에러");
           },
         })
       }
+
+      loginOnly();
+      function loginOnly() {
+        let loginId = GetUser();
+        if (loginId != "" && loginId != null) {
+          replyLoginOnly.innerHTML =
+            `<h4 style="display: inline-block; width: 100px;">댓글</h4>
+                <button type="button" class="btn btnPush btnBlueGreen" style="float:right;margin: auto;"
+                  onclick="InsertReply();">작성</button>
+                <hr>
+                <textarea class="form-control" rows="4" style="resize: none;" id="replySubject"></textarea>`
+        }
+        else {
+          replyLoginOnly.innerHTML = `<h4 th:text="댓글" style="display: inline-block; width: 100px;"></h4>`
+        }
+        console.log(loginId);
+        console.log("${Article.meId}");
+        if (loginId == "${Article.meId}") {
+          console.log(loginId);
+          console.log("${Article.meId}");
+          console.log("동일작성자");
+        }
+        console.log("로그인온리")
+      }
+
+      function InsertReply() {
+        let meId = GetUser();
+        console.log(meId);
+        console.log(replySubject.value);
+        $.ajax({
+          url: "insertKnowHowReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: {
+            boNo: boNo.innerText,
+            subject: replySubject.value,
+            meId: meId
+          },
+          success: function (data) {
+            replySubject.value = "";
+            getReply();
+            alert("작성완료");
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("작성에러");
+          },
+        })
+      }
+
+      function GetUser() {
+        let result = "";
+        $.ajax({
+          url: "getUser",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            console.log("비로그인");
+          },
+        })
+        return result;
+      }
+
+
+      function dateChange(data) {
+        if (data != null && data != 0) {
+          let newData = new Date(data);
+          let result = newData.getFullYear() + "-" +
+            (newData.getMonth() < 10
+              ? "0" + (newData.getMonth() + 1)
+              : newData.getMonth() + 1) +
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+          return result;
+        }
+        else return null;
+      };
     </script>
   </div>
 

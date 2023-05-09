@@ -35,15 +35,15 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardVO> knowHowList(int page) {
+	public List<BoardVO> knowHowList (int page,String keyword){
 		// TODO Auto-generated method stub
-		return boardMapper.knowHowList(page);
+		return boardMapper.knowHowList(page,keyword);
 	}
 
 	@Override
-	public int knowHowMaxPage() {
+	public int knowHowMaxPage(String keyword) {
 		// TODO Auto-generated method stub
-		return boardMapper.knowHowMaxPage();
+		return boardMapper.knowHowMaxPage(keyword);
 	}
 
 	@Override
@@ -57,6 +57,19 @@ public class BoardServiceImpl implements BoardService{
 		// TODO Auto-generated method stub
 		return boardMapper.getknowHowReply(boNo);
 	}
+
+	@Override
+	public int insertKnowHowReply(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return boardMapper.insertKnowHowReply(vo);
+	}
+
+	@Override
+	public void KnowHowAddhit(int boNo) {
+		// TODO Auto-generated method stub
+		boardMapper.KnowHowAddhit(boNo);
+	}
+	
 	
 	
 	

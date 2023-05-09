@@ -13,7 +13,7 @@
 	</insert>
 	
 	<insert id="insertKnowhowArticle"
-		parameterType="BoardTestVO">
+		parameterType="BoardVO">
 		insert into knowhow_board
 		(BO_NO,TITLE,SUBJECT,ME_ID)
 		values(
@@ -26,7 +26,7 @@
 	<select id="knowHowList" resultType="BoardVO">
 		select * from (	select rownum as rn,a.*
 				from (select bo_no,title,reg_dt,view_cnt,me_id 
-                from knowhow_board order by bo_no desc) a
+                from knowhow_board where title Like '%'||#{keyword}||'%' order by bo_no desc) a
 				)
 		where RN between (#{page}-1)*10 and #{page}*10
 	</select>
@@ -37,12 +37,22 @@
 	
 	<select id="knowHowMaxPage" resultType="int">
 		select count(*)
-		from knowhow_board 
+		from knowhow_board where title Like '%'||#{keyword}||'%'
 	</select>
 	
 	<select id="getknowHowReply" resultType="BoardVO">
 		select * from reply 
-		where DIVISION = 'DR2' and NO=#{boNo} and RE IS NULL
+		where DIVISION = 'DR2' and BO_NO=#{boNo} and RE IS NULL
+		ORDER BY comment_id desc
 	</select>
 	
+	<insert id="insertKnowHowReply" parameterType="BoardVO">
+		insert into reply
+		(comment_id,me_id,subject,division,bo_no)
+		values(reply_seq.nextval,#{meId},#{subject},'DR2',#{boNo})
+	</insert>
+	
+	<update id="KnowHowAddhit" parameterType="int">
+		update KNOWHOW_BOARD set view_cnt=view_cnt+1 where BO_NO = #{boNo}
+	</update>
 </mapper>
