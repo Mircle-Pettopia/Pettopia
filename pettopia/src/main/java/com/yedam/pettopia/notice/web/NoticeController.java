@@ -1,5 +1,7 @@
 package com.yedam.pettopia.notice.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,16 +25,18 @@ import com.yedam.pettopia.notice.service.NoticeService;
 		public String noticeList(Criteria cri, Model model) {
 			model.addAttribute("noticeList", noticeService.NoticeListWithPaging(cri));
 			int total= noticeService.totalCount(cri);
-			model.addAttribute("pageMaker", new PageVO(cri, total));
+			model.addAttribute("pageMaker", new PageVO(cri, total));				
 			return "notice/noticeList";
 		}
 		
 		@GetMapping("noticeDetail")
-		public String noticeDetail(NoticeVO noticeVO, Model model) {
+		public String noticeDetail(NoticeVO noticeVO, Model model, @RequestParam final int noNo) {
 			model.addAttribute("noticeDetail", noticeService.getNoticeDetail(noticeVO));
+			int viewCnt = 0;		
+			noticeService.viewCntUpdate(noNo);
+			model.addAttribute("viewCnt",viewCnt);
 			return "notice/noticeDetail";
 		}
-		
 		
 		@GetMapping("noticeInsertForm")
 		public String noticeInsertForm(Model model) {
@@ -42,12 +46,23 @@ import com.yedam.pettopia.notice.service.NoticeService;
 		
 		@PostMapping("noticeInsert")
 		public String noticeInsert(NoticeVO noticeVO) {
-			System.out.println("여기 출력 " + noticeVO);
 			noticeService.insertNotice(noticeVO);
 			return "redirect:noticeList";
 		}
 		
-		@PostMapping("noticeDelete")
+		@GetMapping("noticeUpdateForm")
+		public String noticeUpdateForm(Model model, NoticeVO noticeVO ) {
+			model.addAttribute("noticeDetail", noticeService.getNoticeDetail(noticeVO));
+			return "notice/noticeUpdate";
+		}
+		
+		@PostMapping("noticeUpdate")
+		public String noticeUpdate(NoticeVO noticeVO) {
+			noticeService.updateNotice(noticeVO);
+			return "redirect:noticeList";
+		}
+		
+		@GetMapping("noticeDelete")
 	    private String noticeDelete(@RequestParam final int noNo) {
 			noticeService.deleteNotice(noNo);
 	        return "redirect:noticeList";

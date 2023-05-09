@@ -2,8 +2,8 @@ package com.yedam.pettopia.notice.mapper;
 
 import java.util.List;
 
-import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.notice.Criteria;
+import com.yedam.pettopia.notice.NoticeVO;
 
 public interface NoticeMapper {
 
@@ -20,8 +20,12 @@ public interface NoticeMapper {
 	public int insertNotice(NoticeVO noticeVO);
 	
 	//수정
+	public void updateNotice(NoticeVO noticeVO);
 	
 	//삭제
 	public void deleteNotice(int noNo);
+	
+	//조회수
+	public void viewCntUpdate(int noNo);
 	
 }

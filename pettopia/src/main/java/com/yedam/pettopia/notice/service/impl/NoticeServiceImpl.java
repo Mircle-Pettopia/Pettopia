@@ -3,10 +3,11 @@ package com.yedam.pettopia.notice.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.notice.Criteria;
+import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.notice.mapper.NoticeMapper;
 import com.yedam.pettopia.notice.service.NoticeService;
 
@@ -35,6 +36,11 @@ public class NoticeServiceImpl implements NoticeService {
 	public int totalCount(Criteria Cri) {
 		return noticeMapper.totalCount(Cri);
 	}
+	
+	@Override
+	public void updateNotice(NoticeVO noticeVO) {
+		noticeMapper.updateNotice(noticeVO);
+	}
 
 	@Override
 	public void deleteNotice(int noNo) {
@@ -42,5 +48,10 @@ public class NoticeServiceImpl implements NoticeService {
 		
 	}
 
+	@Override
+	public void viewCntUpdate(int noNo) {
+		noticeMapper.viewCntUpdate(noNo);
+		
+	}
 
 }

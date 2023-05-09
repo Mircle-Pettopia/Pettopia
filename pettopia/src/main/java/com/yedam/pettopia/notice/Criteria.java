@@ -10,6 +10,7 @@ import lombok.ToString;
 public class Criteria {
 	private int pageNo; //페이지 번호
 	private int amount; //페이지당 데이터 수
+	private String keyword;	
 	
 	public Criteria() {
 		this(1, 10);
@@ -19,4 +20,7 @@ public class Criteria {
 		this.pageNo = pageNo;
 		this.amount = amount;
 	}
-}
+
+
+
+	}

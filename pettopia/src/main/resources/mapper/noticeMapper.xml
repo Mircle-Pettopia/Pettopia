@@ -15,14 +15,22 @@
 			FROM notice
 			WHERE ROWNUM <= #{pageNo} * #{amount}
 			ORDER BY no_no DESC
+		]]>
+			<if test="keyword != null">
+             and title like '%'||#{keyword}||'%' 
+            </if>
+		<![CDATA[	
 		)
 		WHERE RN > (#{pageNo} - 1) * #{amount}
-	]]>
+  		]]>
 	</select>
 	
 	<!-- 데이터 전체 개수 -->
 	<select id="totalCount" resultType="int">
 		select count(*) from notice where no_no > 0
+		  <if test="keyword != null">
+            where title like '%'||#{keyword}||'%'
+        </if>
 	</select>
 
 	<!-- 단건조회 -->
@@ -54,7 +62,21 @@
 		)
 	</insert>
 	
-	<delete id="deleteNOtice" parameterType="int">
+	<update id="updateNotice" parameterType="NoticeVO">
+		UPDATE notice
+			SET title = #{title},
+				contents = #{contents}
+			WHERE no_no = #{noNo}
+	
+	</update>
+	
+	<update id="viewCntUpdate" parameterType="int">
+		UPDATE notice
+			SET view_cnt=view_cnt+1
+			WHERE no_no=#{noNo}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="int">
 		DELETE FROM notice WHERE no_no=#{noNo}
 	</delete>
 </mapper>
