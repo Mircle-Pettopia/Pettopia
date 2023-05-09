@@ -7,6 +7,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>Pettopia</title>
+    <style>
+      #imgDetail {
+        display: flex;
+        flex-direction: row;
+        padding-right: 5px;
+      }
+    </style>
   </head>
   <body>
     <div layout:fragment="content">
@@ -96,7 +103,8 @@
           </div>
         </div>
       </section>
-      <div id="test"></div>
+
+      <!-- 등록 모달 -->
       <div
         class="modal fade"
         id="insertModal"
@@ -145,7 +153,7 @@
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >상품분류(대)</label
+                  >대분류</label
                 >
                 <div class="col-sm-6 mt-2">
                   <div
@@ -169,7 +177,7 @@
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >상품분류(소)</label
+                  >소분류</label
                 >
                 <div class="col-sm-7 mt-2" id="sCatList"></div>
               </div>
@@ -213,7 +221,6 @@
                     <div class="col-sm-4">
                       <input type="text" class="form-control optionNm" />
                     </div>
-
                     <div class="col-sm-2">
                       <button
                         class="btn btn-primary text-end btn-md"
@@ -280,7 +287,7 @@
                 <div class="col-sm-6 mt-2">
                   <div
                     class="form-check form-check-inline"
-                    th:each="saleSt : ${saleStList}"
+                    th:each="saleSt : ${code.ST}"
                   >
                     <input
                       class="form-check-input"
@@ -313,9 +320,172 @@
           </div>
         </div>
       </div>
+
+      <!-- 상세조회 모달 -->
+      <div
+        class="modal fade"
+        id="detailModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">상품 상세조회</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품명</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="prdtNmDetail" />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매가</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    id="prdtPrcDetail"
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품설명</label
+                >
+                <form>
+                  <textarea id="summernoteDetail" name="editordata"></textarea>
+                </form>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >대분류</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div
+                    class="form-check form-check-inline"
+                    th:each="lCat : ${lCatList}"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="lCatId"
+                      th:value="${lCat.lCatId}"
+                      th:id="${lCat.lCatId}+'Det'"
+                    />
+                    <label
+                      class="form-check-label"
+                      th:for="${lCat.lCatId}+'Det'"
+                      th:text="${lCat.lCatNm}"
+                    ></label>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >소분류</label
+                >
+                <div class="col-sm-7 mt-2" id="sCatListDetail"></div>
+              </div>
+
+              <div>
+                <div class="row mb-4" id="optionDetail">
+                  <!-- <div class="row mb-4">
+                    <label class="col-sm-2 col-form-label fw-bolder text-center"
+                      >옵션 이름</label
+                    >
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" />
+                    </div>
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >옵션 값</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >추가 가격</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div> -->
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >이미지(메인)</label
+                >
+                <div class="col-sm-6">
+                  <img id="imgMainDetail" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >이미지</label
+                >
+                <div class="col-sm-10" id="imgDetail"></div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매상태</label
+                >
+                <div class="col-sm-6 mt-2">
+                  <div
+                    class="form-check form-check-inline"
+                    th:each="saleSt : ${code.ST}"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="saleSt"
+                      th:id="${saleSt.codCd} + 'Det'"
+                      th:value="${saleSt.codCd}"
+                    />
+                    <label
+                      class="form-check-label"
+                      th:for="${saleSt.codCd} + 'Det'"
+                      th:text="${saleSt.codTitle}"
+                    ></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                닫기
+              </button>
+              <button type="button" class="btn btn-primary">수정</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <script>
         $(document).ready(function () {
-          // 상품분류(대) 선택 하면 상품분류(소) 출력
+          // 대분류 선택 하면 소분류 출력
           $("input[type=radio][name=lCatId]").change(function () {
             $.ajax({
               url: "sCatList",
@@ -338,7 +508,7 @@
                     value.scatNm +
                     "</label>" +
                     "</div>";
-                  sCatList.append(radioBtn); // 새 라디오박스 추가
+                  sCatList.append(radioBtn);
                 });
               },
               error: function (reject) {
@@ -397,6 +567,20 @@
               sortable: true,
             },
             {
+              header: "대분류",
+              name: "lcatId",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "소분류",
+              name: "scatId",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
               header: "상품명",
               name: "prdtNm",
               align: "center",
@@ -442,8 +626,25 @@
         });
 
         $(document).ready(function () {
-          // summernote
+          // summernote 등록페이지
           $("#summernote").summernote({
+            height: 300,
+            minHeight: null,
+            maxHeight: null,
+            focus: true,
+            lang: "ko-KR",
+            placeholder: "상품설명, 이미지 넣어주세요",
+            callbacks: {
+              onImageUpload: function (files) {
+                for (var i = files.length - 1; i >= 0; i--) {
+                  uploadSummernoteImageFile(files[i], this);
+                }
+              },
+            },
+          });
+
+          // summernote 상세조회페이지
+          $("#summernoteDetail").summernote({
             height: 300,
             minHeight: null,
             maxHeight: null,
@@ -650,18 +851,6 @@
           });
         });
 
-        // 상품 상세 조회
-        $.ajax({
-          url: "productDetail",
-          success: function (result) {
-            console.log(result);
-            // $("#test").html(result.prdtDesct);
-          },
-          error: function (reject) {
-            console.log(reject);
-          },
-        });
-
         // 상품 삭제
         $(document).on("click", "#delBtn", function () {
           let selectedRows = prdList.getCheckedRows();
@@ -717,6 +906,134 @@
               });
             }
           });
+        });
+
+        // 상품 상세조회
+        prdList.on("dblclick", (e) => {
+          const rowData = prdList.getRow(e.rowKey);
+          let prdtId = rowData.prdtId;
+          $.ajax({
+            url: "productDetail",
+            data: { prdtId: prdtId },
+            success: function (result) {
+              console.log(result);
+              $("#prdtNmDetail").val(result.product.prdtNm);
+              $("#prdtPrcDetail").val(result.product.prdtPrc);
+              $("#summernoteDetail").summernote(
+                "code",
+                result.product.prdtDesct
+              );
+              $(
+                "#detailModal input[type='radio'][value='" +
+                  result.product.lcatId +
+                  "']"
+              ).prop("checked", true);
+              $(
+                "#detailModal input[type='radio'][value='" +
+                  result.product.saleSt +
+                  "']"
+              ).prop("checked", true);
+
+              let sCatList = $("#sCatListDetail");
+              sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
+
+              // 소분류 조회
+              $.each(result.sCatList, function (index, value) {
+                let radioBtn =
+                  '<div class="form-check form-check-inline">' +
+                  '<input class="form-check-input" type="radio" name="sCatId" value="' +
+                  value.scatId +
+                  '" id="' +
+                  value.scatId +
+                  '">' +
+                  '<label class="form-check-label" for="' +
+                  value.scatId +
+                  '">' +
+                  value.scatNm +
+                  "</label>" +
+                  "</div>";
+                sCatList.append(radioBtn);
+              });
+              $(
+                "#detailModal input[type='radio'][value='" +
+                  result.product.scatId +
+                  "']"
+              ).prop("checked", true);
+
+              $("#optionDetail").empty();
+              // 옵션 조회
+              $.each(result.optionList, function (index, value) {
+                // 새로운 row 생성
+                const newRow = $("<div>").addClass("row mb-4");
+
+                // 옵션 이름 입력 폼 생성
+                const label1 = $("<label>")
+                  .addClass("col-sm-2 col-form-label fw-bolder text-center")
+                  .text("옵션 이름");
+                const input1 = $("<input>")
+                  .addClass("form-control")
+                  .val(value.optNm);
+                const div1 = $("<div>").addClass("col-sm-4").append(input1);
+
+                // 옵션 값 및 추가 가격 입력 폼 생성
+                $.each(result.optionDetailList, function (index, item) {
+                  if (value.optId == item.optId) {
+                    console.log(item);
+                    // 옵션 값 입력 폼 생성
+                    const label2 = $("<label>")
+                      .addClass("col-sm-2 col-form-label fw-bolder text-center")
+                      .text("옵션 값");
+                    const input2 = $("<input>")
+                      .addClass("form-control")
+                      .attr("placeholder", "콤마(,)로 구분해주세요")
+                      .val(item.optDetaNm);
+                    const div2 = $("<div>").addClass("col-sm-4").append(input2);
+
+                    // 추가 가격 입력 폼 생성
+                    const label3 = $("<label>")
+                      .addClass("col-sm-2 col-form-label fw-bolder text-center")
+                      .text("추가 가격");
+                    const input3 = $("<input>")
+                      .addClass("form-control")
+                      .attr("placeholder", "콤마(,)로 구분해주세요")
+                      .val(item.addPrc);
+                    const div3 = $("<div>").addClass("col-sm-4").append(input3);
+
+                    // row에 폼 추가
+                    newRow.append(label1, div1, label2, div2, label3, div3);
+                  }
+                });
+
+                // optionDetail에 row 추가
+                $("#optionDetail").append(newRow);
+              });
+
+              // 이미지 목록 초기화
+              $("#imgDetail").empty();
+              $("#imgMainDetail").attr("src", "");
+
+              result.imgList.forEach(function (item, idx) {
+                let imgSrc = "download/" + item.prdtImg;
+                if (item.isMain === "Y") {
+                  $("#imgMainDetail").attr("src", imgSrc).css("width", "300px");
+                } else {
+                  let imgElem = $("<img>").attr("src", imgSrc).css({
+                    width: "300px",
+                    "margin-right": "10px",
+                  });
+                  $("#imgDetail").append(imgElem);
+                  $("#imgDetail").append("<p>");
+                }
+              });
+
+              // $("#test").html(result.prdtDesct);
+            },
+            error: function (reject) {
+              console.log(reject);
+            },
+          });
+
+          $("#detailModal").modal("show");
         });
 
         // 날짜 변환
