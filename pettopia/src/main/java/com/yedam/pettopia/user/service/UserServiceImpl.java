@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	}
 
 	@Override
-	public boolean userDelNotLogin(String meId, String pw) {
+	public int userDelNotLogin(String meId, String pw) {
 		return mapper.userDelNotLogin(meId, pw);
 	}
 	

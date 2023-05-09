@@ -11,7 +11,7 @@ public interface UserService {
 	public UserVO snsGetNullInfo(String meSnsToken);	//sns로 회원가입 했을 때 주소, 폰번호가 없을 때 알림창 띄우기
 	public int userInfoUpdate(UserVO vo);
 	public int userDelete(String meId);
-	public boolean userDelNotLogin(String meId, String pw);
+	public int userDelNotLogin(String meId, String pw);
 	
 	//kakao login
 	//public String getAccessToken(String authorize_code) throws Throwable;
