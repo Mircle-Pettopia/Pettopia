@@ -9,8 +9,10 @@ public interface BoardService {
 	public int insertArticle(BoardTestVO vo);
 	public BoardTestVO showArticle(String no);
 	public int insertKnowhowArticle(BoardVO vo);
-	public List<BoardVO> knowHowList (int page);
-	public int knowHowMaxPage();
+	public List<BoardVO> knowHowList (int page,String keyword);
+	public int knowHowMaxPage(String keyword);
 	public BoardVO showKnowHow(int boNo);
 	public List<BoardVO> getknowHowReply(int boNo);
+	public int insertKnowHowReply(BoardVO vo);
+	public void KnowHowAddhit(int boNo);
 }

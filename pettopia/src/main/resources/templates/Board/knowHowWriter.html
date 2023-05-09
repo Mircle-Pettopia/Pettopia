@@ -70,10 +70,6 @@
             <div>
               <hr>
               <button onclick="showData()">담긴 데이터 보기(debug)</button>
-              <hr>
-              <span> 작성자ID(debug):
-                <input type="text" value="test@aaa.com" id="meId">
-              </span>
             </div>
             <div class="form-group" style="position: absolute; left: 45%;">
               <button type="button" class="btn btnPush btnBlueGreen formBtn" id="" onclick="insertArticle()">작성</button>
@@ -102,7 +98,7 @@
           async: false,
           dataType: "JSON",
           data: {
-            meId: meId.value,
+            meId: GetUser(),
             title: title.value,
             subject: editor.getData(),
 
@@ -119,6 +115,23 @@
         })
       }
 
+      function GetUser() {
+        let result = "";
+        $.ajax({
+          url: "getUser",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("유저호출에러");
+          },
+        })
+        return result;
+      }
     </script>
   </div>
 

@@ -16,7 +16,8 @@ public class BoardVO {
 	private int viewCnt;
 	private String meId;
 	private int commentId;
+	private String division;
 	private String re;
-	private int no;
+	private String keyword;
 	
 }

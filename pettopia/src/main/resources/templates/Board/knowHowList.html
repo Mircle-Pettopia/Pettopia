@@ -56,6 +56,13 @@
     <div class="board_wrap">
       <div class="board_title">
         <strong>지식공유게시판</strong>
+
+        <div style="display: inline-block; float: right; width: 70%;margin-top: 10px;">
+          <button type="button" class="btn btnPush btnLightBlue" style="float:right;display: inline-block;margin: auto;"
+            onclick="setkeyword();">검색</button>
+          <input type="text" style="float:right;display: inline-block;width: 30%;" id="keyword">
+        </div>
+
       </div>
       <div style="margin-bottom: 10px; text-align: end">
         <div class="board_list_wrap">
@@ -76,8 +83,8 @@
 
           <div class="board_page" id="pagenav">
           </div>
-          <div class="bt_wrap">
-            <a href="knowHowWriter" class="on">등록</a>
+          <div class="bt_wrap" id="bt_warp">
+
           </div>
         </div>
       </div>
@@ -131,6 +138,20 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
+      let NewKeyword = ''
+      function setkeyword() {
+        NewKeyword = keyword.value;
+        showLists();
+      }
+      loginOnly()
+      function loginOnly() {
+        let Uid = GetUser();
+        if (Uid != "" && Uid != null) {
+          console.log(GetUser())
+          bt_warp.innerHTML = `<a href="knowHowWriter" class="on">등록</a>`
+        }
+      }
+
       showLists();
       function showLists(page) {
         if (page == null) {
@@ -138,10 +159,13 @@
         }
         $.ajax({
           url: "knowhowList",
-          method: "POST",
+          method: "GET",
           async: false,
           dataType: "JSON",
-          data: { page: page },
+          data: {
+            page: page,
+            keyword: NewKeyword
+          },
           success: function (data) {
             console.log(data);
             lists.innerHTML = '';
@@ -149,7 +173,7 @@
               lists.innerHTML += `
               <div class="num">${data[i].boNo}</div>
               <div class="title">
-                <a href="showKnowHow?boNo=${data[i].boNo}">${data[i].title}</a>
+                <a href="#" onclick="openArticle(${data[i].boNo})">${data[i].title}</a>
               </div>
               <div class="writer">${data[i].meId}</div>
               <div class="date" >${dateChange(data[i].regDt)}</div>
@@ -168,6 +192,9 @@
           url: "knowHowMaxPage",
           method: "GET",
           async: false,
+          data: {
+            keyword: NewKeyword
+          },
           success: function (data) {
             console.log(data);
             paging(data, 10, 5, page)
@@ -181,6 +208,21 @@
 
       }
 
+      function openArticle(boNo) {
+        $.ajax({
+          url: "knowHowAddHit",
+          method: "GET",
+          async: false,
+          data: {
+            boNo: boNo
+          },
+          success: function (data) {
+          },
+          error: function (reject) {
+          },
+        })
+        return window.open('showKnowHow?boNo=' + boNo);
+      }
 
 
       function paging(totalData, dataPerPage, pageCount, currentPage) {
@@ -229,6 +271,23 @@
         $("#displayCount").text(displayCount);
       }
 
+      function GetUser() {
+        let result = null;
+        $.ajax({
+          url: "getUser",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            console.log("로그인되어있지않음");
+          },
+        })
+        return result;
+      }
 
       //날짜 변환함수
       function dateChange(data) {
@@ -238,7 +297,7 @@
             (newData.getMonth() < 10
               ? "0" + (newData.getMonth() + 1)
               : newData.getMonth() + 1) +
-            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate());
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
           return result;
         }
         else return null;
