@@ -17,4 +17,7 @@ public interface ProductMapper1 {
 	// 전체등록 상품 조회
 	public int insertPrdCount();
 	
+	//카테고리 목록 가져오기
+	public List<Product1VO> selectCategoryList();
+	
 }

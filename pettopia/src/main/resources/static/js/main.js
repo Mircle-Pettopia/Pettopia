@@ -1,4 +1,4 @@
-
+ var $topeContainer
 (function ($) {
     "use strict";
 
@@ -91,6 +91,7 @@
         })
     }
 
+
     $(window).resize(function(){
         if($(window).width() >= 992){
             if($('.menu-mobile').css('display') == 'block') {
@@ -128,7 +129,7 @@
 
     /*==================================================================
     [ Isotope ]*/
-    var $topeContainer = $('.isotope-grid');
+    $topeContainer = $('.isotope-grid');
     var $filter = $('.filter-tope-group');
 
     // filter items on button click
