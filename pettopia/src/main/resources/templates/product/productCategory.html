@@ -348,11 +348,11 @@
 						All Products
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".강아지">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 lcate" data-filter=".LCAT1000">
 						강아지
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".고양이">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 lcate" data-filter=".LCAT1001">
 						고양이
 					</button>
 				</div>
@@ -392,33 +392,41 @@
 								Category
 							</div>
 
-							<ul class="filter-tope-group">
+							<!-- <ul class="filter-tope-group">
 								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" data-filter=".사료">
+									<button href="#" class="filter-link stext-106 trans-04" data-filter=".SCAT1002">
 										사료
 									</button>
 								</li>
 								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" data-filter=".간식">
+									<button href="#" class="filter-link stext-106 trans-04" data-filter=".LCAT1000 .SCAT1007">
 										간식
 									</button>
 								</li>
 
 								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" data-filter=".이동장">
+									<button href="#" class="filter-link stext-106 trans-04" data-filter=".SCAT1004">
 										이동장
 									</button>
 								</li>
 
 								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" data-filter=".장난감">
+									<button href="#" class="filter-link stext-106 trans-04" data-filter=".SCAT1008">
 										장난감
 									</button>
 									<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" data-filter=".위생용품">
+									<button href="#" class="filter-link stext-106 trans-04" data-filter=".SCAT1004">
 										위생용품
 									</button>
 								</li>
+							</ul> -->
+							<ul class="filter-tope-group cate">
+  								<li class="p-b-6" th:each="category : ${categories}"  th:data-lcatnm="${category.lCatId}">
+    								<button href="#" class="filter-link stext-106 trans-04"
+            							 th:text="${category.sCatNm}" 
+            							 th:attr="data-filter=${'.' + category.sCatId}">
+            						</button>
+								 </li>
 							</ul>
 						</div>
 						<div class="filter-col1 p-r-15 p-b-27">
@@ -426,7 +434,7 @@
 								Sort By
 							</div>
 
-							<ul class="filter-tope-group">
+							<ul class="filter-tope-group price">
 								<li class="p-b-6">
 									<button href="#" class="filter-link stext-106 trans-04">
 										최신순
@@ -449,9 +457,10 @@
 					</div>
 				</div>
 			</div>
-				<div class="row isotope-grid">
-				<div class="row" th:each="product : ${index}">
-					<div id="product-list" class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item" th:classappend="${product.lCatId} +' '+${product.sCatId}">
+
+<div class="row isotope-grid">
+				<div id="product-list" class="row" th:each="product : ${index}">
+					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item" th:classappend="${product.lCatId} +' '+${product.sCatId}">
 						<div class="block2">
 							<!-- <div class="block2-pic hov-img0">
 								<img th:src="@{${product.image}}" />
@@ -492,7 +501,7 @@
 						</div>
 					</div>
 					</div>
-<!--  신상품 목록 끝 -->				</div>
+			</div> <!-- 목록 조회 끝 -->
 
 			<!-- Load more -->
 			<div class="flex-c-m flex-w w-full p-t-45">
@@ -927,6 +936,8 @@
 				ps.update();
 			})
 		});
+		
+		
 	</script>
 	<script>
 /* 	// 카테고리와 sort by active 발생
@@ -990,13 +1001,40 @@ sortLinks.forEach(link => {
 }); */
 
 
+/* //Get the product list container element
+const productListContainer = document.getElementById('product-list');
+
+// Get the product list items
+const productItems = productListContainer.querySelectorAll('.isotope-item');
+
+// Convert product items to an array
+const productArray = Array.from(productItems);
+
+// Sort the product array based on price in ascending order
+productArray.sort((a, b) => {
+  const priceA = parseInt(a.querySelector('.stext-105').innerText);
+  const priceB = parseInt(b.querySelector('.stext-105').innerText);
+  return priceA - priceB;
+});
+
+// Clear the existing product list
+productListContainer.innerHTML = '';
+
+// Add the sorted product items to the product list container
+productArray.forEach(item => {
+  productListContainer.appendChild(item);
+});
+
 $(document).ready(function(){
 	  // 가격 오름차순 버튼 클릭 시
 	  $("#sort-by-price-asc").click(function(){
 	    var items = $("#product-list .isotope-item");
+
 	    items.sort(function(a, b) {
 	      var aPrice = parseFloat($(a).find(".stext-105").text().replace(/[^0-9\.]+/g,""));
+	      console.log("aPrice" + aPrice)
 	      var bPrice = parseFloat($(b).find(".stext-105").text().replace(/[^0-9\.]+/g,""));
+	      console.log("bPrice" + bPrice)
 	      return aPrice - bPrice;
 	    });
 	    $("#product-list").empty().append(items);
@@ -1012,9 +1050,60 @@ $(document).ready(function(){
 	    });
 	    $("#product-list").empty().append(items);
 	  });
-	});
-	</script>
-</script>
+	}); */
+	
+$(".lcate").click(function() {
+	var ldata = $(this).data("filter").substring(1);
+    console.log(ldata);
+    $("ul.cate li[data-lcatnm!='" + ldata + "']").hide();
+    $("ul.cate li[data-lcatnm='" + ldata + "']").show();
+});
+
+
+
+//external js: isotope.pkgd.js
+
+$(document).ready( function() {
+  // init Isotope
+  var $grid = $('.row isotope-grid').isotope({
+    itemSelector: '.row isotope-grid',
+    layoutMode: 'fitRows',
+    getSortData: {
+      price: 'stext-105 parseInt',
+    }
+  });
+    
+  $('#filter-tope-group price').on( 'change', function() {
+          var type = $(this).find(':selected').attr('data-sorttype');
+          console.log(type);
+    var sortValue = this.value;
+      if(type=='ass'){$grid.isotope({ sortBy: sortValue , sortAscending: false});}
+          else{$grid.isotope({ sortBy: sortValue , sortAscending: true});}
+   $grid.isotope({ sortBy: sortValue });
+  });
+
+
+  // change is-checked class on buttons
+  $('#price-sort').on( 'change', function() {
+    var sortByValue = this.value;
+      console.log(sortByValue);
+    $grid.isotope({ sortBy: sortByValue});
+  });
+    
+     $('.filters-button-group').on( 'click', 'button', function() {
+    var filterValue = $( this ).attr('data-filter');
+    $grid.isotope({ filter: filterValue });
+  });
+
+  $('.button-group').each( function( i, buttonGroup ) {
+    var $buttonGroup = $( buttonGroup );
+    $buttonGroup.on( 'click', 'button', function() {
+      $buttonGroup.find('.is-checked').removeClass('is-checked');
+      $( this ).addClass('is-checked');
+    });
+  });
+  
+});
 	</script>
 	
 	<!--===============================================================================================-->

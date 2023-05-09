@@ -38,4 +38,9 @@ public class Product1VO {
 //		this.prdtImg = prdtImg;
 //	}
 
+	
+	
+	//카테고리 항목
+	private String sCatNm;
+	private String sCatSt;
 }

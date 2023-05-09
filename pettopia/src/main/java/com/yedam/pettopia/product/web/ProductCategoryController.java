@@ -29,6 +29,8 @@ public class ProductCategoryController {
 	@GetMapping("ProductCategory")
 	public String ProductCategory(Model model){
 		model.addAttribute("index", productService.selectPrdAllList2());
+		System.out.println("출력" +productService.selectCategoryList());
+		model.addAttribute("categories", productService.selectCategoryList()); 
 		return"product/ProductCategory";
 	}
 	@GetMapping("ProductDetail")
@@ -46,9 +48,8 @@ public class ProductCategoryController {
 	public String productList(Model model,
 								@AuthenticationPrincipal PrincipalDetails principalDetails,
 								Authentication authentication) {
-		System.out.println("여기 출력 " + productService.selectPrdAllList());
 		model.addAttribute("index", productService.selectPrdAllList());
-		 
+		
 		//======은애
 		//Authentication 객체를 통해 유저 정보를 가져올 수 있다.
 		String result = "";

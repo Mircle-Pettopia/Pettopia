@@ -25,5 +25,13 @@
     ORDER BY prdt_id
   )
 </select>
-  
+
+<select id="selectCategoryList" resultType="Product1VO">
+  SELECT s_cat_id, l_cat_id, s_cat_nm, s_cat_st
+  FROM (
+   SELECT s_cat_id, l_cat_id, s_cat_nm, s_cat_st
+   FROM product_s_cat
+   ORDER BY s_cat_id
+   )
+  </select>
   </mapper>
