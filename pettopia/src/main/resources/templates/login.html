@@ -37,8 +37,8 @@
                                 <p th:text="${exception}" class="alert alert-danger"
                                     style="font-size: 10px;"></p>
                             </div>
-
-                            <form th:action="@{/login_proc}" method="post" class="needs-validation" > <!--novalidate-->
+                            <!--th:action="@{/login_proc}"-->
+                            <form  method="post" class="needs-validation" > <!--novalidate-->
                                 <!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
                                 
                                 <div class="form-group">

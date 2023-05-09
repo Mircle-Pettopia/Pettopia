@@ -72,4 +72,13 @@
 	SET out_yn = 'Y'
 	WHERE me_id = #{meId}
     </update>
+    
+    <!-- 회원탈퇴한 계정은 로그인 못하도록 진행하기 -->
+    <select id="userDelNotLogin" resultType="String">
+    SELECT out_yn
+	FROM member
+	WHERE 1=1
+	AND me_id = #{meId}
+	AND pw = #{pw}
+    </select>
  </mapper>

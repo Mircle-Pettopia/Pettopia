@@ -1,6 +1,6 @@
 package com.yedam.pettopia.user.web;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
@@ -29,7 +28,13 @@ public class UserController {
 	@GetMapping("/login")
     public String login(@RequestParam(value="error", required = false) String error,
     					@RequestParam(value="exception", required = false) String exception,
-    					Model model) {
+    					Model model,
+    					HttpServletRequest request) {
+		/*String uri = request.getHeader("Referer");
+		
+		if(!uri.contains("/login")){
+	    	request.getSession().setAttribute("prevPage", uri);
+	    }*/
 
 		/* 에러와 예외를 모델에 담아 view resolve */
 		model.addAttribute("error", error);
