@@ -13,8 +13,8 @@
 				get_common(sale_st) as saleSt,
 				reg_dt,
 				mod_dt,
-				s_cat_id,
-				l_cat_id
+				get_scat(s_cat_id) as sCatId,
+				get_lcat(l_cat_id) as lCatId
 		FROM 	product
 		ORDER BY prdt_id
 	</select>
@@ -29,14 +29,14 @@
 	<select id="salePrdCount" resultType="int">
 		SELECT COUNT(*) as cnt
 		FROM product
-		WHERE sale_st = '판매함'
+		WHERE sale_st = 'ST2'
 	</select>
 	
 	<!-- 판매중지 상품 조회 -->
 	<select id="stopSalePrdCount" resultType="int">
 		SELECT COUNT(*) as cnt
 		FROM product
-		WHERE sale_st = '판매안함'
+		WHERE sale_st = 'ST1'
 	</select>
 	
 	<!-- 판매 상태 조회 -->
@@ -189,4 +189,35 @@
 		                   FROM product_option
                            WHERE prdt_id = #{prdtId})	
 	</delete>
+	
+	<!-- 이미지 조회 -->
+	<select id="selectImg" resultType="ProductVO">
+		SELECT 	img_id,
+				prdt_id,
+				prdt_img,
+				is_main
+		FROM	product_img
+		WHERE	prdt_id = #{prdtId}
+	</select>
+	
+	<!-- 옵션 조회 -->
+	<select id="selectOption" resultType="OptionVO">
+		SELECT 	opt_id,
+				prdt_id,
+				opt_nm
+		FROM	product_option
+		WHERE	prdt_id = #{prdtId}
+	</select>
+	
+	<!-- 옵션 디테일 조회 -->
+	<select id="selectOptionDetail" resultType="OptionDetailVO">
+		SELECT	opt_deta_id,
+				opt_deta_nm,
+				add_prc,
+				opt_id
+		FROM	product_option_detail
+		WHERE opt_id IN (SELECT opt_id
+	                        FROM product_option
+	                        WHERE prdt_id = #{prdtId})
+	</select>
 </mapper>

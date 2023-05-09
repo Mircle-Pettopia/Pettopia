@@ -1,6 +1,7 @@
 package com.yedam.pettopia.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yedam.pettopia.admin.ProductVO;
 
@@ -31,7 +32,7 @@ public interface ProductService {
 	public int insertPrd(ProductVO vo);
 
 	// 상품 상세 조회
-	public ProductVO selectDetailList(ProductVO vo);
+	public Map<String, Object> selectDetailList(String prdtId);
 
 	// 상품 삭제
 	public int deleteProduct(ProductVO vo);

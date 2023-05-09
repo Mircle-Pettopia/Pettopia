@@ -33,7 +33,7 @@ public interface ProductMapper {
 	public int insertPrd(ProductVO vo);
 
 	// 상품 상세 조회
-	public ProductVO selectDetailList(ProductVO vo);
+	public ProductVO selectDetailList(String prdtId);
 
 	// 이미지 등록
 	public int insertImg(ProductVO vo);
@@ -55,4 +55,13 @@ public interface ProductMapper {
 	
 	// 옵션 디테일 삭제
 	public int deleteOptionDetail(String prdtId);
+	
+	// 이미지 조회
+	public List<ProductVO> selectImg(String prdtId);
+	
+	// 옵션 조회
+	public List<OptionVO> selectOption(String prdtId);
+	
+	// 옵션 디테일 조회
+	public List<OptionDetailVO> selectOptionDetail(String prdtId);
 }

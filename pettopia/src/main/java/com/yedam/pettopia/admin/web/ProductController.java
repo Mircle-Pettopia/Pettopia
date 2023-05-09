@@ -1,6 +1,7 @@
 package com.yedam.pettopia.admin.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.admin.ProductVO;
 import com.yedam.pettopia.admin.service.ProductService;
+import com.yedam.pettopia.common.service.CodeService;
 
 @Controller
 public class ProductController {
@@ -19,12 +21,15 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 	
+	@Autowired
+	CodeService codeService;
+	
 	@GetMapping("productMag")
 	public String productMagForm(Model model) {
 		model.addAttribute("prdAllCnt", productService.insertPrdCount());
 		model.addAttribute("saleCnt", productService.salePrdCount());
 		model.addAttribute("stopSaleCnt", productService.stopSalePrdCount());
-		model.addAttribute("saleStList", productService.selectSaleSt());
+		model.addAttribute("code", codeService.getCodes("ST"));		
 		model.addAttribute("lCatList", productService.selectLcate());
 		return "admin/productMag";
 	}
@@ -50,10 +55,8 @@ public class ProductController {
 	
 	@GetMapping("productDetail")
 	@ResponseBody
-	public ProductVO productDetail() {
-		ProductVO vo = new ProductVO();
-		vo.setPrdtId("PRD1003");
-		return productService.selectDetailList(vo);
+	public Map<String, Object> productDetail(String prdtId) {
+		return productService.selectDetailList(prdtId);
 	}
 	
 	@PostMapping("productDel")

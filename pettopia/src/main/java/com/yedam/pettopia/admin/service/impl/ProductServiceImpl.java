@@ -1,6 +1,8 @@
 package com.yedam.pettopia.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,11 +99,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductVO selectDetailList(ProductVO vo) {
-		return productMapper.selectDetailList(vo);
-	}
-
-	@Override
 	@Transactional
 	public int deleteProduct(ProductVO vo) {
 		int result = productMapper.deleteProduct(vo);
@@ -126,6 +123,18 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductVO> selectScate(ProductVO vo) {
 		return productMapper.selectScate(vo);
+	}
+
+	@Override
+	public Map<String, Object> selectDetailList(String prdtId) {
+		Map<String, Object> map = new HashMap<>();
+		ProductVO vo = productMapper.selectDetailList(prdtId);
+		map.put("product", vo);
+		map.put("imgList", productMapper.selectImg(prdtId));
+		map.put("sCatList", productMapper.selectScate(vo));
+		map.put("optionList", productMapper.selectOption(prdtId));
+		map.put("optionDetailList", productMapper.selectOptionDetail(prdtId));
+		return map;
 	}
 
 }
