@@ -1,5 +1,6 @@
 package com.yedam.pettopia.user.service;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	
 	@Autowired
     private final UserMapper mapper;
+	@Autowired
+	private final SqlSession session;
 	
 	@Transactional
 	public int joinUser(UserVO vo) {
@@ -122,6 +125,14 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		if(result < 1) {
 			result = -1;
 		};
+		
+		return result;
+	}
+
+	//회원탈퇴
+	@Override
+	public int userDelete(String meId) {
+		int result = mapper.userDelete(meId);
 		
 		return result;
 	}

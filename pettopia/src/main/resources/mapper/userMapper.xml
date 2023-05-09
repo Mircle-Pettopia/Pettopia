@@ -65,4 +65,11 @@
 	</set>
 	WHERE me_id = #{meId}
     </update>
+    
+    <!-- 회원탈퇴 -->
+    <update id="userDelete" parameterType="String">
+    UPDATE member
+	SET out_yn = 'Y'
+	WHERE me_id = #{meId}
+    </update>
  </mapper>
