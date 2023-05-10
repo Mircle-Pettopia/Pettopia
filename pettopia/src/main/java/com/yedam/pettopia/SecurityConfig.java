@@ -41,7 +41,7 @@ public class SecurityConfig {
 			.formLogin()
 					.loginPage("/login")						// GET 요청 (로그인페이지)
 					//.loginProcessingUrl("/login_proc")		// POST 요청 (login 창에 입력한 데이터를 처리)
-					.successHandler(LoginSuccessHandler)					// 로그인이 정상적으로 실행했을 때
+					.successHandler(LoginSuccessHandler)		// 로그인이 정상적으로 실행했을 때
 					.failureHandler(CustomAuthFailureHandler) 	// 로그인 실패 핸들러
 					.usernameParameter("meId")					// html input name을 따로 설정해준다.
 					.passwordParameter("password")				// html input name을 따로 설정해준다.

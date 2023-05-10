@@ -43,7 +43,7 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
 		
 		// 참고 URL : https://gaebalsaebal-developer.tistory.com/4
 		// 로그인 id, pw 값 받아오기
-		String id = request.getParameter("meId");
+		/*String id = request.getParameter("meId");
 		String pw = request.getParameter("password");
 		
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -51,19 +51,15 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
         UserVO idChk = service.getUserAccount(id);
         System.out.println(idChk);
         String yn = idChk.getOutYn();
-        /*String dbPw = idChk.getPw();
         
         boolean pwResult = encoder.matches(pw, dbPw);
         System.out.println(pwResult);
         int result = service.userDelNotLogin(id, dbPw); */
 
-        System.out.println("yn====" + yn);
+        //System.out.println("yn====" + yn);
+        //System.out.println(yn.equals("Y"));
 		if(exception instanceof BadCredentialsException ) {
-			if(yn == "Y") {
-				errorMessage = "test";
-			} else {
-				errorMessage = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해주세요.";
-			}
+			errorMessage = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해주세요.";
 		} else if (exception instanceof UsernameNotFoundException || exception instanceof InternalAuthenticationServiceException) {
 			errorMessage = "존재하지 않는 계정입니다. 회원가입 후 로그인해주세요.";
 		} else if (exception instanceof AuthenticationCredentialsNotFoundException) {

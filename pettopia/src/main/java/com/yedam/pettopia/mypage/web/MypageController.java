@@ -7,12 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.service.MypageService;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 @Controller
 public class MypageController {
 	@Autowired MypageService service;
+	@Autowired CodeService codeService;
 	
 	//마이페이지-주문내역
 	@GetMapping("mypage")
@@ -26,6 +28,7 @@ public class MypageController {
         result += principal;
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
+        model.addAttribute("code", codeService.getCodes("SS", "PS"));
         
 		model.addAttribute("list", service.getOrderList());
 		
