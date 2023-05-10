@@ -1,6 +1,5 @@
 package com.yedam.pettopia.product;
 
-import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,36 +10,32 @@ import lombok.Data;
 
 @Data
 public class Product1VO {
-	private String prdtId;
-	private String prdtNm;
+	private String prdtId; //상품아이디
+	private String prdtNm; //상품이름
 	@JsonFormat(shape=JsonFormat.Shape.STRING)
-	private byte[] prdtDesct;
-	private int prdtPrc;
-	private String saleSt;
+	private String prdtDesct;  //상품설명
+	private int prdtPrc; //상품가격
+	private String saleSt; //판매상태
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date regDt;
+	private Date regDt; //등록일자
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date modDt;
-	private String sCatId;
-	private String lCatId;
+	private Date modDt; //수정일자
+	private String sCatId; //소분류아이디
+	private String lCatId; //대분류아이디
 	
 	private int cnt; // 상품 개수
 
-	public void setPrdtDesctFromBase64(String base64) {
-        this.prdtDesct = Base64.getDecoder().decode(base64);
-    }
-
-//	// getter/setter 메소드
-//	public byte[] getPrdtImg() {
-//		return prdtImg;
-//	}
-//	public void setPrdtImg(byte[] prdtImg) {
-//		this.prdtImg = prdtImg;
-//	}
-
+	//상품옵션
+	private String optId; //옵션id
+	private String optNm; //옵션이름
+	
+	//옵션디테일
+	private String optDetaId; //옵션상세id
+	private String optDetaNm; //옵션상세명
+	private int addPrc; //옵션추가가격
 	
 	
 	//카테고리 항목
-	private String sCatNm;
-	private String sCatSt;
+	private String sCatNm; //대분류이름
+	private String sCatSt; //사용여부
 }

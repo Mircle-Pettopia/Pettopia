@@ -52,7 +52,9 @@
 	<link type="text/css" rel="stylesheet"
 		href="./data/skin/front/mplshop/js/jquery/chosen-imageselect/src/ImageSelect.css">
 	<!-- Add style : end -->
-
+	<!--  jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"></script>
 	<script type="text/javascript">
 		var json_locale_data = { "domain": "messages", "locale_data": { "messages": { "": { "lang": "ATF", "plural-forms": "nplurals=1; plural=0" } } } }
 	</script>
@@ -343,7 +345,7 @@
 	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
+				<div class="flex-w flex-l-m filter-tope-group all m-tb-10">
 					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
 						All Products
 					</button>
@@ -429,38 +431,38 @@
 								 </li>
 							</ul>
 						</div>
-						<div class="filter-col1 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Sort By
-							</div>
-
-							<ul class="filter-tope-group price">
-								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04">
-										최신순
-									</button>
-								</li>
-
-								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" id="sort-by-price-asc">
-										높은가격순
-									</button>
-								</li>
-
-								<li class="p-b-6">
-									<button href="#" class="filter-link stext-106 trans-04" id="sort-by-price-desc">
-										낮은가격순
-									</button>
-								</li>
-							</ul>
-						</div>
+								<div class="filter-col1 p-r-15 p-b-27">
+								  <div class="mtext-102 cl2 p-b-15">
+								    Sort By
+								  </div>
+								
+								  <ul class="sort-tope-group price">
+								    <li class="p-b-6">
+								      <button href="#" class="filter-link stext-106 trans-04 active">
+								        최신순
+								      </button>
+								    </li>
+								
+								    <li class="p-b-6">
+								      <button href="#" class="filter-link stext-106 trans-04" data-sorttype="ass">
+								        높은가격순
+								      </button>
+								    </li>
+								
+								    <li class="p-b-6">
+								      <button href="#" class="filter-link stext-106 trans-04" data-sorttype="dec">
+								        낮은가격순
+								      </button>
+								    </li>
+								  </ul>
+								</div>
 					</div>
 				</div>
 			</div>
 
-<div class="row isotope-grid">
+					<div class="row isotope-grid">
 				<div id="product-list" class="row" th:each="product : ${index}">
-					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item" th:classappend="${product.lCatId} +' '+${product.sCatId}">
+					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item" th:classappend="${product.lCatId} +' '+${product.sCatId}" data-category="transition">
 						<div class="block2">
 							<!-- <div class="block2-pic hov-img0">
 								<img th:src="@{${product.image}}" />
@@ -473,9 +475,9 @@
 							<div class="block2-pic hov-img0">
 								<img src="images/product-09.jpg" alt="IMG-PRODUCT">
 
-								<a href="ProductDetail"
-									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
-									Quick View
+								<a  th:href="@{/ProductDetail(prdtId=${product.prdtId})}"
+								   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+								   Quick View
 								</a>
 							</div>
 
@@ -1063,7 +1065,7 @@ $(".lcate").click(function() {
 
 //external js: isotope.pkgd.js
 
-$(document).ready( function() {
+/* $(document).ready( function() {
   // init Isotope
   var $grid = $('.row isotope-grid').isotope({
     itemSelector: '.row isotope-grid',
@@ -1073,7 +1075,7 @@ $(document).ready( function() {
     }
   });
     
-  $('#filter-tope-group price').on( 'change', function() {
+  $('.filter-tope-group price').on( 'change', function() {
           var type = $(this).find(':selected').attr('data-sorttype');
           console.log(type);
     var sortValue = this.value;
@@ -1084,11 +1086,17 @@ $(document).ready( function() {
 
 
   // change is-checked class on buttons
-  $('#price-sort').on( 'change', function() {
-    var sortByValue = this.value;
-      console.log(sortByValue);
-    $grid.isotope({ sortBy: sortByValue});
-  });
+ $('.filter-tope-group.price button').on('click', function() {
+    var type = $(this).attr('data-sorttype');
+    console.log(type);
+    var sortValue = $(this).attr('id');
+    if (type == 'ass') {
+        $grid.isotope({sortBy: sortValue, sortAscending: false});
+    } else {
+        $grid.isotope({sortBy: sortValue, sortAscending: true});
+    }
+    $grid.isotope({sortBy: sortValue});
+});
     
      $('.filters-button-group').on( 'click', 'button', function() {
     var filterValue = $( this ).attr('data-filter');
@@ -1103,7 +1111,123 @@ $(document).ready( function() {
     });
   });
   
-});
+}); */
+
+ 
+$(document).ready(function () {
+		console.log($('#atag'));
+	
+		var fValue;
+	 	$topeContainer = $('.isotope-grid');
+	    var $filter = $('.filter-tope-group');
+			
+	    // filter items on button click
+	    $filter.each(function () {
+	        $filter.on('click', 'button', function () {
+	            var filterValue = $(this).attr('data-filter');
+	            if(filterValue)
+	            	fValue = filterValue
+	            $topeContainer.isotope({filter: filterValue});
+	        });
+	        
+	    }); 
+
+        var $grid = $topeContainer.each(function () {
+            $(this).isotope({
+                itemSelector: '.isotope-item',
+                layoutMode: 'fitRows',
+                percentPosition: true,
+                animationEngine : 'best-available',
+                masonry: {
+                    columnWidth: '.isotope-item'
+                },
+            	getSortData: {
+      	      	price: function (itemElement) {
+      	        var price = $(itemElement).find('.stext-105').text().replace(/\D/g, '');
+      	        return parseFloat(price);
+      	      },
+      	    },
+            });
+        });
+	 
+
+	    var isotopeButton1 = $('.filter-tope-group.all button');
+
+	    $(isotopeButton1).each(function(){
+	        $(this).on('click', function(){
+	            for(var i=0; i<isotopeButton1.length; i++) {
+	                $(isotopeButton1[i]).removeClass('how-active1');
+	            }
+
+	            $(this).addClass('how-active1');
+	        });
+	    });
+	    
+	    var isotopeButton2 = $('.filter-tope-group.cate button');
+
+	    $(isotopeButton2).each(function(){
+	        $(this).on('click', function(){
+	            for(var i=0; i<isotopeButton2.length; i++) {
+	                $(isotopeButton2[i]).removeClass('how-active1');
+	            }
+
+	            $(this).addClass('how-active1');
+	        });
+	    });
+	    
+	    var isotopeButton = $('.sort-tope-group button');
+
+	    $(isotopeButton).each(function(){
+	        $(this).on('click', function(){
+	            for(var i=0; i<isotopeButton.length; i++) {
+	                $(isotopeButton[i]).removeClass('how-active1');
+	            }
+
+	            $(this).addClass('how-active1');
+	        });
+	    });
+	
+	
+
+   
+   
+	  $('.sort-tope-group.price').on('change', function () {
+	    var type = $(this).find(':selected').attr('data-sorttype');
+	    var sortValue = 'price';
+	    if (type == 'ass') {
+	      $grid.isotope({ sortBy: sortValue, sortAscending: false });
+	      
+	    } else {
+	      $grid.isotope({ sortBy: sortValue, sortAscending: true });
+	    }
+	  });
+
+	  $('.sort-tope-group.price button').on('click', function () {
+		
+	    var type = $(this).attr('data-sorttype');
+	    var sortValue = 'price';
+	    if (type == 'ass') {
+	      $grid.isotope({ sortBy: sortValue, sortAscending: false });
+	    } else {
+	      $grid.isotope({ sortBy: sortValue, sortAscending: true });
+	    }
+ 	   // if(fValue)
+	    //$topeContainer.isotope({filter: fValue}); 
+	  });
+
+/* 	  $('.filters-button-group').on('click', 'button', function () {
+	    var filterValue = $(this).attr('data-filter');
+	    $grid.isotope({ filter: filterValue });
+	  }); */
+
+	  $('.button-group').each(function (i, buttonGroup) {
+	    var $buttonGroup = $(buttonGroup);
+	    $buttonGroup.on('click', 'button', function () {
+	      $buttonGroup.find('.is-checked').removeClass('is-checked');
+	      $(this).addClass('is-checked');
+	    });
+	  });
+	});
 	</script>
 	
 	<!--===============================================================================================-->

@@ -1,4 +1,4 @@
- var $topeContainer
+
 (function ($) {
     "use strict";
 
@@ -129,17 +129,19 @@
 
     /*==================================================================
     [ Isotope ]*/
-    $topeContainer = $('.isotope-grid');
+   /* $topeContainer = $('.isotope-grid');
     var $filter = $('.filter-tope-group');
 
     // filter items on button click
     $filter.each(function () {
         $filter.on('click', 'button', function () {
             var filterValue = $(this).attr('data-filter');
+            if(filterValue)
+            	fValue = filterValue
             $topeContainer.isotope({filter: filterValue});
         });
         
-    });
+    }); 
 
     // init Isotope
     $(window).on('load', function () {
@@ -166,7 +168,7 @@
 
             $(this).addClass('how-active1');
         });
-    });
+    });*/
 
     /*==================================================================
     [ Filter / Search product ]*/

@@ -1,6 +1,7 @@
 package com.yedam.pettopia.product.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,8 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.admin.service.ProductService;
+import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.product.Product1VO;
 import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
@@ -25,6 +29,8 @@ public class ProductCategoryController {
 	
 	@Autowired
 	ProductService1 productService;
+	@Autowired
+	ProductService productService1;
 	
 	@GetMapping("ProductCategory")
 	public String ProductCategory(Model model){
@@ -34,9 +40,21 @@ public class ProductCategoryController {
 		return"product/ProductCategory";
 	}
 	@GetMapping("ProductDetail")
-	public String ProductDetail(Model model) {
+	public String ProductDetail(Product1VO product1VO, Model model, @RequestParam final String prdtId) {
+		System.out.println("출력 여기" + productService.selectProductDetail(product1VO));
+		model.addAttribute("ProductDetail", productService.selectProductDetail(product1VO));
 		return "product/ProductDetail";
 	}
+	
+	/*
+	 * @GetMapping("productDetail1")
+	 * 
+	 * @ResponseBody public Map<String, Object> productDetail(String prdtId) {
+	 * return productService1.selectDetailList(prdtId); }
+	 */
+	
+
+	
 
 	/*
 	 * @GetMapping("index")
