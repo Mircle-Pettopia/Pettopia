@@ -55,4 +55,24 @@
 	<update id="KnowHowAddhit" parameterType="int">
 		update KNOWHOW_BOARD set view_cnt=view_cnt+1 where BO_NO = #{boNo}
 	</update>
+	
+	<delete id="delKnowHow" parameterType="int">
+		delete KNOWHOW_BOARD where BO_NO = #{boNo}
+	</delete>
+	
+	<delete id="delKnowHow2" parameterType="int">
+		delete REPLY where  BO_NO = #{boNo} and DIVISION = 'DR2'
+	</delete>
+	
+	<select id="getKnowHowWriter" parameterType="int" resultType="String">
+		select ME_ID FROM KNOWHOW_BOARD where BO_NO = #{boNo}
+	</select>
+	
+	<update id="updateKnowHow" parameterType="BoardVO">
+		UPDATE KNOWHOW_BOARD SET title=#{title},subject=#{subject} WHERE BO_NO=#{boNo}
+	</update>
+	
+	<delete id="delKnowHowReply" parameterType="int">
+		delete REPLY where comment_id=#{commentId} and DIVISION = 'DR2'
+	</delete>
 </mapper>

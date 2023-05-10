@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -87,6 +88,12 @@ public class BoardController {
 		return "board/knowHowArticle";	
 	}
 	
+	@GetMapping("modKnowHow")
+	public String modKnowHow(Model model,@RequestParam("boNo") int boNo) {
+		model.addAttribute("Article",boardService.showKnowHow(boNo));
+		return "board/knowHowMod";	
+	}
+	
 	@GetMapping("getknowHowReply")
 	@ResponseBody
 	public List<BoardVO> getknowHowReply(Model model,@RequestParam("boNo") int boNo) {
@@ -111,5 +118,22 @@ public class BoardController {
 	@ResponseBody
 	public void knowHowAddHit(int boNo) {
 		boardService.KnowHowAddhit(boNo);
+	}
+	
+	@DeleteMapping("delKnowHow")
+	@ResponseBody
+	public int delKnowHow(int boNo,String Uid) {
+		return boardService.delKnowHow(boNo, Uid);
+	}
+	
+	@PostMapping("updateKnowHow")
+	@ResponseBody
+	public int updateKnowHow(BoardVO vo) {
+		return boardService.updateKnowHow(vo);
+	}
+	@DeleteMapping("delKnowHowReply")
+	@ResponseBody
+	public int delKnowHowReply(int commentId) {
+		return boardService.delKnowHowReply(commentId);
 	}
 }

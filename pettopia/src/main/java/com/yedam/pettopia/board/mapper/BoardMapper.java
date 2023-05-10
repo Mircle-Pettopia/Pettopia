@@ -15,4 +15,9 @@ public interface BoardMapper {
 	public List<BoardVO> getknowHowReply(int boNo);
 	public int insertKnowHowReply(BoardVO vo);
 	public void KnowHowAddhit(int boNo);
+	public int delKnowHow(int boNo);
+	public int delKnowHow2(int boNo);
+	public String getKnowHowWriter(int boNo);
+	public int updateKnowHow(BoardVO vo);
+	public int delKnowHowReply(int commentId);
 }
