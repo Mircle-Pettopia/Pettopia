@@ -524,14 +524,8 @@
             let lCatId = $("input[name=lCatId]:checked").val();
             let saleSt = $("input[name=saleSt]:checked").val();
             let prdtId = $("#prdtIdDetail").val();
-
-            console.log(prdtNm);
-            console.log(prdtPrc);
-            console.log(prdtDesct);
-            console.log(sCatId);
-            console.log(lCatId);
-            console.log(saleSt);
-            console.log(prdtId);
+            let selectedRows = prdList.getRows();
+            console.log(selectedRows);
 
             Swal.fire({
               title: "수정하시겠습니까?",
@@ -546,6 +540,50 @@
                 $.ajax({
                   url: "updatePrd",
                   method: "post",
+                  data: {
+                    prdtNm: prdtNm,
+                    prdtPrc: prdtPrc,
+                    prdtDesct: prdtDesct,
+                    sCatId: sCatId,
+                    lCatId: lCatId,
+                    saleSt: saleSt,
+                    prdtId: prdtId,
+                  },
+                  success: function (result) {
+                    console.log(result);
+                    // 상품 현황 수정
+                    $("#currentPrd td:first-child span").text(result.allPrd);
+                    $("#currentPrd td:nth-child(2) span").text(result.salePrd);
+                    $("#currentPrd td:last-child span").text(result.stopPrd);
+
+                    selectedRows.forEach((row) => {
+                      prdList.removeRow(row.rowKey);
+
+                      let Toast = Swal.mixin({
+                        toast: true,
+                        position: "top",
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                          toast.addEventListener("mouseenter", Swal.stopTimer);
+                          toast.addEventListener(
+                            "mouseleave",
+                            Swal.resumeTimer
+                          );
+                        },
+                      });
+                      Toast.fire({
+                        icon: "success",
+                        title: "삭제가 정상적으로 되었습니다.",
+                      });
+                    });
+
+                    $("#detailModal").modal("hide");
+                  },
+                  error: function (reject) {
+                    console.log(reject);
+                  },
                 });
               }
             });

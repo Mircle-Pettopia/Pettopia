@@ -1,7 +1,5 @@
 package com.yedam.pettopia.admin.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,13 +80,16 @@ public class ProductController {
 	@GetMapping("searchPrd")
 	@ResponseBody
 	public List<ProductVO> searchPrd(ProductVO vo){
-		System.out.println("출력 " + vo);
 		return productService.searchList(vo);
 	}
 	
 	// 상품 수정
-//	@PostMapping("updatePrd")
-//	@ResponseBody
-//	public Map<String, Integer>
+	@PostMapping("updatePrd")
+	@ResponseBody
+	public Map<String, Integer> updatePrd(ProductVO vo){
+		System.out.println(vo);
+		productService.updatePrd(vo);
+		return productService.currentPrd();
+	}
 	
 }

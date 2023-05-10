@@ -151,4 +151,9 @@ public class ProductServiceImpl implements ProductService {
 		return map;
 	}
 
+	@Override
+	public int updatePrd(ProductVO vo) {
+		return productMapper.updatePrd(vo);
+	}
+
 }
