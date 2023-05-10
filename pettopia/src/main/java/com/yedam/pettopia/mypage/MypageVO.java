@@ -13,9 +13,10 @@ public class MypageVO {
 	//order_detail
 	private String ordtId;
 	private String prdtId;
+	private String prdtNm;
 	private String optDetId;
-	private int cnt;
-	private int prc;
+	private int cnt;			//개수
+	private int prc;			//단가
 	
 	//order_header
 	private String ordrId;
@@ -38,6 +39,8 @@ public class MypageVO {
 	private String prdtImg;		//상품이미지
 	private String prdNm;		//상품이름
 	private String sCatNm;		//소분류명
+	private String optDetaNm;	//옵션상세명
+	private String optNm;		//옵션명
 	
 	//------------------------
 	private int price;			//상품금액 + 옵션추가금액

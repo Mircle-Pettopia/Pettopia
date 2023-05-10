@@ -150,28 +150,32 @@ width: 100px;
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
+										<tr th:each="order : ${list}">
 											<td rowspan="">
-												<p>2023-04-12</p>
-												<a class="fontColor" href="orderListDtl" style="text-decoration: underline; text-underline-position:under;">
-													<p>20230509-1521584</p>
+												<p th:text="${#dates.format(order.ordrDate, 'yyyy-MM-dd')}" class="orderDate"></p>
+												<a class="fontColor" th:href="@{/orderListDtl(ordrId=${order.ordrId})}" style="text-decoration: underline; text-underline-position:under;">
+													<p th:text="${order.ordrId}" class="orderId"></p>
 												</a>
 											</td>
-											<td><a href="#" class="fontColor"><img src="images/about-01.jpg" rel="product"></a></td>
+											<td><a href="#" class="fontColor"><img src="${order.prdtImg}" rel="product"></a></td>
 											<td>
-												<strong><a href="#" class="fontColor">상품이름</a></strong>
-												<div class="option">[옵션 : 블랙/FREE]</div>
+												<strong><a href="#" class="fontColor" th:text="${order.prdtNm}"></a></strong>
+											<div class="option">
+												[옵션 : 
+												<sapn th:text="${order.optDetaNm}"></sapn>/
+												<span id="size"></span>
+												]
+											</div>
 											</td>
-											<td>30,000원</td>
-											<td>결제완료</td>
-											<td>Y</td>
+											<td><span th:text="${#numbers.formatInteger(order.price,3,'COMMA')}"></span><span>원</span></td>
+											<td th:text="${order.shipSt}"></td>
+											<td th:text="${order.prcSt}"></td>
 										</tr>
-
 									</tbody>
 									<tfoot>
 										<tr>
 											<td colspan="6" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
-												상품구매금액 34,800 + 배송비 2,200 = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
+												상품구매금액 <sapn id="orderPrice"></sapn> + 배송비 <sapn>2,200</sapn> = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
 											</td>
 										</tr>
 									</tfoot>
@@ -183,10 +187,17 @@ width: 100px;
 			</div>
 		</div>
 		<script th:inline="javascript">
-			/*<![CDATA[*/
-			let test = /*[[${code}]]*/
 
+			let price = 0;
+			let test = /*[[${list}]]*/
 			console.log(test);
+
+			test.map((data) => {
+				price += data.price;
+			})
+			console.log(price);
+
+			$('#orderPrice').text(price);
 		</script>
 	</div>
 	</body>

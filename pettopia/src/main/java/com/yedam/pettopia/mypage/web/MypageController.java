@@ -1,5 +1,7 @@
 package com.yedam.pettopia.mypage.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,8 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.yedam.pettopia.common.service.CodeService;
+import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.service.MypageService;
-import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 @Controller
@@ -22,16 +24,17 @@ public class MypageController {
 	public String orderList(Model model,
 							@AuthenticationPrincipal PrincipalDetails principalDetails,
 							Authentication authentication) {
-		String result = "";
-		//Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        result += principal;
+        String id = principal.getUser().getMeId();
+        List<MypageVO> vo = service.getOrderList(id);
+        String ordr_id = vo.get(0).getOrdrId();
+        String prdt_id = vo.get(0).getPrdtId();
+        
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
-        
-		//model.addAttribute("list", service.getOrderList();
+        model.addAttribute("list", service.getOrderList(id));
+        model.addAttribute("count", service.getOrderDetailCount(ordr_id));
 		
 		return "mypage/mypage";
 	}
