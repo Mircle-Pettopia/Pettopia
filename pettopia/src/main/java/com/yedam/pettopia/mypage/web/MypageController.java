@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.service.MypageService;
+import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 @Controller
@@ -30,7 +31,7 @@ public class MypageController {
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
         
-		model.addAttribute("list", service.getOrderList());
+		//model.addAttribute("list", service.getOrderList();
 		
 		return "mypage/mypage";
 	}

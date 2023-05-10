@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.pettopia.mypage.mapper.MypageMapper">
+  <!-- 주문일자, 주문번호, 이미지, 상품이름, 구매한 옵션명[1] + [2], 배송상태, 결제여부, 옵션명 -->
+  <!-- 상품 가격 + 옵션가격 -->
+  <select id="getOrderList" resultType="MypageVO">
+  SELECT ordr_date, ordr.ordr_id, prdt_img, prdt_nm, opt_deta_nm, ship_st, prc_st, opt_nm,
+        NVL(prdt_prc, 0) + NVL(ADD_PRC, 0) "PRICE"
+  FROM order_header ordr
+    	JOIN order_detail ordt
+	    ON ordr.ordr_id = ordt.ordr_id
+	    JOIN order_detali_option odo
+	    ON ordt.ordt_id = odo.ordt_id
+	    JOIN product_option_detail optd
+	    ON odo.opt_deta_id = optd.opt_deta_id
+	    JOIN product_option opt
+	    ON optd.opt_id = opt.opt_id
+	    JOIN product pr
+	    ON ordt.prdt_id = pr.prdt_id
+	    JOIN product_img img
+	    ON pr.prdt_id = img.prdt_id
+   WHERE 1=1
+   AND me_id = #{meId}
+   AND is_main = 'Y'
+   ORDER BY 1 DESC
+  </select>
+  
+  <!-- 주문번호기준 하나의 주문에 상세가 몇개인지 확인하기 -->
+  <select id="getOrderDetailCount" resultType="String">
+  SELECT COUNT(*) count
+  FROM order_header oh JOIN order_detail od
+  ON oh.ordr_id = od.ordr_id
+  WHERE od.ordr_id = #{ordrId}
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </mapper>

@@ -13,8 +13,13 @@ public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
 
 	@Override
-	public List<MypageVO> getOrderList() {
-		return mapper.getOrderList();
+	public List<MypageVO> getOrderList(MypageVO vo) {
+		return mapper.getOrderList(vo);
+	}
+
+	@Override
+	public int getOrderDetailCount(String meId) {
+		return mapper.getOrderDetailCount(meId);
 	}
 
 	
