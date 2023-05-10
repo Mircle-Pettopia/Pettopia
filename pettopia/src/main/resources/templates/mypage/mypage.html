@@ -6,61 +6,19 @@
     <title>Pettopia</title>
     <meta charset="UTF-8">
 </head>
-<div layout:fragment="content">
 <body>
+	<div layout:fragment="content">
 <style>
-.status  {
-margin-top: 30px;
-background: rgb(248, 245, 250);
-border-radius: 15px;
-padding: 15px;
-}
-
 #backColor{
-margin-top: 30px;
-background: rgb(248, 245, 250);
-padding: 10px 0px 10px 0px !important;
-border-radius: 15px;
-padding: 10px;
-}
-
-.status-icons, .status-text, .status-link {
-	display: flex;
-	justify-content: space-around;
-	margin-top: 10px;
-}
-
-.status-link{
-text-align: center;
-}
-
-.status-icons img {
-width: 8%;
-height: 10%;
-}
-
-.datePut{
-display: inline-flex !important;
-margin-bottom: 10px;
-font-size: 15px !important;
-width: 173px;
-margin-top: 8px;
-background-color: rgb(255, 255, 255) !important;
-}
-
-a, span, th, td, tr {
-font-size: 15px !important;
+	margin-top: 30px;
+	background: rgb(248, 245, 250);
+	padding: 10px 0px 10px 0px !important;
+	border-radius: 15px;
+	padding: 10px;
 }
 
 th, td {
 text-align: center;
-}
-
-#allOrderSearch{
-width: 130px;
-height: 35px;
-font-size: 13px !important;
-margin: 8px 5px 0px 10px;
 }
 
 #btnCss{
@@ -78,26 +36,14 @@ text-align: center;
 #filter li {
 display: inline-block;
 padding-top: 10px;
-border: none;
+border: 1px solid rgb(235, 235, 235);
 border-radius: 10px;
 background-color: white;
-padding: 8px 26px 5px 10px;
+padding: 8px 22px 5px 22px;
 } 
-
-.searchA{
-padding: 8px 40px 5px 0px;
-}
 
 tbody img{
 width: 100px;
-}
-
-tbody p {
-font-size: 13px !important;
-}
-
-.fontColor{
-	color: black;
 }
 </style>
 
@@ -106,7 +52,7 @@ font-size: 13px !important;
                 <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
 
                 <!-- 마이페이지 주문관리 -->
-				<div class="col-md-8 col-lg-10 p-b-80">
+				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
 					<div class="p-r-45 p-r-0-lg m-t-50">
 						<h1>
 							<span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>주문관리
@@ -139,10 +85,16 @@ font-size: 13px !important;
 						<!-- 검색 기능 -->
 						<div class="row m-t-20 m-b-20" id="backColor">
 							<div class="col-md-2">
-								<select name="" id="allOrderSearch">
+								<select name="psss_select" class="allOrderSearch">
 									<option value="0">전체 주문처리 상태</option>
-									<option>2</option>
-									<option>3</option>
+									<!--결제상태-->
+									<option  th:each="plist : ${code.PS}"
+													th:value="${plist?.codTitle}" 
+													th:utext="${plist?.codTitle}"></option>
+									<!--배송상태-->
+									<option  th:each="slist : ${code.SS}"
+													th:value="${slist?.codTitle}" 
+													th:utext="${slist?.codTitle}"></option>
 								</select>
 							</div>
 							<div class="col-md-4">
@@ -216,6 +168,13 @@ font-size: 13px !important;
 										</tr>
 
 									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="6" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
+												상품구매금액 34,800 + 배송비 2,200 = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
+											</td>
+										</tr>
+									</tfoot>
 								</table>
 							</div>
 						</div>
@@ -223,7 +182,13 @@ font-size: 13px !important;
 				</div>
 			</div>
 		</div>
-    </div>
-</body>
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			let test = /*[[${code}]]*/
+
+			console.log(test);
+		</script>
+	</div>
+	</body>
 </html>
 </html>

@@ -96,10 +96,6 @@ public class UserVO implements UserDetails{
         this.pw = pw;
         this.name = name;
     }
-
-	public UserVO orElseThrow(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
 
 }

@@ -24,8 +24,6 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	
 	@Autowired
     private final UserMapper mapper;
-	@Autowired
-	private final SqlSession session;
 	
 	@Transactional
 	public int joinUser(UserVO vo) {
@@ -135,6 +133,11 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		int result = mapper.userDelete(meId);
 		
 		return result;
+	}
+
+	@Override
+	public int userDelNotLogin(String meId, String pw) {
+		return mapper.userDelNotLogin(meId, pw);
 	}
 	
 }
