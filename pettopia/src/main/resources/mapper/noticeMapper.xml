@@ -7,20 +7,19 @@
 
 	<!-- 전체조회 -->
 	<select id="NoticeListWithPaging" resultType="NoticeVO">
-	<![CDATA[
+
 		SELECT no_no, title, rdate, view_cnt
 		FROM
 		(
 			SELECT notice.*, ROWNUM RN
 			FROM notice
-			WHERE ROWNUM <= #{pageNo} * #{amount}
-			ORDER BY no_no DESC
-		]]>
+		<![CDATA[	WHERE ROWNUM <= #{pageNo} * #{amount}  ]]>
 			<if test="keyword != null">
-             and title like '%'||#{keyword}||'%' 
+             AND title like '%'||#{keyword}||'%' 
             </if>
-		<![CDATA[	
+			ORDER BY no_no DESC
 		)
+		<![CDATA[
 		WHERE RN > (#{pageNo} - 1) * #{amount}
   		]]>
 	</select>
@@ -29,7 +28,7 @@
 	<select id="totalCount" resultType="int">
 		select count(*) from notice where no_no > 0
 		  <if test="keyword != null">
-            where title like '%'||#{keyword}||'%'
+            AND title like '%'||#{keyword}||'%'
         </if>
 	</select>
 

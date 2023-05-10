@@ -5,6 +5,7 @@
 <head>
 <title>공지사항</title>
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!--===============================================================================================-->
 <link rel="icon" type="image/png" href="images/icons/favicon.png" />
@@ -39,6 +40,7 @@
 <link rel="stylesheet" type="text/css" href="css/util.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <!--===============================================================================================-->
+
 </head>
 <body class="animsition">
 
@@ -61,10 +63,10 @@
 				<div class="search_area">
 					<div style="height: 50px;">
 						<button class="btn btnPush btnLightBlue" id="SearchBtn"
-							style="float: right; margin-left: 5px;">
+							style="float: right; margin-left: 5px;" onclick="setkeyword();">
 							<i class="fas fa-search"></i>
 						</button>
-						<input class="form-control" type="text" name="keyword"
+						<input class="form-control" type="text" name="keyword" id="keyword"
 							th:value="${pageMaker.cri.keyword}"
 							style="width: 200px; float: right;">
 					</div>
@@ -90,14 +92,13 @@
 										}]]</a>
 								</div>
 								<div class="date">[[ ${#dates.format(notice.rDate,
-									'yyyy/MM/dd')}]]</div>
+									'yyyy-MM-dd HH-mm')}]]</div>
 								<div class="count">[[${notice.viewCnt }]]</div>
 							</div>
 
 							<div>
-								<a href="noticeInsertForm"><button type="button"
-										class="btn btnPush btnBlueGreen"
-										style="float: right; font-size: 13px;">등록</button></a>
+								<a href="noticeInsertForm">
+								<button type="button" class="btn btnPush btnBlueGreen" style="float: right; font-size: 13px;">등록</button></a>
 							</div>
 
 
@@ -114,12 +115,13 @@
 								th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}"
 								th:each="pageButton : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
 								<a th:href="@{/noticeList?pageNo={page} (page = ${pageButton})}"
-									th:text="${pageButton}" class="num"></a>
+									th:text="${pageButton}" th:classappend="${currentPage == pageButton} ? 'num on' : 'num'"></a>
+									
 							</th:block>
 							<a th:if="${pageMaker.next}"
 								th:href="@{/noticeList?pageNo={page}(page=${pageMaker.endPage +1})}"
 								class="bt next">&gt;</a> <a
-								th:href="@{/noticeList?pageNo={page} (page = ${pageMaker.endPage})}"
+								th:href="@{/noticeList?pageNo={page} (page = ${pageMaker.realEnd})}"
 								class="bt last">&gt;&gt;</a>
 						</div>
 
@@ -127,9 +129,9 @@
 				</div>
 
 				<form id="moveForm" method="get">
-					<input type="hidden" name="pageNo" value="${pageMaker.cri.pageNo}">
-					<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-					<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+					<input type="hidden" name="pageNo" th:value="${pageMaker.cri.pageNo}">
+					<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
+					<input type="hidden" name="keyword" th:value="${pageMaker.cri.keyword}">
 				</form>
 
 			</div>
@@ -182,7 +184,7 @@
 				$(".search_area button").on("click", function(e) {
 					e.preventDefault();
 					let val = $("input[name='keyword']").val();
-					moveForm.find("input[name='keyword']").val(val);
+					$("#moveForm").find("input[name='keyword']").val(val);
 					moveForm.submit();
 				});
 			</script>
