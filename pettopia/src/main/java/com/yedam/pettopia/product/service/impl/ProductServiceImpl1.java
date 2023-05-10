@@ -39,4 +39,10 @@ public class ProductServiceImpl1 implements ProductService1{
 		return productMapper.selectCategoryList();
 	}
 
+	@Override
+	public Product1VO selectProductDetail(Product1VO product1VO) {
+		
+		return productMapper.selectProductDetail(product1VO);
+	}
+
 }

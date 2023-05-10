@@ -19,4 +19,7 @@ public interface ProductService1 {
 
 	//카테고리 항목
 	public List<Product1VO> selectCategoryList();
+	
+	// 상품 단건 조회
+	public Product1VO selectProductDetail(Product1VO product1VO);
 }

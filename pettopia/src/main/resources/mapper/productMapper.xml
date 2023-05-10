@@ -34,4 +34,26 @@
    ORDER BY s_cat_id
    )
   </select>
+  
+  <select id="selectProductDetail" resultType="Product1VO">
+ <!--  SELECT P.prdt_id, P.prdt_nm, P.prdt_prc, P.sale_st, P.reg_dt, P.mod_dt, P.prdt_desct,
+       pi.prdt_img, pi.is_main,
+       po.opt_id, po.opt_nm,
+       pod.opt_deta_id, pod.opt_deta_nm, pod.add_prc
+FROM PRODUCT P
+LEFT JOIN PRODUCT_IMG PI ON P.PRDT_ID = PI.PRDT_ID
+LEFT JOIN PRODUCT_OPTION PO ON P.PRDT_ID = PO.PRDT_ID
+LEFT JOIN PRODUCT_OPTION_DETAIL POD ON PO.OPT_ID = POD.OPT_ID
+WHERE P.PRDT_ID = #{prdtId}
+AND pi.is_main = 'Y' -->
+
+SELECT P.prdt_id, P.prdt_nm, P.prdt_prc, P.sale_st, P.reg_dt, P.mod_dt, P.prdt_desct,
+       pi.prdt_img, pi.is_main
+      
+FROM PRODUCT P
+LEFT JOIN PRODUCT_IMG PI ON P.PRDT_ID = PI.PRDT_ID
+WHERE P.PRDT_ID = #{prdtId}
+AND pi.is_main = 'Y'
+
+  </select>
   </mapper>

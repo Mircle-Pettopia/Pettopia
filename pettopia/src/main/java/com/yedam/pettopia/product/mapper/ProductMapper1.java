@@ -20,4 +20,7 @@ public interface ProductMapper1 {
 	//카테고리 목록 가져오기
 	public List<Product1VO> selectCategoryList();
 	
+	// 상품 단건 조회
+	public Product1VO selectProductDetail(Product1VO product1VO);
+	
 }
