@@ -2,7 +2,7 @@ package com.yedam.pettopia.admin.service;
 
 import java.util.List;
 
-import com.yedam.pettopia.admin.web.MemberVO;
+import com.yedam.pettopia.admin.MemberVO;
 
 
 
@@ -10,4 +10,8 @@ public interface MemberService {
 
 	// 회원 조회
 	public List<MemberVO> selectMemberList();
+	
+	// 회원 상세 조회
+	public List<MemberVO> detailMember (MemberVO memberVO);
+	
 }
