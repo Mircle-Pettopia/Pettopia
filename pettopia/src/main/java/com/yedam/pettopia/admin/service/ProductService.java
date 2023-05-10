@@ -37,4 +37,10 @@ public interface ProductService {
 	// 상품 삭제
 	public int deleteProduct(ProductVO vo);
 
+	// 검색 조회
+	public List<ProductVO> searchList(ProductVO vo);
+	
+	// 상품 현황 조회
+	public Map<String, Integer> currentPrd();
+
 }

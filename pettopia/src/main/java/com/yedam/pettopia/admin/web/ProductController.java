@@ -1,5 +1,7 @@
 package com.yedam.pettopia.admin.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ public class ProductController {
 	@Autowired
 	CodeService codeService;
 	
+	// 상품 관리자 페이지
 	@GetMapping("productMag")
 	public String productMagForm(Model model) {
 		model.addAttribute("prdAllCnt", productService.insertPrdCount());
@@ -34,18 +37,21 @@ public class ProductController {
 		return "admin/productMag";
 	}
 	
+	// 상품 리스트
 	@GetMapping("productList")
 	@ResponseBody
 	public List<ProductVO> productList(){
 		return productService.selectPrdAllList();
 	}
 	
+	// 소분류리스트
 	@GetMapping("sCatList")
 	@ResponseBody
 	public List<ProductVO> sCatList(ProductVO vo){
 		return productService.selectScate(vo);
 	}
 	
+	// 상품 등록
 	@PostMapping("insertPrd")
 	@ResponseBody
 	public String insertPrd(ProductVO vo) {
@@ -53,20 +59,36 @@ public class ProductController {
 		return "success";
 	}
 	
+	// 상품 정보
 	@GetMapping("productDetail")
 	@ResponseBody
 	public Map<String, Object> productDetail(String prdtId) {
 		return productService.selectDetailList(prdtId);
 	}
 	
+	// 상품 삭제
 	@PostMapping("productDel")
 	@ResponseBody
-	public String productDelete(@RequestBody ProductVO[] arr) {
+	public Map<String, Integer> productDelete(@RequestBody ProductVO[] arr) {
 		if(arr != null) {
 			for(int i = 0; i < arr.length; i++) {
 				productService.deleteProduct(arr[i]);
 			}
 		}
-		return "success";
+		return productService.currentPrd();
 	}
+	
+	// 검색
+	@GetMapping("searchPrd")
+	@ResponseBody
+	public List<ProductVO> searchPrd(ProductVO vo){
+		System.out.println("출력 " + vo);
+		return productService.searchList(vo);
+	}
+	
+	// 상품 수정
+//	@PostMapping("updatePrd")
+//	@ResponseBody
+//	public Map<String, Integer>
+	
 }
