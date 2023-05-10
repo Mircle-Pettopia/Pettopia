@@ -33,7 +33,7 @@
                       <td>판매중 상품</td>
                       <td>판매중지 상품</td>
                     </tr>
-                    <tr class="text-center">
+                    <tr class="text-center" id="currentPrd">
                       <td class="text-primary text-decoration-underline fs-3">
                         <span th:text="${prdAllCnt}"></span>개
                       </td>
@@ -47,43 +47,98 @@
                   </table>
                 </div>
                 <hr />
-                <form>
-                  <div class="row mb-3 pt-5">
-                    <label class="col-sm-1 col-form-label fw-bolder text-center"
-                      >상품명</label
-                    >
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" />
-                    </div>
-                    <label class="col-sm-1 col-form-label fw-bolder text-center"
-                      >유형</label
-                    >
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label class="col-sm-1 col-form-label fw-bolder text-center"
-                      >등록일자</label
-                    >
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" />
-                    </div>
+                <table class="table table-borderless mt-5">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" scope="row">상품명</th>
+                      <td>
+                        <input type="text" class="form-control" id="searchNm" />
+                      </td>
 
-                    <label class="col-sm-1 col-form-label fw-bolder text-center"
-                      >상품상태</label
-                    >
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="text-center p-4">
-                    <button type="button" class="btn btn-primary">검색</button>
-                    <button type="button" class="btn btn-secondary">
-                      초기화
-                    </button>
-                  </div>
-                </form>
+                      <th class="text-center" scope="row">상품분류</th>
+                      <td>
+                        <div class="d-flex">
+                          <select class="form-select me-2" name="lCatId">
+                            <option>- 대분류 선택 -</option>
+                            <option
+                              th:each="lCat : ${lCatList}"
+                              th:value="${lCat.lCatId}"
+                              th:text="${lCat.lCatNm}"
+                            >
+                              의류
+                            </option>
+                          </select>
+                          <select class="form-select" id="sCatId">
+                            <option>- 소분류 선택 -</option>
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-center" scope="row">상품등록일</th>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <input
+                            type="date"
+                            class="form-control mr-2"
+                            id="startDate"
+                          />
+                          <span class="mx-2">~</span>
+                          <input
+                            type="date"
+                            class="form-control ml-2"
+                            id="endDate"
+                          />
+                        </div>
+                      </td>
+
+                      <th class="text-center" scope="row">판매상태</th>
+                      <td id="saleStTable">
+                        <div class="d-flex">
+                          <div class="form-check me-3">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="selectAll"
+                              name="selectAll"
+                            />
+                            <label class="form-check-label" for="selectAll"
+                              >전체</label
+                            >
+                          </div>
+                          <div
+                            class="form-check me-3"
+                            th:each="saleSt : ${code.ST}"
+                          >
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              th:value="${saleSt.codCd}"
+                              th:id="${saleSt.codCd} + 'ck'"
+                              name="chk"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="${saleSt.codCd} + 'ck'"
+                              th:text="${saleSt.codTitle}"
+                              >판매중</label
+                            >
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="text-center pb-5">
+                  <button type="button" class="btn btn-primary" id="searchBtn">
+                    검색
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="resetBtn">
+                    초기화
+                  </button>
+                </div>
+
                 <div class="text-end p-2">
                   <button
                     type="button"
@@ -333,6 +388,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">상품 상세조회</h5>
+              <input type="text" id="prdtIdDetail" style="display: none" />
               <button
                 type="button"
                 class="btn-close"
@@ -400,36 +456,7 @@
               </div>
 
               <div>
-                <div class="row mb-4" id="optionDetail">
-                  <!-- <div class="row mb-4">
-                    <label class="col-sm-2 col-form-label fw-bolder text-center"
-                      >옵션 이름</label
-                    >
-                    <div class="col-sm-4">
-                      <input type="text" class="form-control" />
-                    </div>
-                  </div>
-                  <label class="col-sm-2 col-form-label fw-bolder text-center"
-                    >옵션 값</label
-                  >
-                  <div class="col-sm-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="콤마(,)로 구분해주세요"
-                    />
-                  </div>
-                  <label class="col-sm-2 col-form-label fw-bolder text-center"
-                    >추가 가격</label
-                  >
-                  <div class="col-sm-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="콤마(,)로 구분해주세요"
-                    />
-                  </div> -->
-                </div>
+                <div class="row mb-4" id="optionDetail"></div>
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
@@ -478,14 +505,71 @@
               >
                 닫기
               </button>
-              <button type="button" class="btn btn-primary">수정</button>
+              <button type="button" class="btn btn-primary" id="updateBtn">
+                수정
+              </button>
             </div>
           </div>
         </div>
       </div>
       <script>
         $(document).ready(function () {
-          // 대분류 선택 하면 소분류 출력
+          // 수정
+          $(document).on("click", "#updateBtn", function () {
+            console.log("수정");
+            let prdtNm = $("#prdtNmDetail").val();
+            let prdtPrc = $("#prdtPrcDetail").val();
+            let prdtDesct = $("#summernoteDetail").summernote("code");
+            let sCatId = $("input[name=sCatId]:checked").val();
+            let lCatId = $("input[name=lCatId]:checked").val();
+            let saleSt = $("input[name=saleSt]:checked").val();
+            let prdtId = $("#prdtIdDetail").val();
+
+            console.log(prdtNm);
+            console.log(prdtPrc);
+            console.log(prdtDesct);
+            console.log(sCatId);
+            console.log(lCatId);
+            console.log(saleSt);
+            console.log(prdtId);
+
+            Swal.fire({
+              title: "수정하시겠습니까?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "수정",
+              cancelButtonText: "취소",
+            }).then((result) => {
+              if (result.value) {
+                $.ajax({
+                  url: "updatePrd",
+                  method: "post",
+                });
+              }
+            });
+          });
+
+          // 전체 체크박스 선택 시 모든 체크박스 선택
+          $("#selectAll").change(function () {
+            $("#saleStTable input:checkbox").prop(
+              "checked",
+              $(this).prop("checked")
+            );
+          });
+
+          $("input[name='chk']").change(function () {
+            if (!$(this).prop("checked")) {
+              $("#selectAll").prop("checked", false);
+            } else if (
+              $("#saleStTable input[name='chk']:not(:checked)").length === 0
+            ) {
+              $("#selectAll").prop("checked", true);
+            }
+          });
+
+          // 등록에서 대분류 선택 하면 소분류 출력
           $("input[type=radio][name=lCatId]").change(function () {
             $.ajax({
               url: "sCatList",
@@ -509,6 +593,101 @@
                     "</label>" +
                     "</div>";
                   sCatList.append(radioBtn);
+                });
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+
+          // 검색기능
+          $(document).on("click", "#searchBtn", function () {
+            let prdtNm = $("#searchNm").val();
+            let lCatId = $("select[name=lCatId]").val();
+            let sCatId = $("#sCatId").val();
+            let startDate = $("#startDate").val();
+            let endDate = $("#endDate").val();
+            let saleSt = [];
+            $("#saleStTable input:checkbox[name=chk]:checked").map(function () {
+              saleSt.push($(this).val());
+            });
+            if (lCatId === "- 대분류 선택 -") {
+              lCatId = "";
+            }
+            if (sCatId === "- 소분류 선택 -") {
+              sCatId = "";
+            }
+
+            $.ajax({
+              url: "searchPrd",
+              data: {
+                prdtNm: prdtNm,
+                lCatId: lCatId,
+                sCatId: sCatId,
+                regDt: startDate,
+                modDt: endDate,
+                searchSaleSt: saleSt,
+              },
+              success: function (result) {
+                prdList.resetData(result);
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+
+          // 초기화
+          $(document).on("click", "#resetBtn", function () {
+            let prdtNm = $("#searchNm").val("");
+            let lCatId = $("select[name=lCatId]").val("- 대분류 선택 -");
+            let sCatId = $("#sCatId").val("- 소분류 선택 -");
+            let startDate = $("#startDate").val("");
+            let endDate = $("#endDate").val("");
+            $("#saleStTable input:checkbox[name=chk]:checked").prop(
+              "checked",
+              false
+            );
+            $("#selectAll:checked").prop("checked", false);
+
+            $.ajax({
+              url: "productList",
+              success: function (data) {
+                prdList.resetData(data);
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+
+          // 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
+          $("#searchNm, #startDate, #endDate").on("keypress", function (event) {
+            if (event.which === 13) {
+              event.preventDefault();
+              $("#searchBtn").click();
+            }
+          });
+
+          // 검색 select 대분류
+          $("select[name=lCatId]").change(function () {
+            $.ajax({
+              url: "sCatList",
+              data: { lCatId: this.value },
+              success: function (result) {
+                let sCatList = $("#sCatId");
+                sCatList.empty(); // 이전에 생성된 옵션들을 모두 제거
+                sCatList.append("<option>- 소분류 선택 -</option>"); // 기본값 추가
+
+                $.each(result, function (index, value) {
+                  let option =
+                    '<option value="' +
+                    value.scatId +
+                    '">' +
+                    value.scatNm +
+                    "</option>";
+                  sCatList.append(option);
                 });
               },
               error: function (reject) {
@@ -544,6 +723,38 @@
               return;
             }
             $(".optionInput").last().remove();
+          });
+
+          // 검색창에서 대분류 선택하면 소분류 출력
+          $("select[name=lCatId]").change(function () {
+            $.ajax({
+              url: "sCatList",
+              data: { lCatId: this.value },
+              success: function (result) {
+                let sCatList = $("#sCatList");
+                sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
+
+                $.each(result, function (index, value) {
+                  let radioBtn =
+                    '<div class="form-check form-check-inline">' +
+                    '<input class="form-check-input" type="radio" name="sCatId" value="' +
+                    value.scatId +
+                    '" id="' +
+                    value.scatId +
+                    '">' +
+                    '<label class="form-check-label" for="' +
+                    value.scatId +
+                    '">' +
+                    value.scatNm +
+                    "</label>" +
+                    "</div>";
+                  sCatList.append(radioBtn);
+                });
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
           });
         });
 
@@ -880,6 +1091,11 @@
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(selectedRows),
                 success: function (result) {
+                  // 상품 현황 업데이트
+                  $("#currentPrd td:first-child span").text(result.allPrd);
+                  $("#currentPrd td:nth-child(2) span").text(result.salePrd);
+                  $("#currentPrd td:last-child span").text(result.stopPrd);
+
                   selectedRows.forEach((row) => {
                     prdList.removeRow(row.rowKey);
 
@@ -910,13 +1126,13 @@
 
         // 상품 상세조회
         prdList.on("dblclick", (e) => {
-          const rowData = prdList.getRow(e.rowKey);
+          let rowData = prdList.getRow(e.rowKey);
           let prdtId = rowData.prdtId;
           $.ajax({
             url: "productDetail",
             data: { prdtId: prdtId },
             success: function (result) {
-              console.log(result);
+              $("#prdtIdDetail").val(prdtId);
               $("#prdtNmDetail").val(result.product.prdtNm);
               $("#prdtPrcDetail").val(result.product.prdtPrc);
               $("#summernoteDetail").summernote(
@@ -961,48 +1177,57 @@
               ).prop("checked", true);
 
               $("#optionDetail").empty();
+
               // 옵션 조회
               $.each(result.optionList, function (index, value) {
                 // 새로운 row 생성
-                const newRow = $("<div>").addClass("row mb-4");
+                let newRow = $("<div>").addClass("row mb-4");
 
                 // 옵션 이름 입력 폼 생성
-                const label1 = $("<label>")
+                let label1 = $("<label>")
                   .addClass("col-sm-2 col-form-label fw-bolder text-center")
                   .text("옵션 이름");
-                const input1 = $("<input>")
+                let input1 = $("<input>")
                   .addClass("form-control")
                   .val(value.optNm);
-                const div1 = $("<div>").addClass("col-sm-4").append(input1);
+                let div1 = $("<div>").addClass("col-sm-4").append(input1);
+                //옵션이름 div
+                let newRow1 = $("<div>")
+                  .addClass("row mb-4")
+                  .append(label1, div1);
 
                 // 옵션 값 및 추가 가격 입력 폼 생성
                 $.each(result.optionDetailList, function (index, item) {
                   if (value.optId == item.optId) {
-                    console.log(item);
                     // 옵션 값 입력 폼 생성
-                    const label2 = $("<label>")
+                    let label2 = $("<label>")
                       .addClass("col-sm-2 col-form-label fw-bolder text-center")
                       .text("옵션 값");
-                    const input2 = $("<input>")
+                    let input2 = $("<input>")
                       .addClass("form-control")
-                      .attr("placeholder", "콤마(,)로 구분해주세요")
                       .val(item.optDetaNm);
-                    const div2 = $("<div>").addClass("col-sm-4").append(input2);
+                    let div2 = $("<div>").addClass("col-sm-4").append(input2);
 
                     // 추가 가격 입력 폼 생성
-                    const label3 = $("<label>")
+                    let label3 = $("<label>")
                       .addClass("col-sm-2 col-form-label fw-bolder text-center")
                       .text("추가 가격");
-                    const input3 = $("<input>")
+                    let input3 = $("<input>")
                       .addClass("form-control")
-                      .attr("placeholder", "콤마(,)로 구분해주세요")
                       .val(item.addPrc);
-                    const div3 = $("<div>").addClass("col-sm-4").append(input3);
+                    let div3 = $("<div>").addClass("col-sm-4").append(input3);
+
+                    let newRow2 = $("<div>")
+                      .addClass("row mb-4")
+                      .append(label2, div2, label3, div3);
 
                     // row에 폼 추가
-                    newRow.append(label1, div1, label2, div2, label3, div3);
+                    newRow.append(newRow1, newRow2);
                   }
                 });
+
+                // 옵션 이름 입력 폼 추가
+                newRow.prepend(newRow1);
 
                 // optionDetail에 row 추가
                 $("#optionDetail").append(newRow);

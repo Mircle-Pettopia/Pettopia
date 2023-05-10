@@ -40,5 +40,8 @@ public class ProductVO {
 	
 	//옵션
 	private String option;
+	
+	//검색
+	private String[] searchSaleSt;
 
 }

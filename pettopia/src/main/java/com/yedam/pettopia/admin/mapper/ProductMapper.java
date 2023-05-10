@@ -64,4 +64,7 @@ public interface ProductMapper {
 	
 	// 옵션 디테일 조회
 	public List<OptionDetailVO> selectOptionDetail(String prdtId);
+	
+	// 검색 조회
+	public List<ProductVO> searchList(ProductVO vo);
 }

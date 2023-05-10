@@ -137,4 +137,18 @@ public class ProductServiceImpl implements ProductService {
 		return map;
 	}
 
+	@Override
+	public List<ProductVO> searchList(ProductVO vo) {
+		return productMapper.searchList(vo);
+	}
+
+	@Override
+	public Map<String, Integer> currentPrd() {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("allPrd", productMapper.insertPrdCount());
+		map.put("salePrd", productMapper.salePrdCount());
+		map.put("stopPrd", productMapper.stopSalePrdCount());
+		return map;
+	}
+
 }

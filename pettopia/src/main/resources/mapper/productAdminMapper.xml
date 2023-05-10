@@ -207,6 +207,7 @@
 				opt_nm
 		FROM	product_option
 		WHERE	prdt_id = #{prdtId}
+		ORDER BY opt_id
 	</select>
 	
 	<!-- 옵션 디테일 조회 -->
@@ -219,5 +220,41 @@
 		WHERE opt_id IN (SELECT opt_id
 	                        FROM product_option
 	                        WHERE prdt_id = #{prdtId})
+	    ORDER BY opt_deta_id
+	</select>
+	
+	<!-- 검색 조회 -->
+	<select id="searchList" resultType="ProductVO">
+		SELECT  prdt_id,
+				prdt_nm,
+				prdt_desct,
+				prdt_prc,
+				get_common(sale_st) as saleSt,
+				reg_dt,
+				mod_dt,
+				get_scat(s_cat_id) as sCatId,
+				get_lcat(l_cat_id) as lCatId
+		FROM	product
+		<where>
+			<if test="prdtNm != null and !prdtNm.equals('')">
+				AND prdt_nm LIKE '%' || #{prdtNm} || '%'
+			</if>
+			<if test="lCatId != null and !lCatId.equals('')">
+				AND l_cat_id LIKE '%' || #{lCatId} || '%'
+			</if>
+			<if test="sCatId != null and !sCatId.equals('')">
+				AND s_cat_id LIKE '%' || #{sCatId} || '%'
+			</if>
+			<if test="regDt != null and !regDt.equals('')">
+				AND <![CDATA[reg_dt >= #{regDt}]]> and <![CDATA[TRUNC(reg_dt) <= #{modDt}]]>
+			</if>
+			<if test="searchSaleSt != null and searchSaleSt.length > 0">
+    			AND sale_st IN
+    			<foreach collection="searchSaleSt" item="item" open="(" separator="," close=")">
+        			#{item}
+    			</foreach>
+			</if>
+		</where>
+		ORDER BY prdt_id
 	</select>
 </mapper>
