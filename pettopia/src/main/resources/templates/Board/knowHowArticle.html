@@ -11,6 +11,7 @@
 
 <body>
   <div layout:fragment="content">
+    <span style="display: none;" id="meId" th:text="${Article.meId}"></span>
     <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -24,17 +25,20 @@
             <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50 border">
               <h4 th:text="${Article.title}"></h4>
               <hr>
-              <span th:text="|작성자: ${Article.meId} / 작성일:${Article.regDt} / 글번호:${Article.boNo}|"></span>
+              <span>작성자:</span>
+              <span th:text="${Article.meId}"></span>
+              <span>/ 작성일:</span>
+              <span th:text="${Article.regDt}"></span>
+              <span>/ 글번호:</span>
+              <span th:text="${Article.boNo}"></span>
               <hr>
               <div id="Viewer" th:utext="${ Article.subject }">
               </div>
               <hr>
               <div id="ownerOnly">
-                <button type="button" class="btn btnPush btnLightBlue">수정</button>
-                <button type="button" class="btn btnPush btnRed">삭제</button>
+
               </div>
             </div>
-
             <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-20 border">
 
               <div id="replyLoginOnly">
@@ -49,11 +53,12 @@
 
       <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
     </div>
-    <script th:inline="javascript">
-      var ArticleObject = [[${ Article }]];
-    </script>
+
     <script>
-      console.log(articleObject.meId);
+      let path = /*[[${path}]]*/
+        console.log(meId.innerText);
+
+      let user = GetUser();
       getReply();
       function getReply() {
         $.ajax({
@@ -68,7 +73,8 @@
             for (i = 0; i < data.length; i++) {
               replys.innerHTML +=
                 `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
-                <h5>작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5>
+                <h5 style="display:inline-block;">작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5> 
+                ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
                 <hr>
                 <div class="Viewer">${data[i].subject}
                 </div>
@@ -81,6 +87,31 @@
             alert("댓글불러오기에러");
           },
         })
+      }
+      function deleteReply(commentId, meId) {
+        if (meId == user) {
+          console.log("여기까진됨")
+          $.ajax({
+            url: "delKnowHowReply",
+            method: "delete",
+            async: false,
+            dataType: "JSON",
+            data: { commentId: commentId },
+            success: function (data) {
+              console.log(data);
+              Swal.fire('삭제완료', '', 'success');
+              getReply();
+            },
+            error: function (reject) {
+              console.log(reject);
+              Swal.fire('에러발생', '', 'error');
+              getReply();
+            },
+          })
+        }
+        else {
+          Swal.fire('계정을 확인바랍니다', '', 'info');
+        }
       }
 
       loginOnly();
@@ -95,14 +126,14 @@
                 <textarea class="form-control" rows="4" style="resize: none;" id="replySubject"></textarea>`
         }
         else {
-          replyLoginOnly.innerHTML = `<h4 th:text="댓글" style="display: inline-block; width: 100px;"></h4>`
+          replyLoginOnly.innerHTML = `<h4 style="display: inline-block; width: 100px;">댓글</h4>`
         }
+
         console.log(loginId);
-        console.log("${Article.meId}");
-        if (loginId == "${Article.meId}") {
-          console.log(loginId);
-          console.log("${Article.meId}");
-          console.log("동일작성자");
+        if (meId.innerText == loginId) {
+          ownerOnly.innerHTML = `                
+                <button type="button" class="btn btnPush btnLightBlue" onclick="location.replace('modKnowHow?boNo='+${boNo.innerText});">수정</button>
+                <button type="button" class="btn btnPush btnRed" onclick="deleteArticle()">삭제</button>`
         }
         console.log("로그인온리")
       }
@@ -164,6 +195,56 @@
         }
         else return null;
       };
+      const urlParams = new URL(location.href).searchParams;
+      const writer = urlParams.get('boNo');
+
+      function deleteArticle() {
+        Swal.fire({
+          title: '정말로 삭제하시겠습니까?',
+          showCancelButton: true,
+          confirmButtonText: '삭제',
+          denyButtonText: `취소`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            $.ajax({
+              url: "delKnowHow",
+              method: "delete",
+              async: false,
+              dataType: 'json',
+              data: {
+                Uid: meId.innerText,
+                boNo: boNo.innerText
+              },
+              success: function (data) {
+                console.log(data);
+                if (data == -1) {
+                  swal.fire('삭제실패 작성자가 아닙니다', '', 'info')
+                }
+                else if (data == 1) {
+                  console.log("성공")
+                  Swal.fire('정상적으로 삭제 되었습니다', '', 'success')
+                    .then(() => {
+                      location.replace("knowhow")
+                    })
+
+                }
+                else {
+                  Swal.fire('삭제실패 잠시뒤 다시 시도해주세요', '', 'error')
+                }
+              },
+              error: function (reject) {
+                console.log(reject);
+                console.log("비로그인");
+                Swal.fire('삭제실패 잠시뒤 다시 시도해주세요', '', 'error')
+                  .then(() => {
+                    location.replace("knowhow")
+                  })
+              },
+            })
+          }
+        })
+      }
     </script>
   </div>
 

@@ -15,4 +15,8 @@ public interface BoardService {
 	public List<BoardVO> getknowHowReply(int boNo);
 	public int insertKnowHowReply(BoardVO vo);
 	public void KnowHowAddhit(int boNo);
+	public int delKnowHow(int boNo,String Uid);
+	public String getKnowHowWriter(int boNo);
+	public int updateKnowHow(BoardVO vo);
+	public int delKnowHowReply(int commentId);
 }

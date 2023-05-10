@@ -69,9 +69,37 @@ public class BoardServiceImpl implements BoardService{
 		// TODO Auto-generated method stub
 		boardMapper.KnowHowAddhit(boNo);
 	}
-	
-	
-	
+
+	@Override
+	public int delKnowHow(int boNo, String Uid) {
+		// TODO Auto-generated method stub
+		System.out.println("test:"+Uid);
+		int result = -1;
+		if(getKnowHowWriter(boNo).equals(Uid))
+		{
+			result = boardMapper.delKnowHow(boNo);
+			boardMapper.delKnowHow2(boNo);
+		};
+		return result;
+	}
+
+	@Override
+	public String getKnowHowWriter(int boNo) {
+		// TODO Auto-generated method stub
+		return boardMapper.getKnowHowWriter(boNo);
+	}
+
+	@Override
+	public int updateKnowHow(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return boardMapper.updateKnowHow(vo);
+	}
+
+	@Override
+	public int delKnowHowReply(int commentId) {
+		// TODO Auto-generated method stub
+		return boardMapper.delKnowHowReply(commentId);
+	}
 	
 
 }

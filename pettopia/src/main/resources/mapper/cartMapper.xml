@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.pettopia.cart.mapper.CartMapper">
+	<select id="getCart" resultType="CartVO">
+		select * from CART_DETAIL D
+		LEFT JOIN CART C
+		ON C.CRT_ID=D.CRT_ID 
+		LEFT JOIN PRODUCT P
+		ON C.PRDT_ID = P.PRDT_ID
+		LEFT JOIN PRODUCT_OPTION_DETAIL OD
+		ON D.OPT_DETA_ID = OD.OPT_DETA_ID
+		where me_id=#{meId}
+	</select>
+</mapper>
