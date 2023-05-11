@@ -20,4 +20,43 @@
 		FROM member
 		ORDER BY me_id
 	</select>
+
+
+	<!-- 검색 -->
+	<select id="searchList" resultType="MemberVO">
+		SELECT ME_ID,
+		NAME,
+		PHONE,
+		POST,
+		ADDR,
+		ADDR_DETAIL,
+		SIGN_DT,
+		UPDATE_DT,
+		SIGN_PATH,
+		OUT_YN,
+		ROLE
+		FROM member
+		<where>
+			<if test="meId != null and !meId.equals('')">
+				AND me_id LIKE '%' || #{meId} || '%'
+			</if>
+			<if test="name != null and !name.equals('')">
+				AND name LIKE '%' || #{name} || '%'
+			</if>
+			<if test="start != null and !start.equals('')">
+				AND <![CDATA[sign_dt >= #{start}]]>
+			</if>
+			<if test="end != null and !end.equals('')">
+				AND <![CDATA[sign_dt <= #{end}]]>
+			</if>
+			<if test="signPath != null and signPath.length > 0">
+				AND SIGN_PATH IN
+				<foreach collection="signPath" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY ME_ID
+	</select>
 </mapper>
