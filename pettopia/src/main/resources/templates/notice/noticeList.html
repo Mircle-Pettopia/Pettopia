@@ -96,7 +96,7 @@
 								<div class="count">[[${notice.viewCnt }]]</div>
 							</div>
 
-							<div>
+							<div sec:authorize="hasAuthority('ROLE_ADMIN')">
 								<a href="noticeInsertForm">
 								<button type="button" class="btn btnPush btnBlueGreen" style="float: right; font-size: 13px;">등록</button></a>
 							</div>

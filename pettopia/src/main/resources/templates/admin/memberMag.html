@@ -14,193 +14,144 @@
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">회원 관리</h5>
-							<div class="col-lg-12 p-4"></div>
-							<div class="card-body">
-								<select class="dataTable-selector" name="searchParam"
-									id="searchParam">
-									<option selected value="">전체</option>
-									<option value="memId">아이디</option>
-									<option value="memNm">이름</option>
-									<option value="matCd">?</option>
-								</select> <input type="text" class="form-control" id="searchMat"
-									name="searchMat"
-									style="width: 150px; height: 36px; display: inline-block;" />
-								<button class="btn btn-primary" id="searchBtn">
-									<i class="fas fa-search"></i> 검색
-								</button>
+							<table class="table table-borderless mt-5">
+								<tbody>
+									<tr>
+										<th class="text-center" scope="row">아이디</th>
+										<td><input style="width: 60%;" type="text"
+											class="form-control" id="searchId" /></td>
+
+										<th class="text-center" scope="row">이름</th>
+										<td><input type="text" class="form-control" id="searchNm"
+											style="width: 60%;" /></td>
+									</tr>
+									<tr>
+										<th class="text-center" scope="row">가입일자</th>
+										<td>
+											<div class="d-flex align-items-center" style="width: 60%;">
+												<input type="date" class="form-control mr-2" id="start"
+													name="start" /> <span class="mx-2">~</span> <input
+													type="date" class="form-control ml-2" id="end" name="end" />
+											</div>
+										</td>
+
+										<th class="text-center" scope="row">가입경로</th>
+										<td id="saleStTable">
+											<div class="d-flex">
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox"
+														id="selectAll" name="selectAll" /> <label
+														class="form-check-label" for="selectAll">전체</label>
+												</div>
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox"
+														id="company" name="chk" /> <label class="form-check-label"
+														for="company">company</label>
+												</div>
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox"
+														id="kakao" name="chk" /> <label class="form-check-label"
+														for="kakao">kakao</label>
+												</div>
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox"
+														id="naver" name="chk" /> <label class="form-check-label"
+														for="naver">naver</label>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<!-- <tr>
+										<th class="text-center" scope="row">탈퇴여부</th>
+										<td id="saleStTable">
+											<div class="d-flex">
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox"
+														id="selectAll" name="selectAll" /> <label
+														class="form-check-label" for="selectAll">전체</label>
+												</div>
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox" value="ST1"
+														id="ST1ck" name="chk" /> <label class="form-check-label"
+														for="ST1ck">Y</label>
+												</div>
+												<div class="form-check me-3">
+													<input class="form-check-input" type="checkbox" value="ST2"
+														id="ST2ck" name="chk" /> <label class="form-check-label"
+														for="ST2ck">N</label>
+												</div>
+											</div>
+										</td>
+
+
+									</tr> -->
+								</tbody>
+							</table>
+
+							<div class="text-center pb-5">
+								<button type="button" class="btn btn-primary" id="searchBtn">
+									검색</button>
+								<button type="button" class="btn btn-secondary" id="resetBtn">
+									초기화</button>
 							</div>
-
-
-
-
 							<div id="memberList"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-		
-	<div
-        class="modal fade"
-        id="detailModal"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-      >
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">상품 상세조회</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >상품명</label
-                >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="prdtNmDetail" />
-                </div>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >판매가</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="number"
-                    min="0"
-                    class="form-control"
-                    id="prdtPrcDetail"
-                  />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >상품설명</label
-                >
-                <form>
-                  <textarea id="summernoteDetail" name="editordata"></textarea>
-                </form>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >대분류</label
-                >
-                <div class="col-sm-6 mt-2">
-                  <div
-                    class="form-check form-check-inline"
-                    th:each="lCat : ${lCatList}"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="lCatId"
-                      th:value="${lCat.lCatId}"
-                      th:id="${lCat.lCatId}+'Det'"
-                    />
-                    <label
-                      class="form-check-label"
-                      th:for="${lCat.lCatId}+'Det'"
-                      th:text="${lCat.lCatNm}"
-                    ></label>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >소분류</label
-                >
-                <div class="col-sm-7 mt-2" id="sCatListDetail"></div>
-              </div>
 
-              <div>
-                <div class="row mb-4" id="optionDetail">
-                  <!-- <div class="row mb-4">
-                    <label class="col-sm-2 col-form-label fw-bolder text-center"
-                      >옵션 이름</label
-                    >
-                    <div class="col-sm-4">
-                      <input type="text" class="form-control" />
-                    </div>
-                  </div>
-                  <label class="col-sm-2 col-form-label fw-bolder text-center"
-                    >옵션 값</label
-                  >
-                  <div class="col-sm-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="콤마(,)로 구분해주세요"
-                    />
-                  </div>
-                  <label class="col-sm-2 col-form-label fw-bolder text-center"
-                    >추가 가격</label
-                  >
-                  <div class="col-sm-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="콤마(,)로 구분해주세요"
-                    />
-                  </div> -->
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >이미지(메인)</label
-                >
-                <div class="col-sm-6">
-                  <img id="imgMainDetail" />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >이미지</label
-                >
-                <div class="col-sm-10" id="imgDetail"></div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >판매상태</label
-                >
-                <div class="col-sm-6 mt-2">
-                  <div
-                    class="form-check form-check-inline"
-                    th:each="saleSt : ${code.ST}"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="saleSt"
-                      th:id="${saleSt.codCd} + 'Det'"
-                      th:value="${saleSt.codCd}"
-                    />
-                    <label
-                      class="form-check-label"
-                      th:for="${saleSt.codCd} + 'Det'"
-                      th:text="${saleSt.codTitle}"
-                    ></label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                닫기
-              </button>
-              <button type="button" class="btn btn-primary">수정</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+
+		<div class="modal fade" id="detailModal" tabindex="-1"
+			aria-labelledby="modifyModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modifyModalLabel">회원 정보</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="name">이름</label> <input type="text"
+									class="form-control" id="name">
+							</div>
+							<div class="form-group">
+								<label for="phone">전화번호</label> <input type="text"
+									class="form-control" id="phone">
+							</div>
+							<div class="form-group">
+								<label for="addr">주소</label> <input type="text"
+									class="form-control" id="addr">
+							</div>
+							<div class="form-group">
+								<label for="addrDetail">상세주소</label> <input type="text"
+									class="form-control" id="addrDetail">
+							</div>
+							<div class="form-group">
+								<label for="post">우편번호</label> <input type="text"
+									class="form-control" id="post">
+							</div>
+							<div class="form-group">
+								<label for="signPath">가입경로</label> <input type="text"
+									class="form-control" id="signPath">
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<!-- <button type="button" class="btn btn-primary" id="updateBtn">
+							수정</button> -->
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
 
 		<script>
 			const Grid = tui.Grid;
@@ -300,6 +251,7 @@
 				return formattedDate;
 			}
 
+			//회원리스트
 			$.ajax({
 				url : "memberList",
 				dataType : "JSON",
@@ -310,41 +262,87 @@
 					console.log(reject);
 				},
 			});
-			
-			
-			
-			memberList.on('dblclick', ev => {
-				var meId = memberList.getValue(ev.rowKey, 'meId')
-				var name = memberList.getValue(ev.rowKey, 'name')
+
+			//검색버튼
+			$(document).on("click", "#searchBtn", function() {
+				let meId = $("#searchId").val();
+				let name = $("#searchNm").val();
+				let start = $("#start").val();
+				let end = $("#end").val();
+				let signPath = [];
+	            $("#saleStTable input:checkbox[name=chk]:checked").map(function () {
+	            	signPath.push($(this).val());
+	            });
+				
+				
 				$.ajax({
-					url: "memberDetailList",
-					method: 'Post',
-					dataType: 'JSON',
-					data: {
-						meId: meId,
-						name: name,
+					url : "searchMbr",
+					data : {
+						meId : meId,
+						name : name,
+						start : start,
+						end : end,
+						signPath : signPath,
 					},
-					success: function (result) {
-						grid2.resetData(result)
-						for (var all of result) {
-							var rscStc = all.rscStc
-							if (rscStc == null || rscStc == 0 || rscStc == '') {
-								rscStc = 0;
-							}
-							var allStc = Number(all.ordrCnt) + Number(all.rscStc)
-							grid2.setValue(all.rowKey, 'allStc', allStc)
-							grid2.setValue(all.rowKey, 'rscStc', rscStc)
-							$('#ordrCd').val(ordrCd)
-						}
-						$('#exampleModal').modal('show');
-						setTimeout(function () {
-							grid2.refreshLayout()
-						}, 300);
+					success : function(result) {
+						memberList.resetData(result);
+					},
+					error : function(reject) {
+						console.log(reject);
+					},
+				});
+			});
 
-					}
-				})
-			})
+			//초기화버튼
+			$(document).on("click", "#resetBtn", function() {
+				let meId = $("#searchId").val("");
+				let name = $("#searchNm").val("");
+				let start = $("#start").val("");
+				let end = $("#end").val("");
+				  $("#saleStTable input:checkbox[name=chk]:checked").prop(
+			              "checked",
+			              false
+			            );
+			            $("#selectAll:checked").prop("checked", false);
+				
+				$.ajax({
+					url : "memberList",
+					success : function(data) {
+						memberList.resetData(data);
+					},
+					error : function(reject) {
+						console.log(reject);
+					},
+				});
+			});
 
+			memberList.on("dblclick", function(e) {
+								const rowData = memberList.getRow(e.rowKey);
+								document.getElementById("name").value = rowData.name;
+								document.getElementById("phone").value = rowData.phone;
+								document.getElementById("addr").value = rowData.addr;
+								document.getElementById("addrDetail").value = rowData.addrDetail;
+								document.getElementById("post").value = rowData.post;
+								document.getElementById("signPath").value = rowData.signPath;
+								$("#detailModal").modal("show");
+							});
+			
+		       $("#selectAll").change(function () {
+		            $("#saleStTable input:checkbox").prop(
+		              "checked",
+		              $(this).prop("checked")
+		            );
+		          });
+		       
+		         $("input[name='chk']").change(function () {
+		             if (!$(this).prop("checked")) {
+		               $("#selectAll").prop("checked", false);
+		             } else if (
+		               $("#saleStTable input[name='chk']:not(:checked)").length === 0
+		             ) {
+		               $("#selectAll").prop("checked", true);
+		             }
+		           });
 		</script>
 	</div>
 </body>

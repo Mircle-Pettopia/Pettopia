@@ -67,4 +67,7 @@ public interface ProductMapper {
 	
 	// 검색 조회
 	public List<ProductVO> searchList(ProductVO vo);
+	
+	// 상품 수정
+	public int updatePrd(ProductVO vo);
 }

@@ -24,9 +24,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> detailMember(MemberVO memberVO) {
-		return memberMapper.detailMember(memberVO);
+	public List<MemberVO> searchList(MemberVO memberVO) {
+		return memberMapper.searchList(memberVO);
+		
 	}
+
 
 
 

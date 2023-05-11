@@ -4,5 +4,30 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.pettopia.admin.mapper.OrderMapper">
-
+	<select id="orderAllList" resultType="OrderVO">
+		SELECT 	o.ordr_id,
+				o.me_id,
+				o.ordr_date,
+				o.rcv_psn,
+				o.rcv_phone,
+				o.rcv_addr,
+				o.tt_prc,
+				o.mthd,
+				o.invo,
+				o.ship_prc,
+				o.prc_st,
+				o.ship_st,
+				o.point,
+				o.note,
+				m.name
+		FROM	order_header o JOIN member m
+		ON		o.me_id = m.me_id
+		ORDER BY o.ordr_id
+	</select>
+	
+	<update id="updatePrcSt" parameterType="OrderVO">
+		UPDATE 	order_header
+		SET		prc_st = #{prcSt}
+		WHERE	ordr_id = #{ordrId}
+	</update>
 </mapper>

@@ -257,4 +257,17 @@
 		</where>
 		ORDER BY prdt_id
 	</select>
+	
+	<!-- 상품 수정 -->
+	<update id="updatePrd" parameterType="ProductVO">
+		UPDATE 	product
+		SET		prdt_nm = #{prdtNm},
+				prdt_desct = #{prdtDesct},
+				prdt_prc = #{prdtPrc},
+				sale_st = #{saleSt},
+				mod_dt = sysdate,
+				s_cat_id = #{sCatId},
+				l_cat_id = #{lCatId}
+		WHERE	prdt_id = #{prdtId}
+	</update>
 </mapper>

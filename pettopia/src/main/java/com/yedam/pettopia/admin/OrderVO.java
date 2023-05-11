@@ -20,7 +20,7 @@ public class OrderVO {
 	private String rcvAddr;
 	private int ttPrc;
 	private String mthd;
-	private int invo;
+	private long invo;
 	private int shipPrc;
 	private String prcSt;
 	private String shipSt;
@@ -33,4 +33,7 @@ public class OrderVO {
 	private String optDetaId;
 	private int cnt;
 	private int prc;
+	
+	// 회원
+	private String name;
 }

@@ -4,13 +4,42 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.pettopia.cart.mapper.CartMapper">
 	<select id="getCart" resultType="CartVO">
-		select * from CART_DETAIL D
-		LEFT JOIN CART C
+		select C.CRT_ID,
+		    CRT_DETA_ID,
+		    D.OPT_DETA_ID,
+		    ME_ID,
+		    C.PRDT_ID,
+		    CNT,
+		    PRDT_NM,
+		    PRDT_PRC,
+		    SALE_ST,
+		    OPT_DETA_NM,
+		    ADD_PRC,
+		    OPT_ID ,
+		    PRDT_IMG
+		from CART_DETAIL D
+		right OUTER JOIN CART C
 		ON C.CRT_ID=D.CRT_ID 
 		LEFT JOIN PRODUCT P
 		ON C.PRDT_ID = P.PRDT_ID
 		LEFT JOIN PRODUCT_OPTION_DETAIL OD
 		ON D.OPT_DETA_ID = OD.OPT_DETA_ID
+		LEFT JOIN (select PRDT_IMG,PRDT_ID from PRODUCT_IMG WHERE IS_MAIN='Y') I
+		ON P.PRDT_ID = I.PRDT_ID
 		where me_id=#{meId}
+		ORDER BY CRT_ID
 	</select>
+	
+	<update id='setAmount'>
+		update cart set cnt=#{cnt} where crt_id=#{crtId}
+	</update>
+	
+	<delete id='delCart'>
+		delete cart where crt_id=#{crtId}
+	</delete>
+	
+	<delete id='delCartDetail'>
+		delete cart_detail where crt_id=#{crtId}
+	</delete>
+	
 </mapper>

@@ -18,5 +18,17 @@ public class CartServiceImpl implements CartService {
 		// TODO Auto-generated method stub
 		return cartMapper.getCart(meId);
 	}
+	@Override
+	public int setAmount(String crtId, int cnt) {
+		// TODO Auto-generated method stub
+		return cartMapper.setAmount(crtId, cnt);
+	}
+	@Override
+	public int delCart(String crtId) {
+		int result=0;
+		result+=cartMapper.delCart(crtId);
+		result+=cartMapper.delCartDetail(crtId);
+		return result;
+	}
 
 }
