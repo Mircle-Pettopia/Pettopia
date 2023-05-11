@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.pettopia.mypage.mapper.MypageMapper">
+  <select id="getOrder" resultType="MypageVO">
+  SELECT * FROM order_header WHERE me_id = #{meId}
+  </select>
+  <!-- 주문일자, 주문번호, 이미지, 상품이름, 구매한 옵션명[1] + [2], 배송상태, 결제여부, 옵션명 -->
+  <!-- 상품 가격 + 옵션가격 -->
+  <select id="getOrderList" resultType="MypageVO">
+  SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, ordr.ordr_id, prdt_img, prdt_nm, opt_deta_nm,
+  		 get_common(ship_st) ship_st, get_common(prc_st) prc_st, opt_nm, ordt.prdt_id, odo.ordt_id, ship_prc, cnt,
+         NVL(cnt, 0) * NVL(prc, 0) "PRICE", prc, NVL(POINT, 0) + NVL(TT_PRC,0) "TOTAL"
+  FROM order_header ordr
+    	JOIN order_detail ordt
+	    ON ordr.ordr_id = ordt.ordr_id
+	    JOIN order_detali_option odo
+	    ON ordt.ordt_id = odo.ordt_id
+	    JOIN product_option_detail optd
+	    ON odo.opt_deta_id = optd.opt_deta_id
+	    JOIN product_option opt
+	    ON optd.opt_id = opt.opt_id
+	    JOIN product pr
+	    ON ordt.prdt_id = pr.prdt_id
+	    JOIN product_img img
+	    ON pr.prdt_id = img.prdt_id
+   WHERE 1=1
+   AND me_id = #{meId}
+   AND is_main = 'Y'
+   AND opt_nm = '색상'
+   <if test="start != null and !start.equals('') and end!= null and !end.equals('')">
+   AND ordr_date BETWEEN TO_DATE(#{start}, 'rrrr-MM-DD') AND TO_DATE(#{end}, 'rrrr-MM-DD')
+   </if>
+   <if test="shipSt != null and !shipSt.equals('')">
+   AND SHIP_ST = #{shipSt}
+   </if>
+   <if test="prcSt != null and !prcSt.equals('')">
+   AND PRC_ST = #{prcSt}
+   </if>
+   ORDER BY 1 DESC
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </mapper>

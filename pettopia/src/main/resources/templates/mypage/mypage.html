@@ -22,18 +22,17 @@ text-align: center;
 }
 
 #btnCss{
-float: right;
+/*float: right;*/
 position: relative;
 bottom: 10px;
-margin-top: 8px;
+margin-top: 25px;
 }
 
-#filter{
-margin-top: 8px;
-text-align: center;
+.filter{
+margin-top: 25px;
 }
 
-#filter li {
+.filter li {
 display: inline-block;
 padding-top: 10px;
 border: 1px solid rgb(235, 235, 235);
@@ -44,6 +43,10 @@ padding: 8px 22px 5px 22px;
 
 tbody img{
 width: 100px;
+}
+
+td, tr, th{
+	vertical-align: middle !important;
 }
 </style>
 
@@ -84,33 +87,43 @@ width: 100px;
 
 						<!-- 검색 기능 -->
 						<div class="row m-t-20 m-b-20" id="backColor">
-							<div class="col-md-2">
-								<select name="psss_select" class="allOrderSearch">
-									<option value="0">전체 주문처리 상태</option>
-									<!--결제상태-->
-									<option  th:each="plist : ${code.PS}"
-													th:value="${plist?.codTitle}" 
-													th:utext="${plist?.codTitle}"></option>
-									<!--배송상태-->
-									<option  th:each="slist : ${code.SS}"
-													th:value="${slist?.codTitle}" 
-													th:utext="${slist?.codTitle}"></option>
-								</select>
+							<div class="col-md-3">
+								<div style="margin-left: 30px;">
+									<span> 주문처리</span>
+									<select name="shipSt" class="allOrderSearch" id="shipSt">
+										<option value="">전체 주문처리 상태</option>
+										<!--배송상태-->
+										<option  th:each="slist : ${code.SS}"
+														th:value="${slist?.codTitle}" 
+														th:utext="${slist?.codTitle}" name="shipSt"></option>
+									</select>
+									<br/>
+									<span> 결제여부</span>
+									<select name="prcSt" class="allOrderSearch" id="prcSt">
+										<option value="">전체 결제여부</option>
+										<!--결제상태-->
+										<option  th:each="plist : ${code.PS}"
+														th:value="${plist?.codTitle}" 
+														th:utext="${plist?.codTitle}" name="prcSt"></option>
+									</select>
+								</div>
 							</div>
 							<div class="col-md-4">
-								<div id="filter">
+								<div class="filter" name="">
 									<ul>
-										<a href="#" class="fontColor"><li>하루</li></a>
-										<a href="#" class="fontColor"><li>일개월</li></a>
-										<a href="#" class="fontColor"><li>일주일</li></a>
-										<a href="#" class="fontColor"><li>삼개월</li></a>
+										<a class="fontColor"><li>오늘</li></a>
+										<a class="fontColor"><li>1주일</li></a>
+										<a class="fontColor"><li>1개월</li></a>
+										<a class="fontColor"><li>3개월</li></a>
 									</ul>
 								</div>
 							</div>
-							<div class="col-md-5">
-								<input type="date" id="frDt" name="frDt" class="datePut">
-								<span style="margin: 0px 10px;"> - </span>
-								<input type="date" id="toDt" name="toDt" class="datePut">
+							<div class="col-md-4">
+								<div class="filter" name="">
+									<input type="date" id="start" name="start" class="datePut">
+									<span style="margin: 0px 10px;"> - </span>
+									<input type="date" id="end" name="end" class="datePut">
+								</div>
 							</div>
 							<div class="col-md-1">
 								<div id="btnCss">
@@ -126,67 +139,246 @@ width: 100px;
 						<div style="height: 800px;">
 							<h4 style="margin-bottom: 20px;">상품주문정보</h4>
 							<!--구매한 주문정보-->
-							<div>
-								<table class="table">
+							<div >
+								<table class="table" id="tableList">
 									<colgroup>
+										<col width="13%">
 										<col width="20%">
-										<col width="20%">
-										<col width="25%">
-										<col width="15%">
-										<col width="15%">
-										<col width="5%">
+										<col width="19%">
+										<col width="10%">
+										<col width="10%">
+										<col width="9%">
+										<col width="10%">
+										<col width="8%">
 									</colgroup>
-									<thead style="text-align: center;">
-										<tr >
+									<thead style="text-align: center;" id="draw">
+										<tr>
 											<th scope="col">
 												주문일자 <br/>
 												주문번호
 											</th>
 											<th scope="col">이미지</th>
 											<th scope="col">상품정보</th>
+											<th scope="col">수량</th>
 											<th scope="col">상품금액</th>
+											<th scope="col">총금액</th>
 											<th scope="col">주문처리상태</th>
-											<th scope="col">취소</th>
+											<th scope="col">결제여부</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td rowspan="">
-												<p>2023-04-12</p>
-												<a class="fontColor" href="orderListDtl" style="text-decoration: underline; text-underline-position:under;">
-													<p>20230509-1521584</p>
-												</a>
+										<!--<tr>
+											<td colspan="7" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
+												상품구매금액 <sapn id="orderPrice"></sapn> + 배송비 <sapn th:text="${test}" id="delivery"></sapn> = 합계 : <span class="total_price" style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
 											</td>
-											<td><a href="#" class="fontColor"><img src="images/about-01.jpg" rel="product"></a></td>
-											<td>
-												<strong><a href="#" class="fontColor">상품이름</a></strong>
-												<div class="option">[옵션 : 블랙/FREE]</div>
-											</td>
-											<td>30,000원</td>
-											<td>결제완료</td>
-											<td>-</td>
-										</tr>
-
+										</tr>-->
 									</tbody>
-									<tfoot>
-										<tr>
-											<td colspan="6" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
-												상품구매금액 34,800 + 배송비 2,200 = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
-											</td>
-										</tr>
-									</tfoot>
 								</table>
 							</div>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script th:inline="javascript">
-			/*<![CDATA[*/
-			let test = /*[[${code}]]*/
+			//let total = /*[[${total}]]*/\
 
-			console.log(test);
+			let data = [
+				/*[# th:each="order : ${list}"]*/
+					{
+					ordrDate : /*[[${order.ordrDate}]]*/,
+					ordrId : /*[[${order.ordrId}]]*/,
+					prdtImg : /*[[${order.prdtImg}]]*/,
+					prdtNm : /*[[${order.prdtNm}]]*/,
+					optDetaNm : /*[[${order.optDetaNm}]]*/,
+					price : /*[[${order.price}]]*/,
+					shipSt : /*[[${order.shipSt}]]*/,
+					prcSt : /*[[${order.prcSt}]]*/
+				},
+				/*[/]*/
+			];
+
+			/*<![CDATA[*/
+			let id = /*[[${id}]]*/
+			let ship = $('#shipSt').val();
+			let prcSt = $('#prcSt').val();
+			let start = $('#start').val();
+			let end = $('#end').val();
+
+			//주문내역 ajax
+			
+			const orderList = (start = undefined, end = undefined, shipSt = undefined, prcSt = undefined) => {
+				$.ajax({
+					type: "POST",
+					url: "getOrder",
+					data : {meId : id,
+									shipSt : ship,
+									prcSt : prcSt,
+									start : start,
+									end : end},
+					dataType: "json",
+					success: function(data){
+						orderList.innerHTML = '';
+						let aa = '';
+
+						for(let i = 0 ; i < data.length; i++){
+							let date = dateChange(data[i].ordrDate);
+							let prc = AddComma(data[i].prc);
+							let total = AddComma(data[i].total);
+
+							if(data.length){
+									orderList.innerHTML += `
+												<tr>
+													<td>
+														<p class="orderDate">${date}</p>
+														<a class="fontColor" style="text-decoration: underline; text-underline-position:under;">
+															<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?meId=${id}">
+																<strong>${data[i].ordrId}</strong>
+															</a>
+														</a>
+													</td>
+													<td><a href="#" class="fontColor"><img src="${data[i].prdtImg}" rel="product"></a></td>
+													<td>
+														<a href="#" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
+														<div class="option">
+															[옵션 : 
+															<sapn >${data[i].optDetaNm}</sapn>/
+															<span id="size"></span>
+															]
+														</div>
+													</td>
+													<td>${data[i].cnt}</td>
+													<td><span>${prc}</span><span>원</span></td>
+													<td><span>${total}</span><span>원</span></td>
+													<td>${data[i].shipSt}</td>
+													<td>${data[i].prcSt}</td>
+												</tr>
+										`
+									} else{
+											orderList.innerHTML += `<div>주문건이 없습니다.</div>`
+									}
+							}
+								$('#draw').append(orderList.innerHTML);
+					},
+					error : function(rej) {
+						console.log(rej);
+					}
+				})
+			};
+			orderList();
+
+			//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
+			$(window).on('load', function () {
+				fn_cellMerge('tableList', [0,5,6,7]);
+			});
+			/*]]>*/
+
+			//금액포맷
+			function AddComma(num) {
+					var regexp = /\B(?=(\d{3})+(?!\d))/g;
+					return num.toString().replace(regexp, ',');
+			};
+
+			//날짜변환
+			function dateChange(data) {
+				let newData = new Date(data);
+				let result = newData.getFullYear() + "-" +
+							(newData.getMonth() < 10
+							? "0" + (newData.getMonth() + 1)
+							: newData.getMonth() + 1) +
+							"-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate());
+					return result;
+			};
+
+			
+			// table td cell merge---------------------------------------------------------------------------------------
+			// 참고 : http://toyuq.tistory.com/251
+			function fn_cellMerge(vid, vcol, vtd){ //테이블 아이디, 셀머지할 컬럼 0부터~, 태그(옵션)
+      
+			var id = vid;
+			var col = vcol;
+			var td = ((!!vtd) ? vtd : "td"  ); // 기본이 td 태그 기준으로 merge함
+				
+			var spanCnt = 1;
+			var preText; //이전 텍스트
+		
+			var r = [];
+
+			var rows = $("table[id="+id+"] tr").find(td+":eq("+col[0]+")").length; //row 개수
+		
+			if(rows <= 1){
+					return false;
+			}
+
+			for(var i = 0; col.length > i; i++){
+					r.push({ idx : [], spans : []});
+					if(i == 0){ //첫번째
+							$("table[id="+id+"] tr").find(td+":eq("+col[i]+")").each(function(index, item){// row수만큼 돌린다.
+									if(index == 0) { //첫번째 row
+											r[i].idx.push(index);
+											spanCnt = 1;
+									}else if( (rows-1) == index){ //마지막 row
+											if(preText != $(this).text()){ //중복없이 단일행 마지막
+													r[i].idx.push(index);
+													r[i].spans.push(spanCnt);
+											}else{ //전 값이 동일한 경우
+													spanCnt = spanCnt+1;
+													r[i].spans.push(spanCnt);
+											}
+									}else if(preText != $(this).text()){ //텍스트가 바뀔때 index
+											r[i].idx.push(index);
+											r[i].spans.push(spanCnt);
+											spanCnt = 1;
+									}else{ //위 아래 텍스트가 같을 때
+											spanCnt = spanCnt+1;
+									}
+									preText = $(this).text();
+							});
+					}else if( !r[i-1].idx.length){ // rowSpan할 row가 없다면 종료
+							break;
+					}else{ //그 뒤 그룹으로
+							var j = 1; //그룹 구별자
+							$("table[id="+id+"] tr").find(td+":eq("+col[i]+")").each(function(index, item){// row수만큼 돌린다.
+									if(index == 0) { //첫번째 row
+											r[i].idx.push(index);
+											spanCnt = 1;
+									}else if(r[i-1].idx[j] == (index)){ //rowSpan 적용 시작 지점에서 리셋
+											r[i].idx.push(index);
+											r[i].spans.push(spanCnt);
+											spanCnt = 1;
+											j++;
+									}else if( (rows-1) == index){ //마지막 row
+											if(preText != $(this).text()){ //중복없이 단일행 마지막
+													r[i].idx.push(index);
+													r[i].spans.push(spanCnt);
+											}else{ //전 값이 동일한 경우
+													spanCnt = spanCnt+1;
+													r[i].spans.push(spanCnt);
+											}
+									}else if(preText != $(this).text()){ //텍스트가 바뀔때 index
+											r[i].idx.push(index);
+											r[i].spans.push(spanCnt);
+											spanCnt = 1;
+									}else{ //위 아래 텍스트가 같을 때
+											spanCnt = spanCnt+1;
+									}
+									preText = $(this).text();
+							});
+					}
+			}
+			for(var k = col.length; k > 0; k--){ //역순으로 돌려야 그룹이 안깨짐
+					$("table[id="+id+"] tr").find(td+":eq("+col[k-1]+")").each(function(index, item){
+							if(r[k-1].idx[0] == index){
+									$(this).attr("rowspan",r[k-1].spans[0]);
+									r[k-1].idx.shift();
+									r[k-1].spans.shift();
+							}else{
+									$(this).remove();
+							}
+					});
+			}
+		};
 		</script>
 	</div>
 	</body>
