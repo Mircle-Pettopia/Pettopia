@@ -28,7 +28,7 @@ public class MypageVO {
 	private String rcvAddr;
 	private int ttPrc;
 	private String mthd;
-	private int invo;
+	private long invo;
 	private int shipPrc;
 	private String prcSt;
 	private String shipSt;
@@ -45,7 +45,9 @@ public class MypageVO {
 	//------------------------
 	private int price;			//상품금액 + 옵션추가금액
 	private int count;			//하나의 주문번호에 몇개의 상세주문건이 있는지
-	
+	private String start;
+	private String end;
+	private int total;
 	
 	
 	

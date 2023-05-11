@@ -8,6 +8,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.MypageVO;
@@ -26,17 +30,28 @@ public class MypageController {
 							Authentication authentication) {
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         String id = principal.getUser().getMeId();
-        List<MypageVO> vo = service.getOrderList(id);
-        String ordr_id = vo.get(0).getOrdrId();
-        String prdt_id = vo.get(0).getPrdtId();
+        MypageVO vo = new MypageVO();
+        List<MypageVO> mvo = service.getOrder(id);
+        
+        System.out.println(mvo.getClass());
         
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
-        model.addAttribute("list", service.getOrderList(id));
-        model.addAttribute("count", service.getOrderDetailCount(ordr_id));
+        model.addAttribute("total", mvo);
 		
 		return "mypage/mypage";
+	}
+	
+	@PostMapping("getOrder")
+	@ResponseBody
+	public List<MypageVO> getOrder(@RequestParam String meId, @RequestParam(required = false) String start,
+								@RequestParam(required = false) String end, @RequestParam(required = false) String shipSt,
+								@RequestParam(required = false) String prcSt
+								){
+		MypageVO vo = new MypageVO();
+		
+		return service.getOrderList(meId, start, end, shipSt, prcSt);
 	}
 	
 	//마이페이지-주문내역상세

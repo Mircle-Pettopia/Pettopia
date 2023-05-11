@@ -11,16 +11,19 @@ import com.yedam.pettopia.mypage.mapper.MypageMapper;
 @Service
 public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
-
+	
 	@Override
-	public List<MypageVO> getOrderList(String meId) {
-		return mapper.getOrderList(meId);
+	public List<MypageVO> getOrder(String meId) {
+		return mapper.getOrder(meId);
 	}
 
 	@Override
-	public String getOrderDetailCount(String prdtId) {
-		return mapper.getOrderDetailCount(prdtId);
+	public List<MypageVO> getOrderList(String meId, String start, String end,
+									String shipSt, String prcSt) {
+		return mapper.getOrderList(meId, start, end, shipSt, prcSt);
 	}
+
+	
 
 
 	
