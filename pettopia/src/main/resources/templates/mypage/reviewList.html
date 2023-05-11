@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+<title>Pettopia</title>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content">
+		<style>
+
+</style>
+
+		<div class="container">
+			<div class="row">
+				<th:block th:replace="/layout/navbar : navbarFragment"></th:block>
+
+			
+			</div>
+		</div>
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			let test = /*[[${code}]]*/
+
+			console.log(test);
+		</script>
+	</div>
+</body>
+</html>
+</html>

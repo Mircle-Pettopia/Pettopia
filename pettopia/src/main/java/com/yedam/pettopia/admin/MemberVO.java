@@ -18,5 +18,6 @@ public class MemberVO {
 	private String addrDetail;
 
 	
-	
+	private String start;
+	private String end;
 }
