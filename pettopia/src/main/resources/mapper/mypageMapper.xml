@@ -28,7 +28,6 @@
    WHERE 1=1
    AND me_id = #{meId}
    AND is_main = 'Y'
-   AND opt_nm = '색상'
    <if test="start != null and !start.equals('') and end!= null and !end.equals('')">
    AND ordr_date BETWEEN TO_DATE(#{start}, 'rrrr-MM-DD') AND TO_DATE(#{end}, 'rrrr-MM-DD')
    </if>

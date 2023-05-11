@@ -221,43 +221,44 @@ td, tr, th{
 					success: function(data){
 						orderList.innerHTML = '';
 						let aa = '';
+						let key = '';
 
 						for(let i = 0 ; i < data.length; i++){
 							let date = dateChange(data[i].ordrDate);
 							let prc = AddComma(data[i].prc);
 							let total = AddComma(data[i].total);
-
+							key = data[i].ordrId;
+							console.log(key);
+							
 							if(data.length){
-									orderList.innerHTML += `
-												<tr>
-													<td>
-														<p class="orderDate">${date}</p>
-														<a class="fontColor" style="text-decoration: underline; text-underline-position:under;">
-															<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?meId=${id}">
-																<strong>${data[i].ordrId}</strong>
-															</a>
-														</a>
-													</td>
-													<td><a href="#" class="fontColor"><img src="${data[i].prdtImg}" rel="product"></a></td>
-													<td>
-														<a href="#" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
-														<div class="option">
-															[옵션 : 
-															<sapn >${data[i].optDetaNm}</sapn>/
-															<span id="size"></span>
-															]
-														</div>
-													</td>
-													<td>${data[i].cnt}</td>
-													<td><span>${prc}</span><span>원</span></td>
-													<td><span>${total}</span><span>원</span></td>
-													<td>${data[i].shipSt}</td>
-													<td>${data[i].prcSt}</td>
-												</tr>
-										`
-									} else{
-											orderList.innerHTML += `<div>주문건이 없습니다.</div>`
-									}
+								orderList.innerHTML += `
+								<tr>
+									<td>
+										<p class="orderDate">${date}</p>
+										<a class="fontColor" style="text-decoration: underline; text-underline-position:under;">
+											<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?meId=${id}">
+												<strong>${data[i].ordrId}</strong>
+											</a>
+										</a>
+									</td>
+									<td><a href="#" class="fontColor"><img src="${data[i].prdtImg}" rel="product"></a></td>
+									<td>
+										<a href="#" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
+										<div class="option">
+											<sapn id="${data[i].ordrId}Options"></span>
+										</div>
+									</td>
+									<td>${data[i].cnt}</td>
+									<td><span>${prc}</span><span>원</span></td>
+									<td><span>${total}</span><span>원</span></td>
+									<td>${data[i].shipSt}</td>
+									<td>${data[i].prcSt}</td>
+									</tr>
+									`
+								} else{
+									orderList.innerHTML += `<div>주문건이 없습니다.</div>`
+								}
+								DomId(data[i].ordrId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
 							}
 								$('#draw').append(orderList.innerHTML);
 					},
@@ -267,6 +268,10 @@ td, tr, th{
 				})
 			};
 			orderList();
+
+			function DomId(id) { //id로 태그찾기 압축용
+        return document.getElementById(id)
+      }
 
 			//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
 			$(window).on('load', function () {
