@@ -30,20 +30,16 @@ public class MypageController {
 							Authentication authentication) {
 		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         String id = principal.getUser().getMeId();
-        MypageVO vo = new MypageVO();
-        List<MypageVO> mvo = service.getOrder(id);
-        
-        System.out.println(mvo.getClass());
         
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
-        model.addAttribute("total", mvo);
-		
+        model.addAttribute("getprcSt", service.getPrcCount(id));
+        model.addAttribute("getShipSt", service.getShipCount(id));
 		return "mypage/mypage";
 	}
 	
-	@PostMapping("getOrder")
+	@GetMapping("getOrder")
 	@ResponseBody
 	public List<MypageVO> getOrder(@RequestParam String meId, @RequestParam(required = false) String start,
 								@RequestParam(required = false) String end, @RequestParam(required = false) String shipSt,
