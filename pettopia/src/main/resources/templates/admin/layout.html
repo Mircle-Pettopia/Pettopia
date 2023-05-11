@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html 
- xmlns:th="http://www.thymeleaf.org" 
- xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
 <meta charset="utf-8">
@@ -22,7 +20,7 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
 	rel="stylesheet">
-	
+
 <!-- Vendor CSS Files -->
 <link href="admin/assets/vendor/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -59,21 +57,30 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <!-- Toast UI 페이징 -->
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script
+	src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 
-<script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
-<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
+<script type="text/javascript"
+	src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+<script type="text/javascript"
+	src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 
 <!-- Toast UI 에디터 -->
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script
+	src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 
 <!-- summbernote -->
 <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script> -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <!-- Swal -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
@@ -87,7 +94,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-  
+
 
 </head>
 
@@ -104,6 +111,14 @@
 		</div>
 		<!-- End Logo -->
 
+		<nav class="header-nav ms-auto">
+			<ul class="d-flex align-items-center me-5">
+				<li><a class="dropdown-item d-flex align-items-center"
+					th:href="@{/}"> <i class="bi bi-box-arrow-right me-1"></i> <span>쇼핑몰
+							가기</span>
+				</a></li>
+			</ul>
+		</nav>
 	</header>
 	<!-- End Header -->
 
@@ -112,14 +127,14 @@
 
 		<ul class="sidebar-nav" id="sidebar-nav">
 
-			<li class="nav-item"><a class="nav-link collapsed" th:href="@{/productMag}">
-					<i class="bi bi-grid"></i> <span>상품관리</span>
+			<li class="nav-item"><a class="nav-link collapsed"
+				th:href="@{/productMag}"> <i class="bi bi-grid"></i> <span>상품관리</span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" th:href="@{/orderMag}">
-					<i class="bi bi-menu-button-wide"></i> <span>주문관리</span>
+			<li class="nav-item"><a class="nav-link collapsed"
+				th:href="@{/orderMag}"> <i class="bi bi-menu-button-wide"></i> <span>주문관리</span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" th:href="@{/memberMag}">
-					<i class="bi bi-journal-text"></i> <span>회원관리</span>
+			<li class="nav-item"><a class="nav-link collapsed"
+				th:href="@{/memberMag}"> <i class="bi bi-journal-text"></i> <span>회원관리</span>
 			</a></li>
 
 		</ul>

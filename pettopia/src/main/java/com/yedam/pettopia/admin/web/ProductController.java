@@ -1,5 +1,6 @@
 package com.yedam.pettopia.admin.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,10 +87,16 @@ public class ProductController {
 	// 상품 수정
 	@PostMapping("updatePrd")
 	@ResponseBody
-	public Map<String, Integer> updatePrd(ProductVO vo){
-		System.out.println(vo);
-		productService.updatePrd(vo);
-		return productService.currentPrd();
+	public Map<String, Object> updatePrd(ProductVO vo){
+		int result = productService.updatePrd(vo);
+		Map<String, Object> map = new HashMap<>();
+		if(result == 1) {
+			map.put("currentPrd", productService.currentPrd());
+			map.put("seletePrd", productService.selectPrdAllList());
+		}else {
+			map.put("error", null);
+		}
+		return map;
 	}
 	
 }
