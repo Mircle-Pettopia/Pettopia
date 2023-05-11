@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.cart.service.CartService;
@@ -34,5 +36,15 @@ public class CartController {
 		return cartService.getCart(meId); 
 	}
 	
-
+	@PostMapping("setAmount")
+	@ResponseBody
+	public int setAmount(String crtId,int cnt) {
+		return cartService.setAmount(crtId, cnt);
+	}
+	
+	@DeleteMapping("delCart")
+	@ResponseBody
+	public int delCart(String crtId) {
+		return cartService.delCart(crtId);
+	}
 }

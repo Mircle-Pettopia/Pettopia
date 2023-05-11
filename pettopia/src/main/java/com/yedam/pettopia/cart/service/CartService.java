@@ -6,4 +6,6 @@ import com.yedam.pettopia.cart.service.vo.CartVO;
 
 public interface CartService {
 	public List<CartVO> getCart(String meId);
+	public int setAmount(String crtId,int cnt);
+	public int delCart(String crtId);
 }

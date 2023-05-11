@@ -16,4 +16,7 @@ public class CartVO {
 	private String prdtNm;
 	private int prdtPrc;
 	private String crtDetaId;
+	private String optDetaNm;
+	private String prdtImg;
+	
 }
