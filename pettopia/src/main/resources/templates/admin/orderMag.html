@@ -43,26 +43,17 @@
                 <table class="table table-borderless mt-5">
                   <tbody>
                     <tr>
-                      <th class="text-center" scope="row">상품명</th>
-                      <td>
+                      <th class="text-center col-sm-1" scope="row">주문자</th>
+                      <td class="col-sm-4">
                         <input type="text" class="form-control" />
                       </td>
-
-                      <th class="text-center" scope="row">상품분류</th>
-                      <td>
-                        <div class="d-flex">
-                          <select class="form-select me-2">
-                            <option>- 대분류 선택 -</option>
-                            <option>의류</option>
-                          </select>
-                          <select class="form-select">
-                            <option>- 소분류 선택 -</option>
-                          </select>
-                        </div>
+                      <th class="text-center col-sm-1" scope="row">상품명</th>
+                      <td class="col-sm-4">
+                        <input type="text" class="form-control" />
                       </td>
                     </tr>
                     <tr>
-                      <th class="text-center" scope="row">상품등록일</th>
+                      <th class="text-center" scope="row">주문일자</th>
                       <td>
                         <div class="d-flex align-items-center">
                           <input type="date" class="form-control mr-2" />
@@ -70,8 +61,9 @@
                           <input type="date" class="form-control ml-2" />
                         </div>
                       </td>
-
-                      <th class="text-center" scope="row">판매상태</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center" scope="row">결제상태</th>
                       <td>
                         <div class="d-flex">
                           <div class="form-check me-3">
@@ -84,14 +76,30 @@
                               type="checkbox"
                               name="chk"
                             />
-                            <label class="form-check-label">판매중</label>
+                            <label class="form-check-label">결제전</label>
+                          </div>
+                        </div>
+                      </td>
+                      <th class="text-center" scope="row">배송상태</th>
+                      <td>
+                        <div class="d-flex">
+                          <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" />
+                            <label class="form-check-label">전체</label>
+                          </div>
+                          <div class="form-check me-3">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="chk"
+                            />
+                            <label class="form-check-label">배송대기</label>
                           </div>
                         </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-
                 <div class="text-center pb-5">
                   <button type="button" class="btn btn-primary" id="searchBtn">
                     검색
@@ -109,82 +117,167 @@
       </section>
       <script>
         const Grid = tui.Grid;
-
-        // 상품 관리 리스트(그리드)
-        const orderList = new Grid({
-          el: document.getElementById("orderList"),
-          rowHeaders: ["checkbox", "rowNum"],
-          bodyHeight: 430,
-          pageOptions: {
-            useClient: true,
-            perPage: 10,
-          },
-          columns: [
-            {
-              header: "주문ID",
-              name: "prdtId",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-            },
-            {
-              header: "주문자",
-              name: "lcatId",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-            },
-            {
-              header: "상품명",
-              name: "scatId",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-            },
-            {
-              header: "총 결제금액",
-              name: "prdtNm",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-            },
-            {
-              header: "결제상태",
-              name: "prdtPrc",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-            },
-            {
-              header: "배송상태",
-              name: "saleSt",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-            },
-            {
-              header: "주문일자",
-              name: "regDt",
-              align: "center",
-              sortingType: "asc",
-              sortable: true,
-              formatter: function (e) {
-                return formattedDate(e.value);
-              },
-            },
-          ],
-        });
-
         // 상품 리스트
         $.ajax({
-          url: "",
-          success: function (data) {
-            orderList.resetData(data);
+          url: "orderList",
+          success: function (result) {
+            console.log(result);
+            let prcSt = result.code.PS;
+            let shipSt = result.code.SS;
+            console.log(shipSt);
+            let prcStArr = [];
+            let shipStArr = [];
+            for (let i = 0; i < prcSt.length; i++) {
+              let obj = {
+                text: prcSt[i].codTitle,
+                value: prcSt[i].codCd,
+              };
+              prcStArr.push(obj);
+            }
+
+            for (let i = 0; i < shipSt.length; i++) {
+              let obj = {
+                text: shipSt[i].codTitle,
+                value: shipSt[i].codCd,
+              };
+              shipStArr.push(obj);
+            }
+
+            // 상품 관리 리스트(그리드)
+            const orderList = new Grid({
+              el: document.getElementById("orderList"),
+              rowHeaders: ["checkbox", "rowNum"],
+              bodyHeight: 430,
+              pageOptions: {
+                useClient: true,
+                perPage: 10,
+              },
+              columns: [
+                {
+                  header: "주문ID",
+                  name: "ordrId",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                },
+                {
+                  header: "주문자",
+                  name: "name",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                },
+                {
+                  header: "상품명",
+                  name: "prdtNm",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                },
+                {
+                  header: "총 결제금액",
+                  name: "ttPrc",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                },
+                {
+                  header: "결제수단",
+                  name: "mthd",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                },
+                {
+                  header: "결제상태",
+                  name: "prcSt",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                  formatter: "listItemText",
+                  editor: {
+                    type: "select",
+                    options: {
+                      listItems: prcStArr,
+                    },
+                  },
+                  relations: [
+                    {
+                      listItems({ value }) {
+                        console.log(value);
+                        return [value];
+                      },
+                      disabled({ value }) {
+                        console.log(value);
+                        return !value;
+                      },
+                    },
+                  ],
+                },
+
+                {
+                  header: "배송상태",
+                  name: "shipSt",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                  formatter: "listItemText",
+                  editor: {
+                    type: "select",
+                    options: {
+                      listItems: shipStArr,
+                    },
+                  },
+                },
+                {
+                  header: "주문일자",
+                  name: "ordrDate",
+                  align: "center",
+                  sortingType: "asc",
+                  sortable: true,
+                  formatter: function (e) {
+                    return formattedDate(e.value);
+                  },
+                },
+              ],
+            });
+            orderList.resetData(result.orderList);
+            // orderList.on("afterChange", function (ev) {
+            //   console.log(ev);
+            //   let getRow = orderList.getRow(ev);
+            //   console.log(getRow);
+            //   let ordrId = getRow.ordrId;
+            //   let prcSt = ev.changes[0].value;
+            //   console.log(ordrId);
+            //   console.log(prcSt);
+            // });
+            orderList.on("afterChange", function (ev) {
+              console.log(ev);
+              ev.changes.forEach(function (change) {
+                console.log(change);
+
+                let row = orderList.getRow(change.rowKey);
+                let ordrId = row.ordrId;
+                let prcSt = change.value;
+                console.log(ordrId, prcSt);
+              });
+            });
           },
+
           error: function (reject) {
             console.log(reject);
           },
         });
+
+        // 날짜 변환
+        function formattedDate(timestamp) {
+          let date = new Date(timestamp);
+          let year = date.getFullYear();
+          let month = String(date.getMonth() + 1).padStart(2, "0");
+          let day = String(date.getDate()).padStart(2, "0");
+          let formattedDate = year + "-" + month + "-" + day;
+          return formattedDate;
+        }
       </script>
     </div>
   </body>

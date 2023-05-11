@@ -39,8 +39,10 @@ public interface ProductService {
 
 	// 검색 조회
 	public List<ProductVO> searchList(ProductVO vo);
-	
+
 	// 상품 현황 조회
 	public Map<String, Integer> currentPrd();
 
+	// 상품 수정
+	public int updatePrd(ProductVO vo);
 }

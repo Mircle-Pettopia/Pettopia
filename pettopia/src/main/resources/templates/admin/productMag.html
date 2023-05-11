@@ -436,7 +436,7 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      name="lCatId"
+                      name="lCatIdDet"
                       th:value="${lCat.lCatId}"
                       th:id="${lCat.lCatId}+'Det'"
                     />
@@ -514,24 +514,202 @@
       </div>
       <script>
         $(document).ready(function () {
+          // 상품 상세조회
+          let rowKey;
+          prdList.on("dblclick", (e) => {
+            let rowData = prdList.getRow(e.rowKey);
+            rowKey = e.rowKey;
+            let prdtId = rowData.prdtId;
+            $.ajax({
+              url: "productDetail",
+              data: { prdtId: prdtId },
+              success: function (result) {
+                $("#prdtIdDetail").val(prdtId);
+                $("#prdtNmDetail").val(result.product.prdtNm);
+                $("#prdtPrcDetail").val(result.product.prdtPrc);
+                $("#summernoteDetail").summernote(
+                  "code",
+                  result.product.prdtDesct
+                );
+                $(
+                  "#detailModal input[type='radio'][value='" +
+                    result.product.lcatId +
+                    "']"
+                ).prop("checked", true);
+                $(
+                  "#detailModal input[type='radio'][value='" +
+                    result.product.saleSt +
+                    "']"
+                ).prop("checked", true);
+
+                let sCatList = $("#sCatListDetail");
+                sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
+
+                // 소분류 조회
+                $.each(result.sCatList, function (index, value) {
+                  let radioBtn =
+                    '<div class="form-check form-check-inline">' +
+                    '<input class="form-check-input" type="radio" name="sCatId" value="' +
+                    value.scatId +
+                    '" id="' +
+                    value.scatId +
+                    '">' +
+                    '<label class="form-check-label" for="' +
+                    value.scatId +
+                    '">' +
+                    value.scatNm +
+                    "</label>" +
+                    "</div>";
+                  sCatList.append(radioBtn);
+                });
+                $(
+                  "#detailModal input[type='radio'][value='" +
+                    result.product.scatId +
+                    "']"
+                ).prop("checked", true);
+
+                $("#optionDetail").empty();
+
+                // 옵션 조회
+                $.each(result.optionList, function (index, value) {
+                  // 새로운 row 생성
+                  let newRow = $("<div>").addClass("row mb-4");
+
+                  // 옵션 이름 입력 폼 생성
+                  let label1 = $("<label>")
+                    .addClass("col-sm-2 col-form-label fw-bolder text-center")
+                    .text("옵션 이름");
+                  let input1 = $("<input>")
+                    .addClass("form-control")
+                    .val(value.optNm);
+                  let div1 = $("<div>").addClass("col-sm-4").append(input1);
+                  //옵션이름 div
+                  let newRow1 = $("<div>")
+                    .addClass("row mb-4")
+                    .append(label1, div1);
+
+                  // 옵션 값 및 추가 가격 입력 폼 생성
+                  $.each(result.optionDetailList, function (index, item) {
+                    if (value.optId == item.optId) {
+                      // 옵션 값 입력 폼 생성
+                      let label2 = $("<label>")
+                        .addClass(
+                          "col-sm-2 col-form-label fw-bolder text-center"
+                        )
+                        .text("옵션 값");
+                      let input2 = $("<input>")
+                        .addClass("form-control")
+                        .val(item.optDetaNm);
+                      let div2 = $("<div>").addClass("col-sm-4").append(input2);
+
+                      // 추가 가격 입력 폼 생성
+                      let label3 = $("<label>")
+                        .addClass(
+                          "col-sm-2 col-form-label fw-bolder text-center"
+                        )
+                        .text("추가 가격");
+                      let input3 = $("<input>")
+                        .addClass("form-control")
+                        .val(item.addPrc);
+                      let div3 = $("<div>").addClass("col-sm-4").append(input3);
+
+                      let newRow2 = $("<div>")
+                        .addClass("row mb-4")
+                        .append(label2, div2, label3, div3);
+
+                      // row에 폼 추가
+                      newRow.append(newRow1, newRow2);
+                    }
+                  });
+
+                  // 옵션 이름 입력 폼 추가
+                  newRow.prepend(newRow1);
+
+                  // optionDetail에 row 추가
+                  $("#optionDetail").append(newRow);
+                });
+
+                // 이미지 목록 초기화
+                $("#imgDetail").empty();
+                $("#imgMainDetail").attr("src", "");
+
+                result.imgList.forEach(function (item, idx) {
+                  let imgSrc = "download/" + item.prdtImg;
+                  if (item.isMain === "Y") {
+                    $("#imgMainDetail")
+                      .attr("src", imgSrc)
+                      .css("width", "300px");
+                  } else {
+                    let imgElem = $("<img>").attr("src", imgSrc).css({
+                      width: "300px",
+                      "margin-right": "10px",
+                    });
+                    $("#imgDetail").append(imgElem);
+                    $("#imgDetail").append("<p>");
+                  }
+                });
+
+                // $("#test").html(result.prdtDesct);
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+
+            $("#detailModal").modal("show");
+          });
+
           // 수정
           $(document).on("click", "#updateBtn", function () {
-            console.log("수정");
             let prdtNm = $("#prdtNmDetail").val();
             let prdtPrc = $("#prdtPrcDetail").val();
             let prdtDesct = $("#summernoteDetail").summernote("code");
             let sCatId = $("input[name=sCatId]:checked").val();
-            let lCatId = $("input[name=lCatId]:checked").val();
+            let lCatId = $("input[name=lCatIdDet]:checked").val();
             let saleSt = $("input[name=saleSt]:checked").val();
             let prdtId = $("#prdtIdDetail").val();
 
-            console.log(prdtNm);
-            console.log(prdtPrc);
-            console.log(prdtDesct);
-            console.log(sCatId);
-            console.log(lCatId);
-            console.log(saleSt);
-            console.log(prdtId);
+            if (prdtNm === "") {
+              $("#prdtNmDetail").focus();
+              Swal.fire({
+                icon: "warning",
+                title: "상품명을 입력해주세요.",
+              });
+              return;
+            }
+
+            if (prdtPrc === "") {
+              $("#prdtPrcDetail").focus();
+              Swal.fire({
+                icon: "warning",
+                title: "판매가를 입력해주세요",
+              });
+              return;
+            }
+
+            if (typeof lCatId === "undefined") {
+              Swal.fire({
+                icon: "warning",
+                title: "대분류를 선택해주세요.",
+              });
+              return;
+            }
+
+            if (typeof sCatId === "undefined") {
+              Swal.fire({
+                icon: "warning",
+                title: "소분류를 선택해주세요.",
+              });
+              return;
+            }
+
+            if (typeof saleSt === "undefined") {
+              Swal.fire({
+                icon: "warning",
+                title: "판매상태를 선택해주세요.",
+              });
+              return;
+            }
 
             Swal.fire({
               title: "수정하시겠습니까?",
@@ -546,6 +724,50 @@
                 $.ajax({
                   url: "updatePrd",
                   method: "post",
+                  data: {
+                    prdtNm: prdtNm,
+                    prdtPrc: prdtPrc,
+                    prdtDesct: prdtDesct,
+                    sCatId: sCatId,
+                    lCatId: lCatId,
+                    saleSt: saleSt,
+                    prdtId: prdtId,
+                  },
+                  success: function (result) {
+                    // 상품 현황 수정
+                    $("#currentPrd td:first-child span").text(
+                      result.currentPrd.allPrd
+                    );
+                    $("#currentPrd td:nth-child(2) span").text(
+                      result.currentPrd.salePrd
+                    );
+                    $("#currentPrd td:last-child span").text(
+                      result.currentPrd.stopPrd
+                    );
+
+                    let newData = result.seletePrd[rowKey]; // 변경할 데이터
+                    prdList.setRow(rowKey, newData);
+
+                    let Toast = Swal.mixin({
+                      toast: true,
+                      position: "top",
+                      showConfirmButton: false,
+                      timer: 1500,
+                      timerProgressBar: true,
+                      didOpen: (toast) => {
+                        toast.addEventListener("mouseenter", Swal.stopTimer);
+                        toast.addEventListener("mouseleave", Swal.resumeTimer);
+                      },
+                    });
+                    Toast.fire({
+                      icon: "success",
+                      title: "수정이 정상적으로 되었습니다.",
+                    });
+                    $("#detailModal").modal("hide");
+                  },
+                  error: function (reject) {
+                    console.log(reject);
+                  },
                 });
               }
             });
@@ -569,13 +791,44 @@
             }
           });
 
-          // 등록에서 대분류 선택 하면 소분류 출력
+          // 등록에서 대분류 선택 하면 소분류 출력(등록)
           $("input[type=radio][name=lCatId]").change(function () {
             $.ajax({
               url: "sCatList",
               data: { lCatId: this.value },
               success: function (result) {
                 let sCatList = $("#sCatList");
+                sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
+
+                $.each(result, function (index, value) {
+                  let radioBtn =
+                    '<div class="form-check form-check-inline">' +
+                    '<input class="form-check-input" type="radio" name="sCatId" value="' +
+                    value.scatId +
+                    '" id="' +
+                    value.scatId +
+                    '">' +
+                    '<label class="form-check-label" for="' +
+                    value.scatId +
+                    '">' +
+                    value.scatNm +
+                    "</label>" +
+                    "</div>";
+                  sCatList.append(radioBtn);
+                });
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+          // 등록에서 대분류 선택 하면 소분류 출력(상세조회)
+          $("input[type=radio][name=lCatIdDet]").change(function () {
+            $.ajax({
+              url: "sCatList",
+              data: { lCatId: this.value },
+              success: function (result) {
+                let sCatList = $("#sCatListDetail");
                 sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
 
                 $.each(result, function (index, value) {
@@ -1098,22 +1351,21 @@
 
                   selectedRows.forEach((row) => {
                     prdList.removeRow(row.rowKey);
-
-                    let Toast = Swal.mixin({
-                      toast: true,
-                      position: "top",
-                      showConfirmButton: false,
-                      timer: 1500,
-                      timerProgressBar: true,
-                      didOpen: (toast) => {
-                        toast.addEventListener("mouseenter", Swal.stopTimer);
-                        toast.addEventListener("mouseleave", Swal.resumeTimer);
-                      },
-                    });
-                    Toast.fire({
-                      icon: "success",
-                      title: "삭제가 정상적으로 되었습니다.",
-                    });
+                  });
+                  let Toast = Swal.mixin({
+                    toast: true,
+                    position: "top",
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.addEventListener("mouseenter", Swal.stopTimer);
+                      toast.addEventListener("mouseleave", Swal.resumeTimer);
+                    },
+                  });
+                  Toast.fire({
+                    icon: "success",
+                    title: "삭제가 정상적으로 되었습니다.",
                   });
                 },
                 error: function (reject) {
@@ -1122,143 +1374,6 @@
               });
             }
           });
-        });
-
-        // 상품 상세조회
-        prdList.on("dblclick", (e) => {
-          let rowData = prdList.getRow(e.rowKey);
-          let prdtId = rowData.prdtId;
-          $.ajax({
-            url: "productDetail",
-            data: { prdtId: prdtId },
-            success: function (result) {
-              $("#prdtIdDetail").val(prdtId);
-              $("#prdtNmDetail").val(result.product.prdtNm);
-              $("#prdtPrcDetail").val(result.product.prdtPrc);
-              $("#summernoteDetail").summernote(
-                "code",
-                result.product.prdtDesct
-              );
-              $(
-                "#detailModal input[type='radio'][value='" +
-                  result.product.lcatId +
-                  "']"
-              ).prop("checked", true);
-              $(
-                "#detailModal input[type='radio'][value='" +
-                  result.product.saleSt +
-                  "']"
-              ).prop("checked", true);
-
-              let sCatList = $("#sCatListDetail");
-              sCatList.empty(); // 이전에 생성된 라디오박스들을 모두 제거
-
-              // 소분류 조회
-              $.each(result.sCatList, function (index, value) {
-                let radioBtn =
-                  '<div class="form-check form-check-inline">' +
-                  '<input class="form-check-input" type="radio" name="sCatId" value="' +
-                  value.scatId +
-                  '" id="' +
-                  value.scatId +
-                  '">' +
-                  '<label class="form-check-label" for="' +
-                  value.scatId +
-                  '">' +
-                  value.scatNm +
-                  "</label>" +
-                  "</div>";
-                sCatList.append(radioBtn);
-              });
-              $(
-                "#detailModal input[type='radio'][value='" +
-                  result.product.scatId +
-                  "']"
-              ).prop("checked", true);
-
-              $("#optionDetail").empty();
-
-              // 옵션 조회
-              $.each(result.optionList, function (index, value) {
-                // 새로운 row 생성
-                let newRow = $("<div>").addClass("row mb-4");
-
-                // 옵션 이름 입력 폼 생성
-                let label1 = $("<label>")
-                  .addClass("col-sm-2 col-form-label fw-bolder text-center")
-                  .text("옵션 이름");
-                let input1 = $("<input>")
-                  .addClass("form-control")
-                  .val(value.optNm);
-                let div1 = $("<div>").addClass("col-sm-4").append(input1);
-                //옵션이름 div
-                let newRow1 = $("<div>")
-                  .addClass("row mb-4")
-                  .append(label1, div1);
-
-                // 옵션 값 및 추가 가격 입력 폼 생성
-                $.each(result.optionDetailList, function (index, item) {
-                  if (value.optId == item.optId) {
-                    // 옵션 값 입력 폼 생성
-                    let label2 = $("<label>")
-                      .addClass("col-sm-2 col-form-label fw-bolder text-center")
-                      .text("옵션 값");
-                    let input2 = $("<input>")
-                      .addClass("form-control")
-                      .val(item.optDetaNm);
-                    let div2 = $("<div>").addClass("col-sm-4").append(input2);
-
-                    // 추가 가격 입력 폼 생성
-                    let label3 = $("<label>")
-                      .addClass("col-sm-2 col-form-label fw-bolder text-center")
-                      .text("추가 가격");
-                    let input3 = $("<input>")
-                      .addClass("form-control")
-                      .val(item.addPrc);
-                    let div3 = $("<div>").addClass("col-sm-4").append(input3);
-
-                    let newRow2 = $("<div>")
-                      .addClass("row mb-4")
-                      .append(label2, div2, label3, div3);
-
-                    // row에 폼 추가
-                    newRow.append(newRow1, newRow2);
-                  }
-                });
-
-                // 옵션 이름 입력 폼 추가
-                newRow.prepend(newRow1);
-
-                // optionDetail에 row 추가
-                $("#optionDetail").append(newRow);
-              });
-
-              // 이미지 목록 초기화
-              $("#imgDetail").empty();
-              $("#imgMainDetail").attr("src", "");
-
-              result.imgList.forEach(function (item, idx) {
-                let imgSrc = "download/" + item.prdtImg;
-                if (item.isMain === "Y") {
-                  $("#imgMainDetail").attr("src", imgSrc).css("width", "300px");
-                } else {
-                  let imgElem = $("<img>").attr("src", imgSrc).css({
-                    width: "300px",
-                    "margin-right": "10px",
-                  });
-                  $("#imgDetail").append(imgElem);
-                  $("#imgDetail").append("<p>");
-                }
-              });
-
-              // $("#test").html(result.prdtDesct);
-            },
-            error: function (reject) {
-              console.log(reject);
-            },
-          });
-
-          $("#detailModal").modal("show");
         });
 
         // 날짜 변환
