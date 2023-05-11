@@ -14,4 +14,5 @@ public interface MemberMapper {
 	public List<MemberVO> searchList(MemberVO memberVO);
 	
 	
+	
 }

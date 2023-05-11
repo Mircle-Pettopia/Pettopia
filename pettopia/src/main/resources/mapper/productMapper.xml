@@ -16,7 +16,7 @@
   WHERE ROWNUM &lt;= 4
 </select>
 
-
+<!-- 전체 목록 조회 -->
 <select id="selectPrdAllList2" resultType="Product1VO">
   SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
   FROM (
@@ -26,6 +26,7 @@
   )
 </select>
 
+<!--  카테고리 항목  -->
 <select id="selectCategoryList" resultType="Product1VO">
   SELECT s_cat_id, l_cat_id, s_cat_nm, s_cat_st
   FROM (
@@ -34,7 +35,7 @@
    ORDER BY s_cat_id
    )
   </select>
-  
+  <!-- 제품 상세조회 메인이미지 여부가 y인 항목들을 가져옴-->
   <select id="selectProductDetail" resultType="Product1VO">
  <!--  SELECT P.prdt_id, P.prdt_nm, P.prdt_prc, P.sale_st, P.reg_dt, P.mod_dt, P.prdt_desct,
        pi.prdt_img, pi.is_main,
@@ -56,4 +57,26 @@ WHERE P.PRDT_ID = #{prdtId}
 AND pi.is_main = 'Y'
 
   </select>
+ <select id="selectOption" resultType="Product1VO">
+ SELECT 	opt_id,
+				prdt_id,
+				opt_nm
+		FROM	product_option
+		WHERE	prdt_id = #{prdtId}
+		ORDER BY opt_id
+ </select>
+ 
+ <!-- 옵션 디테일 조회 -->
+	<select id="selectOptionDetail" resultType="Product1VO">
+		SELECT	opt_deta_id,
+				opt_deta_nm,
+				add_prc,
+				opt_id
+		FROM	product_option_detail
+		WHERE opt_id IN (SELECT opt_id
+	                        FROM product_option
+	                        WHERE prdt_id = #{prdtId})
+	    ORDER BY opt_deta_id
+	</select>
+  
   </mapper>

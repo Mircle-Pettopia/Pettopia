@@ -38,4 +38,10 @@ public class Product1VO {
 	//카테고리 항목
 	private String sCatNm; //대분류이름
 	private String sCatSt; //사용여부
+	
+	//이미지
+	private String imgId; //이미지 id
+	private String prdtImg; //상품 이미지
+	private String isMain; //대표이미지 여부 y or n 으로 구분
+	
 }
