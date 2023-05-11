@@ -32,20 +32,28 @@ public class ProductCategoryController {
 	@Autowired
 	ProductService productService1;
 	
+	
+	//카테고리 항목
 	@GetMapping("ProductCategory")
 	public String ProductCategory(Model model){
 		model.addAttribute("index", productService.selectPrdAllList2());
-		System.out.println("출력" +productService.selectCategoryList());
 		model.addAttribute("categories", productService.selectCategoryList()); 
 		return"product/ProductCategory";
 	}
+	
+	//제품 상세조회
 	@GetMapping("ProductDetail")
 	public String ProductDetail(Product1VO product1VO, Model model, @RequestParam final String prdtId) {
-		System.out.println("출력 여기" + productService.selectProductDetail(product1VO));
+
 		model.addAttribute("ProductDetail", productService.selectProductDetail(product1VO));
+		System.out.println("옵션출력" + productService.selectOption(prdtId) );
+		model.addAttribute("OptionList", productService.selectOption(prdtId));
+		System.out.println("옵션디테일" + productService.selectOptionDetail(prdtId));
+		model.addAttribute("optionDetailList", productService.selectOptionDetail(prdtId));
 		return "product/ProductDetail";
 	}
 	
+
 	/*
 	 * @GetMapping("productDetail1")
 	 * 

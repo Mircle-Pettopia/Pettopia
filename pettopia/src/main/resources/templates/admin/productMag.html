@@ -1132,6 +1132,7 @@
             url: "productDetail",
             data: { prdtId: prdtId },
             success: function (result) {
+            	console.log(result)
               $("#prdtIdDetail").val(prdtId);
               $("#prdtNmDetail").val(result.product.prdtNm);
               $("#prdtPrcDetail").val(result.product.prdtPrc);

@@ -383,7 +383,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-6 col-lg-5 p-b-30">
+				<!-- <div class="col-md-6 col-lg-5 p-b-30">
 					<div class="p-r-50 p-t-5 p-lr-0-lg">
 						<h4 class="mtext-105 cl2 js-name-detail p-b-14" id="prdtNm">
 							[[${ProductDetail.prdtNm}]]
@@ -397,46 +397,24 @@
 							<p th:utext="${ProductDetail.prdtDesct}" />
 						</p>
 
-						<!--  -->
+						
 						<div class="p-t-33">
-							<div class="flex-w flex-r-m p-b-10">
-								<div class="size-203 flex-c-m respon6">
-									Size
+							<div class="flex-w flex-r-m p-b-10" th:each="option: ${OptionList}" th:data="${option.optId}">
+								<div class="size-203 flex-c-m respon6" >
+									<span th:text="${option.optNm}"></span>
 								</div>
 
 								<div class="size-204 respon6-next">
 									<div class="rs1-select2 bor8 bg0">
 										<select class="js-select2" name="time">
 											<option>Choose an option</option>
-											<option>Size S</option>
-											<option>Size M</option>
-											<option>Size L</option>
-											<option>Size XL</option>
+											<option th:each="optionDetail: ${optionDetailList}" th:data="${optionDetail.optId}"th:text="${optionDetail.optDetaNm} +' '+ '(' +${optionDetail.addPrc}+원+')'" th:if="${optionDetail.optId == option.optId}"></option>
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
 								</div>
 							</div>
-
-							<div class="flex-w flex-r-m p-b-10">
-								<div class="size-203 flex-c-m respon6">
-									Color
-								</div>
-
-								<div class="size-204 respon6-next">
-									<div class="rs1-select2 bor8 bg0">
-										<select class="js-select2" name="time">
-											<option>Choose an option</option>
-											<option>Red</option>
-											<option>Blue</option>
-											<option>White</option>
-											<option>Grey</option>
-										</select>
-										<div class="dropDownSelect2"></div>
-									</div>
-								</div>
-							</div>
-
+							
 							<div class="flex-w flex-r-m p-b-10">
 								<div class="size-204 flex-w flex-m respon6-next">
 									<div class="wrap-num-product flex-w m-r-20 m-tb-10">
@@ -465,9 +443,59 @@
 							</div>
 						</div>
 
-						<!--  -->
+						
 					</div>
-				</div>
+				</div> -->
+<div class="col-md-6 col-lg-5 p-b-30">
+  <div class="p-r-50 p-t-5 p-lr-0-lg">
+    <h4 class="mtext-105 cl2 js-name-detail p-b-14" id="prdtNm">
+      [[${ProductDetail.prdtNm}]]
+    </h4>
+    <span class="mtext-106 cl2" id="prdtPrc">
+      [[${ProductDetail.prdtPrc}]]원
+    </span>
+    <p class="stext-102 cl3 p-t-23" id="prdtDesct">
+      <p th:utext="${ProductDetail.prdtDesct}" />
+    </p>
+    <div class="p-t-33">
+      <div class="flex-w flex-r-m p-b-10" th:each="option: ${OptionList}" th:data="${option.optId}">
+        <div class="size-203 flex-c-m respon6">
+          <span th:text="${option.optNm}"></span>
+        </div>
+        <div class="size-204 respon6-next">
+          <div class="rs1-select2 bor8 bg0">
+            <select class="js-select2" name="time" onchange="updatePrice()">
+              <option>Choose an option</option>
+              <option th:each="optionDetail: ${optionDetailList}" th:data-add-prc="${optionDetail.addPrc}" th:data="${optionDetail.optId}" th:text="${optionDetail.optDetaNm} +' '+ '('+'+' +${optionDetail.addPrc}+원+')'" th:if="${optionDetail.optId == option.optId}"></option>
+            </select>
+            <div class="dropDownSelect2"></div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-w flex-r-m p-b-10">
+        <div class="size-204 flex-w flex-m respon6-next">
+          <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+              <i class="fs-16 zmdi zmdi-minus"></i>
+            </div>
+            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1" onchange="updatePrice()">
+            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+              <i class="fs-16 zmdi zmdi-plus"></i>
+            </div>
+          </div>
+          <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+            Add to cart
+          </button>
+        </div>
+        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+          <i class="zmdi zmdi-favorite" style="font-size:45px;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 			</div>
 
 			<div class="bor10 m-t-50 p-t-43 p-b-40">
@@ -1047,8 +1075,7 @@
 			</div>
 		</div>
 	</div>
-
-
+	
 
 	<!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -1149,10 +1176,84 @@
 			})
 		});
 	</script>
-	
+	<script>
+	// Get the necessary elements
+	//옵션 값 추가하기
+	// Get the necessary elements
+var priceElement = document.getElementById('prdtPrc');
+var quantityInput = document.querySelector('input[name="num-product"]');
+var initialPrice = parseFloat(priceElement.innerText.replace(/[^0-9]+/g, ''));
+
+// Function to update the price based on quantity and selected option
+function updatePrice1() {
+  // Get the current quantity value
+  var quantity = parseInt(quantityInput.value);
+
+  // Get the selected option value
+  var selectedOption = document.querySelector('select.js-select2 option:checked');
+
+  // Calculate the additional price based on the selected option
+  var additionalPrice = 0;
+  if (selectedOption) {
+    additionalPrice = parseFloat(selectedOption.dataset.addPrc);
+    if (isNaN(additionalPrice)) {
+      additionalPrice = 0; // Set default additional price to 0 if NaN
+    }
+  }
+
+  // Calculate the new price
+  var newPrice = (initialPrice + additionalPrice) * quantity;
+
+  // Update the price element with the new price
+  priceElement.innerText = newPrice + ' 원';
+}
+
+// Add event listener to the quantity input
+quantityInput.addEventListener('input', updatePrice);
+
+// Add event listener to the option select
+document.querySelector('.js-select2').addEventListener('change', updatePrice);
+
+	</script>
+	<script>
+	//수량변경 시 가격 변동
+	// Get the necessary elements
+	var priceElement = document.getElementById('prdtPrc');
+	var quantityInput = document.querySelector('input[name="num-product"]');
+	var initialPrice = parseFloat(priceElement.innerText.replace(/[^0-9]+/g, ''));
+
+	function updatePrice() {
+		  // Get the current quantity value after a slight delay
+		  setTimeout(function() {
+		    var quantity = parseInt(quantityInput.value);
+
+		    // Check if the quantity value is valid
+		    if (isNaN(quantity) || quantity <= 0) {
+		      // Set the new price to 0 won
+		      priceElement.innerText = '0 원';
+		    } else {
+		      // Calculate the new price
+		      var newPrice = initialPrice * quantity;
+
+		      // Update the price element with the new price
+		      priceElement.innerText = newPrice + ' 원';
+		    }
+		  }, 10); // Delay of 10 milliseconds (adjust as needed)
+		}
+
+	// 플러스 버튼 클릭 시
+	document.querySelector('.btn-num-product-up').addEventListener('click', updatePrice);
+
+	// 마이너스 버튼 클릭 시 
+	document.querySelector('.btn-num-product-down').addEventListener('click', updatePrice);
+	//
+	// 수량 직접입력
+	quantityInput.addEventListener('input', updatePrice);
+
+</script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
-
+	
 </body>
 
 </html>

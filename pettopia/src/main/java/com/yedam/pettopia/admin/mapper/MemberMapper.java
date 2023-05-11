@@ -16,4 +16,5 @@ public interface MemberMapper {
 	// 회원 수정
 	public void updateMember(MemberVO memberVO);
 	
+	
 }
