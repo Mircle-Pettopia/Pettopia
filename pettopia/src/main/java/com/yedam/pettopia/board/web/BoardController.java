@@ -4,8 +4,7 @@ package com.yedam.pettopia.board.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,10 +56,9 @@ public class BoardController {
 	
 	@GetMapping("knowhowList")
 	@ResponseBody
-	public List<BoardVO> knowhowList(int page,String keyword) {
-		if(page==0) {
-		page=1;
-		}
+	public List<BoardVO> knowhowList(@RequestParam(defaultValue = "1", required = false) int page,
+			                         String keyword) {
+		
 		return boardService.knowHowList(page,keyword);
 	}
 	
@@ -88,6 +86,7 @@ public class BoardController {
 		return "board/knowHowArticle";	
 	}
 	
+	//글 수정페이지 열기
 	@GetMapping("modKnowHow")
 	public String modKnowHow(Model model,@RequestParam("boNo") int boNo) {
 		model.addAttribute("Article",boardService.showKnowHow(boNo));
@@ -109,8 +108,8 @@ public class BoardController {
 	
 	@GetMapping("getUser")
 	@ResponseBody
-	public String getUser(@AuthenticationPrincipal PrincipalDetails principalDetails,Authentication authentication) {
-		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+	public String getUser(@AuthenticationPrincipal PrincipalDetails principal) {
+		
 		return principal.getUser().getMeId();
 	}
 	
@@ -125,7 +124,7 @@ public class BoardController {
 	public int delKnowHow(int boNo,String Uid) {
 		return boardService.delKnowHow(boNo, Uid);
 	}
-	
+	//글수정 업데이트
 	@PostMapping("updateKnowHow")
 	@ResponseBody
 	public int updateKnowHow(BoardVO vo) {
