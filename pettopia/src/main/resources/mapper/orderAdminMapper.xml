@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.pettopia.admin.mapper.OrderMapper">
+	<!-- 주문 전체 조회 -->
 	<select id="orderAllList" resultType="OrderVO">
 		SELECT 	o.ordr_id,
 				o.me_id,
@@ -25,9 +26,155 @@
 		ORDER BY o.ordr_id
 	</select>
 	
+	<!-- 결제상태 변경 -->
 	<update id="updatePrcSt" parameterType="OrderVO">
 		UPDATE 	order_header
 		SET		prc_st = #{prcSt}
 		WHERE	ordr_id = #{ordrId}
 	</update>
+	
+	<!-- 배송상태 변경 -->
+	<update id="updateShipSt" parameterType="OrderVO">
+		UPDATE 	order_header
+		SET		ship_st = #{shipSt}
+		WHERE	ordr_id = #{ordrId}
+	</update>
+	
+	<!-- 운송장 등록 -->
+	<update id="updateInvo" parameterType="OrderVO">
+		UPDATE 	order_header
+		SET		invo = #{invo},
+				ship_st = 'SS2'
+		WHERE	ordr_id = #{ordrId}
+	</update>
+	
+	<!-- 결제 대기 카운트 -->
+	<select id="prcStCnt1" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_header
+		WHERE prc_st = 'PS1'
+	</select>
+	
+	<!-- 결제 완료 카운트 -->
+	<select id="prcStCnt2" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_header
+		WHERE prc_st = 'PS2'
+	</select>
+	
+	<!-- 결제 취소 카운트 -->
+	<select id="prcStCnt3" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_header
+		WHERE prc_st = 'PS3'
+	</select>
+	
+	<!-- 주문 상품 조회 -->
+	<select id="orderPrdList" resultType="OrderVO">
+		SELECT	od.ordt_id,
+				od.ordr_id,
+				od.prdt_id,
+				od.cnt,
+				od.prc,
+				p.prdt_nm
+		FROM	order_detail od JOIN product p
+		ON		od.prdt_id = p.prdt_id
+		ORDER BY od.ordt_id
+	</select>
+	
+	<!-- 검색 조회 -->
+	<select id="searchList" resultType="OrderVO">
+		SELECT 	o.ordr_id,
+				o.me_id,
+				o.ordr_date,
+				o.rcv_psn,
+				o.rcv_phone,
+				o.rcv_addr,
+				o.tt_prc,
+				o.mthd,
+				o.invo,
+				o.ship_prc,
+				o.prc_st,
+				o.ship_st,
+				o.point,
+				o.note,
+				m.name
+		FROM	order_header o JOIN member m
+		ON		o.me_id = m.me_id
+		<where>
+			<if test="name != null and !name.equals('')">
+				AND m.name LIKE '%' || #{name} || '%'
+			</if>
+			<if test="mthd != null and !mthd.equals('')">
+				AND o.mthd LIKE '%' || #{mthd} || '%'
+			</if>
+			<if test="ordrDate != null and !ordrDate.equals('')">
+				AND <![CDATA[o.ordr_date >= #{ordrDate}]]> and <![CDATA[TRUNC(o.ordr_date) <= #{endDate}]]>
+			</if>
+			<if test="prcStSearch != null and prcStSearch.length > 0">
+    			AND o.prc_st IN
+    			<foreach collection="prcStSearch" item="item" open="(" separator="," close=")">
+        			#{item}
+    			</foreach>
+			</if>
+			<if test="shipStSearch != null and shipStSearch.length > 0">
+    			AND o.ship_st IN
+    			<foreach collection="shipStSearch" item="item" open="(" separator="," close=")">
+        			#{item}
+    			</foreach>
+			</if>
+		</where>
+		ORDER BY o.ordr_id
+	</select>
+	<!-- 검색 상품 -->
+	<select id="searchPrdList" resultType="OrderVO">
+		SELECT 	o.ordr_id,
+				o.me_id,
+				o.ordr_date,
+				o.rcv_psn,
+				o.rcv_phone,
+				o.rcv_addr,
+				o.tt_prc,
+				o.mthd,
+				o.invo,
+				o.ship_prc,
+				o.prc_st,
+				o.ship_st,
+				o.point,
+				o.note,
+				m.name,
+				p.prdt_nm
+		FROM	order_header o 
+		JOIN 	member m
+		ON		o.me_id = m.me_id
+		JOIN    order_detail od
+		ON      o.ordr_id = od.ordr_id
+		JOIN	product p
+		ON		od.prdt_id = p.prdt_id 
+		<where>
+			<if test="name != null and !name.equals('')">
+				AND m.name LIKE '%' || #{name} || '%'
+			</if>
+			<if test="mthd != null and !mthd.equals('')">
+				AND o.mthd LIKE '%' || #{mthd} || '%'
+			</if>
+			<if test="ordrDate != null and !ordrDate.equals('')">
+				AND <![CDATA[o.ordr_date >= #{ordrDate}]]> and <![CDATA[TRUNC(o.ordr_date) <= #{endDate}]]>
+			</if>
+			<if test="prcStSearch != null and prcStSearch.length > 0">
+    			AND o.prc_st IN
+    			<foreach collection="prcStSearch" item="item" open="(" separator="," close=")">
+        			#{item}
+    			</foreach>
+			</if>
+			<if test="shipStSearch != null and shipStSearch.length > 0">
+    			AND o.ship_st IN
+    			<foreach collection="shipStSearch" item="item" open="(" separator="," close=")">
+        			#{item}
+    			</foreach>
+			</if>
+		</where>
+		ORDER BY o.ordr_id
+	</select>
+	
 </mapper>
