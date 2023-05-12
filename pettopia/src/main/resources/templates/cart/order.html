@@ -59,6 +59,11 @@
         font-weight: bold;
         font-size: 14px;
       }
+
+      .btncustom {
+        margin: 0px 1px 10px 1px;
+        width: 33%;
+      }
     </style>
 
     <div class="container">
@@ -91,15 +96,15 @@
                 </tr>
                 <tr>
                   <th>받으시는분</th>
-                  <td><input type="text"></td>
+                  <td><input type="text" id="reciever"></td>
                 </tr>
                 <tr>
                   <th>연락처</th>
-                  <td><input type="text"></td>
+                  <td><input type="text" id="tel"></td>
                 </tr>
                 <tr>
                   <th>배송요청사항</th>
-                  <td><input type="text"></td>
+                  <td><input type="text" id="note"></td>
                 </tr>
               </table>
             </div><!--end 주문정보-->
@@ -185,7 +190,24 @@
               </div>
               </h3>
               <hr>
-              <button class="btn-primary btn-lg btn-block" onclick="requestPay();">결제하기!</button>
+              <h4>결제방식:<span id="payMethod"></span></h4>
+              <br>
+              <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+                <label class="btn btn-secondary btncustom active"
+                  onclick="changePayMethod('html5_inicis.INIBillTst','카드결제(Inicis)')">
+                  <input type="radio" name="payment" id="option1" autocomplete="off" checked> 카드
+                </label>
+                <label class="btn btn-warning btncustom" onclick="changePayMethod('kakaopay','카카오페이')">
+                  <input type="radio" name="payment" id="option2" autocomplete="off"> 카카오
+                </label>
+                <label class="btn btn-primary btncustom" onclick="changePayMethod('tosspay','토스페이')">
+                  <input type="radio" name="payment" id="option3" autocomplete="off"
+                    onclick="changePayMethod('tosspay','토스페이')"> 토스
+                </label>
+              </div>
+              <hr>
+              <button class="btn-success btn-lg btn-block" onclick="requestPay();">결제하기!</button>
+              <button class="btn-success btn-lg btn-block" onclick="insertOrder();">결제하기!(debug)</button>
             </div>
           </div>
 
@@ -197,7 +219,14 @@
     <script>
 
       var OrderNm = '펫토피아!'
-      getCart()
+      var CartObject = new Object();
+      var pay_method = 'html5_inicis.INIBillTst';
+      changePayMethod('html5_inicis.INIBillTst', '카드결제(Inicis)');
+      function changePayMethod(method, name) { //카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
+        pay_method = method;
+        payMethod.innerText = name;
+      }
+      getCart();
       function getCart() {
         let result = "";
         $.ajax({
@@ -206,7 +235,8 @@
           async: false,
           data: { meId: GetUser() },
           success: function (data) {
-            console.log(data);
+            CartObject = data;
+            console.log(CartObject);
             console.log('장바구니 목록 불러오기성공');
             drawOrderList(data);
           },
@@ -221,16 +251,15 @@
         let prodOverlapKey = '';
         OrderList.innerHTML = '';
         for (let i = 0; i < data.length; i++) {
-
           if (prodOverlapKey != data[i].crtId) {
-            OrderNm += data[i].prdtNm + ',';
+            OrderNm += data[i].prdtNm + '/';
             console.log("drawing row")
             prodOverlapKey = data[i].crtId;
             OrderList.innerHTML += `
               <tr>
                 <td>
                   <a href="#" class="fontColor"><img src="download/${data[i].prdtImg}" rel="product"></a>
-                </td>
+                </td>   
                 <td>
                   <strong><a href="#" class="fontColor">${data[i].prdtNm}</a></strong>
                   <div id="${data[i].crtId}Options">옵션</div>
@@ -344,26 +373,74 @@
       src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
     <script>
+      var response;
       var IMP = window.IMP; // 생략가능
       IMP.init("imp58116322");
       function requestPay() {
         IMP.request_pay({
-          pg: "kakaopay",//카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
+          pg: pay_method,//카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
           pay_method: "card",
           merchant_uid: "pettopia" + Date(),
           name: OrderNm,
+          buyer_name: reciever.value,
           amount: FinalPrice.innerText,
-          buyer_tel: "010-0000-0000",
+          currency: "KRW",
+          buyer_tel: tel.value,
+          buyer_addr: addr.value + addrref.value + addrDtl,
+          buyer_postcode: post.value
         }, function (rsp) { // callback
           //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
           if (rsp.success) {
-            alert("결제에 성공하였습니다")
+            response = rsp;
+            console.log(rsp);
+            insertOrder();
+            alert("결제에 성공하였습니다");
           }
           else {
             alert("결제에 실패하였습니다 다시시도해주십시오")
           }
         });
       };
+
+
+      function insertOrder() {
+
+        $.ajax({
+          url: "insertOrder",
+          method: "Post",
+          async: false,
+          dataType: "json",
+          contentType: 'application/json',
+          data: JSON.stringify({ 'cartData': JSON.stringify(CartObject), 'userData': JSON.stringify(collectBuyerInfo()) }),
+          success: function (data) {
+            alert('주문번호' + data + '성공!')
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        })
+        return result;
+      }
+
+      function collectBuyerInfo() {
+        result = {
+          meId: GetUser(),
+          imp: response.imp_uid,
+          rcvPsn: reciever.value,
+          rcvPhone: tel.value,
+          rcvAddr: addr.value + addrref.value + addrDtl.value,
+          ttPrc: FinalPrice.innerText,
+          mthd: payMethod.innerText,
+          shipPrc: shipPrice.innerText,
+          prcSt: 'PS2',
+          shipSt: 'SS1',
+          point: 0,
+          note: note.value
+        }
+        return result;
+      }
     </script>
     <!--결제============================= -->
 

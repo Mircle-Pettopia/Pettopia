@@ -15,20 +15,26 @@
 	<insert id="insertKnowhowArticle"
 		parameterType="BoardVO">
 		insert into knowhow_board
-		(BO_NO,TITLE,SUBJECT,ME_ID)
+					(BO_NO,
+					TITLE,
+					SUBJECT,
+					ME_ID)
 		values(
-		(select TO_NUMBER(NVL(MAX(BO_NO),0))+1 BO_NO from knowhow_board)
-		,#{title}
-		,#{subject}
-		,#{meId})
+					(select TO_NUMBER(NVL(MAX(BO_NO),0))+1 BO_NO from knowhow_board)
+					,#{title}
+					,#{subject}
+					,#{meId})
 	</insert>
 	
 	<select id="knowHowList" resultType="BoardVO">
-		select * from (	select rownum as rn,a.*
-				from (select bo_no,title,reg_dt,view_cnt,me_id 
-                from knowhow_board where title Like '%'||#{keyword}||'%' order by bo_no desc) a
-				)
-		where RN between (#{page}-1)*10 and #{page}*10
+select *  from ( select rownum as rn,a.*   from (
+
+				   select bo_no,title,reg_dt,view_cnt,me_id 
+                    from knowhow_board 
+                   where title Like '%'||#{keyword}||'%'
+                   order by bo_no desc
+                          
+) a	) where RN between (#{page}-1)*10 and #{page}*10
 	</select>
 	
 	<select id="showKnowHow" resultType="BoardVO">
@@ -37,12 +43,15 @@
 	
 	<select id="knowHowMaxPage" resultType="int">
 		select count(*)
-		from knowhow_board where title Like '%'||#{keyword}||'%'
+		from knowhow_board 
+		where title Like '%'||#{keyword}||'%'
 	</select>
 	
 	<select id="getknowHowReply" resultType="BoardVO">
 		select * from reply 
-		where DIVISION = 'DR2' and BO_NO=#{boNo} and RE IS NULL
+		where DIVISION = 'DR2' 
+		  and BO_NO=#{boNo} 
+		  and RE IS NULL
 		ORDER BY comment_id desc
 	</select>
 	
