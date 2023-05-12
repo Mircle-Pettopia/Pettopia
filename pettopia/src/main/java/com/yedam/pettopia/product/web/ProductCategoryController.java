@@ -35,7 +35,30 @@ public class ProductCategoryController {
 	
 	//카테고리 항목
 	@GetMapping("ProductCategory")
-	public String ProductCategory(Model model){
+	public String ProductCategory(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
+			Authentication authentication){
+		String result = "";
+		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		//System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
+		
+		//익명사용자도 페이지 접근이 가능하도록 진행하기
+		//참고 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
+		if(context != "anonymousUser") {
+			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+			if(principal.getUser().getSignPath() == "company") {
+				result += principal;
+	            model.addAttribute("id", principal.getUser().getMeId());
+	            model.addAttribute("name", principal.getUser().getName());
+	            
+	            System.out.println(model);
+	        } else{
+	        	result += principal;
+	            model.addAttribute("id", principal.getUser().getMeId());
+	            model.addAttribute("name", principal.getUser().getName());
+	            model.addAttribute("token", principal.getUser().getMeSnsToken());
+	        };
+		};
 		model.addAttribute("index", productService.selectPrdAllList2());
 		model.addAttribute("categories", productService.selectCategoryList()); 
 		return"product/ProductCategory";
@@ -43,7 +66,30 @@ public class ProductCategoryController {
 	
 	//제품 상세조회
 	@GetMapping("ProductDetail")
-	public String ProductDetail(Product1VO product1VO, Model model, @RequestParam final String prdtId) {
+	public String ProductDetail(Product1VO product1VO, Model model, @RequestParam final String prdtId, @AuthenticationPrincipal PrincipalDetails principalDetails,
+			Authentication authentication) {
+		String result = "";
+		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		//System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
+		
+		//익명사용자도 페이지 접근이 가능하도록 진행하기
+		//참고 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
+		if(context != "anonymousUser") {
+			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+			if(principal.getUser().getSignPath() == "company") {
+				result += principal;
+	            model.addAttribute("id", principal.getUser().getMeId());
+	            model.addAttribute("name", principal.getUser().getName());
+	            
+	            System.out.println(model);
+	        } else{
+	        	result += principal;
+	            model.addAttribute("id", principal.getUser().getMeId());
+	            model.addAttribute("name", principal.getUser().getName());
+	            model.addAttribute("token", principal.getUser().getMeSnsToken());
+	        };
+		};
 
 		model.addAttribute("ProductDetail", productService.selectProductDetail(product1VO));
 		System.out.println("옵션출력" + productService.selectOption(prdtId) );
