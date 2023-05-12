@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.yedam.pettopia.review.mapper.ReviewMapper">
+ 
+	<select id="selectReviewList" resultType="ReviewVO">
+		SELECT p.PRDT_NM,
+		i.PRDT_IMG,
+		d.ordt_id,
+		h.ORDR_DATE
+		FROM product p, PRODUCT_IMG i, ORDER_DETAIL d, ORDER_HEADER h
+		WHERE ship_st = 'SS1'
+		AND me_id = 'tt@aaa.com'
+	</select>
+ 
+ 
+ 
+ 
+ </mapper>

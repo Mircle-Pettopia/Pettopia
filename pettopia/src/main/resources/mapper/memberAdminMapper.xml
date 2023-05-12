@@ -14,11 +14,21 @@
 		ADDR_DETAIL,
 		SIGN_DT,
 		UPDATE_DT,
-		SIGN_PATH,
+		get_common(SIGN_PATH) as signPath,
 		OUT_YN,
 		ROLE
 		FROM member
 		ORDER BY me_id
+	</select>
+
+
+	<!-- 가입 경로 조회 -->
+	<select id="selectPath" resultType="MemberVO">
+		SELECT 	cod_cd,
+				cod_title
+		FROM 	code c JOIN code_detail cd
+		ON 		c.co_cd = cd.co_cd
+		WHERE 	c.co_cd = 'SC'
 	</select>
 
 
@@ -32,7 +42,7 @@
 		ADDR_DETAIL,
 		SIGN_DT,
 		UPDATE_DT,
-		SIGN_PATH,
+		get_common(SIGN_PATH) as signPath,
 		OUT_YN,
 		ROLE
 		FROM member
@@ -49,9 +59,9 @@
 			<if test="end != null and !end.equals('')">
 				AND <![CDATA[sign_dt <= #{end}]]>
 			</if>
-			<if test="signPath != null and signPath.length > 0">
+		<if test="searchPath != null and searchPath.length > 0">
 				AND SIGN_PATH IN
-				<foreach collection="signPath" item="item" open="("
+				<foreach collection="searchPath" item="item" open="("
 					separator="," close=")">
 					#{item}
 				</foreach>

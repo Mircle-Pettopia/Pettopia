@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+    <title>Pettopia</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content">
+<style>
+#backColor{
+	margin-top: 30px;
+	background: rgb(248, 245, 250);
+	padding: 10px 0px 10px 0px !important;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+th, td {
+text-align: center;
+}
+
+#btnCss{
+/*float: right;*/
+position: relative;
+bottom: 10px;
+margin-top: 25px;
+}
+
+.filter{
+margin-top: 25px;
+}
+
+.filter li {
+display: inline-block;
+padding-top: 10px;
+border: 1px solid rgb(235, 235, 235);
+border-radius: 10px;
+background-color: white;
+padding: 8px 22px 5px 22px;
+} 
+
+tbody img{
+width: 100px;
+}
+
+td, tr, th{
+	vertical-align: middle !important;
+}
+</style>
+
+    <div class="container">
+			<div class="row">
+                <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+
+                <!-- 마이페이지 주문관리 -->
+				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
+					<div class="p-r-45 p-r-0-lg m-t-50">
+						<h1>
+							<span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>작성 가능한 리뷰
+						</h1>
+								<br><br>
+							<div >
+								<table class="table" id="tableList">
+									<colgroup>
+										<col width="10%">
+										<col width="10%">
+										<col width="10%">
+										<col width="10%">
+									</colgroup>
+									<thead style="text-align: center;" id="draw">
+										<tr>
+											<th scope="col">
+												주문일자 <br/>
+												주문번호
+											</th>
+											<th scope="col">이미지</th>
+											<th scope="col">상품이름</th>
+											<th scope="col">후기등록버튼</th>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+									
+								</table>
+							</div>
+
+
+
+				<div th:each=" review : ${reviewList}">
+								<!--  <div class="num" th:text="${review.reNo }"></div>-->
+								<div class="title">
+									[[${review.prdtImg }]]
+								</div>
+								<div class="date">[[${review.prdtNm }]]</div>
+								<div class="count">[[${review.ordtId }]]</div>
+								<div class="count2">[[${review.ordrDate }]]</div>
+							</div>
+
+							<div sec:authorize="hasAuthority('ROLE_ADMIN')">
+								<a href="noticeInsertForm">
+								<button type="button" class="btn btnPush btnBlueGreen" style="float: right; font-size: 13px;">등록</button></a>
+							</div>
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	</body>
+</html>
+</html>

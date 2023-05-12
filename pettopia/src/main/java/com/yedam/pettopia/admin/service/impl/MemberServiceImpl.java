@@ -10,8 +10,6 @@ import com.yedam.pettopia.admin.mapper.MemberMapper;
 import com.yedam.pettopia.admin.service.MemberService;
 
 
-
-
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -22,12 +20,19 @@ public class MemberServiceImpl implements MemberService {
 	public List<MemberVO> selectMemberList() {
 		return memberMapper.selectMemberList();
 	}
-
+	
+	@Override
+	public List<MemberVO> selectPath() {
+		return memberMapper.selectPath();
+	}
+	
 	@Override
 	public List<MemberVO> searchList(MemberVO memberVO) {
 		return memberMapper.searchList(memberVO);
 		
 	}
+
+
 
 
 
