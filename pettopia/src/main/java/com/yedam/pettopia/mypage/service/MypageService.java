@@ -6,11 +6,11 @@ import com.yedam.pettopia.mypage.MypageVO;
 
 public interface MypageService {
 	public MypageVO getOrder(String meId);
-	public List<MypageVO> getOrderList(String meId, String start, String end,
-			String shipSt, String prcSt);
+	public MypageVO getOrdrList(String ordrId);
 	public List<MypageVO> getPrcCount(String meId);
 	public List<MypageVO> getShipCount(String meId);
-	
+	public List<MypageVO> getOrderList(MypageVO vo);
+	public MypageVO ordtIdOptionInfo(String ordtId);
 	
 	
 	

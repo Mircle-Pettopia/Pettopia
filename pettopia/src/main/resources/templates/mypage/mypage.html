@@ -49,7 +49,7 @@ td, tr, th{
 	vertical-align: middle !important;
 }
 
-#clickLi{
+#clickLi, .status-link a{
 	cursor: pointer;
 }
 </style>
@@ -58,7 +58,7 @@ td, tr, th{
 			<div class="row">
                 <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
 
-                <!-- 마이페이지 주문관리 -->
+				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
 					<div class="p-r-45 p-r-0-lg m-t-50">
 						<h1>
@@ -73,19 +73,20 @@ td, tr, th{
 								<img src="images/icons/cargo-truck.png" alt="">
 								<img src="images/icons/checked.png" alt="">
 							</div>
-
 							<div class="status-text">
-								<span id="">결제여부</span>
-								<span id="a">배송전</span>
-								<span id="b">배송중</span>
-								<span id="c">배송완료</span>
+								<div >
+									<span id="" th:if="#{code.PS == '결제완료'}">결제완료</span>
+								</div>
+								<div th:each="slist : ${code.SS}">
+									<span class="test" th:text="${slist.codTitle}"></span>
+								</div>
 							</div>
 
 							<div class="status-link">
-								<a href="" class="fontColor" id=""></a>
-								<a href="" class="fontColor" id="a-1"></a>
-								<a href="" class="fontColor" id="b-1"></a>
-								<a href="" class="fontColor" id="c-1"></a>
+								<a class="fontColor" id="prcCnt" onclick="prcSearch('결제완료')">0</a>
+								<a class="fontColor" id="a-1" onclick="shipSearch('배송전')">0</a>
+								<a class="fontColor" id="b-1" onclick="shipSearch('배송중')">0</a>
+								<a class="fontColor" id="c-1" onclick="shipSearch('배송완료')">0</a>
 							</div>
 						</div>
 
@@ -185,18 +186,12 @@ td, tr, th{
 			</div>
 		</div>
 		<script th:inline="javascript">
-			window.onload=function(){
-				//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
-				//fn_cellMerge('orderList', [0,5,6,7]);
-			}
+			/*window.onload=function(){}*/
 			let prc = /*[[${getprcSt}]]*/
 			let shipList = /*[[${getShipSt}]]*/
 
+			//배송상태에 따른 개수 확인
 			shipList.map((data)=>{
-				console.log(data);
-				console.log(data.shipSt)
-				console.log(data.shipCount);
-
 				if(data.shipSt == '배송전'){
 					$('#a-1').text(data.shipCount);
 				} else if (data.shipSt == '배송중') {
@@ -206,6 +201,16 @@ td, tr, th{
 				}
 			});
 
+			//결제상태는 화면에 결제완료만 보이기 때문에 결제완료 외에는 처리하지 않는다.
+			prc.map((data) => {
+				console.log(data);
+				if(data.prcSt == '결제완료'){
+					$('#prcCnt').text(data.prcCount);
+				} else if(data.prcSt == '결제대기') {
+					//console.log("결제대기");
+				}
+			});
+			
 			/*<![CDATA[*/
 			let id = /*[[${id}]]*/
 			let ship = $('#shipSt').val();
@@ -216,19 +221,19 @@ td, tr, th{
 			let start_date_change;
 			let end_date_change;
 			
-			
 			//주문내역 ajax
 			const orderList = (start = undefined, end = undefined, shipSt = undefined, prcSt = undefined) => {
 				$.ajax({
 					url: "getOrder",
 					method: "GET",
 					data : {meId : id,
-						shipSt : ship,
-							prcSt : prcSt,
-							start : start,
-							end : end},
+								shipSt : ship,
+								prcSt : prcSt,
+								start : start,
+								end : end},
 					async: false,
 					success: function(data){
+						console.log(data);
 						drawOrderList(data);
 					},
 					error : function(rej) {
@@ -244,37 +249,72 @@ td, tr, th{
 					let date = dateChange(data[i].ordrDate);
 					let prc = AddComma(data[i].prc);
 					let total = AddComma(data[i].total);
-					key = data[i].ordrId;
-					
-					getOrderList.innerHTML += `
-					<tr id="${key}">
-								<td>
-									<p class="orderDate">${date}</p>
-									<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?ordrId=${key}">
-										<strong>${data[i].ordrId}</strong>
-									</a>
-									</td>
-									<td><a href="#" class="fontColor"><img src="${data[i].prdtImg}" alt="img"></a></td>
+
+					if(key != data[i].ordtId) {
+						key = data[i].ordtId;
+						//console.log(data[i].ordtId+"row 새로그림");
+						getOrderList.innerHTML += `
+								<tr id="${data[i].ordtId}">
 									<td>
-										<a href="#" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
-										<br/>
-										<p id="${key}Options"></p>
-										<p>${data[i].optDetaNm}</p>
+										<p class="orderDate">${date}</p>
+										<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?ordrId=${data[i].ordrId}">
+											<strong>${data[i].ordrId}</strong>
+										</a>
+										</td>
+										<td><a href="#" class="fontColor"><img src="${data[i].prdtImg}" alt="img"></a></td>
+										<td id=option>
+											<a href="#" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
+											<br/>
+											<sapn id="${data[i].ordtId}_option"></sapn>
 										</td>
 										<td>${data[i].cnt}</td>
 										<td><span>${prc}</span><span>원</span></td>
 										<td><span>${total}</span><span>원</span></td>
 										<td>${data[i].shipSt}</td>
 										<td>${data[i].prcSt}</td>
-							</tr>
-							`;
-							domId(key + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
-							if(data.length==0){
-								getOrderList.innerHTML += `<div>주문건이 없습니다.</div>`
-							};
-						};
-						fn_cellMerge('orderList', [0,5,6,7]);
+								</tr>
+								`;
 					};
+
+					let ordtId = data[i].ordtId;
+					//console.log(ordtDt);
+					$.ajax({
+						url: "option",
+						method: "GET",
+						data : {ordtId : ordtId},
+						//async: false,
+						success: function(data){
+							//console.log(data)
+							//drawOrderList(data);
+							if(data){
+								// ',' 기준으로 자르기
+								var beforeStr = data.optDetaNm;
+								var afterStr = beforeStr.split(',');
+								/*console.log(afterStr[0]);
+								console.log(afterStr[1]);*/
+								domId(ordtId + "_option").innerHTML += `옵션정보 : ${afterStr[0]} / ${afterStr[1]}`;
+							}
+						},
+						error : function(rej) {
+							console.log(rej);
+						}
+					})
+					//domId(data[i].ordtId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
+					//console.log((data[i].ordtId + "Options").innerText);
+
+					if(data.length == 0){
+						let tr = document.createElement('tr');
+						let td = document.createElement('td');
+						$(td).attr('colspan', '8');
+						
+						td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+						tr.appendChild(td);
+						document.querySelector('#getOrderList').appendChild(tr);
+					};
+				};
+				//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
+				fn_cellMerge('orderList', [0,5,6,7]);
+			};
 					
 					
 					
@@ -297,7 +337,7 @@ td, tr, th{
 			});
 			
 			$('#90').on('click',()=>{
-				console.log(threeMonth());
+				//console.log(threeMonth());
 				start_date_change = document.getElementById('start').value = threeMonth();
 				end_date_change = document.getElementById('end').value = dateChange(date);
 			})
@@ -312,9 +352,7 @@ td, tr, th{
 				let prcSt = $('#prcSt').val();
 				let start = $('#start').val();
 				let end = $('#end').val();
-				
-				console.log(ship);
-				console.log(prcSt);
+
 				$.ajax({
 					url: "getOrder",
 					method: "GET",
@@ -345,10 +383,90 @@ td, tr, th{
 					}
 				})
 			}
+
+			function shipSearch(code){
+				let id = /*[[${id}]]*/
+				let ship = code;
+				let prcSt = $('#prcSt').val();
+				let start = $('#start').val();
+				let end = $('#end').val();
+				
+				//console.log(ship);
+				//console.log(prcSt);
+				$.ajax({
+					url: "getOrder",
+					method: "GET",
+					data : {meId : id,
+							shipSt : ship,
+							prcSt : prcSt,
+							start : start,
+							end : end},
+					success: function(data){
+						if(data.length > 0){
+							$('#orderList > tbody').empty();	//table 초기화
+							fn_cellMerge('orderList', [0,5,6,7]);
+							drawOrderList(data);
+						} else {
+							$('#orderList > tbody').empty();	//table 초기화
+							let tr = document.createElement('tr');
+							let td = document.createElement('td');
+							$(td).attr('colspan', '8');
+							
+							td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+							tr.appendChild(td);
+							document.querySelector('#getOrderList').appendChild(tr);
+						}
+					},
+					error : function(rej) {
+						console.log(rej);
+					}
+				})
+			}
+
+			function prcSearch(code){
+				let id = /*[[${id}]]*/
+				let ship = $('#shipSt').val();
+				let prcSt = code;
+				let start = $('#start').val();
+				let end = $('#end').val();
+				
+				//console.log(ship);
+				//console.log(prcSt);
+				$.ajax({
+					url: "getOrder",
+					method: "GET",
+					data : {meId : id,
+							shipSt : ship,
+							prcSt : prcSt,
+							start : start,
+							end : end},
+					success: function(data){
+						console.log(data);
+						if(data.length > 0){
+							$('#orderList > tbody').empty();	//table 초기화
+							fn_cellMerge('orderList', [0,5,6,7]);
+							drawOrderList(data);
+						} else {
+							$('#orderList > tbody').empty();	//table 초기화
+							let tr = document.createElement('tr');
+							let td = document.createElement('td');
+							$(td).attr('colspan', '8');
+							
+							td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+							tr.appendChild(td);
+							document.querySelector('#getOrderList').appendChild(tr);
+						}
+					},
+					error : function(rej) {
+						console.log(rej);
+					}
+				})
+			}
+
 			//---------------------------------------
 			
 			function domId(id) { //id로 태그찾기 압축용
-				return document.getElementsByClassName(id);
+				return document.getElementById(id);
 			}
 			/*]]>*/
 			

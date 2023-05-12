@@ -49,6 +49,7 @@ public class MypageVO {
 	private int total;
 	private int prcCount;
 	private int shipCount;
+	private int page;
 	
 	
 	

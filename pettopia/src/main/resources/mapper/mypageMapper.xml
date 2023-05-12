@@ -6,25 +6,37 @@
 	<select id="getOrder" resultType="MypageVO">
 		SELECT * FROM order_header WHERE me_id = #{meId}
 	</select>
+	<select id="getOrdrList" resultType="MypageVO">
+		SELECT
+			TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date,
+			ordr_id,
+			me_id,
+			rcv_psn,
+			rcv_phone,
+			rcv_addr,
+			tt_prc,
+			mthd,
+			invo,
+			ship_prc,
+			get_common(prc_st) prc_st,
+			get_common(ship_st) ship_st,
+			point,
+			note
+		FROM order_header WHERE ordr_id = #{ordrId}
+	</select>
 	<!-- 주문일자, 주문번호, 이미지, 상품이름, 구매한 옵션명[1] + [2], 배송상태, 결제여부, 옵션명 -->
 	<!-- 상품 가격 + 옵션가격 -->
 	<select id="getOrderList" resultType="MypageVO">
-		SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, ordr.ordr_id, prdt_img, prdt_nm, opt_deta_nm,
-				get_common(ship_st) ship_st, get_common(prc_st) prc_st, opt_nm, ordt.prdt_id, odo.ordt_id, ship_prc, cnt,
-				NVL(cnt, 0) * NVL(prc, 0) "PRICE", prc, NVL(POINT, 0) + NVL(TT_PRC,0) "TOTAL", ordt.ordt_id
+		SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, ordr.ordr_id, prdt_img, prdt_nm, 
+						get_common(ship_st) ship_st, get_common(prc_st) prc_st, ordt.prdt_id, ship_prc, cnt,
+						NVL(cnt, 0) * NVL(prc, 0) "PRICE", prc, NVL(POINT, 0) + NVL(TT_PRC,0) "TOTAL", ordt.ordt_id
 		FROM order_header ordr
-			JOIN order_detail ordt
-				ON ordr.ordr_id = ordt.ordr_id
-					JOIN order_detali_option odo
-						ON ordt.ordt_id = odo.ordt_id
-							JOIN product_option_detail optd
-								ON odo.opt_deta_id = optd.opt_deta_id
-									JOIN product_option opt
-								ON optd.opt_id = opt.opt_id
-							JOIN product pr
-						ON ordt.prdt_id = pr.prdt_id
-					JOIN product_img img
-				ON pr.prdt_id = img.prdt_id
+			    JOIN order_detail ordt
+			        ON ordr.ordr_id = ordt.ordr_id
+			            JOIN product pr
+			                ON ordt.prdt_id = pr.prdt_id
+			            JOIN product_img img
+			        ON pr.prdt_id = img.prdt_id
 		 WHERE 1=1
 		 AND me_id = #{meId}
 		 AND is_main = 'Y'
@@ -38,6 +50,36 @@
 		 AND get_common(PRC_ST) = #{prcSt}
 		 </if>
 		 ORDER BY 1 DESC
+	</select>
+	
+	<select id="test" resultType="MypageVO">
+		SELECT * FROM ( SELECT ROWNUM AS rn, a.*
+	                FROM(
+	                        SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, ordr.ordr_id, prdt_img, prdt_nm, 
+	                            get_common(ship_st) ship_st, get_common(prc_st) prc_st, ordt.prdt_id, ship_prc, cnt,
+	                            NVL(cnt, 0) * NVL(prc, 0) "PRICE", prc, NVL(POINT, 0) + NVL(TT_PRC,0) "TOTAL", ordt.ordt_id
+	                        FROM order_header ordr
+	                            JOIN order_detail ordt
+	                                ON ordr.ordr_id = ordt.ordr_id
+	                                    JOIN product pr
+	                                        ON ordt.prdt_id = pr.prdt_id
+	                                    JOIN product_img img
+	                                ON pr.prdt_id = img.prdt_id
+	                         WHERE 1=1
+	                         AND me_id = 'tt@aaa.com'
+	                         AND is_main = 'Y'
+	                         <if test="start != null and !start.equals('') and end!= null and !end.equals('')">
+	                         AND TO_DATE(ordr_date, 'rrrr-MM-dd') BETWEEN #{start} AND #{end}
+	                         </if>
+	                         <if test="shipSt != null and !shipSt.equals('')">
+	                         AND get_common(SHIP_ST) = #{shipSt}
+	                         </if>
+	                         <if test="prcSt != null and !prcSt.equals('')">
+	                         AND get_common(PRC_ST) = #{prcSt}
+	                         </if>
+	                         ORDER BY 1 DESC) a
+	                    )
+		WHERE RN between (#{page}-1)*10 and #{page}*10
 	</select>
 
 	<!-- 결제여부 개수 -->
@@ -54,6 +96,21 @@
 		     FROM order_header
 			WHERE me_id = #{meId}
 	     GROUP BY get_common(ship_st)
+	</select>
+	
+	<!-- 옵션정보 가져오기, LISTAGG를 사용, 선아의 도움으로 진행함!-->
+	<select id="ordtIdOptionInfo" resultType="MypageVO">
+		SELECT
+	        DISTINCT odo.ordt_id,
+		    LISTAGG(pod.opt_deta_nm, ',')
+		    WITHIN GROUP (ORDER BY odo.ordt_id)
+		    OVER(PARTITION BY odo.ordt_id) opt_deta_nm
+		FROM
+		    ORDER_DETAIL_OPTION odo JOIN PRODUCT_OPTION_DETAIL pod
+		ON
+		    odo.OPT_DETA_ID = pod.OPT_DETA_ID
+		WHERE
+		    ORDT_ID = #{ordtId}
 	</select>
   
   

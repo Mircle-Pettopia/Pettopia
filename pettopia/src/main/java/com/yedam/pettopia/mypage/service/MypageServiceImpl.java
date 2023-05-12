@@ -16,11 +16,15 @@ public class MypageServiceImpl implements MypageService{
 	public MypageVO getOrder(String meId) {
 		return mapper.getOrder(meId);
 	}
+	
+	@Override
+	public MypageVO getOrdrList(String ordrId) {
+		return mapper.getOrdrList(ordrId);
+	}
 
 	@Override
-	public List<MypageVO> getOrderList(String meId, String start, String end,
-									String shipSt, String prcSt) {
-		return mapper.getOrderList(meId, start, end, shipSt, prcSt);
+	public List<MypageVO> getOrderList(MypageVO vo) {
+		return mapper.getOrderList(vo);
 	}
 
 	@Override
@@ -31,6 +35,11 @@ public class MypageServiceImpl implements MypageService{
 	@Override
 	public List<MypageVO> getShipCount(String meId) {
 		return mapper.getShipCount(meId);
+	}
+
+	@Override
+	public MypageVO ordtIdOptionInfo(String ordtId) {
+		return mapper.ordtIdOptionInfo(ordtId);
 	}
 
 	

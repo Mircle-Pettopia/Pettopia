@@ -12,6 +12,8 @@ public interface UserService {
 	public int userInfoUpdate(UserVO vo);
 	public int userDelete(String meId);
 	public int userDelNotLogin(String meId, String pw);
+	public int joinUser(UserVO vo);
+	public int idChk(String meId);
 	
 	//kakao login
 	//public String getAccessToken(String authorize_code) throws Throwable;

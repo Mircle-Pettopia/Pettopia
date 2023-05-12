@@ -96,7 +96,11 @@
 							<sapn th:text="${name}"></sapn>님 어서오세요!
 						</a>
 						<a href="logout" class="flex-c-m trans-04 p-lr-25" style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-						<a href="mypage" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
+						<!--권한별 나오는 버튼 다르게하기-->
+						<!--USER-->
+						<a th:if="${role == 'USER'}" class="flex-c-m trans-04 p-lr-25" href="mypage">마이페이지</a>
+						<!--ADMIN-->
+						<a th:if="${role == 'ADMIN'}" class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>
 					</div>
 					<!--로그인이 되어있지 않을 때-->
 					<div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">

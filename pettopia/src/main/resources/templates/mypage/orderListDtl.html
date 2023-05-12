@@ -50,35 +50,41 @@ td, th {
 
     <div class="container">
 			<div class="row">
-                <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+        <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
 
-                <!-- 마이페이지 주문관리 -->
+        <!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80">
 					<div class="p-r-45 p-r-0-lg m-t-50">
             <h1><span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>주문상세조회</h1>
             <!-- 주문정보 -->
             <div style="margin-top: 20px;">
             <h5 style="margin-bottom: 15px;"><strong>주문정보</strong></h5>
-            <table class="table">
+            <p th:text="${orderlist}"></p>
+            <table class="table" th:each="list : ${orderlist}">
               <colgroup>
                 <col width="40%">
                 <col width="60%">
               </colgroup>
+
               <tr>
                 <th>주문번호</th>
-                <td>20230509_2423452</td>
+                <td th:text="${list.ordrId}"></td>
               </tr>
               <tr>
                 <th>주문일자</th>
-                <td>2023-05-09</td>
+                <td th:text="${#dates.format(list.ordrDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
               </tr>
               <tr>
                 <th>주문자</th>
-                <td>정은애</td>
+                <td th:text="${list.rcvPsn}"></td>
+              </tr>
+              <tr>
+                <th >결제여부</th>
+                <td th:text="${list.prcSt}"></td>
               </tr>
               <tr>
                 <th>주문처리상태</th>
-                <td>배송중</td>
+                <td th:text="${list.shipSt}"></td>
               </tr>
             </table>
           </div><!--end 주문정보-->

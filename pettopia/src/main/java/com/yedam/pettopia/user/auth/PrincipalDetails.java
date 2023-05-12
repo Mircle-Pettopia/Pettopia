@@ -69,6 +69,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 		
     	if(user.getRole().equals("ADMIN")) {
     		collect.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    	} else if(user.getRole().equals("USER")){
+    		collect.add(new SimpleGrantedAuthority("ROLE_USER"));
     	} else {
     		collect.add(new SimpleGrantedAuthority("ROLE_USER"));
     	}
