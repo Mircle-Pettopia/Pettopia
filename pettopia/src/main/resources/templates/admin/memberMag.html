@@ -35,31 +35,42 @@
 											</div>
 										</td>
 
-										<th class="text-center" scope="row">가입경로</th>
-										<td id="saleStTable">
-											<div class="d-flex">
-												<div class="form-check me-3">
-													<input class="form-check-input" type="checkbox"
-														id="selectAll" name="selectAll" /> <label
-														class="form-check-label" for="selectAll">전체</label>
-												</div>
-												<div class="form-check me-3">
-													<input class="form-check-input" type="checkbox"
-														id="company" name="chk" /> <label class="form-check-label"
-														for="company">company</label>
-												</div>
-												<div class="form-check me-3">
-													<input class="form-check-input" type="checkbox"
-														id="kakao" name="chk" /> <label class="form-check-label"
-														for="kakao">kakao</label>
-												</div>
-												<div class="form-check me-3">
-													<input class="form-check-input" type="checkbox"
-														id="naver" name="chk" /> <label class="form-check-label"
-														for="naver">naver</label>
-												</div>
-											</div>
-										</td>
+							 <th class="text-center" scope="row">가입경로</th>
+                      <td id="PathTable">
+                        <div class="d-flex">
+                          <div class="form-check me-3">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="selectAll"
+                              name="selectAll"
+                            />
+                            <label class="form-check-label" for="selectAll"
+                              >전체</label
+                            >
+                          </div>
+                          <div
+                            class="form-check me-3"
+                            th:each="Path : ${code.SC}"
+                          >
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              th:value="${Path.codCd}"
+                              th:id="${Path.codCd} + 'ck'"
+                              name="chk"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="${Path.codCd} + 'ck'"
+                              th:text="${Path.codTitle}"
+                              ></label
+                            >
+                          </div>
+                        </div>
+                      </td>
+                      
+                      
 									</tr>
 									<!-- <tr>
 										<th class="text-center" scope="row">탈퇴여부</th>
@@ -104,11 +115,11 @@
 
 
 		<div class="modal fade" id="detailModal" tabindex="-1"
-			aria-labelledby="modifyModalLabel" aria-hidden="true">
+			aria-labelledby="detailModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="modifyModalLabel">회원 정보</h5>
+						<h5 class="modal-title" id="detailModalLabel">회원 정보</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close"></button>
 					</div>
@@ -116,27 +127,27 @@
 						<form>
 							<div class="form-group">
 								<label for="name">이름</label> <input type="text"
-									class="form-control" id="name">
+									class="form-control" id="name" readonly>
 							</div>
 							<div class="form-group">
 								<label for="phone">전화번호</label> <input type="text"
-									class="form-control" id="phone">
+									class="form-control" id="phone" readonly>
 							</div>
 							<div class="form-group">
 								<label for="addr">주소</label> <input type="text"
-									class="form-control" id="addr">
+									class="form-control" id="addr" readonly>
 							</div>
 							<div class="form-group">
 								<label for="addrDetail">상세주소</label> <input type="text"
-									class="form-control" id="addrDetail">
+									class="form-control" id="addrDetail" readonly>
 							</div>
 							<div class="form-group">
 								<label for="post">우편번호</label> <input type="text"
-									class="form-control" id="post">
+									class="form-control" id="post" readonly>
 							</div>
 							<div class="form-group">
 								<label for="signPath">가입경로</label> <input type="text"
-									class="form-control" id="signPath">
+									class="form-control" id="signPath" readonly>
 							</div>
 						</form>
 					</div>
@@ -270,7 +281,7 @@
 				let start = $("#start").val();
 				let end = $("#end").val();
 				let signPath = [];
-	            $("#saleStTable input:checkbox[name=chk]:checked").map(function () {
+	            $("#PathTable input:checkbox[name=chk]:checked").map(function () {
 	            	signPath.push($(this).val());
 	            });
 				
@@ -282,7 +293,7 @@
 						name : name,
 						start : start,
 						end : end,
-						signPath : signPath,
+						searchPath : signPath,
 					},
 					success : function(result) {
 						memberList.resetData(result);
@@ -299,7 +310,7 @@
 				let name = $("#searchNm").val("");
 				let start = $("#start").val("");
 				let end = $("#end").val("");
-				  $("#saleStTable input:checkbox[name=chk]:checked").prop(
+				  $("#PathTable input:checkbox[name=chk]:checked").prop(
 			              "checked",
 			              false
 			            );
@@ -328,7 +339,7 @@
 							});
 			
 		       $("#selectAll").change(function () {
-		            $("#saleStTable input:checkbox").prop(
+		            $("#PathTable input:checkbox").prop(
 		              "checked",
 		              $(this).prop("checked")
 		            );
@@ -338,7 +349,7 @@
 		             if (!$(this).prop("checked")) {
 		               $("#selectAll").prop("checked", false);
 		             } else if (
-		               $("#saleStTable input[name='chk']:not(:checked)").length === 0
+		               $("#PathTable input[name='chk']:not(:checked)").length === 0
 		             ) {
 		               $("#selectAll").prop("checked", true);
 		             }
