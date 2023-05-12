@@ -3,13 +3,10 @@ package com.yedam.pettopia.mypage.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,47 +23,41 @@ public class MypageController {
 	//마이페이지-주문내역
 	@GetMapping("mypage")
 	public String orderList(Model model,
-							@AuthenticationPrincipal PrincipalDetails principalDetails,
-							Authentication authentication) {
-		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+							@AuthenticationPrincipal PrincipalDetails principal) {
         String id = principal.getUser().getMeId();
-        MypageVO vo = new MypageVO();
-        List<MypageVO> mvo = service.getOrder(id);
-        
-        System.out.println(mvo.getClass());
-        
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
+        model.addAttribute("role", principal.getUser().getRole());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
-        model.addAttribute("total", mvo);
-		
+        model.addAttribute("getprcSt", service.getPrcCount(id));
+        model.addAttribute("getShipSt", service.getShipCount(id));
 		return "mypage/mypage";
+	};
+	
+	@GetMapping("option")
+	@ResponseBody
+	public MypageVO option(String ordtId){
+		System.out.println(ordtId);
+		return service.ordtIdOptionInfo(ordtId);
 	}
 	
-	@PostMapping("getOrder")
+	//주문내역 검색기능
+	@GetMapping("getOrder")
 	@ResponseBody
-	public List<MypageVO> getOrder(@RequestParam String meId, @RequestParam(required = false) String start,
-								@RequestParam(required = false) String end, @RequestParam(required = false) String shipSt,
-								@RequestParam(required = false) String prcSt
-								){
-		MypageVO vo = new MypageVO();
-		
-		return service.getOrderList(meId, start, end, shipSt, prcSt);
+	public List<MypageVO> getOrder(MypageVO vo){
+		return service.getOrderList(vo);
 	}
 	
 	//마이페이지-주문내역상세
 	@GetMapping("orderListDtl")
 	public String orderListDtl(Model model,
-								@AuthenticationPrincipal PrincipalDetails principalDetails,
-								Authentication authentication) {
-		String result = "";
-		//Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	
-		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        result += principal;
+							   @AuthenticationPrincipal PrincipalDetails principal,
+							   @RequestParam String ordrId) {
+		
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
-        
+        model.addAttribute("role", principal.getUser().getRole());
+        model.addAttribute("orderlist", service.getOrdrList(ordrId));
 		return "mypage/orderListDtl";
 	}
 	

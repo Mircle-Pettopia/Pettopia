@@ -26,6 +26,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
         
         String username = "";
         String providerId = "";
+        String st = "";
         
         String provider = userRequest.getClientRegistration().getRegistrationId();
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -34,12 +35,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
         if(provider.equals("kakao")){	//추가
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
             providerId = oAuth2UserInfo.getProviderId();	//수정
+            st = "SC3"; 
             
             username = provider+"_"+providerId;
             
         } else if(provider.equals("naver")){
             oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
             providerId = oAuth2UserInfo.getProviderId();	//수정
+            st = "SC2";
 
             username = oAuth2UserInfo.getName();
         };
@@ -66,7 +69,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
         	
         	meSnsToken = UserVO.oauth2Register()
 	                    .meId(email).pw(password).name(username)
-	                    .meSnsToken(providerId).signPath(provider)
+	                    .meSnsToken(providerId).signPath(st)
 	                    .provider(provider).providerId(providerId)
 	                    .build();
             

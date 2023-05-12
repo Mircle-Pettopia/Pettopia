@@ -13,14 +13,33 @@ public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
 	
 	@Override
-	public List<MypageVO> getOrder(String meId) {
+	public MypageVO getOrder(String meId) {
 		return mapper.getOrder(meId);
+	}
+	
+	@Override
+	public MypageVO getOrdrList(String ordrId) {
+		return mapper.getOrdrList(ordrId);
 	}
 
 	@Override
-	public List<MypageVO> getOrderList(String meId, String start, String end,
-									String shipSt, String prcSt) {
-		return mapper.getOrderList(meId, start, end, shipSt, prcSt);
+	public List<MypageVO> getOrderList(MypageVO vo) {
+		return mapper.getOrderList(vo);
+	}
+
+	@Override
+	public List<MypageVO> getPrcCount(String meId) {
+		return mapper.getPrcCount(meId);
+	}
+
+	@Override
+	public List<MypageVO> getShipCount(String meId) {
+		return mapper.getShipCount(meId);
+	}
+
+	@Override
+	public MypageVO ordtIdOptionInfo(String ordtId) {
+		return mapper.ordtIdOptionInfo(ordtId);
 	}
 
 	

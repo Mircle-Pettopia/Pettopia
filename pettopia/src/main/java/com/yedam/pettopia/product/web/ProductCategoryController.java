@@ -1,8 +1,5 @@
 package com.yedam.pettopia.product.web;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,10 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.admin.service.ProductService;
-import com.yedam.pettopia.notice.NoticeVO;
 import com.yedam.pettopia.product.Product1VO;
 import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
@@ -133,6 +128,8 @@ public class ProductCategoryController {
 		//참고 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
 		if(context != "anonymousUser") {
 			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+			model.addAttribute("role", principal.getUser().getRole());
+			
 			if(principal.getUser().getSignPath() == "company") {
 				result += principal;
 	            model.addAttribute("id", principal.getUser().getMeId());
@@ -146,9 +143,9 @@ public class ProductCategoryController {
 	            model.addAttribute("token", principal.getUser().getMeSnsToken());
 	        };
 		};
+		
 	        
 		return "index";
 	}
 	
-
 }
