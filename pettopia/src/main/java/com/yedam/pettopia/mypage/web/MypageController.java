@@ -23,7 +23,8 @@ public class MypageController {
 	//마이페이지-주문내역
 	@GetMapping("mypage")
 	public String orderList(Model model,
-							@AuthenticationPrincipal PrincipalDetails principal) {
+							@AuthenticationPrincipal PrincipalDetails principal,
+							MypageVO vo, String nowPage, String cntPerPage) {
         String id = principal.getUser().getMeId();
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
@@ -31,13 +32,30 @@ public class MypageController {
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
         model.addAttribute("getprcSt", service.getPrcCount(id));
         model.addAttribute("getShipSt", service.getShipCount(id));
+        
+        int total = service.countOrderList();
+        cntPerPage = "8";
+        //한 페이지 당 1~9개의 제품을 보이게 하는 곳
+  		//cntPerPage = 제품별로 최대 나올 수 있는 값
+        if (nowPage == null && cntPerPage == null) {
+    		nowPage = "1";
+    		cntPerPage = "8";
+    	} else if (nowPage == null) {
+    		nowPage = "1";
+    	} else if (cntPerPage == null) { 
+    		cntPerPage = "8";
+    	}
+        
+        vo = new MypageVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+        System.out.println("vo>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + vo);
+        model.addAttribute("paging", vo);
+        
 		return "mypage/mypage";
 	};
 	
 	@GetMapping("option")
 	@ResponseBody
 	public MypageVO option(String ordtId){
-		System.out.println(ordtId);
 		return service.ordtIdOptionInfo(ordtId);
 	}
 	
@@ -45,7 +63,8 @@ public class MypageController {
 	@GetMapping("getOrder")
 	@ResponseBody
 	public List<MypageVO> getOrder(MypageVO vo){
-		return service.getOrderList(vo);
+		System.out.println("getOrder=======" + vo);
+		return service.pagingTest(vo);
 	}
 	
 	//마이페이지-주문내역상세

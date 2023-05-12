@@ -50,8 +50,45 @@ public class MypageVO {
 	private int prcCount;
 	private int shipCount;
 	private int page;
+	private int rn;
 	
+	private int nowPage, startPage, endPage, totals, cntPerPage, lastPage, stars, ends;
+	private int cntPage = 8;
 	
+	public MypageVO() {
+	}
+	
+	public MypageVO(int total, int nowPage, int cntPerPage) {
+		setNowPage(nowPage);
+		setCntPerPage(cntPerPage);
+		setTotals(total);
+		calcLastPage(getTotals(), getCntPerPage());
+		calcStartEndPage(getNowPage(), cntPage);
+		calcStartEnd(getNowPage(), getCntPerPage());
+	}
+	
+	// 제일 마지막 페이지 계산
+	public void calcLastPage(int total, int cntPerPage) {
+		setLastPage((int) Math.ceil((double)total / (double)cntPerPage));
+	}
+	
+	// 시작, 끝 페이지 계산
+	public void calcStartEndPage(int nowPage, int cntPage) {
+		setEndPage(((int)Math.ceil((double)nowPage / (double)cntPage)) * cntPage);
+		if (getLastPage() < getEndPage()) {
+			setEndPage(getLastPage());
+		}
+		setStartPage(getEndPage() - cntPage + 1);
+		if (getStartPage() < 1) {
+			setStartPage(1);
+		}
+	}
+	
+	// DB 쿼리에서 사용할 start, end값 계산
+	public void calcStartEnd(int nowPage, int cntPerPage) {
+		setEnds(nowPage * cntPerPage);
+		setStars(getEnds() - cntPerPage + 1);
+	}
 	
 	
 	

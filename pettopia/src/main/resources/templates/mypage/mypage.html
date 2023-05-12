@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<html lang="ko" itemscope itemtype="http://schema.org/WebPage">
 <head>
     <title>Pettopia</title>
     <meta charset="UTF-8">
@@ -138,10 +138,9 @@ td, tr, th{
 								</div>
 							</div>
 						</div>
-
 						
 						<!-- 상품주문정보 -->
-						<div style="height: 800px;">
+						<div>
 							<h4 style="margin-bottom: 20px;">상품주문정보</h4>
 							<!--구매한 주문정보-->
 							<div>
@@ -177,9 +176,30 @@ td, tr, th{
 												상품구매금액 <sapn id="orderPrice"></sapn> + 배송비 <sapn th:text="${test}" id="delivery"></sapn> = 합계 : <span class="total_price" style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
 											</td>
 										</tr>-->
-										
 								</table>
 							</div>
+
+							<!--paging div-->
+							<!--참고 : https://po9357.github.io/spring/2019-05-28-Board_Paging/-->
+							<!--참고2 : https://yju7257.tistory.com/97-->
+							<!--th:classappend="${i eq nowPage} ? active : ''"-->
+							<div class="d-flex justify-content-center m-t-20">
+								<div class="pagination">
+									<!--이전-->
+									<th:block th:if="${paging.startPage != 1 }">
+										<a th:href= "'/mypage?nowPage='+${paging.startPage-1}+'&cntPerPage='+${paging.cntPerPage}">&laquo;</a>
+									</th:block>
+									<!--시작페이지 - 끝페이지-->
+									<th:block th:each=" i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+										<a th:href="'/mypage?nowPage='+${i}+'&cntPerPage='+${paging.cntPerPage}"
+											th:text="${i}"></a>
+									</th:block>
+									<!--다음-->
+									<th:block th:if="${paging.endPage != paging.lastPage}">
+										<a th:href="'/mypage?nowPage='+${paging.startPage + 1}+'&cntPerPage='+${paging.cntPerPage}">&raquo;</a>
+									</th:block>
+								</div>
+							</div>  <!--end paging div-->
 						</div>
 					</div>
 				</div>
@@ -189,6 +209,8 @@ td, tr, th{
 			/*window.onload=function(){}*/
 			let prc = /*[[${getprcSt}]]*/
 			let shipList = /*[[${getShipSt}]]*/
+			let page = /*[[${paging}]]*/
+			console.log(page);
 
 			//배송상태에 따른 개수 확인
 			shipList.map((data)=>{
@@ -203,7 +225,6 @@ td, tr, th{
 
 			//결제상태는 화면에 결제완료만 보이기 때문에 결제완료 외에는 처리하지 않는다.
 			prc.map((data) => {
-				console.log(data);
 				if(data.prcSt == '결제완료'){
 					$('#prcCnt').text(data.prcCount);
 				} else if(data.prcSt == '결제대기') {
@@ -220,6 +241,8 @@ td, tr, th{
 			let date = new Date();
 			let start_date_change;
 			let end_date_change;
+			let stars = page.stars;
+			let ends = page.ends;
 			
 			//주문내역 ajax
 			const orderList = (start = undefined, end = undefined, shipSt = undefined, prcSt = undefined) => {
@@ -227,10 +250,12 @@ td, tr, th{
 					url: "getOrder",
 					method: "GET",
 					data : {meId : id,
-								shipSt : ship,
-								prcSt : prcSt,
-								start : start,
-								end : end},
+							shipSt : ship,
+							prcSt : prcSt,
+							start : start,
+							end : end,
+							stars : stars,
+							ends : ends},
 					async: false,
 					success: function(data){
 						console.log(data);
@@ -260,18 +285,18 @@ td, tr, th{
 										<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?ordrId=${data[i].ordrId}">
 											<strong>${data[i].ordrId}</strong>
 										</a>
-										</td>
-										<td><a href="#" class="fontColor"><img src="${data[i].prdtImg}" alt="img"></a></td>
-										<td id=option>
-											<a href="#" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
-											<br/>
-											<sapn id="${data[i].ordtId}_option"></sapn>
-										</td>
-										<td>${data[i].cnt}</td>
-										<td><span>${prc}</span><span>원</span></td>
-										<td><span>${total}</span><span>원</span></td>
-										<td>${data[i].shipSt}</td>
-										<td>${data[i].prcSt}</td>
+									</td>
+									<td><a href="ProductDetail?prdtId=${data[i].prdtId}" class="fontColor"><img src="download/${data[i].prdtImg}" alt="img"></a></td>
+									<td id=option>
+										<a href="ProductDetail?prdtId=${data[i].prdtId}" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
+										<br/>
+										<sapn id="${data[i].ordtId}_option"></sapn>
+									</td>
+									<td>${data[i].cnt}</td>
+									<td><span>${prc}</span><span>원</span></td>
+									<td><span>${total}</span><span>원</span></td>
+									<td>${data[i].shipSt}</td>
+									<td>${data[i].prcSt}</td>
 								</tr>
 								`;
 					};
@@ -311,11 +336,10 @@ td, tr, th{
 						tr.appendChild(td);
 						document.querySelector('#getOrderList').appendChild(tr);
 					};
-				};
+				}; // end for
 				//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
 				fn_cellMerge('orderList', [0,5,6,7]);
 			};
-					
 					
 					
 			//기간버튼-------------------------------
@@ -346,6 +370,7 @@ td, tr, th{
 				search();
 			});
 
+			//검색 ajax---------------------------
 			function search(){
 				let id = /*[[${id}]]*/
 				let ship = $('#shipSt').val();
@@ -360,9 +385,10 @@ td, tr, th{
 							shipSt : ship,
 							prcSt : prcSt,
 							start : start,
-							end : end},
+							end : end,
+							stars : stars,
+							ends : ends},
 					success: function(data){
-						console.log(data);
 						if(data.length > 0){
 							$('#orderList > tbody').empty();	//table 초기화
 							fn_cellMerge('orderList', [0,5,6,7]);
@@ -400,7 +426,9 @@ td, tr, th{
 							shipSt : ship,
 							prcSt : prcSt,
 							start : start,
-							end : end},
+							end : end,
+							stars : stars,
+							ends : ends},
 					success: function(data){
 						if(data.length > 0){
 							$('#orderList > tbody').empty();	//table 초기화
@@ -439,7 +467,9 @@ td, tr, th{
 							shipSt : ship,
 							prcSt : prcSt,
 							start : start,
-							end : end},
+							end : end,
+							stars : stars,
+							ends : ends},
 					success: function(data){
 						console.log(data);
 						if(data.length > 0){

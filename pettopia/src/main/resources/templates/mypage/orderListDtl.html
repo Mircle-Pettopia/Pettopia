@@ -59,7 +59,6 @@ td, th {
             <!-- 주문정보 -->
             <div style="margin-top: 20px;">
             <h5 style="margin-bottom: 15px;"><strong>주문정보</strong></h5>
-            <p th:text="${orderlist}"></p>
             <table class="table" th:each="list : ${orderlist}">
               <colgroup>
                 <col width="40%">
@@ -92,26 +91,26 @@ td, th {
           <!-- 결제정보 -->
           <div style="margin-top: 30px;">
             <h5 style="margin-bottom: 15px;"><strong>결제정보</strong></h5>
-            <table class="table">
+            <table class="table" th:each="list : ${orderlist}">
               <colgroup>
                 <col width="40%">
                 <col width="60%">
               </colgroup>
               <tr class="trColor">
-                <th >총 주문금액</th>
-                <td>30,000원</td>
+                <th>총 주문금액</th>
+                <td><span data-th-text="${#numbers.formatInteger(list.shipPrc + list.ttPrc + list.point, 3, 'COMMA') + '원'}"></span></td>
               </tr>
               <tr class="trColor">
                 <th>총 할인금액</th>
-                <td>100원</td>
+                <td><span data-th-text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span></td>
               </tr>
               <tr class="trColor">
                 <th>총 결제금액</th>
-                <td>29,900원</td>
+                <td><span data-th-text="${#numbers.formatInteger(list.ttPrc + list.shipPrc, 3, 'COMMA') + '원'}"></span></td>
               </tr>
               <tr>
                 <th>결제수단</th>
-                <td>신용카드</td>
+                <td th:text="${list.mthd}">신용카드</td>
               </tr>
             </table>
           </div><!--end 결제정보-->

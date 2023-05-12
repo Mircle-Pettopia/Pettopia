@@ -12,6 +12,9 @@ public interface MypageMapper {
 	public List<MypageVO> getShipCount(String meId);
 	public MypageVO ordtIdOptionInfo(String ordtId);
 	
+	public int countOrderList();
+	public List<MypageVO> pagingTest(MypageVO vo);
+	
 	
 	
 	

@@ -12,6 +12,9 @@ public interface MypageService {
 	public List<MypageVO> getOrderList(MypageVO vo);
 	public MypageVO ordtIdOptionInfo(String ordtId);
 	
+	public int countOrderList();
+	public List<MypageVO> pagingTest(MypageVO vo);
+	
 	
 	
 	

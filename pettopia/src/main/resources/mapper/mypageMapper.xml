@@ -6,6 +6,12 @@
 	<select id="getOrder" resultType="MypageVO">
 		SELECT * FROM order_header WHERE me_id = #{meId}
 	</select>
+	
+	<!-- 주문내역 총 개수 -->
+	<select id="countOrderList" resultType="int">
+		SELECT COUNT(*) FROM order_detail
+	</select>
+	
 	<select id="getOrdrList" resultType="MypageVO">
 		SELECT
 			TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date,
@@ -24,12 +30,15 @@
 			note
 		FROM order_header WHERE ordr_id = #{ordrId}
 	</select>
+	
 	<!-- 주문일자, 주문번호, 이미지, 상품이름, 구매한 옵션명[1] + [2], 배송상태, 결제여부, 옵션명 -->
 	<!-- 상품 가격 + 옵션가격 -->
 	<select id="getOrderList" resultType="MypageVO">
 		SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, ordr.ordr_id, prdt_img, prdt_nm, 
 						get_common(ship_st) ship_st, get_common(prc_st) prc_st, ordt.prdt_id, ship_prc, cnt,
-						NVL(cnt, 0) * NVL(prc, 0) "PRICE", prc, NVL(POINT, 0) + NVL(TT_PRC,0) "TOTAL", ordt.ordt_id
+						NVL(cnt, 0) * NVL(prc, 0) "PRICE",
+						NVL(point, 0) + NVL(tt_prc,0) + NVL(ship_prc, 0) "TOTAL",
+						ordt.ordt_id, prc
 		FROM order_header ordr
 			    JOIN order_detail ordt
 			        ON ordr.ordr_id = ordt.ordr_id
@@ -52,7 +61,8 @@
 		 ORDER BY 1 DESC
 	</select>
 	
-	<select id="test" resultType="MypageVO">
+	<!-- 페이징테스트 -->
+	<select id="pagingTest" resultType="MypageVO">
 		SELECT * FROM ( SELECT ROWNUM AS rn, a.*
 	                FROM(
 	                        SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, ordr.ordr_id, prdt_img, prdt_nm, 
@@ -79,7 +89,7 @@
 	                         </if>
 	                         ORDER BY 1 DESC) a
 	                    )
-		WHERE RN between (#{page}-1)*10 and #{page}*10
+		WHERE RN  BETWEEN #{stars} AND #{ends}
 	</select>
 
 	<!-- 결제여부 개수 -->
