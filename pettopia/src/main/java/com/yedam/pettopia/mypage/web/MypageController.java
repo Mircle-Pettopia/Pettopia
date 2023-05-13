@@ -30,6 +30,7 @@ public class MypageController {
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("role", principal.getUser().getRole());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
+        model.addAttribute("list",service.getOrder(id));
         model.addAttribute("getprcSt", service.getPrcCount(id));
         model.addAttribute("getShipSt", service.getShipCount(id));
         
@@ -47,7 +48,6 @@ public class MypageController {
     	}
         
         vo = new MypageVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-        System.out.println("vo>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + vo);
         model.addAttribute("paging", vo);
         
 		return "mypage/mypage";
@@ -80,7 +80,21 @@ public class MypageController {
 		return "mypage/orderListDtl";
 	}
 	
+	@GetMapping("ordrDetailList")
+	@ResponseBody
+	public List<MypageVO> ordrDetailList(String ordrId) {
+		return service.ordrDetailList(ordrId);
+	}
 	
+	//마이페이지-관심상품조회
+	@GetMapping("prodInterest")
+	public String prodInterest(Model model,
+							   @AuthenticationPrincipal PrincipalDetails principal) {
+		String id = principal.getUser().getMeId();
+		model.addAttribute("id", principal.getUser().getMeId());
+        model.addAttribute("name", principal.getUser().getName());
+		return "mypage/prodInterest";
+	}
 	
 	
 	

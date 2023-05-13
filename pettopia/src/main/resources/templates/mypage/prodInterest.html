@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<html lang="ko" itemscope itemtype="http://schema.org/WebPage">
+<head>
+    <title>Pettopia</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div layout:fragment="content">
+    <style>
+        h3 {
+            text-align: center;
+            margin: 30px 0px;
+        }
+
+        .table-shopping-cart {
+            /* height: 250px; */
+            overflow: auto;
+            margin-top: 20px;
+        }
+
+        .table-shopping-cart>table {
+            width: 100%;
+        }
+
+        td img {
+            width: 100px;
+        }
+
+        .btnSet {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        table input {
+            width: 30px !important;
+        }
+        
+        tr, td, th, span, p{
+            font-size: 13px !important;
+        }
+
+        th, td {
+            text-align: center;
+        }
+
+        td, tr, th{
+            vertical-align: middle !important;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+            <!-- 마이페이지 관심상품 -->
+            <div class="col-md-8 col-lg-10 p-b-80 fontSize">
+                <div class="p-r-45 p-r-0-lg m-t-50">
+                    <h1>
+                        <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
+                    </h1>
+                    <h3>**님의 관심상품목록</h3>
+                    <h5>기본정보</h5>
+                    <div>
+                        <!--<div class="how-itemcart1"></div>
+                        <div class="how-itemcart1"></div>
+                        <div class="how-itemcart1"></div>-->
+                        <table class="table">
+                            <colgroup>
+                                    <col width="15%">
+                                    <col width="25%">
+                                    <col width="30%">
+                                    <col width="15%">
+                                    <col width="15%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div style="margin:0 auto; display:inline-block;">
+                                            <input type="checkbox">
+                                        </div>
+                                    </th>
+                                    <th>이미지</th>
+                                    <th>상품정보</th>
+                                    <th>판매가</th>
+                                    <th>선택</th>
+                                </tr>
+                            </thead>
+
+                            <!-- ↓↓↓여기에 조회된 결과 출력 -->
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="margin:0 auto; display:inline-block;">
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td><img src="images/item-cart-02.jpg" alt=""></td>
+                                    <td class="column-3">
+                                        <span>남성 기모 맨투맨L</span>
+                                        <div>2023-04-28</div>
+                                        <div style="margin:0 auto; display:inline-block;">
+                                            <button type="button" class="btn btnPush btnOrange">옵션변경</button>
+                                        </div>
+                                    </td>
+                                    <td>42,000원</td>
+                                    <td>
+                                        <div style="margin:0 auto; display:inline-block;">
+                                            <button type="button" class="btn btnPush btnBlueGreen">장바구니</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="btnSet">
+                            <button itype="button" class="btn btnPush btnLightBlue">상품주문</button>
+                            <button type="button" class="btn btnPush btnRed">관심상품 지우기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+</html>

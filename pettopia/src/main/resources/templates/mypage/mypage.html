@@ -52,6 +52,7 @@ td, tr, th{
 #clickLi, .status-link a{
 	cursor: pointer;
 }
+
 </style>
 
     <div class="container">
@@ -64,26 +65,40 @@ td, tr, th{
 						<h1>
 							<span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>주문관리
 						</h1>
-
-						<!-- 배송 상태 -->
+						
 						<div class="row m-t-20 m-b-20 backColor">
+							<!--결제여부-->
 							<div class="status-icons">
-								<img src="images/icons/check-bill.png" alt="">
-								<img src="images/icons/giftbox.png" alt="">
-								<img src="images/icons/cargo-truck.png" alt="">
-								<img src="images/icons/checked.png" alt="">
+								<img src="images/icons/spinner-fill-icon.png" alt="">
+								<img src="images/icons/credit-card-detailed-line-icon.png" alt="">
+								<img src="images/icons/circle-error.png" alt="">
 							</div>
 							<div class="status-text">
-								<div >
-									<span id="" th:if="#{code.PS == '결제완료'}">결제완료</span>
+								<div th:each="plist : ${code.PS}">
+									<span id="" th:text="${plist.codTitle}">결제완료</span>
 								</div>
+							</div>
+							<div class="status-link" style="margin-bottom: 20px;">
+								<a class="fontColor" id="prcCnt-1" onclick="prcSearch('결제대기')">0</a>
+								<a class="fontColor" id="prcCnt-2" onclick="prcSearch('결제완료')">0</a>
+								<a class="fontColor" id="prcCnt-3" onclick="prcSearch('결제취소')">0</a>
+							</div>
+							
+							<!-- 배송 상태 -->
+							<div class="status-icons">
+								<!--<img src="images/icons/check-bill.png" alt="">-->
+								<img src="images/icons/giftbox.png" alt="">
+								<img src="images/icons/cargo-truck.png"  style="width: 40px !important; height: 40px;" alt="">
+								<img src="images/icons/circle-check.png" alt="">
+							</div>
+
+							<div class="status-text">
 								<div th:each="slist : ${code.SS}">
 									<span class="test" th:text="${slist.codTitle}"></span>
 								</div>
 							</div>
 
 							<div class="status-link">
-								<a class="fontColor" id="prcCnt" onclick="prcSearch('결제완료')">0</a>
 								<a class="fontColor" id="a-1" onclick="shipSearch('배송전')">0</a>
 								<a class="fontColor" id="b-1" onclick="shipSearch('배송중')">0</a>
 								<a class="fontColor" id="c-1" onclick="shipSearch('배송완료')">0</a>
@@ -210,7 +225,7 @@ td, tr, th{
 			let prc = /*[[${getprcSt}]]*/
 			let shipList = /*[[${getShipSt}]]*/
 			let page = /*[[${paging}]]*/
-			console.log(page);
+			let ordrList = /*[[${list}]]*/
 
 			//배송상태에 따른 개수 확인
 			shipList.map((data)=>{
@@ -222,6 +237,16 @@ td, tr, th{
 					$('#c-1').text(data.shipCount);
 				}
 			});
+
+			prc.map((data)=>{
+				if(data.prcSt == '결제대기'){
+					$('#prcCnt-1').text(data.prcCount);
+				} else if (data.prcSt == '결제완료'){
+					$('#prcCnt-2').text(data.prcCount);
+				} else if (data.prcSt == '결제취소'){
+					$('#prcCnt-3').text(data.prcCount);
+				}
+			})
 
 			//결제상태는 화면에 결제완료만 보이기 때문에 결제완료 외에는 처리하지 않는다.
 			prc.map((data) => {
@@ -258,7 +283,6 @@ td, tr, th{
 							ends : ends},
 					async: false,
 					success: function(data){
-						console.log(data);
 						drawOrderList(data);
 					},
 					error : function(rej) {
@@ -285,6 +309,12 @@ td, tr, th{
 										<a class="fontColor" style="text-decoration:underline;" href="orderListDtl?ordrId=${data[i].ordrId}">
 											<strong>${data[i].ordrId}</strong>
 										</a>
+										<br/>
+										<div style="margin:0 auto; display:inline-block;">
+											<div id="orderCancel_" + ${data[i].ordrId}>
+												<button type="button" class="btn btnPush btnRed orderCancel" >주문취소</button>
+											</div>
+										</div>
 									</td>
 									<td><a href="ProductDetail?prdtId=${data[i].prdtId}" class="fontColor"><img src="download/${data[i].prdtImg}" alt="img"></a></td>
 									<td id=option>
@@ -332,7 +362,7 @@ td, tr, th{
 						let td = document.createElement('td');
 						$(td).attr('colspan', '8');
 						
-						td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+						td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
 						tr.appendChild(td);
 						document.querySelector('#getOrderList').appendChild(tr);
 					};
@@ -340,7 +370,7 @@ td, tr, th{
 				//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
 				fn_cellMerge('orderList', [0,5,6,7]);
 			};
-					
+
 					
 			//기간버튼-------------------------------
 			$('#1').on('click',()=>{
@@ -399,7 +429,7 @@ td, tr, th{
 							let td = document.createElement('td');
 							$(td).attr('colspan', '8');
 							
-							td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+							td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
 							tr.appendChild(td);
 							document.querySelector('#getOrderList').appendChild(tr);
 						}
@@ -440,7 +470,7 @@ td, tr, th{
 							let td = document.createElement('td');
 							$(td).attr('colspan', '8');
 							
-							td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+							td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
 							tr.appendChild(td);
 							document.querySelector('#getOrderList').appendChild(tr);
 						}
@@ -482,7 +512,7 @@ td, tr, th{
 							let td = document.createElement('td');
 							$(td).attr('colspan', '8');
 							
-							td.innerHTML = `<p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p>`
+							td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
 							tr.appendChild(td);
 							document.querySelector('#getOrderList').appendChild(tr);
 						}
@@ -544,16 +574,16 @@ td, tr, th{
 				
 				var id = vid;
 				var col = vcol;
-			var td = ((!!vtd) ? vtd : "td"  ); // 기본이 td 태그 기준으로 merge함
+				var td = ((!!vtd) ? vtd : "td"  ); // 기본이 td 태그 기준으로 merge함
+				
+				var spanCnt = 1;
+				var preText; //이전 텍스트
+				
+				var r = [];
+				
+				var rows = $("table[id="+id+"] tr").find(td+":eq("+col[0]+")").length; //row 개수
 			
-			var spanCnt = 1;
-			var preText; //이전 텍스트
-			
-			var r = [];
-			
-			var rows = $("table[id="+id+"] tr").find(td+":eq("+col[0]+")").length; //row 개수
-		
-			if(rows <= 1){
+				if(rows <= 1){
 					return false;
 				}
 				
@@ -612,19 +642,19 @@ td, tr, th{
 							preText = $(this).text();
 						});
 					}
-			}
-			for(var k = col.length; k > 0; k--){ //역순으로 돌려야 그룹이 안깨짐
+				}
+				for(var k = col.length; k > 0; k--){ //역순으로 돌려야 그룹이 안깨짐
 					$("table[id="+id+"] tr").find(td+":eq("+col[k-1]+")").each(function(index, item){
-							if(r[k-1].idx[0] == index){
-								$(this).attr("rowspan",r[k-1].spans[0]);
-								r[k-1].idx.shift();
-								r[k-1].spans.shift();
-							}else{
-								$(this).remove();
-							}
-						});
-					}
-				};
+						if(r[k-1].idx[0] == index){
+							$(this).attr("rowspan",r[k-1].spans[0]);
+							r[k-1].idx.shift();
+							r[k-1].spans.shift();
+						}else{
+							$(this).remove();
+						}
+					});
+				}
+			};
 
 			let data = [
 				/*[# th:each="order : ${list}"]*/

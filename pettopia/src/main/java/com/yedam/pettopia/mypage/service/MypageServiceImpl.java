@@ -13,7 +13,7 @@ public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
 	
 	@Override
-	public MypageVO getOrder(String meId) {
+	public List<MypageVO> getOrder(String meId) {
 		return mapper.getOrder(meId);
 	}
 	
@@ -52,6 +52,11 @@ public class MypageServiceImpl implements MypageService{
 	@Override
 	public MypageVO ordtIdOptionInfo(String ordtId) {
 		return mapper.ordtIdOptionInfo(ordtId);
+	}
+
+	@Override
+	public List<MypageVO> ordrDetailList(String ordrId) {
+		return mapper.ordrDetailList(ordrId);
 	}
 
 
