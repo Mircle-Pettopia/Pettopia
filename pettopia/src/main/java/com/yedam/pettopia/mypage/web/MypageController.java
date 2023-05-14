@@ -90,10 +90,23 @@ public class MypageController {
 	@GetMapping("prodInterest")
 	public String prodInterest(Model model,
 							   @AuthenticationPrincipal PrincipalDetails principal) {
-		String id = principal.getUser().getMeId();
 		model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
+        model.addAttribute("role", principal.getUser().getRole());
 		return "mypage/prodInterest";
+	}
+	
+	//마이페이지-관심상품리스트
+	@GetMapping("prodInterestList")
+	@ResponseBody
+	public List<MypageVO> prodInterestList(@RequestParam String meId){
+		return service.getInterestList(meId);
+	}
+	
+	@GetMapping("prdtoption")
+	@ResponseBody
+	public List<MypageVO> prdtoption(String prdtId){
+		return service.prdtIdOptionInfo(prdtId);
 	}
 	
 	

@@ -59,6 +59,16 @@ public class MypageServiceImpl implements MypageService{
 		return mapper.ordrDetailList(ordrId);
 	}
 
+	@Override
+	public List<MypageVO> getInterestList(String meId) {
+		return mapper.getInterestList(meId);
+	}
+
+	@Override
+	public List<MypageVO> prdtIdOptionInfo(String prdtId) {
+		return mapper.prdtIdOptionInfo(prdtId);
+	}
+
 
 	
 

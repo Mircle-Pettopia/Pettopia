@@ -5,10 +5,15 @@
 <head>
     <title>Pettopia</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
 <div layout:fragment="content">
     <style>
+        button{
+            font-size: 11px !important;
+        }
+
         h3 {
             text-align: center;
             margin: 30px 0px;
@@ -60,8 +65,22 @@
                     <h1>
                         <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
                     </h1>
-                    <h3>**님의 관심상품목록</h3>
+                    <h3><sapn id="name" th:text="${name}"></sapn>님의 관심상품목록</h3>
                     <h5>기본정보</h5>
+
+                    <!--모달-->
+                    <!--<div id="modal" class="w3-modal m-t-50">
+                        <div class="w3-modal-content w3-animate-opacity w3-card-4">
+                        <span onclick="document.getElementById('modal').style.display='none'" 
+                        class="w3-button w3-display-topright">&times;</span>
+                        <h2>옵션선택</h2>
+                        <div class="w3-container" style="height: 400px !important;">
+                            <div id="option"></div>
+                        </div>
+                        </div>
+                    </div>--> <!--end 모달-->
+
+                    <!--table-->
                     <div>
                         <!--<div class="how-itemcart1"></div>
                         <div class="how-itemcart1"></div>
@@ -89,8 +108,8 @@
                             </thead>
 
                             <!-- ↓↓↓여기에 조회된 결과 출력 -->
-                            <tbody>
-                                <tr>
+                            <tbody id="list">
+                                <!--<tr>
                                     <td>
                                         <div style="margin:0 auto; display:inline-block;">
                                             <input type="checkbox">
@@ -110,18 +129,138 @@
                                             <button type="button" class="btn btnPush btnBlueGreen">장바구니</button>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr>-->
                             </tbody>
                         </table>
                         <div class="btnSet">
                             <button itype="button" class="btn btnPush btnLightBlue">상품주문</button>
-                            <button type="button" class="btn btnPush btnRed">관심상품 지우기</button>
+                            <button type="button" class="btn btnPush btnRed">삭제</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+        let id = /*[[${id}]]*/
+
+        const interestList = () => {
+            $.ajax({
+                url: 'prodInterestList',
+                method : 'GET',
+                data : {meId : id},
+                success : (data) => {
+                    drawList(data);
+                },
+                error : (err) => {
+                    console.log(err);
+                }
+            })
+        };
+        interestList();
+
+        function drawList(data){
+
+            for(let i = 0; i < data.length; i++){
+                let date = dateChange(data[i].intInDt);
+                let price = AddComma(data[i].prdtPrc);
+                console.log(data);
+
+                list.innerHTML += `
+                        <tr>
+                            <td>
+                                <div style="margin:0 auto; display:inline-block;">
+                                    <input type="checkbox">
+                                </div>
+                            </td>
+                            <td><img src="download/${data[i].prdtImg}" alt="prod_img"></td>
+                            <td>
+                                <span>${data[i].prdtNm}</span>
+                                <div>${date}</div>
+                            </td>
+                            <td>${price}원</td>
+                            <td>
+                                <div style="margin:0 auto; display:inline-block;">
+                                    <button type="button" class="btn btnPush btnBlueGreen" id="optionBtn_${data[i].prdtId}"
+                                            onclick="document.getElementById('modal_${data[i].prdtId}').style.display='block'" >장바구니</button>
+                                </div>
+                                <div id="modal_${data[i].prdtId}" class="w3-modal m-t-50">
+                                    <div class="w3-modal-content w3-animate-opacity w3-card-4">
+                                        <span onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'" 
+                                        class="w3-button w3-display-topright">&times;</span>
+                                        <h2>옵션선택</h2>
+                                        <div class="w3-container" style="height: 400px !important;">
+                                            <div>
+                                                <select id="optionList_${data[i].prdtId}">
+                                                    <option>??????</option>    
+                                                </select>    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        `;
+
+                //상품옵션
+                let prdtId = data[i].prdtId;
+                $.ajax({
+                    url: "prdtoption",
+                    method: "GET",
+                    data : {prdtId : prdtId},
+                    success: function(data){
+                        data.map((item) => {
+                            const productOptionList = data[i].optDetaNm.split(",");
+                            if(productOptionList.length != 0) {
+                                for(let i = 0; i < productOptionList.length; i++) {
+                                    const sizeOptionElement = document.createElement("option");
+                                    sizeOptionElement.innerText = productOptionList[i];
+                                    sizeOptionElement.value = productOptionList[i];
+                                    $(`#optionList_${prdtId}`).append(sizeOptionElement);
+                                }
+                            } 
+                            
+                        });
+                        console.log(data);
+                    },
+                    error : function(rej) {
+                        console.log(rej);
+                    }
+                })
+                if(data.length == 0){
+                    let tr = document.createElement('tr');
+                    let td = document.createElement('td');
+                    $(td).attr('colspan', '8');
+                    
+                    td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
+                    tr.appendChild(td);
+                    document.querySelector('#getOrderList').appendChild(tr);
+                };
+            }// end for
+        };
+
+        function domId(id) { //id로 태그찾기 압축용
+            return document.getElementById(id);
+        }
+
+        //날짜변환
+        function dateChange(data) {
+            let newData = new Date(data);
+            let result = newData.getFullYear() + "-" +
+            (newData.getMonth() < 10
+            ? "0" + (newData.getMonth() + 1)
+            : newData.getMonth() + 1) +
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate());
+            return result;
+        };
+
+        //금액포맷
+        function AddComma(num) {
+            var regexp = /\B(?=(\d{3})+(?!\d))/g;
+            return num.toString().replace(regexp, ',');
+        };
+
+    </script>
 </div>
 </body>
 </html>

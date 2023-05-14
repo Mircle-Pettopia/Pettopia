@@ -13,8 +13,12 @@ public interface MypageMapper {
 	public List<MypageVO> getShipCount(String meId);
 	public MypageVO ordtIdOptionInfo(String ordtId);
 	
-	//디테일조회
+	//주문내역디테일조회
 	public List<MypageVO> ordrDetailList(String ordrId);
+	//관심상품조회
+	public List<MypageVO> getInterestList(String meId);
+	//상품번호 기준 옵션
+	public List<MypageVO> prdtIdOptionInfo(String prdtId);
 	
 	//페이징
 	public int countOrderList();

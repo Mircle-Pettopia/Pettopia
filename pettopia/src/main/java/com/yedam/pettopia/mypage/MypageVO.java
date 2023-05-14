@@ -51,6 +51,9 @@ public class MypageVO {
 	private int shipCount;
 	private int page;
 	private int rn;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date intInDt;
+	private int prdtPrc;
 	
 	private int nowPage, startPage, endPage, totals, cntPerPage, lastPage, stars, ends;
 	private int cntPage = 8;

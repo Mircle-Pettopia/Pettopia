@@ -155,6 +155,64 @@
 		    ORDT_ID = #{ordtId}
 	</select>
   
+  	<!-- 관심상품 조회 -->
+  	<select id="getInterestList" resultType="MypageVO">
+	  	SELECT
+		    ip.prdt_id,
+		    int_in_dt,
+		    prdt_nm,
+		    is_main,
+		    prdt_img,
+		    prdt_prc
+		FROM interest_product ip
+		    JOIN product pr
+		        ON ip.prdt_id = pr.prdt_id
+		            JOIN PRODUCT_IMG img
+		                ON ip.prdt_id = img.prdt_id
+		WHERE 1=1
+		AND is_main = 'Y'
+		AND me_id = #{meId}
+  	</select>
+  
+  	<!-- 상품번호 기준 옵션 -->
+  	<select id="prdtIdOptionInfo" resultType="MypageVO">
+	  	SELECT
+		    DISTINCT
+		    	pr.prdt_id,
+			    OPT_NM,
+			    LISTAGG(OPT_DETA_NM, ',') WITHIN GROUP(ORDER BY OPT_DETA_NM) OVER(PARTITION BY OPT_NM) AS OPT_DETA_NM
+		FROM product pr
+		    JOIN product_option po
+		        ON pr.prdt_id = po.prdt_id
+		            JOIN product_option_detail pod
+		                ON po.opt_id = pod.opt_id
+		WHERE 1=1
+		AND  OPT_NM IN('색상','사이즈')
+		AND pr.prdt_id = #{prdtId}
+  	</select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
