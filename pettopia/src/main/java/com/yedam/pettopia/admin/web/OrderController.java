@@ -28,7 +28,8 @@ public class OrderController {
 	// 주문 관리 페이지
 	@GetMapping("orderMag")
 	public String orderMagForm(Model model) {
-		model.addAttribute("count", orderService.prcStCnt());
+		model.addAttribute("prcSt", orderService.prcStCnt());
+		model.addAttribute("shipSt", orderService.shipStCnt());
 		model.addAttribute("code", codeService.getCodes("PS", "SS"));
 		return "admin/orderMag";
 	}
@@ -55,9 +56,9 @@ public class OrderController {
 	// 배송 상태 변경
 	@PostMapping("updateShipSt")
 	@ResponseBody
-	public String updateShipSt(OrderVO vo) {
+	public Map<String, Integer> updateShipSt(OrderVO vo) {
 		orderService.updateShipSt(vo);
-		return "success";
+		return orderService.shipStCnt();
 	}
 	
 	// 운송장 등록

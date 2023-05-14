@@ -58,4 +58,13 @@ public class OrderServiceImpl implements OrderService {
 		map.put("orderPrdList", orderMapper.searchPrdList(vo));
 		return map;
 	}
+
+	@Override
+	public Map<String, Integer> shipStCnt() {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("shipSt1", orderMapper.shipStCnt1());
+		map.put("shipSt2", orderMapper.shipStCnt2());
+		map.put("shipSt3", orderMapper.shipStCnt3());
+		return map;
+	}
 }

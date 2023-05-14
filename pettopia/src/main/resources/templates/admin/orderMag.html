@@ -19,22 +19,36 @@
                 <div class="col-lg-12 p-4">
                   <table class="table table-bordered">
                     <tr class="table-primary">
-                      <td colspan="3">주문 현황</td>
+                      <td colspan="3" class="col-sm-6">주문 현황</td>
+                      <td colspan="3">배송 현황</td>
                     </tr>
                     <tr class="table-secondary text-center">
-                      <td>결제대기</td>
+                      <td class="col-sm-2">결제대기</td>
                       <td>결제완료</td>
                       <td>결제취소</td>
+                      <td class="col-sm-2">배송전</td>
+                      <td class="col-sm-2">배송중</td>
+                      <td class="col-sm-2">배송완료</td>
                     </tr>
-                    <tr class="text-center" id="currentPrc">
+                    <tr class="text-center" id="currentSt">
                       <td class="text-primary text-decoration-underline fs-3">
-                        <span th:text="${count.prcSt1}">0</span>건
+                        <span th:text="${prcSt.prcSt1}">0</span>건
                       </td>
                       <td class="text-success text-decoration-underline fs-3">
-                        <span th:text="${count.prcSt2}">0</span>건
+                        <span th:text="${prcSt.prcSt2}">0</span>건
                       </td>
                       <td class="text-danger text-decoration-underline fs-3">
-                        <span th:text="${count.prcSt3}">0</span>건
+                        <span th:text="${prcSt.prcSt3}">0</span>건
+                      </td>
+
+                      <td class="text-primary text-decoration-underline fs-3">
+                        <span th:text="${shipSt.shipSt1}">0</span>건
+                      </td>
+                      <td class="text-success text-decoration-underline fs-3">
+                        <span th:text="${shipSt.shipSt2}">0</span>건
+                      </td>
+                      <td class="text-danger text-decoration-underline fs-3">
+                        <span th:text="${shipSt.shipSt3}">0</span>건
                       </td>
                     </tr>
                   </table>
@@ -162,6 +176,181 @@
           </div>
         </div>
       </section>
+
+      <!-- 상세조회 모달 -->
+      <div
+        class="modal fade"
+        id="detailModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">주문 상세조회</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row mb-4">
+                <h6 class="my-4">주문정보</h6>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >주문번호</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="detailNo"
+                    readonly
+                  />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >주문자</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="detailNm"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >주문일자</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="Date"
+                    class="form-control"
+                    id="detailDate"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <h6 class="my-4">상품정보</h6>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >상품명</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" readonly />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >판매가</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" readonly />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <h6 class="my-4">배송정보</h6>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >받는 사람</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    readonly
+                    id="rcvPsn"
+                  />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >연락처</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    readonly
+                    id="rcvPhone"
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >주소</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    readonly
+                    id="rcvAddr"
+                  />
+                </div>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >배송 요청사항</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" readonly id="note" />
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <h6 class="my-4">결제정보</h6>
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >적립금</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" readonly id="point" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >배송비</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    readonly
+                    id="shipPrc"
+                  />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >총금액</label
+                >
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" readonly id="ttPrc" />
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label class="col-sm-2 col-form-label fw-bolder text-center"
+                  >결제금액</label
+                >
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    readonly
+                    id="resultPrc"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <script>
         const Grid = tui.Grid;
 
@@ -252,7 +441,7 @@
             // 상품 관리 리스트(그리드)
             const orderList = new Grid({
               el: document.getElementById("orderList"),
-              rowHeaders: ["checkbox", "rowNum"],
+              rowHeaders: ["rowNum"],
               bodyHeight: 430,
               pageOptions: {
                 useClient: true,
@@ -438,9 +627,9 @@
                       prcSt: value,
                     },
                     success: function (result) {
-                      $("#currentPrc td:first-child span").text(result.prcSt1);
-                      $("#currentPrc td:nth-child(2) span").text(result.prcSt2);
-                      $("#currentPrc td:last-child span").text(result.prcSt3);
+                      $("#currentSt td:nth-child(1) span").text(result.prcSt1);
+                      $("#currentSt td:nth-child(2) span").text(result.prcSt2);
+                      $("#currentSt td:nth-child(3) span").text(result.prcSt3);
                       Swal.fire({
                         icon: "success",
                         title: "결제상태가 변경되었습니다.",
@@ -459,12 +648,13 @@
                       shipSt: value,
                     },
                     success: function (result) {
-                      if (result == "success") {
-                        Swal.fire({
-                          icon: "success",
-                          title: "배송상태가 변경되었습니다.",
-                        });
-                      }
+                      $("#currentSt td:nth-child(4) span").text(result.shipSt1);
+                      $("#currentSt td:nth-child(5) span").text(result.shipSt2);
+                      $("#currentSt td:nth-child(6) span").text(result.shipSt3);
+                      Swal.fire({
+                        icon: "success",
+                        title: "배송상태가 변경되었습니다.",
+                      });
                     },
                     error: function (reject) {
                       console.log(reject);
@@ -596,6 +786,32 @@
                   console.log(reject);
                 },
               });
+            });
+
+            // 더블클릭시 상세조회
+            orderList.on("dblclick", (e) => {
+              let rowData = orderList.getRow(e.rowKey);
+              console.log(rowData);
+              if (e.columnName === "shipSt" || e.columnName === "prcSt") {
+                return;
+              }
+              let point = rowData.point;
+              let shipPrc = rowData.shipPrc;
+              let ttPrc = rowData.ttPrc;
+
+              $("#detailNo").val(rowData.ordrId);
+              $("#detailNm").val(rowData.name);
+              $("#detailDate").val(formattedDate(rowData.ordrDate));
+              $("#rcvPsn").val(rowData.rcvPsn);
+              $("#rcvPhone").val(rowData.rcvPhone);
+              $("#rcvAddr").val(rowData.rcvAddr);
+              $("#note").val(rowData.note);
+              $("#point").val(point);
+              $("#shipPrc").val(shipPrc);
+              $("#ttPrc").val(ttPrc);
+              $("#resultPrc").val(ttPrc + shipPrc - point);
+
+              $("#detailModal").modal("show");
             });
           },
 

@@ -35,4 +35,14 @@ public interface OrderMapper {
 	
 	// 검색 상품
 	public List<OrderVO> searchPrdList(OrderVO vo);
+	
+	// 배송전 카운트
+	public int shipStCnt1();
+	
+	// 배송중 카운트
+	public int shipStCnt2();
+	
+	// 배송완료 카운트
+	public int shipStCnt3();
+	
 }
