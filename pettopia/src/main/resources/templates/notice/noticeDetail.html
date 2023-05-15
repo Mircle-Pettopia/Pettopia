@@ -85,8 +85,8 @@
 				</div>
 				<div class="bt_wrap" sec:authorize="hasAuthority('ROLE_ADMIN')">
 					> <a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
-							type="button" class="btn btnPush btnBlueGreen">수정</button></a> <a
-						th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
+							type="button" class="btn btnPush btnBlueGreen">수정</button></a> 
+							<a th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
 							type="button" class="btn btnPush btnRed">삭제</button></a>
 				</div>
 			</div>

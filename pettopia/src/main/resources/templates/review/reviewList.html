@@ -106,43 +106,36 @@ td, tr, th {
 							</span>작성 가능한 리뷰
 						</h1>
 						<br> <br>
-						<div>
-							<table class="table" id="tableList">
-								<colgroup>
-									<col width="5%">
-									<col width="10%">
-									<col width="5%">
-								</colgroup>
-								<thead style="text-align: center;" id="draw">
-									<tr>
 
-										<th scope="col">이미지</th>
-										<th scope="col">구매일자 <br />상품이름
-										</th>
-										<th scope="col">후기등록버튼</th>
-									</tr>
-								</thead>
-								<tbody>
-									
-									
-								</tbody>
-							</table>
-						</div>
 
-						<div th:each="review : ${reviewList}">
+						<div th:each="review : ${reviewList}"
+							style="width: 925px; height: 150px; font-weight: bold;border-bottom: solid 1px #ddd;margin: 25px 0 0px 0;"}>
 							<div class="title">
-								<img th:src="${review.prdtImg}" />
+								<!--  <img th:src="${review.prdtImg}" />-->
+								<img src="images/item-cart-01.jpg" alt="IMG"
+									style="width: 120px; height: 120px; float: left; margin-right: 20px;" />
 							</div>
-							<div class="name">[[${review.prdtNm}]]</div>
-							<div class="count">[[${review.ordtId}]]</div>
-							<div class="date">[[ ${#dates.format(review.ordrDate,
+							<div
+								style="width: 160px; float: left; margin-right: 20px; height: 120px; line-height: 100px;"
+								font>구매 확정일 : [[ ${#dates.format(review.ordrDate,
 								'yyyy-MM-dd')}]]</div>
-							<div class="btnn">
+
+							<div
+								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">
+								
+								[[${review.prdtNm}]]
+							</div>
+							<div style="height: 120px; float: left; line-height: 100px;">
+								옵션 어쩌구 저쩌구
+								[[${review.ordtId}]]
+							</div>
+							<div class="btnn" style="padding: 20px 0 0 0;">
 								<button type="button"
 									class="btn btnPush btnBlueGreen write-review-btn"
 									id="reviewBtn" data-toggle="modal"
 									data-target="#write-review-modal"
-									style="float: right; font-size: 13px;">후기 등록</button>
+									style="float: right; font-size: 13px; width: 63px;">후기
+									등록</button>
 							</div>
 						</div>
 					</div>
@@ -188,13 +181,14 @@ td, tr, th {
 								<textarea class="form-control" id="review-content"
 									name="contents" rows="5" placeholder="내용을 입력해주세요."></textarea>
 							</div>
-						
+
 						</form>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary" onclick="insertReview()">등록</button>
+						<button type="button" class="btn btn-primary"
+							onclick="insertReview()">등록</button>
 					</div>
 				</div>
 			</div>
@@ -204,31 +198,29 @@ td, tr, th {
 	</div>
 
 	<script>
-			$('#reviewBtn').click(function() {
-				$('#write-review-modal').modal('show');
-			});
-			
-			
-		      function insertReview() {
-		          $.ajax({
-		            url: "reviewInsert",
-		            method: "POST",
-		            async: false,
-		            dataType: "JSON",
-		            data: {
-		              contents: contents.value,
-		            },
-		            success: function (data) {
-		              console.log(data);
-		              alert("데이터 전송 완료");
-		            },
-		            error: function (reject) {
-		              console.log(reject);
-		              alert("에러");
-		            },
-		          })
-		        }
+		$('#reviewBtn').click(function() {
+			$('#write-review-modal').modal('show');
+		});
 
+		function insertReview() {
+			$.ajax({
+				url : "reviewInsert",
+				method : "POST",
+				async : false,
+				dataType : "JSON",
+				data : {
+					contents : contents.value,
+				},
+				success : function(data) {
+					console.log(data);
+					alert("데이터 전송 완료");
+				},
+				error : function(reject) {
+					console.log(reject);
+					alert("에러");
+				},
+			})
+		}
 	</script>
 
 
