@@ -84,4 +84,5 @@ select *  from ( select rownum as rn,a.*   from (
 	<delete id="delKnowHowReply" parameterType="int">
 		delete REPLY where comment_id=#{commentId} and DIVISION = 'DR2'
 	</delete>
+	
 </mapper>

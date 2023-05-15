@@ -115,6 +115,17 @@ public class UserController {
     	return "mypage/userInfo";
     }
     
+    
+    //=========영주 작업중 공용layout  ajax 통신용 사용자 정보 컨트롤러입니다
+    @GetMapping("userInfoAjax")
+    @ResponseBody
+    public Object userInfo(@AuthenticationPrincipal PrincipalDetails principal) {
+    	principal.getUser().setPw(null);//보안을위해 패스워드는 null처리후 보내줌
+    	return principal.getUser();
+    }
+    //=========영주 작업중 여기까지
+    
+    
     //비밀번호체크
     @PostMapping("pwChk")
     @ResponseBody

@@ -185,16 +185,16 @@
                   <span id="NavShipPrice"></span><span>원</span>
                   <br>
                   <hr>
-                  <span style="text-align: left;display: inline-block; float: left;">결제금액:</span>
+                  <span style="text-align: left;display: inline-block; float: left;">결재금액:</span>
                   <span id="NavFinalPrice"></span><span>원</span>
               </div>
               </h3>
               <hr>
-              <h4>결제방식:<span id="payMethod"></span></h4>
+              <h4>결재방식:<span id="payMethod"></span></h4>
               <br>
               <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
                 <label class="btn btn-secondary btncustom active"
-                  onclick="changePayMethod('html5_inicis.INIBillTst','카드결제(Inicis)')">
+                  onclick="changePayMethod('html5_inicis.INIBillTst','카드결재(Inicis)')">
                   <input type="radio" name="payment" id="option1" autocomplete="off" checked> 카드
                 </label>
                 <label class="btn btn-warning btncustom" onclick="changePayMethod('kakaopay','카카오페이')">
@@ -206,8 +206,7 @@
                 </label>
               </div>
               <hr>
-              <button class="btn-success btn-lg btn-block" onclick="requestPay();">결제하기!</button>
-              <button class="btn-success btn-lg btn-block" onclick="insertOrder();">결제하기!(debug)</button>
+              <button class="btn-success btn-lg btn-block" onclick="requestPay();">결재하기!</button>
             </div>
           </div>
 
@@ -218,27 +217,45 @@
 
     <script>
 
-      var OrderNm = '펫토피아!'
-      var CartObject = new Object();
-      var pay_method = 'html5_inicis.INIBillTst';
-      changePayMethod('html5_inicis.INIBillTst', '카드결제(Inicis)');
+      var OrderNm = '펫토피아!' //주문명은 해당이름으로 시작함
+      var CartObject = new Object(); //장바구니정보를 담아둘 전역변수
+      var Respon = new Object();  //결재정보를 담아둘 전역변수
+      var pay_method = 'html5_inicis.INIBillTst'; //결재방법 기본값
+      var UID = GetUser()
+
+      changePayMethod('html5_inicis.INIBillTst', '카드결재(Inicis)'); //결재방법을 바꾸는 함수 (API 입력될 PG Value, DB에 들어갈 결재수단이름)
       function changePayMethod(method, name) { //카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
         pay_method = method;
         payMethod.innerText = name;
       }
-      getCart();
+
+
+      function sumCartOption() { //카트Object의 옵션가격을 더한 각 제품의 가격을 CartObject의 prc에 넣어줌
+        console.log('sumCartOption함수실행')
+        for (let i = 0; i < CartObject.length; i++) {
+          console.log(CartObject[i].crtId + 'Price');
+          let itemId = CartObject[i].crtId + 'Price';
+          CartObject[i].prc = DomId(itemId).innerText;
+        }
+      }
+
+      getCart(); // 해당사용자의 장바구니 목록가져오기
       function getCart() {
         let result = "";
         $.ajax({
           url: "getCart",
           method: "GET",
           async: false,
-          data: { meId: GetUser() },
+          data: { meId: UID },
           success: function (data) {
-            CartObject = data;
+            CartObject = data; //페이지에 들어온이후 장바구니DB에 변동사항이 생기더라도 변하지않도록 장바구니 객체를 저장 
+
             console.log(CartObject);
             console.log('장바구니 목록 불러오기성공');
             drawOrderList(data);
+            console.log('그리기완료');
+            sumCartOption()
+            console.log('제품옵션가격 업데이트완료')
           },
           error: function (reject) {
             console.log(reject);
@@ -247,12 +264,12 @@
         })
       }
 
-      function drawOrderList(data) {
+      function drawOrderList(data) { // 장바구니목록에서 해당 사용자의 구매예정 제품리스트를 그려서 뿌려주는함수
         let prodOverlapKey = '';
         OrderList.innerHTML = '';
         for (let i = 0; i < data.length; i++) {
           if (prodOverlapKey != data[i].crtId) {
-            OrderNm += data[i].prdtNm + '/';
+            OrderNm += data[i].prdtNm + '/'; //결재시 OrderNm에 선언해둔이름 + 제품명/제품명/제품명/... 으로 DB에저장됨 ex) "펫토피아!맛있는사료/장난감공/""
             console.log("drawing row")
             prodOverlapKey = data[i].crtId;
             OrderList.innerHTML += `
@@ -271,14 +288,14 @@
                 </td>
               </tr>`
           }
-          DomId(data[i].crtId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
-          DomId(data[i].crtId + "Price").innerText = DomId(data[i].crtId + "Price").innerText * 1 + data[i].addPrc * 1;
+          DomId(data[i].crtId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] ")); //옵션값을 해당 제품란 옵션칸에 찾아가서 하나씩 더해서 붙여줌
+          DomId(data[i].crtId + "Price").innerText = DomId(data[i].crtId + "Price").innerText * 1 + data[i].addPrc * 1; //옵션에따른 가격을 해당 제품란 단가칸에 찾아가서 기존값+옵션값으로 반복해서 더해줌 
           comPrdtTotal(data[i].crtId);
         }
 
       }
 
-      function comPrdtTotal(target) {
+      function comPrdtTotal(target) { //제품 총가격 계산해서 해당 칸에 넣어서 뿌려주기
         DomId(target + 'Total').innerText = DomId(target + 'Price').innerText * DomId(target + 'CNT').innerText;
         let prdtTotalElements = document.getElementsByClassName('prdtTotal');
         sumPrice.innerText = '0'
@@ -289,17 +306,17 @@
         SumNavDraw()
       }
 
-      function DomId(id) { //id로 태그찾기 압축용
+      function DomId(id) { //id로 태그찾기 압축용 함수
         return document.getElementById(id)
       }
 
-      function SumNavDraw() {
+      function SumNavDraw() { // NAV쪽으로 값들 옮겨 적어주기
         NavSumPrice.innerText = sumPrice.innerText;
         NavShipPrice.innerText = shipPrice.innerText;
         NavFinalPrice.innerText = FinalPrice.innerText;
       }
 
-      function GetUser() {
+      function GetUser() { //사용자 ID 반환하는 함수
         let result = "";
         $.ajax({
           url: "getUser",
@@ -317,7 +334,24 @@
         return result;
       }
 
-      //다음 API
+      function delAllCart() { //사용자의 장바구니를 모두 삭제하는 함수
+        $.ajax({
+          url: "delAllCart",
+          method: "Delete",
+          async: false,
+          data: { meId: UID },
+          success: function (data) {
+            console.log(data + '장바구니 삭제완료');
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        })
+        return result;
+      }
+
+
+      //다음 주소 API
       function sample6_execDaumPostcode() {
         new daum.Postcode({
           oncomplete: function (data) {
@@ -367,13 +401,12 @@
       }; // END 다음 카카오 API 
     </script>
 
-    <!--결제============================ -->
+    <!--결재============================ -->
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
     <script th:inline="javascript" type="text/javascript"
       src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
-    <script>
-      var response;
+    <script>//결재 API
       var IMP = window.IMP; // 생략가능
       IMP.init("imp58116322");
       function requestPay() {
@@ -389,33 +422,34 @@
           buyer_addr: addr.value + addrref.value + addrDtl,
           buyer_postcode: post.value
         }, function (rsp) { // callback
-          //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+          //rsp.imp_uid 값으로 결재 단건조회 API를 호출하여 결재결과를 판단합니다.
           if (rsp.success) {
-            response = rsp;
-            console.log(rsp);
-            insertOrder();
-            alert("결제에 성공하였습니다");
+            Respon = rsp
+            console.log(Respon);
+            let orderCD = insertOrder();
+            Swal.fire('결재완료!', '주문번호:' + orderCD, 'success').then(() => {
+              location.replace("mypage");
+            })
           }
           else {
-            alert("결제에 실패하였습니다 다시시도해주십시오")
+            alert("결재에 실패하였습니다 다시시도해주십시오")
           }
         });
       };
 
 
-      function insertOrder() {
-
+      function insertOrder() { //결재성공시 주문테이블에 해당 주문건 insert
         $.ajax({
           url: "insertOrder",
           method: "Post",
           async: false,
-          dataType: "json",
+          dataType: "text",
           contentType: 'application/json',
           data: JSON.stringify({ 'cartData': JSON.stringify(CartObject), 'userData': JSON.stringify(collectBuyerInfo()) }),
           success: function (data) {
-            alert('주문번호' + data + '성공!')
             console.log(data);
             result = data;
+            delAllCart();//주문 insert가 완료되면 해당유저의 장바구니를 비움
           },
           error: function (reject) {
             console.log(reject);
@@ -424,10 +458,13 @@
         return result;
       }
 
-      function collectBuyerInfo() {
+
+
+      function collectBuyerInfo() { //주문건 insert시 필요정보를 화면단에서 모아서 Object 형식으로 반환하는 함수
+        console.log('데이터 조합단' + Respon.imp_uid);
         result = {
-          meId: GetUser(),
-          imp: response.imp_uid,
+          meId: UID,
+          imp: Respon.imp_uid,
           rcvPsn: reciever.value,
           rcvPhone: tel.value,
           rcvAddr: addr.value + addrref.value + addrDtl.value,
@@ -442,7 +479,7 @@
         return result;
       }
     </script>
-    <!--결제============================= -->
+    <!--결재============================= -->
 
 
   </div>
