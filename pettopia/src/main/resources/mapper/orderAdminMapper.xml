@@ -177,4 +177,24 @@
 		ORDER BY o.ordr_id
 	</select>
 	
+	<!-- 배송전 카운트 -->
+	<select id="shipStCnt1" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_header
+		WHERE ship_st = 'SS1'
+	</select>
+	
+	<!-- 배송중 카운트 -->
+	<select id="shipStCnt2" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_header
+		WHERE ship_st = 'SS2'
+	</select>
+	
+	<!-- 배송완료 카운트 -->
+	<select id="shipStCnt3" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_header
+		WHERE ship_st = 'SS3'
+	</select>
 </mapper>
