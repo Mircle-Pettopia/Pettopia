@@ -45,7 +45,7 @@
 	</delete>
 	
 	<insert id='insertOrderHeader' parameterType='CartVO'>
-		<selectKey keyProperty="newId" resultType="String" order="BEFORE">
+		<selectKey keyProperty="ordrId" resultType="String" order="BEFORE">
 		select 'ORD'||ORDER_SEQ.NEXTVAL from DUAL
 		</selectKey>
 		insert into ORDER_HEADER 
@@ -63,7 +63,7 @@
 			NOTE,
 			IMP)
 		VALUES(
-				#{newId},
+				#{ordrId},
 				#{meId},
 				#{rcvPsn},
 				#{rcvPhone},
@@ -79,7 +79,7 @@
 			)
 	</insert>
 	<insert id='insertOrderDetail' parameterType='CartVO'>
-	<selectKey keyProperty="newId" resultType="String" order="BEFORE">
+	<selectKey keyProperty="ordtId" resultType="String" order="BEFORE">
 	select 'ORDT'||ORDER_DT_SEQ.NEXTVAL from DUAL
 	</selectKey>
 		insert into ORDER_DETAIL
@@ -90,7 +90,7 @@
 		   PRC
 		   )
 		VALUES(
-				#{newId},
+				#{ordtId},
 				#{ordrId},
 				#{prdtId},
 				#{cnt},
@@ -99,7 +99,7 @@
 	</insert>
 	
 	<insert id='insertOrderOption' parameterType='CartVO'>
-	<selectKey keyProperty="newId" resultType="String" order="BEFORE">
+	<selectKey keyProperty="ordtOpCd" resultType="String" order="BEFORE">
 	select 'OROP'||ORDER_OP_SEQ.NEXTVAL from DUAL
 	</selectKey>
 		insert into ORDER_DETAIL
@@ -108,7 +108,7 @@
 		   OPT_DETA_ID,
 		   )
 		VALUES(
-				#{newId},
+				#{ordtOpCd},
 				#{ordtId},
 				#{optDetaId}
 			)
