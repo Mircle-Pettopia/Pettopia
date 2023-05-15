@@ -115,7 +115,7 @@
 								th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}"
 								th:each="pageButton : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
 								<a th:href="@{/noticeList?pageNo={page} (page = ${pageButton})}"
-									th:text="${pageButton}" th:classappend="${currentPage == pageButton} ? 'num on' : 'num'"></a>
+									th:text="${pageButton}" th:classappend="${cri.pageNo == pageButton} ? 'num on' : 'num'"></a>
 									
 							</th:block>
 							<a th:if="${pageMaker.next}"

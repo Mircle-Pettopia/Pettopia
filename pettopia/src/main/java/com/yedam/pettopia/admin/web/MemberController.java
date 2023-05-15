@@ -30,7 +30,6 @@ public class MemberController {
 	@GetMapping("memberList")
 	@ResponseBody
 	public List<MemberVO> memberList(){
-		
 		return memberService.selectMemberList();
 	}
 	

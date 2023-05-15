@@ -74,6 +74,15 @@
 								th:text="*{contents}">
 </textarea>
 						</div>
+						<div >
+							<dl>
+								<dt id="files">첨부파일</dt>
+								<dd>
+									<a th:href="@{/downloadFile(filepath=${noticeDetail.files})}"
+										th:text="${noticeDetail.files}"></a>
+								</dd>
+							</dl>
+						</div>
 					</div>
 					<div class="bt_wrap">
 						<button type="submit" class="btn btnPush btnBlueGreen">수정</button>
