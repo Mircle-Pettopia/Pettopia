@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.pettopia.admin.mapper.ProductMapper;
 import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.mapper.MypageMapper;
 
 @Service
 public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
+	@Autowired ProductMapper pmapper;
 	
 	@Override
 	public List<MypageVO> getOrder(String meId) {
@@ -61,12 +63,14 @@ public class MypageServiceImpl implements MypageService{
 
 	@Override
 	public List<MypageVO> getInterestList(String meId) {
-		return mapper.getInterestList(meId);
-	}
-
-	@Override
-	public List<MypageVO> prdtIdOptionInfo(String prdtId) {
-		return mapper.prdtIdOptionInfo(prdtId);
+		List<MypageVO> my = mapper.getInterestList(meId);
+		
+		for(MypageVO mvo : my) {
+			mvo.setOptionVal(pmapper.selectOptionDetail(mvo.getPrdtId()));
+			
+		}
+		
+		return my;
 	}
 
 

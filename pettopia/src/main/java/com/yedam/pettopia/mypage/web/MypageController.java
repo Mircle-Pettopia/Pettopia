@@ -10,15 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.admin.OptionVO;
 import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.service.MypageService;
+import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 @Controller
 public class MypageController {
 	@Autowired MypageService service;
 	@Autowired CodeService codeService;
+	@Autowired ProductService1 productService;
 	
 	//마이페이지-주문내역
 	@GetMapping("mypage")
@@ -89,7 +92,12 @@ public class MypageController {
 	//마이페이지-관심상품조회
 	@GetMapping("prodInterest")
 	public String prodInterest(Model model,
-							   @AuthenticationPrincipal PrincipalDetails principal) {
+							   @AuthenticationPrincipal PrincipalDetails principal,
+							   String prdtId) {
+		String id = principal.getUser().getMeId();
+		//List<MypageVO> list = service.getInterestList(id); 
+		//System.out.println("list>>>>>>>>>>>>>>>>" + list);
+		//model.addAttribute("list", list);
 		model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("role", principal.getUser().getRole());
@@ -103,11 +111,6 @@ public class MypageController {
 		return service.getInterestList(meId);
 	}
 	
-	@GetMapping("prdtoption")
-	@ResponseBody
-	public List<MypageVO> prdtoption(String prdtId){
-		return service.prdtIdOptionInfo(prdtId);
-	}
 	
 	
 	

@@ -54,6 +54,15 @@
         td, tr, th{
             vertical-align: middle !important;
         }
+
+        .optionW{
+            width: 200px;
+        }
+
+        .optionTitle{
+            width: 100px !important;
+            display: inline-block;;
+        }
     </style>
 
     <div class="container">
@@ -65,7 +74,9 @@
                     <h1>
                         <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
                     </h1>
-                    <h3><sapn id="name" th:text="${name}"></sapn>님의 관심상품목록</h3>
+                    <h3 class="noonnu_font">
+                        <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${name}" ></sapn>
+                        님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;"></h3>
                     <h5>기본정보</h5>
 
                     <!--모달-->
@@ -144,12 +155,14 @@
     <script th:inline="javascript">
         let id = /*[[${id}]]*/
 
+
         const interestList = () => {
             $.ajax({
                 url: 'prodInterestList',
                 method : 'GET',
                 data : {meId : id},
                 success : (data) => {
+                    //console.log(data);
                     drawList(data);
                 },
                 error : (err) => {
@@ -160,20 +173,19 @@
         interestList();
 
         function drawList(data){
-
-            for(let i = 0; i < data.length; i++){
+            let opt ="";
+            for(let i = 0; i < data.length; i++) {
                 let date = dateChange(data[i].intInDt);
                 let price = AddComma(data[i].prdtPrc);
-                console.log(data);
-
-                list.innerHTML += `
+                //console.log(data[i].optionVal);
+                opt += `
                         <tr>
                             <td>
                                 <div style="margin:0 auto; display:inline-block;">
                                     <input type="checkbox">
                                 </div>
                             </td>
-                            <td><img src="download/${data[i].prdtImg}" alt="prod_img"></td>
+                            <td><a href="ProductDetail?prdtId=${data[i].prdtId}"><img src="download/${data[i].prdtImg}" alt="prod_img"></a></td>
                             <td>
                                 <span>${data[i].prdtNm}</span>
                                 <div>${date}</div>
@@ -184,16 +196,38 @@
                                     <button type="button" class="btn btnPush btnBlueGreen" id="optionBtn_${data[i].prdtId}"
                                             onclick="document.getElementById('modal_${data[i].prdtId}').style.display='block'" >장바구니</button>
                                 </div>
+
                                 <div id="modal_${data[i].prdtId}" class="w3-modal m-t-50">
                                     <div class="w3-modal-content w3-animate-opacity w3-card-4">
                                         <span onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'" 
-                                        class="w3-button w3-display-topright">&times;</span>
-                                        <h2>옵션선택</h2>
+                                                class="w3-button w3-display-topright">&times;</span>
+                                        <h3>옵션선택</h3>
                                         <div class="w3-container" style="height: 400px !important;">
                                             <div>
-                                                <select id="optionList_${data[i].prdtId}">
-                                                    <option>??????</option>    
-                                                </select>    
+                                                <!-- 사이즈 -->
+                                                <div id="div2">`;
+
+                            tempOptId  = "";                                                  
+                            for(let j = 0 ; j < data[i].optionVal.length ; j++){
+                                if(j == 0){
+                                    opt += `${data[i].optionVal[j].optNm}<select name="optDetaId">`;
+                                } else if(data[i].optionVal[j].optId != tempOptId){
+                                    opt += `</select><br/>${data[i].optionVal[j].optNm}<select name="optDetaId">`;
+                                }
+                                console.log(data[i].optionVal);
+                                opt += `<option value="${data[i].optionVal[j].optDetaId}" data-price = "${data[i].optionVal[j].addPrc}">${data[i].optionVal[j].optDetaNm}</option>`
+                                tempOptId = data[i].optionVal[j].optId;
+                            }
+                            opt += `</select>`;
+
+
+                            opt += `
+                                                    <!--<div class="optionTitle">
+                                                        <span class="labelW">사이즈</span>
+                                                    </div>-->
+                                                    <button type="button" id="insert">테스트</button>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -202,31 +236,38 @@
                         </tr>
                         `;
 
+                        
+
                 //상품옵션
-                let prdtId = data[i].prdtId;
-                $.ajax({
+                //let prdtId = data[i].prdtId;
+                /* $.ajax({
                     url: "prdtoption",
                     method: "GET",
                     data : {prdtId : prdtId},
                     success: function(data){
-                        data.map((item) => {
-                            const productOptionList = data[i].optDetaNm.split(",");
-                            if(productOptionList.length != 0) {
-                                for(let i = 0; i < productOptionList.length; i++) {
-                                    const sizeOptionElement = document.createElement("option");
-                                    sizeOptionElement.innerText = productOptionList[i];
-                                    sizeOptionElement.value = productOptionList[i];
-                                    $(`#optionList_${prdtId}`).append(sizeOptionElement);
-                                }
-                            } 
-                            
-                        });
                         console.log(data);
+                        for(let i = 0 ; i < data.length ; i++){
+                            const productOptId = data[i].optId;
+                            let productName = data[i].optNm;
+                            let select = document.createElement("select");
+                            select.name = data[i].optNm;
+
+                            for(let j = 0; j < data[i].optionVal.length; j++) {
+                                let option = document.createElement("option");
+                                option.innerText = data[i].optionVal[j].optDetaNm;
+                                option.value = data[i].optionVal[j].optDetaId;
+                                select.append(option);
+                            }
+
+                            $('#div2').append(select);
+                        };
                     },
                     error : function(rej) {
                         console.log(rej);
                     }
-                })
+                })*/
+                
+                //DB에 있는 값이 없으면 없다고 띄우기
                 if(data.length == 0){
                     let tr = document.createElement('tr');
                     let td = document.createElement('td');
@@ -237,7 +278,12 @@
                     document.querySelector('#getOrderList').appendChild(tr);
                 };
             }// end for
+            list.innerHTML = opt;
         };
+
+        $('#insert').on('click',(e)=>{
+            console.log(e);
+        })
 
         function domId(id) { //id로 태그찾기 압축용
             return document.getElementById(id);

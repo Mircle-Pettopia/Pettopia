@@ -57,16 +57,18 @@ WHERE P.PRDT_ID = #{prdtId}
 AND pi.is_main = 'Y'
 
   </select>
- <select id="selectOption" resultType="Product1VO">
- SELECT 	opt_id,
+  
+  	 <!-- 옵션 조회 -->
+	 <select id="selectOption" resultType="Product1VO">
+		SELECT 	opt_id,
 				prdt_id,
 				opt_nm
 		FROM	product_option
 		WHERE	prdt_id = #{prdtId}
 		ORDER BY opt_id
- </select>
+	 </select>
  
- <!-- 옵션 디테일 조회 -->
+ 	<!-- 옵션 디테일 조회 -->
 	<select id="selectOptionDetail" resultType="Product1VO">
 		SELECT	opt_deta_id,
 				opt_deta_nm,
@@ -78,5 +80,7 @@ AND pi.is_main = 'Y'
 	                        WHERE prdt_id = #{prdtId})
 	    ORDER BY opt_deta_id
 	</select>
+	
+
   
   </mapper>

@@ -14,7 +14,6 @@ public interface MypageService {
 	
 	public List<MypageVO> ordrDetailList(String ordrId);
 	public List<MypageVO> getInterestList(String meId);
-	public List<MypageVO> prdtIdOptionInfo(String prdtId);
 	
 	public int countOrderList();
 	public List<MypageVO> pagingTest(MypageVO vo);
