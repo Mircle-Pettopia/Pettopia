@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import com.yedam.pettopia.cart.service.CartService;
 import com.yedam.pettopia.cart.service.vo.CartVO;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -29,16 +27,18 @@ public class CartController {
 
 	final CartService cartService;
 	
-	@GetMapping("CartMain")
+	
+	@GetMapping("CartMain") //장바구니 페이지 호출
 	public String cartMain(Model model) {
 		return "cart/cart";
 	}
-	@GetMapping("OrderMain")
+	
+	@GetMapping("OrderMain") //주문페이지 호출
 	public String orderMain(Model model) {
 		return "cart/order";
 	}
 	
-	@GetMapping("getCart")
+	@GetMapping("getCart") //장바구니 정보 호출
 	@ResponseBody
 	public List<CartVO> getCart(String meId){
 		return cartService.getCart(meId); 
@@ -51,12 +51,14 @@ public class CartController {
 		return cartService.setAmount(crtId, cnt);
 	}
 	
+	// 장바구니 제품 삭제
 	@DeleteMapping("delCart")
 	@ResponseBody
 	public int delCart(String crtId) {
 		return cartService.delCart(crtId);
 	}
 	
+	// 주문시 데이터 파싱후 주문입력실시
 	@PostMapping("insertOrder")
 	@ResponseBody
 	public String insertOrder(@RequestBody final HashMap<String, Object> map) {
@@ -66,5 +68,17 @@ public class CartController {
 		CartVO orderInfo =gson.fromJson(map.get("userData").toString(), CartVO.class);
 	
 		return cartService.insertOrderHeader(orderList,orderInfo);
+	}
+	
+	@DeleteMapping("delAllCart")
+	@ResponseBody
+	public int delAllCart(String meId) {
+		return cartService.delAllCart(meId);
+	}
+	
+	@GetMapping("cartCount")
+	@ResponseBody
+	public int cartCount(String meId) {
+		return cartService.cartCount(meId);
 	}
 }

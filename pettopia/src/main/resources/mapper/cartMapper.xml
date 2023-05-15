@@ -94,7 +94,7 @@
 				#{ordrId},
 				#{prdtId},
 				#{cnt},
-				#{prdtPrc},
+				#{prc}
 			)
 	</insert>
 	
@@ -102,10 +102,10 @@
 	<selectKey keyProperty="ordtOpCd" resultType="String" order="BEFORE">
 	select 'OROP'||ORDER_OP_SEQ.NEXTVAL from DUAL
 	</selectKey>
-		insert into ORDER_DETAIL
+		insert into ORDER_DETAIL_OPTION
 		   (ORDT_OP_CD,
 		   ORDT_ID,
-		   OPT_DETA_ID,
+		   OPT_DETA_ID
 		   )
 		VALUES(
 				#{ordtOpCd},
@@ -113,4 +113,8 @@
 				#{optDetaId}
 			)
 	</insert>
+	
+	<select id='cartCount' parameterType='String' resultType="Integer">
+		select count(*) from cart where me_id=#{meId}
+	</select>
 </mapper>

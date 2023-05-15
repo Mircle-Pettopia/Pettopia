@@ -9,4 +9,6 @@ public interface CartService {
 	public int setAmount(String crtId,int cnt);
 	public int delCart(String crtId);
 	public String insertOrderHeader(List<CartVO> orderList,CartVO orderInfo);
+	public int delAllCart(String meId);
+	public int cartCount(String meId);
 }
