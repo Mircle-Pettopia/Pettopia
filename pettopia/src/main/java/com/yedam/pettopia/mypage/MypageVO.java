@@ -1,13 +1,20 @@
 package com.yedam.pettopia.mypage;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.yedam.pettopia.admin.OptionDetailVO;
 
 import lombok.Data;
 
 @Data
 public class MypageVO {
+	
+	//옵션
+	private List<OptionDetailVO> optionVal;
+	
 	//주문내역 확인
 	
 	//order_detail
@@ -41,6 +48,7 @@ public class MypageVO {
 	private String sCatNm;		//소분류명
 	private String optDetaNm;	//옵션상세명
 	private String optNm;		//옵션명
+	private String optId;
 	
 	//------------------------
 	private int price;			//상품금액 + 옵션추가금액
