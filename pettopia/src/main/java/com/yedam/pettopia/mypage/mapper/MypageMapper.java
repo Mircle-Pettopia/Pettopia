@@ -17,14 +17,15 @@ public interface MypageMapper {
 	public List<MypageVO> ordrDetailList(String ordrId);
 	//관심상품조회
 	public List<MypageVO> getInterestList(String meId);
-	//상품번호 기준 옵션
-	public List<MypageVO> prdtIdOptionInfo(String prdtId);
+	//관심상품 개수
+	public int interestCnt(String meId);
 	
 	//페이징
 	public int countOrderList();
 	public List<MypageVO> pagingTest(MypageVO vo);
 	
-	
+	//관심상품 삭제
+	public int interestDelete(MypageVO vo);
 	
 	
 	

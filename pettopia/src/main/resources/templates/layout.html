@@ -185,10 +185,10 @@
 							<i class="zmdi zmdi-shopping-cart" onclick="location.replace('CartMain');"></i>
 						</div>
 
-						<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0">
-							<i class="zmdi zmdi-favorite-outline"></i>
-						</a>
+						<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
+							data-notify="0" id="interestCounter">
+							<i class="zmdi zmdi-favorite-outline" onclick="location.replace('prodInterest')"></i>
+						</div>
 					</div>
 				</nav>
 			</div>
@@ -521,7 +521,28 @@
 					cartCounter.setAttribute('data-notify', 0);
 				},
 			})
-		}
+		};
+
+		//은애 :D ---- 관심상품 개수도 표기해줬지롱!!
+		productInterestCount();
+		function productInterestCount() {
+			$.ajax({
+				url: "interestCount",
+				method: "GET",
+				async: false,
+				data: { meId: GetUser() },
+				success: function (data) {
+					interestCounter.setAttribute('data-notify', data);
+				},
+				error: function (reject) {
+					console.log(reject);
+					interestCounter.setAttribute('data-notify', 0);
+				},
+			})
+		};
+
+
+
 		//==============AJAX로 로그인정보받아와서 layout 자체적으로 로그인 여부에따른 헤더 변화 코드작성중 InnerHTML 안먹히는 이슈로 잠시보류 내일와서확인함
 		//============== 위에 레거시코드라고 주석 적어놓은부분 대체예정==========================================================
 		// UpdateHeader();

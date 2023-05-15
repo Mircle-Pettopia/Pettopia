@@ -61,16 +61,44 @@ public class MypageServiceImpl implements MypageService{
 		return mapper.ordrDetailList(ordrId);
 	}
 
+	// 관심상품리스트
+	// 옵션 + 옵션디테일 정보도 같이 불러온다
 	@Override
 	public List<MypageVO> getInterestList(String meId) {
+		// 아이디 기준으로 관심상품을 모두 데려온다.
 		List<MypageVO> my = mapper.getInterestList(meId);
+		//System.out.println("my>>>>>>>>>>>>>>>>>>>>>>>>" + my);
 		
+		// my를 반복문 돌려서 옵션디테일을 데려온다
 		for(MypageVO mvo : my) {
+			//System.out.println("mvo>>>>>>>>>>>>>>>>>>>>>>" + mvo);
 			mvo.setOptionVal(pmapper.selectOptionDetail(mvo.getPrdtId()));
-			
 		}
 		
 		return my;
+	}
+
+	@Override
+	public int interestCnt(String meId) {
+		return mapper.interestCnt(meId);
+	}
+
+	@Override
+	public int interestDelete(MypageVO vo) {
+		String id = vo.getMeId();
+		String check_prdtId = vo.getPrdtId();
+		String[] check_prdtId_arr = check_prdtId.split(",");
+		
+		MypageVO mvo = new MypageVO();
+		
+		for(int i = 0 ; i < check_prdtId_arr.length ; i++) {
+			mvo.setMeId(id);
+			mvo.setPrdtId(check_prdtId_arr[i]);
+		}
+		
+		System.out.println("mvo>>>>>>>>>>>>>>>>>>>" + mvo);
+		
+		return mapper.interestDelete(mvo);
 	}
 
 

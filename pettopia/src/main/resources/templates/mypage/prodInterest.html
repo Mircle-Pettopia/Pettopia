@@ -10,17 +10,27 @@
 <body>
 <div layout:fragment="content">
     <style>
-        button{
-            font-size: 11px !important;
-        }
-
         h3 {
             text-align: center;
             margin: 30px 0px;
         }
+        button{
+            font-size: 11px !important;
+        }
+        td img {
+            width: 100px;
+        }
+        table input {
+            width: 30px !important;
+        }
+        th, td {
+            text-align: center;
+        }
+        td, tr, th{
+            vertical-align: middle !important;
+        }
 
         .table-shopping-cart {
-            /* height: 250px; */
             overflow: auto;
             margin-top: 20px;
         }
@@ -29,9 +39,6 @@
             width: 100%;
         }
 
-        td img {
-            width: 100px;
-        }
 
         .btnSet {
             display: flex;
@@ -39,29 +46,39 @@
             margin-top: 20px;
         }
 
-        table input {
-            width: 30px !important;
-        }
-        
-        tr, td, th, span, p{
-            font-size: 13px !important;
-        }
-
-        th, td {
-            text-align: center;
-        }
-
-        td, tr, th{
-            vertical-align: middle !important;
-        }
 
         .optionW{
             width: 200px;
+            margin-bottom: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
         .optionTitle{
             width: 100px !important;
-            display: inline-block;;
+            display: inline-block;
+            
+        }
+
+        #div2{
+            height: 250px;
+        }
+
+        #div2 div{
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        #priceDiv{
+            text-align: right !important;
+            font-size: 16px !important; 
+            margin-top:15px;
+            margin-right: 50px;
+        }
+
+        input[type="checkbox"]{
+            width: 20px;
+            height: 20px;
         }
     </style>
 
@@ -71,31 +88,14 @@
             <!-- 마이페이지 관심상품 -->
             <div class="col-md-8 col-lg-10 p-b-80 fontSize">
                 <div class="p-r-45 p-r-0-lg m-t-50">
-                    <h1>
+                    <h2>
                         <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
-                    </h1>
+                    </h2>
                     <h3 class="noonnu_font">
                         <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${name}" ></sapn>
                         님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;"></h3>
-                    <h5>기본정보</h5>
-
-                    <!--모달-->
-                    <!--<div id="modal" class="w3-modal m-t-50">
-                        <div class="w3-modal-content w3-animate-opacity w3-card-4">
-                        <span onclick="document.getElementById('modal').style.display='none'" 
-                        class="w3-button w3-display-topright">&times;</span>
-                        <h2>옵션선택</h2>
-                        <div class="w3-container" style="height: 400px !important;">
-                            <div id="option"></div>
-                        </div>
-                        </div>
-                    </div>--> <!--end 모달-->
-
                     <!--table-->
                     <div>
-                        <!--<div class="how-itemcart1"></div>
-                        <div class="how-itemcart1"></div>
-                        <div class="how-itemcart1"></div>-->
                         <table class="table">
                             <colgroup>
                                     <col width="15%">
@@ -108,7 +108,7 @@
                                 <tr>
                                     <th>
                                         <div style="margin:0 auto; display:inline-block;">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id="cbx_chkAll">
                                         </div>
                                     </th>
                                     <th>이미지</th>
@@ -117,35 +117,12 @@
                                     <th>선택</th>
                                 </tr>
                             </thead>
-
                             <!-- ↓↓↓여기에 조회된 결과 출력 -->
-                            <tbody id="list">
-                                <!--<tr>
-                                    <td>
-                                        <div style="margin:0 auto; display:inline-block;">
-                                            <input type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td><img src="images/item-cart-02.jpg" alt=""></td>
-                                    <td class="column-3">
-                                        <span>남성 기모 맨투맨L</span>
-                                        <div>2023-04-28</div>
-                                        <div style="margin:0 auto; display:inline-block;">
-                                            <button type="button" class="btn btnPush btnOrange">옵션변경</button>
-                                        </div>
-                                    </td>
-                                    <td>42,000원</td>
-                                    <td>
-                                        <div style="margin:0 auto; display:inline-block;">
-                                            <button type="button" class="btn btnPush btnBlueGreen">장바구니</button>
-                                        </div>
-                                    </td>
-                                </tr>-->
-                            </tbody>
+                            <tbody id="list"></tbody>
                         </table>
                         <div class="btnSet">
                             <button itype="button" class="btn btnPush btnLightBlue">상품주문</button>
-                            <button type="button" class="btn btnPush btnRed">삭제</button>
+                            <button type="button" class="btn btnPush btnRed" id="interestDeleteBtn">삭제</button>
                         </div>
                     </div>
                 </div>
@@ -155,14 +132,13 @@
     <script th:inline="javascript">
         let id = /*[[${id}]]*/
 
-
+        // 관심상품 화면출력
         const interestList = () => {
             $.ajax({
                 url: 'prodInterestList',
                 method : 'GET',
                 data : {meId : id},
                 success : (data) => {
-                    //console.log(data);
                     drawList(data);
                 },
                 error : (err) => {
@@ -179,94 +155,88 @@
                 let price = AddComma(data[i].prdtPrc);
                 //console.log(data[i].optionVal);
                 opt += `
-                        <tr>
-                            <td>
-                                <div style="margin:0 auto; display:inline-block;">
-                                    <input type="checkbox">
-                                </div>
-                            </td>
-                            <td><a href="ProductDetail?prdtId=${data[i].prdtId}"><img src="download/${data[i].prdtImg}" alt="prod_img"></a></td>
-                            <td>
-                                <span>${data[i].prdtNm}</span>
-                                <div>${date}</div>
-                            </td>
-                            <td>${price}원</td>
-                            <td>
-                                <div style="margin:0 auto; display:inline-block;">
-                                    <button type="button" class="btn btnPush btnBlueGreen" id="optionBtn_${data[i].prdtId}"
-                                            onclick="document.getElementById('modal_${data[i].prdtId}').style.display='block'" >장바구니</button>
-                                </div>
+                    <tr id="${data[i].prdtId}">
+                        <td>
+                            <div style="margin:0 auto; display:inline-block;">
+                                <input type="checkbox" name="chk">
+                            </div>
+                        </td>
+                        <td><a href="ProductDetail?prdtId=${data[i].prdtId}"><img src="download/${data[i].prdtImg}" alt="prod_img"></a></td>
+                        <td>
+                            <span>${data[i].prdtNm}</span>
+                            <div>${date}</div>
+                        </td>
+                        <td>${price}원</td>
+                        <td>
+                            <div style="margin:0 auto; display:inline-block;">
+                                <button type="button" class="btn btnPush btnBlueGreen" id="optionBtn_${data[i].prdtId}"
+                                        onclick="document.getElementById('modal_${data[i].prdtId}').style.display='block'">장바구니</button>
+                            </div>
 
-                                <div id="modal_${data[i].prdtId}" class="w3-modal m-t-50">
-                                    <div class="w3-modal-content w3-animate-opacity w3-card-4">
-                                        <span onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'" 
-                                                class="w3-button w3-display-topright">&times;</span>
-                                        <h3>옵션선택</h3>
-                                        <div class="w3-container" style="height: 400px !important;">
-                                            <div>
-                                                <!-- 사이즈 -->
+                            <div id="modal_${data[i].prdtId}" class="w3-modal m-t-50">
+                                <div class="row">
+                                <div class="w3-modal-content w3-animate-opacity w3-card-4">
+                                    <span onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'" 
+                                            class="w3-button w3-display-topright">&times;</span>
+                                    <h3 class="noonnu_font">< < 옵션선택 > ></h3>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="optionTitle" style="width:180px !important; margin-bottom:10px; margin-top:-30px;"><h4 class="noonnu_font">상품명 : ${data[i].prdtNm}</h4></div>
+                                            <br/>
+                                            <img src="download/${data[i].prdtImg}" alt="prod_img" style="width:300px; height:300px;">
+                                        </div> <!-- class="col-6" -->
+
+                                        <div class="col-6">
+                                            <div class="w3-container" style="height: 400px !important;">
                                                 <div id="div2">`;
 
-                            tempOptId  = "";                                                  
+                            tempOptId  = "";
+                            let priceOption = "";
+                            
+                            
                             for(let j = 0 ; j < data[i].optionVal.length ; j++){
                                 if(j == 0){
-                                    opt += `${data[i].optionVal[j].optNm}<select name="optDetaId">`;
+                                    opt += `<div class="optionTitle">${data[i].optionVal[j].optNm}</div><select name="optDetaId" class="optionW" id="optDetaId_${data[i].optionVal[j].optDetaId}">`;
                                 } else if(data[i].optionVal[j].optId != tempOptId){
-                                    opt += `</select><br/>${data[i].optionVal[j].optNm}<select name="optDetaId">`;
+                                    opt += `</select><br/><div class="optionTitle">${data[i].optionVal[j].optNm}</div><select name="optDetaId" class="optionW" id="optDetaId_${data[i].optionVal[j].optDetaId}">`;
                                 }
-                                console.log(data[i].optionVal);
-                                opt += `<option value="${data[i].optionVal[j].optDetaId}" data-price = "${data[i].optionVal[j].addPrc}">${data[i].optionVal[j].optDetaNm}</option>`
+                                opt += `<option value="${data[i].optionVal[j].optDetaId}"
+                                                data-price = "${data[i].optionVal[j].addPrc}"> 
+                                            ${data[i].optionVal[j].optDetaNm}&nbsp;&nbsp;(+<span id="price_${data[i].optionVal[j].optDetaId}">${data[i].optionVal[j].addPrc}<span> 원)
+                                        </option>`
                                 tempOptId = data[i].optionVal[j].optId;
+
+                                /*$(document).on("change", `#optDetaId_${data[i].optionVal[j].optDetaId}`, (e) => {
+                                    console.log(e.target.value);
+                                });*/
                             }
+                            // console.log(tempOptId);
                             opt += `</select>`;
-
-
+                            
                             opt += `
-                                                    <!--<div class="optionTitle">
-                                                        <span class="labelW">사이즈</span>
-                                                    </div>-->
-                                                    <button type="button" id="insert">테스트</button>
+                                                    <br/>
+                                                    <div id="priceDiv">
+                                                        구매금액 : ${price}원
+                                                    </div>
+                                                </div> <!-- end div2 -->
+                                                <div style="margin:0 auto; display:inline-block;">
+                                                    <button type="button" id="cartInsert_${data[i].prdtId}" class="btn btnPush btnBlueGreen" style="width:150px">장바구니 담기</button>
+                                                    <button type="button"  class="btn btnPush btnRed" style="width:150px"
+                                                            onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'">취소</button>
                                                 </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            </div> <!-- end w3-container -->
+                                        </div> <!-- end col-md-6 -->
+                                    </div> <!-- end row -->
+                                </div> <!-- end modal -->
                             </td>
                         </tr>
                         `;
 
-                        
+                // 장바구니 버튼 클릭 시 ....안돼요ㅠㅠ....
+                $(document).on('click', `#cartInsert_${data[i].prdtId}`, (e) => {
+                    console.log(e);
+                });
 
-                //상품옵션
-                //let prdtId = data[i].prdtId;
-                /* $.ajax({
-                    url: "prdtoption",
-                    method: "GET",
-                    data : {prdtId : prdtId},
-                    success: function(data){
-                        console.log(data);
-                        for(let i = 0 ; i < data.length ; i++){
-                            const productOptId = data[i].optId;
-                            let productName = data[i].optNm;
-                            let select = document.createElement("select");
-                            select.name = data[i].optNm;
-
-                            for(let j = 0; j < data[i].optionVal.length; j++) {
-                                let option = document.createElement("option");
-                                option.innerText = data[i].optionVal[j].optDetaNm;
-                                option.value = data[i].optionVal[j].optDetaId;
-                                select.append(option);
-                            }
-
-                            $('#div2').append(select);
-                        };
-                    },
-                    error : function(rej) {
-                        console.log(rej);
-                    }
-                })*/
-                
                 //DB에 있는 값이 없으면 없다고 띄우기
                 if(data.length == 0){
                     let tr = document.createElement('tr');
@@ -280,10 +250,6 @@
             }// end for
             list.innerHTML = opt;
         };
-
-        $('#insert').on('click',(e)=>{
-            console.log(e);
-        })
 
         function domId(id) { //id로 태그찾기 압축용
             return document.getElementById(id);
@@ -306,6 +272,70 @@
             return num.toString().replace(regexp, ',');
         };
 
+        //체크박스
+        $(document).ready(function() {
+			$("#cbx_chkAll").click(function() {
+				if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+				else $("input[name=chk]").prop("checked", false);
+			});
+			
+			$("input[name=chk]").click(function() {
+				var total = $("input[name=chk]").length;
+				var checked = $("input[name=chk]:checked").length;
+				
+				if(total != checked) $("#cbx_chkAll").prop("checked", false);
+				else $("#cbx_chkAll").prop("checked", true); 
+			});
+		});
+
+        //체크박스 클릭 후 삭제버튼 누르면 관심상품 삭제진행
+        $('#interestDeleteBtn').on('click',function(){
+            let check_prdtId = "";
+            $('#list input[type=checkbox]:checked').each(function (index, item) {
+                let tr = $(item).parent().parent().parent()[0];
+                check_prdtId += $(tr).attr("id") + ',';
+
+                //삭제할건지 한 번 더 물어보고 진행하기
+                Swal.fire({
+                    title: '알림',
+                    text: "선택된 상품을 관심상품 리스트에서 삭제하시겠습니까?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '확인',
+                    cancelButtonText: '취소',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url : 'interestDelete',
+                            method : 'POST',
+                            data : {meId : id, prdtId : check_prdtId},
+                            success : (data) => {
+                                if(data > 0){
+                                    Swal.fire(
+                                        '삭제완료',
+                                        '관심상품 리스트에서 삭제되었습니다.',
+                                        'success'
+                                    )
+                                } else {
+                                    Swal.fire(
+                                        '삭제오류',
+                                        '삭제도중 오류가 발생하였습니다.',
+                                        'error'
+                                    )
+                                }
+                            },
+                            error : (err) => {
+                                console.log(err);
+                            }
+                        });
+                    };
+                });
+            });
+        })
+
+        
     </script>
 </div>
 </body>

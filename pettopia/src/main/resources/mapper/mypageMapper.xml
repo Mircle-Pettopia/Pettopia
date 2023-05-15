@@ -172,26 +172,19 @@
 		AND is_main = 'Y'
 		AND me_id = #{meId}
   	</select>
+  	
+  	<!-- 관심상품 개수 -->
+  	<select id='interestCnt' parameterType='String' resultType="Integer">
+		SELECT COUNT(*)
+		FROM interest_product
+		WHERE me_id = #{meId}
+	</select>
   
-  	<!-- 상품번호 기준 옵션 -->
-  	<select id="prdtIdOptionInfo" resultType="MypageVO">
-	  	SELECT
-		    DISTINCT
-		    	pr.prdt_id,
-		    	po.OPT_ID,
-			    OPT_NM,
-			    LISTAGG(OPT_DETA_NM, ',') WITHIN GROUP(ORDER BY OPT_DETA_NM) OVER(PARTITION BY OPT_NM) AS OPT_DETA_NM
-		FROM product pr
-		    JOIN product_option po
-		        ON pr.prdt_id = po.prdt_id
-		            JOIN product_option_detail pod
-		                ON po.opt_id = pod.opt_id
-		WHERE 1=1
-		AND  OPT_NM IN('색상','사이즈','추가옵션')
-		AND pr.prdt_id = #{prdtId}
-  	</select>
-  
-  
+    <delete id="interestDelete" parameterType="MypageVO">
+		DELETE FROM interest_product
+		WHERE me_id = #{meId}
+		AND prdt_id = #{prdtId}
+    </delete>
   
   
   
