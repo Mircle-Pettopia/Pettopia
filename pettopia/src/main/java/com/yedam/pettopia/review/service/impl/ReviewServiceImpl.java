@@ -15,9 +15,20 @@ public class ReviewServiceImpl implements ReviewService {
 	@Autowired
 	ReviewMapper reviewMapper;
 	
+	//작성 가능한 후기 리스트
 	@Override
 	public List<ReviewVO> selectReviewList() {
 		return reviewMapper.selectReviewList();
+	}
+	//후기 작성
+	@Override
+	public int insertReview(ReviewVO reviewVO) {
+		return reviewMapper.insertReview(reviewVO);
+	}
+	//내가 작성한 후기 리스트
+	@Override
+	public List<ReviewVO> selectWrittenList() {
+		return reviewMapper.selectWrittenList();
 	}
 
 }

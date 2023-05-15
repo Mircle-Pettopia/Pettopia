@@ -2,7 +2,6 @@ package com.yedam.pettopia.notice.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 
 import com.yedam.pettopia.notice.Criteria;
 import com.yedam.pettopia.notice.NoticeVO;

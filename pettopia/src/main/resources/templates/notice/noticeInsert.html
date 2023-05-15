@@ -56,7 +56,7 @@
 				<strong>공지사항</strong>
 			</div>
 			<form th:action="@{/noticeInsert}" method="post"
-				th:object="${noticeVO}">
+				th:object="${noticeVO}" enctype="multipart/form-data"> 
 				<div class="board_write_wrap">
 					<div class="board_write">
 						<div class="title">
@@ -72,7 +72,7 @@
 							<dl>
 								<dt>첨부파일</dt>
 								<dd>
-									<input type="file" id="files" th:field="*{files}">
+									<input type="file" id="files" th:field="*{partFile}">
 								</dd>
 							</dl>
 						</div>

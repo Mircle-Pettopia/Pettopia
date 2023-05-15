@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
 <head>
-    <title>Pettopia</title>
-    <meta charset="UTF-8">
+<title>Pettopia</title>
+<meta charset="UTF-8">
 </head>
 <body>
 	<div layout:fragment="content">
-<style>
-#backColor{
+		<style>
+#backColor {
 	margin-top: 30px;
 	background: rgb(248, 245, 250);
 	padding: 10px 0px 10px 0px !important;
@@ -18,101 +19,219 @@
 }
 
 th, td {
-text-align: center;
+	text-align: center;
 }
 
-#btnCss{
-/*float: right;*/
-position: relative;
-bottom: 10px;
-margin-top: 25px;
+#btnCss {
+	/*float: right;*/
+	position: relative;
+	bottom: 10px;
+	margin-top: 25px;
 }
 
-.filter{
-margin-top: 25px;
+.filter {
+	margin-top: 25px;
 }
 
 .filter li {
-display: inline-block;
-padding-top: 10px;
-border: 1px solid rgb(235, 235, 235);
-border-radius: 10px;
-background-color: white;
-padding: 8px 22px 5px 22px;
-} 
-
-tbody img{
-width: 100px;
+	display: inline-block;
+	padding-top: 10px;
+	border: 1px solid rgb(235, 235, 235);
+	border-radius: 10px;
+	background-color: white;
+	padding: 8px 22px 5px 22px;
 }
 
-td, tr, th{
+tbody img {
+	width: 100px;
+}
+
+td, tr, th {
 	vertical-align: middle !important;
+}
+
+#myform fieldset {
+	display: inline-block;
+	direction: rtl;
+	border: 0;
+}
+
+#myform fieldset legend {
+	text-align: right;
+}
+
+.star input[type=radio] {
+	display: none;
+}
+
+.star label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+.star label:hover {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star label:hover ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star input[type=radio]:checked ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#reviewContents {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	resize: none;
 }
 </style>
 
-    <div class="container">
+		<div class="container">
 			<div class="row">
-                <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+				<th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
 
-                <!-- 마이페이지 주문관리 -->
+				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
 					<div class="p-r-45 p-r-0-lg m-t-50">
 						<h1>
-							<span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>작성 가능한 리뷰
+							<span style="font-weight: bold; color: rgb(201, 159, 240);">|
+							</span>작성 가능한 리뷰
 						</h1>
-								<br><br>
-							<div >
-								<table class="table" id="tableList">
-									<colgroup>
-										<col width="10%">
-										<col width="10%">
-										<col width="10%">
-										<col width="10%">
-									</colgroup>
-									<thead style="text-align: center;" id="draw">
-										<tr>
-											<th scope="col">
-												주문일자 <br/>
-												주문번호
-											</th>
-											<th scope="col">이미지</th>
-											<th scope="col">상품이름</th>
-											<th scope="col">후기등록버튼</th>
-										</tr>
-									</thead>
-									<tbody>
-										
-									</tbody>
+						<br> <br>
+						<div>
+							<table class="table" id="tableList">
+								<colgroup>
+									<col width="5%">
+									<col width="10%">
+									<col width="5%">
+								</colgroup>
+								<thead style="text-align: center;" id="draw">
+									<tr>
+
+										<th scope="col">이미지</th>
+										<th scope="col">구매일자 <br />상품이름
+										</th>
+										<th scope="col">후기등록버튼</th>
+									</tr>
+								</thead>
+								<tbody>
 									
-								</table>
+									
+								</tbody>
+							</table>
+						</div>
+
+						<div th:each="review : ${reviewList}">
+							<div class="title">
+								<img th:src="${review.prdtImg}" />
 							</div>
-
-
-
-				<div th:each=" review : ${reviewList}">
-								<!--  <div class="num" th:text="${review.reNo }"></div>-->
-								<div class="title">
-									[[${review.prdtImg }]]
-								</div>
-								<div class="date">[[${review.prdtNm }]]</div>
-								<div class="count">[[${review.ordtId }]]</div>
-								<div class="count2">[[${review.ordrDate }]]</div>
+							<div class="name">[[${review.prdtNm}]]</div>
+							<div class="count">[[${review.ordtId}]]</div>
+							<div class="date">[[ ${#dates.format(review.ordrDate,
+								'yyyy-MM-dd')}]]</div>
+							<div class="btnn">
+								<button type="button"
+									class="btn btnPush btnBlueGreen write-review-btn"
+									id="reviewBtn" data-toggle="modal"
+									data-target="#write-review-modal"
+									style="float: right; font-size: 13px;">후기 등록</button>
 							</div>
-
-							<div sec:authorize="hasAuthority('ROLE_ADMIN')">
-								<a href="noticeInsertForm">
-								<button type="button" class="btn btnPush btnBlueGreen" style="float: right; font-size: 13px;">등록</button></a>
-							</div>
-
-
-
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	
+
+
+
+		<!-- 후기 등록 모달창 -->
+		<div class="modal fade" id="write-review-modal" tabindex="-1"
+			role="dialog" aria-labelledby="write-review-modal-label"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="write-review-modal-label">후기 등록</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<!-- 후기 등록 폼 -->
+						<form class="mb-3" name="myform" id="myform" method="post">
+							<fieldset>
+								<span class="text-bold">별점을 선택해주세요</span>
+								<div class="star">
+									<input type="radio" name="reviewStar" value="5" id="rate1"><label
+										style="display: inline-block;" for="rate1">★</label> <input
+										type="radio" name="reviewStar" value="4" id="rate2"><label
+										style="display: inline-block;" for="rate2">★</label> <input
+										type="radio" name="reviewStar" value="3" id="rate3"><label
+										style="display: inline-block;" for="rate3">★</label> <input
+										type="radio" name="reviewStar" value="2" id="rate4"><label
+										style="display: inline-block;" for="rate4">★</label> <input
+										type="radio" name="reviewStar" value="1" id="rate5"><label
+										style="display: inline-block;" for="rate5">★</label>
+								</div>
+							</fieldset>
+							<div class="form-group">
+								<label for="review-content">내용</label>
+								<textarea class="form-control" id="review-content"
+									name="contents" rows="5" placeholder="내용을 입력해주세요."></textarea>
+							</div>
+						
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-primary" onclick="insertReview()">등록</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 	</div>
-	</body>
+
+	<script>
+			$('#reviewBtn').click(function() {
+				$('#write-review-modal').modal('show');
+			});
+			
+			
+		      function insertReview() {
+		          $.ajax({
+		            url: "reviewInsert",
+		            method: "POST",
+		            async: false,
+		            dataType: "JSON",
+		            data: {
+		              contents: contents.value,
+		            },
+		            success: function (data) {
+		              console.log(data);
+		              alert("데이터 전송 완료");
+		            },
+		            error: function (reject) {
+		              console.log(reject);
+		              alert("에러");
+		            },
+		          })
+		        }
+
+	</script>
+
+
+</body>
 </html>
 </html>
