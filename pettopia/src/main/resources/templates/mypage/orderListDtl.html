@@ -9,11 +9,13 @@
 <div layout:fragment="content">
 <body>
 <style>
-#allOrderSearch{
-width: 130px;
-height: 35px;
-font-size: 13px !important;
-margin: 8px 5px 0px 10px;
+td, tr, th{
+	vertical-align: middle !important;
+  font-size: 12px !important;
+}
+
+#getOrderList th, #getOrderList td{
+  text-align: center;
 }
 
 #btnCss{
@@ -29,10 +31,6 @@ padding: 8px 40px 5px 0px;
 
 tbody img{
 width: 100px;
-}
-
-tbody p, tr {
-font-size: 11px !important;
 }
 
 td, th {
@@ -57,9 +55,8 @@ td, th {
 					<div class="p-r-45 p-r-0-lg m-t-50">
             <h1><span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>주문상세조회</h1>
             <!-- 주문정보 -->
-            <div style="margin-top: 20px;">
+            <div style="margin-top: 30px;">
             <h5 style="margin-bottom: 15px;"><strong>주문정보</strong></h5>
-            <p th:text="${orderlist}"></p>
             <table class="table" th:each="list : ${orderlist}">
               <colgroup>
                 <col width="40%">
@@ -90,79 +87,72 @@ td, th {
           </div><!--end 주문정보-->
 
           <!-- 결제정보 -->
-          <div style="margin-top: 30px;">
+          <div style="margin-top: 40px;">
             <h5 style="margin-bottom: 15px;"><strong>결제정보</strong></h5>
-            <table class="table">
+            <th:block th:each="list : ${orderlist}">
+            <table class="table" >
               <colgroup>
                 <col width="40%">
                 <col width="60%">
               </colgroup>
               <tr class="trColor">
-                <th >총 주문금액</th>
-                <td>30,000원</td>
+                <th>상품 구매금액</th>
+                <td><span data-th-text="${#numbers.formatInteger(list.ttPrc - list.shipPrc - list.point, 3, 'COMMA') + '원'}"></span></td>
               </tr>
-              <tr class="trColor">
-                <th>총 할인금액</th>
-                <td>100원</td>
+              <tr>
+                <th>배송비</th>
+                <td><span data-th-text="${#numbers.formatInteger(list.shipPrc, 3, 'COMMA') + '원'}"></span></td>
+              </tr>
+              <tr>
+                <th>할인금액</th>
+                <td><span data-th-text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span></td>
               </tr>
               <tr class="trColor">
                 <th>총 결제금액</th>
-                <td>29,900원</td>
+                <td><span style="color: red; font-weight: bold;" data-th-text="${#numbers.formatInteger(list.ttPrc, 3, 'COMMA') + '원'}"></span></td>
               </tr>
               <tr>
                 <th>결제수단</th>
-                <td>신용카드</td>
+                <td th:text="${list.mthd}">신용카드</td>
               </tr>
             </table>
+            </th:block>
           </div><!--end 결제정보-->
 
           <!--주문상품정보-->
-          <div style="margin-top: 30px;"> 
+          <div style="margin-top: 40px;"> 
             <h5 style="margin-bottom: 15px;"><strong>주문 상품 정보</strong></h5>
             <table class="table">
               <colgroup>
                 <col width="20%">
-                <col width="25%">
-                <col width="10%">
-                <col width="15%">
                 <col width="20%">
+                <col width="8%">
                 <col width="10%">
+                <col width="13%">
+                <col width="19%">
+                <col width="11%">
               </colgroup>
               <thead>
                 <tr>
                   <th scope="col" style="text-align: center;">이미지</th>
                   <th scope="col" style="text-align: center;">상품정보</th>
                   <th scope="col" style="text-align: center;">수량</th>
+                  <th scope="col" style="text-align: center;">상품금액</th>
                   <th scope="col" style="text-align: center;">상품구매금액</th>
                   <th scope="col" style="text-align: center;">배송구분</th>
                   <th scope="col" style="text-align: center;">주문처리상태</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <a href="#" class="fontColor"><img src="images/about-01.jpg" rel="product"></a>
-                  </td>
-                  <td>
-                    <strong><a href="#" class="fontColor">상품이름</a></strong>
-                    <div>[옵션 : 블랙/FREE]</div>
-                  </td>
-                  <td style="text-align: center;">1</td>
-                  <td style="text-align: center;">30,000원</td>
-                  <td style="text-align: center;">
-                    <p>우체국택배</p>
-                    <a class="fontColor" href="#" style="text-decoration: underline; text-underline-position:under;">
-                      <p>20230509-1521584</p>
-                    </a>
-                  </td>
-                  <td style="text-align: center;">-</td>
-                </tr>
-              </tbody>
-              <tfoot>
+              <tbody id="getOrderList"></tbody>
+              <tfoot id="getPrice" th:each="list : ${orderlist}">
                 <tr class="trColor">
-                  <td colspan="2">[기본배송]</td>
-                  <td colspan="4" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
-                    상품구매금액 34,800 + 배송비 2,200 = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;">37,000원</span>
+                  <td colspan="2" style="text-align: center;">[기본배송]</td>
+                  <td colspan="5" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
+                    상품구매금액 <span th:text="${#numbers.formatInteger(list.ttPrc - list.shipPrc - list.point, 3, 'COMMA') + '원'}"></span>
+                    + 배송비 <span th:text="${#numbers.formatInteger(list.shipPrc, 3, 'COMMA') + '원'}"></span>
+                    - 적립금 <span th:text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span>
+                    = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;"
+                                  th:text="${#numbers.formatInteger(list.ttPrc, 3, 'COMMA') + '원'}"></span>
                   </td>
                 </tr>
               </tfoot>
@@ -170,33 +160,35 @@ td, th {
           </div><!-- end 주문상품정보 -->
 
           <!-- 배송지정보 -->
-          <div style="margin-top: 30px;">
+          <div style="margin-top: 40px;">
             <h5 style="margin-bottom: 15px;"><strong>결제정보</strong></h5>
             <table class="table">
               <colgroup>
                 <col width="40%">
                 <col width="60%">
               </colgroup>
-              <tr class="trColor">
-                <th >받으시는분</th>
-                <td>정은애</td>
-              </tr>
-              <tr>
-                <th>우편번호</th>
-                <td>15286</td>
-              </tr>
-              <tr>
-                <th>주소</th>
-                <td>예담</td>
-              </tr>
-              <tr>
-                <th>연락처</th>
-                <td>010-1212-1212</td>
-              </tr>
-              <tr>
-                <th>배송메시지</th>
-                <td>-</td>
-              </tr>
+              <tbody th:each="list : ${orderlist}">
+                <tr class="trColor">
+                  <th >받으시는분</th>
+                  <td th:text="${list.rcvPsn}"></td>
+                </tr>
+                <tr>
+                  <th>우편번호</th>
+                  <td>15286</td>
+                </tr>
+                <tr>
+                  <th>주소</th>
+                  <td th:text="${list.rcvAddr}"></td>
+                </tr>
+                <tr>
+                  <th>연락처</th>
+                  <td th:text="${list.rcvPhone}">010-1212-1212</td>
+                </tr>
+                <tr>
+                  <th>배송메시지</th>
+                  <td th:text="${list.note}">-</td>
+                </tr>
+              </tbody>
             </table>
           </div><!--end 배송지정보-->
 
@@ -209,6 +201,209 @@ td, th {
 
 			</div>
 		</div>
+    
+    <script th:inline="javascript">
+      let id = /*[[${id}]]*/
+      let list = /*[[${orderlist}]]*/
+      let ordrId = list.ordrId;
+      console.log(list);
+      
+      const orderList = () => {
+				$.ajax({
+          url: "ordrDetailList",
+					method: "GET",
+					data : {ordrId : ordrId},
+          success: function(data){
+						drawOrderList(data);
+					},
+					error : function(rej) {
+            console.log(rej);
+					}
+				})
+			};
+			orderList();
+
+      function drawOrderList(data){
+				let key = '';
+				for(let i = 0 ; i < data.length; i++){
+					let date = dateChange(data[i].ordrDate);
+					let prc = AddComma(data[i].prc);
+					let price = AddComma(data[i].price);
+          let invo = numSorting(String(data[i].invo));
+
+					if(key != data[i].ordtId) {
+						key = data[i].ordtId;
+						//console.log(data[i].ordtId+"row 새로그림");
+						getOrderList.innerHTML += `
+								<tr id="${data[i].ordtId}">
+									<td><a href="ProductDetail?prdtId=${data[i].prdtId}" class="fontColor"><img src="download/${data[i].prdtImg}" alt="img"></a></td>
+									<td id=option>
+										<a href="ProductDetail?prdtId=${data[i].prdtId}" class="fontColor"><strong>${data[i].prdtNm}</strong></a>
+										<br/>
+										<sapn id="${data[i].ordtId}_option"></sapn>
+									</td>
+									<td>${data[i].cnt}</td>
+									<td><span>${prc}</span><span>원</span></td>
+                  <td><span>${price}<span>원</span></span></td>
+									<td><sapn>${data[i].shipSt}<br/><span class="status-link">${invo}</span></span></td>
+									<td>${data[i].prcSt}</td>
+								</tr>
+								`;
+					};
+					let ordtId = data[i].ordtId;
+					//console.log(ordtDt);
+					$.ajax({
+						url: "option",
+						method: "GET",
+						data : {ordtId : ordtId},
+						//async: false,
+						success: function(data){
+							//console.log(data)
+							//drawOrderList(data);
+							if(data){
+								// ',' 기준으로 자르기
+								var beforeStr = data.optDetaNm;
+								var afterStr = beforeStr.split(',');
+								/*console.log(afterStr[0]);
+								console.log(afterStr[1]);*/
+								domId(ordtId + "_option").innerHTML += `옵션정보 : ${afterStr[0]} / ${afterStr[1]}`;
+							}
+						},
+						error : function(rej) {
+							console.log(rej);
+						}
+					})
+					//domId(data[i].ordtId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
+					//console.log((data[i].ordtId + "Options").innerText);
+
+					if(data.length == 0){
+						let tr = document.createElement('tr');
+						let td = document.createElement('td');
+						$(td).attr('colspan', '8');
+						
+						td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
+						tr.appendChild(td);
+						document.querySelector('#getOrderList').appendChild(tr);
+					};
+				}; // end for
+				//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
+				fn_cellMerge('orderList', [4]);
+			};
+
+      function domId(id) { //id로 태그찾기 압축용
+				return document.getElementById(id);
+			}
+      
+      //금액포맷
+			function AddComma(num) {
+				var regexp = /\B(?=(\d{3})+(?!\d))/g;
+				return num.toString().replace(regexp, ',');
+			};
+			//날짜변환
+			function dateChange(data) {
+				let newData = new Date(data);
+				let result = newData.getFullYear() + "-" +
+				(newData.getMonth() < 10
+				? "0" + (newData.getMonth() + 1)
+				: newData.getMonth() + 1) +
+				"-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate());
+				return result;
+			};
+      //운송장번호 포맷
+      function numSorting(num){
+        let result;
+        result = num.substr(0,4) + '-' + num.substr(4,4) + '-' + num.substr(8,4) +'-' + num.substr(12,4);
+        return result;
+      }
+
+      // table td cell merge---------------------------------------------------------------------------------------
+			// 참고 : http://toyuq.tistory.com/251
+			function fn_cellMerge(vid, vcol, vtd){ //테이블 아이디, 셀머지할 컬럼 0부터~, 태그(옵션)
+				
+				var id = vid;
+				var col = vcol;
+				var td = ((!!vtd) ? vtd : "td"  ); // 기본이 td 태그 기준으로 merge함
+				
+				var spanCnt = 1;
+				var preText; //이전 텍스트
+				
+				var r = [];
+				
+				var rows = $("table[id="+id+"] tr").find(td+":eq("+col[0]+")").length; //row 개수
+			
+				if(rows <= 1){
+					return false;
+				}
+				
+				for(var i = 0; col.length > i; i++){
+					r.push({ idx : [], spans : []});
+					if(i == 0){ //첫번째
+						$("table[id="+id+"] tr").find(td+":eq("+col[i]+")").each(function(index, item){// row수만큼 돌린다.
+							if(index == 0) { //첫번째 row
+								r[i].idx.push(index);
+								spanCnt = 1;
+							}else if( (rows-1) == index){ //마지막 row
+								if(preText != $(this).text()){ //중복없이 단일행 마지막
+									r[i].idx.push(index);
+									r[i].spans.push(spanCnt);
+								}else{ //전 값이 동일한 경우
+									spanCnt = spanCnt+1;
+									r[i].spans.push(spanCnt);
+								}
+							}else if(preText != $(this).text()){ //텍스트가 바뀔때 index
+								r[i].idx.push(index);
+								r[i].spans.push(spanCnt);
+								spanCnt = 1;
+							}else{ //위 아래 텍스트가 같을 때
+								spanCnt = spanCnt+1;
+							}
+							preText = $(this).text();
+						});
+					}else if( !r[i-1].idx.length){ // rowSpan할 row가 없다면 종료
+						break;
+					}else{ //그 뒤 그룹으로
+						var j = 1; //그룹 구별자
+						$("table[id="+id+"] tr").find(td+":eq("+col[i]+")").each(function(index, item){// row수만큼 돌린다.
+							if(index == 0) { //첫번째 row
+								r[i].idx.push(index);
+								spanCnt = 1;
+							}else if(r[i-1].idx[j] == (index)){ //rowSpan 적용 시작 지점에서 리셋
+								r[i].idx.push(index);
+								r[i].spans.push(spanCnt);
+								spanCnt = 1;
+								j++;
+							}else if( (rows-1) == index){ //마지막 row
+								if(preText != $(this).text()){ //중복없이 단일행 마지막
+									r[i].idx.push(index);
+									r[i].spans.push(spanCnt);
+								}else{ //전 값이 동일한 경우
+									spanCnt = spanCnt+1;
+									r[i].spans.push(spanCnt);
+								}
+							}else if(preText != $(this).text()){ //텍스트가 바뀔때 index
+								r[i].idx.push(index);
+								r[i].spans.push(spanCnt);
+								spanCnt = 1;
+							}else{ //위 아래 텍스트가 같을 때
+								spanCnt = spanCnt+1;
+							}
+							preText = $(this).text();
+						});
+					}
+				}
+				for(var k = col.length; k > 0; k--){ //역순으로 돌려야 그룹이 안깨짐
+					$("table[id="+id+"] tr").find(td+":eq("+col[k-1]+")").each(function(index, item){
+						if(r[k-1].idx[0] == index){
+							$(this).attr("rowspan",r[k-1].spans[0]);
+							r[k-1].idx.shift();
+							r[k-1].spans.shift();
+						}else{
+							$(this).remove();
+						}
+					});
+				}
+			};
+      </script>
     </div>
 </body>
 </html>

@@ -23,21 +23,39 @@ public class MypageController {
 	//마이페이지-주문내역
 	@GetMapping("mypage")
 	public String orderList(Model model,
-							@AuthenticationPrincipal PrincipalDetails principal) {
+							@AuthenticationPrincipal PrincipalDetails principal,
+							MypageVO vo, String nowPage, String cntPerPage) {
         String id = principal.getUser().getMeId();
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("role", principal.getUser().getRole());
         model.addAttribute("code", codeService.getCodes("SS", "PS"));
+        model.addAttribute("list",service.getOrder(id));
         model.addAttribute("getprcSt", service.getPrcCount(id));
         model.addAttribute("getShipSt", service.getShipCount(id));
+        
+        int total = service.countOrderList();
+        cntPerPage = "8";
+        //한 페이지 당 1~9개의 제품을 보이게 하는 곳
+  		//cntPerPage = 제품별로 최대 나올 수 있는 값
+        if (nowPage == null && cntPerPage == null) {
+    		nowPage = "1";
+    		cntPerPage = "8";
+    	} else if (nowPage == null) {
+    		nowPage = "1";
+    	} else if (cntPerPage == null) { 
+    		cntPerPage = "8";
+    	}
+        
+        vo = new MypageVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+        model.addAttribute("paging", vo);
+        
 		return "mypage/mypage";
 	};
 	
 	@GetMapping("option")
 	@ResponseBody
 	public MypageVO option(String ordtId){
-		System.out.println(ordtId);
 		return service.ordtIdOptionInfo(ordtId);
 	}
 	
@@ -45,7 +63,8 @@ public class MypageController {
 	@GetMapping("getOrder")
 	@ResponseBody
 	public List<MypageVO> getOrder(MypageVO vo){
-		return service.getOrderList(vo);
+		System.out.println("getOrder=======" + vo);
+		return service.pagingTest(vo);
 	}
 	
 	//마이페이지-주문내역상세
@@ -61,7 +80,34 @@ public class MypageController {
 		return "mypage/orderListDtl";
 	}
 	
+	@GetMapping("ordrDetailList")
+	@ResponseBody
+	public List<MypageVO> ordrDetailList(String ordrId) {
+		return service.ordrDetailList(ordrId);
+	}
 	
+	//마이페이지-관심상품조회
+	@GetMapping("prodInterest")
+	public String prodInterest(Model model,
+							   @AuthenticationPrincipal PrincipalDetails principal) {
+		model.addAttribute("id", principal.getUser().getMeId());
+        model.addAttribute("name", principal.getUser().getName());
+        model.addAttribute("role", principal.getUser().getRole());
+		return "mypage/prodInterest";
+	}
+	
+	//마이페이지-관심상품리스트
+	@GetMapping("prodInterestList")
+	@ResponseBody
+	public List<MypageVO> prodInterestList(@RequestParam String meId){
+		return service.getInterestList(meId);
+	}
+	
+	@GetMapping("prdtoption")
+	@ResponseBody
+	public List<MypageVO> prdtoption(String prdtId){
+		return service.prdtIdOptionInfo(prdtId);
+	}
 	
 	
 	

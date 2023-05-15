@@ -13,9 +13,21 @@ public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
 	
 	@Override
-	public MypageVO getOrder(String meId) {
+	public List<MypageVO> getOrder(String meId) {
 		return mapper.getOrder(meId);
 	}
+	
+	//전체 주문디테일 개수 들고온다
+	@Override
+	public int countOrderList() {
+		return mapper.countOrderList();
+	}
+	//페이징기능
+	@Override
+	public List<MypageVO> pagingTest(MypageVO vo) {
+		return mapper.pagingTest(vo);
+	}
+	
 	
 	@Override
 	public MypageVO getOrdrList(String ordrId) {
@@ -41,6 +53,22 @@ public class MypageServiceImpl implements MypageService{
 	public MypageVO ordtIdOptionInfo(String ordtId) {
 		return mapper.ordtIdOptionInfo(ordtId);
 	}
+
+	@Override
+	public List<MypageVO> ordrDetailList(String ordrId) {
+		return mapper.ordrDetailList(ordrId);
+	}
+
+	@Override
+	public List<MypageVO> getInterestList(String meId) {
+		return mapper.getInterestList(meId);
+	}
+
+	@Override
+	public List<MypageVO> prdtIdOptionInfo(String prdtId) {
+		return mapper.prdtIdOptionInfo(prdtId);
+	}
+
 
 	
 

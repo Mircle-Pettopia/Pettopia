@@ -122,10 +122,13 @@ background-color: rgb(233, 233, 233);
 
 .status-link{
     text-align: center;
+	color: skyblue;
+	font-weight: bold;
 }
 
 .status-icons img {
-    width: 5%;
+    width: 30px;
+	height: 30px;
 }
 
 .status {
@@ -143,3 +146,23 @@ background-color: rgb(233, 233, 233);
 	color: black;
 }
 
+/*----------------------------------------------------------*/
+/* 페이징 CSS */
+.pagination {
+	display: inline-block;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+	border-radius:50%;
+}
+
+.pagination a.active {
+	background-color: tomato;
+	color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: silver;}
