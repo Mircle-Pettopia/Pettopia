@@ -117,4 +117,39 @@
 	<select id='cartCount' parameterType='String' resultType="Integer">
 		select count(*) from cart where me_id=#{meId}
 	</select>
+	
+	<!-- 은애 :D !! prodInterest -> cart insert (cart)-->
+	<insert id="interstInCart" parameterType="CartVO">
+		<selectKey keyProperty="crtId" resultType="String" order="BEFORE">
+			SELECT 'CRT' || seq_cart.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO cart
+			(crt_id, me_id, prdt_id, cnt)
+	    VALUES
+	    	(#{crtId}, #{meId}, #{prdtId}, #{cnt})
+	</insert>
+	
+	<!-- 은애 :D !! prodInterst -> cart insert (cart detail)-->
+	<insert id="interstInCartDetail" parameterType="CartVO">
+		<selectKey keyProperty="crtDetaId" resultType="String" order="BEFORE">
+				SELECT 'CRTD' || seq_cart_detail.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO cart_detail
+			(crt_deta_id, opt_deta_id, crt_id)
+	    VALUES
+	    	(#{crtDetaId}, #{optDetaId}, #{crtId})
+	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

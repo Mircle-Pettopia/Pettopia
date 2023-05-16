@@ -14,4 +14,7 @@ public interface CartMapper {
 	public int insertOrderOption(CartVO vo);
 	public int cartCount(String meId);
 	
+	//은애!!!!
+	public int interstInCart(CartVO vo);
+	public int interstInCartDetail(CartVO cartvo);
 }
