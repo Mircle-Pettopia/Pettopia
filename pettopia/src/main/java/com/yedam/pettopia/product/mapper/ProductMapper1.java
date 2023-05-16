@@ -1,8 +1,11 @@
 package com.yedam.pettopia.product.mapper;
 
 import java.util.List;
+import java.util.Map;
 
-import com.yedam.pettopia.admin.ProductVO;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.pettopia.product.Product1VO;
 
 
@@ -32,5 +35,15 @@ public interface ProductMapper1 {
 	 //옵션상세조회
 	public List<Product1VO> selectOptionDetail(String prdtId);
 	
+	//관심상품등록
+	public void insertProduct(String prdtId, String meId);
+    //관심상품해제
+	public void deleteProduct(String prdtId, String meId);	
 	
-}
+	//장바구니등록
+	
+	 int addCart(@Param("meId") String meId, @Param("prdtId") String prdtId, @Param("cnt") int cnt, @Param("optDetaIds") List<String> optDetaIds);
+
+	}
+
+	 

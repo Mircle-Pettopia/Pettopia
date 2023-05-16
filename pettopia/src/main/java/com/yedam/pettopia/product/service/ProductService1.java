@@ -7,6 +7,7 @@ import com.yedam.pettopia.product.Product1VO;
 
 
 
+
 public interface ProductService1 {
 
 	// 상품 전체 조회
@@ -30,6 +31,13 @@ public interface ProductService1 {
 	
 	//옵션상세조회
 	public List<Product1VO> selectOptionDetail(String prdtId);
-
+	
+	//관심상품등록
+	public void insertProduct(String prdtId, String meId);
+    //관심상품해제
+	public void deleteProduct(String prdtId, String meId);
+	
+	//장바구니등록
+	int addCart(String meId, String prdtId, int cnt, List<String> optDetaIds);
 
 }
