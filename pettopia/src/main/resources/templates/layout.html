@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
-<title>Pettopia</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->
+	<title>Pettopia</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
 	<link rel="icon" type="image/png" href="/images/icons/favicon.png" />
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
@@ -62,7 +63,7 @@
 			font-style: normal;
 		}
 
-		.noonnu_font{
+		.noonnu_font {
 			font-family: 'SUITE-Regular' !important;
 		}
 
@@ -70,43 +71,41 @@
 			font-family: 'SUITE-Regular' !important;
 		}*/
 
-		#wellcomeMag{
+		#wellcomeMag {
 			color: white;
 			font-size: 15px !important;
-			border:none !important;
+			border: none !important;
 			margin-right: 50px;
 			margin-top: 5px;
 		}
 	</style>
 
 </head>
+
 <body class="animsition">
-<!-- Header -->
+	<!-- Header -->
 	<header>
 		<!-- Header desktop -->
-		<div class="container-menu-desktop" >
+		<div class="container-menu-desktop">
 			<!-- Topbar -->
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="right-top-bar flex-w h-full">
 					</div>
-					<div class="right-top-bar flex-w h-full" th:if="${not #strings.isEmpty(id)}">
-						<!--로그인을 했을 때-->
-						<a id="wellcomeMag">
-							<sapn th:text="${name}"></sapn>님 어서오세요!
-						</a>
-						<a href="logout" class="flex-c-m trans-04 p-lr-25" style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-						<a href="mypage" class="flex-c-m trans-04 p-lr-25">마이페이지</a>
+
+
+					<!-- ============================================레거시 코드============================================ -->
+					<div class="right-top-bar flex-w h-full" id="LoginHeader">
+						테스팅
 					</div>
 					<!--로그인이 되어있지 않을 때-->
-					<div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
+					<!-- <div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
 						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
 						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
-					</div>
-					
+					</div> -->
+					<!-- ============================================레거시 코드끝============================================ -->
 				</div>
 			</div>
-
 			<div class="wrap-menu-desktop" style="background-color: white;">
 				<nav class="limiter-menu-desktop container">
 
@@ -172,20 +171,19 @@
 						</div>
 
 						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-							data-notify="2">
-							<i class="zmdi zmdi-shopping-cart"></i>
+							data-notify="0" id="cartCounter">
+							<i class="zmdi zmdi-shopping-cart" onclick="location.replace('CartMain');"></i>
 						</div>
 
-						<a href="#"
-							class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0">
-							<i class="zmdi zmdi-favorite-outline"></i>
-						</a>
+						<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0"
+							id="interestCounter">
+							<i class="zmdi zmdi-favorite-outline" onclick="location.replace('prodInterest')"></i>
+						</div>
 					</div>
 				</nav>
 			</div>
 		</div>
-		
+
 
 		<!-- Modal Search -->
 		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
@@ -204,9 +202,9 @@
 		</div>
 	</header>
 	<!-- end header -->
-	
+
 	<!-- 장바구니 모달 -->
-	<!-- Cart -->
+	<!-- Cart
 	<div class="wrap-header-cart js-panel-cart">
 		<div class="s-full js-hide-cart"></div>
 
@@ -292,13 +290,13 @@
 			</div>
 		</div>
 	</div>
-	
+	 장바구니모달 끝 -->
 	<section class="bg0 p-t-62 p-b-60">
 		<article layout:fragment="content">
 			컨텐트영역
 		</article>
 	</section>
-	
+
 	<!-- Footer -->
 	<footer class="bg3 p-t-75 p-b-32">
 		<div class="container">
@@ -399,8 +397,7 @@
 
 					<form>
 						<div class="wrap-input1 w-full p-b-4">
-							<input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
-								placeholder="email@example.com">
+							<input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email" placeholder="email@example.com">
 							<div class="focus-input1 trans-04"></div>
 						</div>
 
@@ -440,16 +437,15 @@
 					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 					Copyright &copy;
 					<script>document.write(new Date().getFullYear());</script> All rights reserved | Made with <i
-						class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
-						target="_blank">Colorlib</a> &amp; distributed by <a href="https://themewagon.com"
-						target="_blank">ThemeWagon</a>
+						class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+					&amp; distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
 					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 
 				</p>
 			</div>
 		</div>
 	</footer>
-	
+
 	<!--===============================================================================================-->
 	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
@@ -478,6 +474,124 @@
 	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<!--===============================================================================================-->
 	<script src="/js/main.js"></script>
-</body>
-</html>
 
+
+	<!-- 여기서부턴 영주작업중 -->
+	<script>
+
+		function GetUser() { //사용자ID가져오는 함수 컨트롤러는 Cart에있음
+			$.ajax({
+				url: "getUser",
+				method: "GET",
+				async: false,
+				success: function (data) {
+					console.log(data);
+					result = data;
+				},
+				error: function (reject) {
+					console.log(reject);
+					console.log("카트불러오기실패");
+					result = null;
+				},
+			})
+			return result;
+		}
+		CartCount();
+		function CartCount() { //레이아웃에 장바구니 들어있는 갯수 갱신하는 함수 컨트롤러는 Cart에있음
+			$.ajax({
+				url: "cartCount",
+				method: "GET",
+				async: false,
+				data: { meId: GetUser() },
+				success: function (data) {
+					cartCounter.setAttribute('data-notify', data);
+				},
+				error: function (reject) {
+					console.log(reject);
+					cartCounter.setAttribute('data-notify', 0);
+				},
+			})
+		};
+
+		//은애 :D ---- 관심상품 개수도 표기해줬지롱!!
+		productInterestCount();
+		function productInterestCount() {
+			$.ajax({
+				url: "interestCount",
+				method: "GET",
+				async: false,
+				data: { meId: GetUser() },
+				success: function (data) {
+					interestCounter.setAttribute('data-notify', data);
+				},
+				error: function (reject) {
+					console.log(reject);
+					interestCounter.setAttribute('data-notify', 0);
+				},
+			})
+		};
+
+
+
+		// ==============AJAX로 로그인정보받아와서 layout 자체적으로 로그인 여부에따른 헤더 변화 코드작성중 InnerHTML 안먹히는 이슈로 잠시보류 내일와서확인함
+		// ============== 위에 레거시코드라고 주석 적어놓은부분 대체예정==========================================================
+		UpdateHeader();
+		function UpdateHeader() { //레이아웃에 로그인여부, 관리자 여부에따라 레이아웃 헤더 바꾸는함수 컨트롤러는 User에있음
+
+			$.ajax({
+				url: "userInfoAjax",
+				method: "GET",
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					console.log(data);
+					drawLoginHeader(data);
+					console.log(LoginHeader.InnerHTML);
+				},
+				error: function (reject) {
+					console.log(reject);
+					console.log("로그인정보 가져오기 실패");
+					drawNonLoginHeader();
+				},
+			})
+
+		}
+
+		function drawLoginHeader(data) {
+			console.log(LoginHeader);
+			console.log(LoginHeader.innerHTML);
+			console.log('로그인헤더 작성');
+			LoginHeader.innerHTML =
+				`
+				<a id = "wellcomeMag">
+					<span>${data.name}</span>님 어서오세요!
+						</a>
+				<a href="logout" class="flex-c-m trans-04 p-lr-25"
+					style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
+			`
+			if (data.role == 'ADMIN') {
+				LoginHeader.innerHTML +=
+					`<a class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>`
+			}
+			else {
+				LoginHeader.innerHTML +=
+					`<a class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>`
+			}
+		}
+		function drawNonLoginHeader() {
+			console.log('비로그인헤더 작성');
+			LoginHeader.innerHTML = `
+						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
+						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
+					`
+		}
+	</script>
+
+
+
+	<!-- 여기까지 -->
+
+
+</body>
+
+</html>

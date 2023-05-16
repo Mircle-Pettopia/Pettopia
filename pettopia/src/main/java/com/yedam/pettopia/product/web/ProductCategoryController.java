@@ -3,7 +3,6 @@ package com.yedam.pettopia.product.web;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.admin.service.ProductService;
 import com.yedam.pettopia.product.Product1VO;
@@ -174,6 +172,8 @@ public class ProductCategoryController {
 		//참고 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
 		if(context != "anonymousUser") {
 			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+			model.addAttribute("role", principal.getUser().getRole());
+			
 			if(principal.getUser().getSignPath() == "company") {
 				result += principal;
 	            model.addAttribute("id", principal.getUser().getMeId());
@@ -187,9 +187,9 @@ public class ProductCategoryController {
 	            model.addAttribute("token", principal.getUser().getMeSnsToken());
 	        };
 		};
+		
 	        
 		return "index";
 	}
 	
-
 }

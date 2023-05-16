@@ -138,7 +138,6 @@
                     초기화
                   </button>
                 </div>
-
                 <div class="text-end p-2">
                   <button
                     type="button"
@@ -456,7 +455,59 @@
               </div>
 
               <div>
+                <div class="text-end mb-2">
+                  <button class="btn btn-primary" id="optionUpdateBtn">
+                    옵션 수정
+                  </button>
+                </div>
                 <div class="row mb-4" id="optionDetail"></div>
+              </div>
+
+              <div id="optionDetailUpdate" style="display: none">
+                <div class="row mb-4 optionInputDetail">
+                  <div class="row mb-4">
+                    <label class="col-sm-2 col-form-label fw-bolder text-center"
+                      >옵션 이름</label
+                    >
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control optionNmDetail" />
+                    </div>
+                    <div class="col-sm-2">
+                      <button
+                        class="btn btn-primary text-end btn-md"
+                        id="optionAddDetail"
+                      >
+                        +
+                      </button>
+                      <button
+                        class="btn btn-danger text-end btn-md"
+                        id="optionDelDetail"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >옵션 값</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control optionValDetail"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                  <label class="col-sm-2 col-form-label fw-bolder text-center"
+                    >추가 가격</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      type="text"
+                      class="form-control optionPrcDetail"
+                      placeholder="콤마(,)로 구분해주세요"
+                    />
+                  </div>
+                </div>
               </div>
               <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-bolder text-center"
@@ -605,11 +656,11 @@
                       // 추가 가격 입력 폼 생성
                       let label3 = $("<label>")
                         .addClass(
-                          "col-sm-2 col-form-label fw-bolder text-center"
+                          "col-sm-2 col-form-label fw-bolder text-right"
                         )
                         .text("추가 가격");
                       let input3 = $("<input>")
-                        .addClass("form-control")
+                        .addClass("form-control text-end")
                         .val(item.addPrc);
                       let div3 = $("<div>").addClass("col-sm-4").append(input3);
 
@@ -668,6 +719,48 @@
             let lCatId = $("input[name=lCatIdDet]:checked").val();
             let saleSt = $("input[name=saleSt]:checked").val();
             let prdtId = $("#prdtIdDetail").val();
+
+            if (optionUpdateChk == true) {
+              console.log("옵션 수정 한다");
+              let option = [];
+
+              let optionInput = $(".optionInputDetail");
+              for (let i = 0; i < optionInput.length; i++) {
+                let name = $(".optionNmDetail").eq(i).val();
+                let obj = {
+                  optNm: name,
+                  optionVal: [],
+                };
+
+                option.push(obj);
+
+                let values = $(".optionValDetail").eq(i);
+                let prices = $(".optionPrcDetail").eq(i);
+                for (let j = 0; j < values.length; j++) {
+                  let valueArr = values.eq(j).val().split(",");
+                  let priceArr = prices.eq(j).val().split(",");
+                  if (valueArr.length != priceArr.length) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "옵션 값과 추가 가격이 일치 하지 않습니다.",
+                    });
+                    chk = false;
+                    return;
+                  }
+
+                  for (let k = 0; k < valueArr.length; k++) {
+                    let detailObj = {
+                      optDetaNm: valueArr[k].trim().toUpperCase(),
+                      addPrc: parseInt(priceArr[k].trim()),
+                    };
+
+                    obj.optionVal.push(detailObj);
+                  }
+                }
+              }
+              // formData.append("option", JSON.stringify(option));
+              console.log(option);
+            }
 
             if (prdtNm === "") {
               $("#prdtNmDetail").focus();
@@ -771,6 +864,22 @@
                 });
               }
             });
+          });
+
+          let optionUpdateChk = false;
+          // 옵션 수정
+          $(document).on("click", "#optionUpdateBtn", function () {
+            if (optionUpdateChk == false) {
+              optionUpdateChk = true;
+              $("#optionUpdateBtn").text("취소");
+              $("#optionDetail").css("display", "none");
+              $("#optionDetailUpdate").css("display", "");
+            } else {
+              optionUpdateChk = false;
+              $("#optionUpdateBtn").text("옵션 수정");
+              $("#optionDetail").css("display", "");
+              $("#optionDetailUpdate").css("display", "none");
+            }
           });
 
           // 전체 체크박스 선택 시 모든 체크박스 선택
@@ -978,6 +1087,26 @@
             $(".optionInput").last().remove();
           });
 
+          // + 버튼 클릭(상세)
+          $(document).on("click", "#optionAddDetail", function () {
+            var clone = $(".optionInputDetail").eq(0).clone();
+            clone.find("input").val("");
+            clone.find(".btn").remove();
+            $("#optionDetailUpdate").append(clone);
+          });
+
+          // - 버튼 클릭(상세)
+          $(document).on("click", "#optionDelDetail", function () {
+            if ($(".optionInputDetail").length === 1) {
+              Swal.fire({
+                icon: "error",
+                title: "지울 수 없습니다.",
+              });
+              return;
+            }
+            $(".optionInputDetail").last().remove();
+          });
+
           // 검색창에서 대분류 선택하면 소분류 출력
           $("select[name=lCatId]").change(function () {
             $.ajax({
@@ -1057,6 +1186,9 @@
               align: "center",
               sortingType: "asc",
               sortable: true,
+              formatter: function (e) {
+                return formattedMoney(e.value);
+              },
             },
             {
               header: "판매상태",
@@ -1375,7 +1507,7 @@
             }
           });
         });
-        
+
         // 날짜 변환
         function formattedDate(timestamp) {
           let date = new Date(timestamp);
@@ -1384,6 +1516,11 @@
           let day = String(date.getDate()).padStart(2, "0");
           let formattedDate = year + "-" + month + "-" + day;
           return formattedDate;
+        }
+
+        // 돈 변환
+        function formattedMoney(value) {
+          return value.toLocaleString() + "원";
         }
       </script>
     </div>

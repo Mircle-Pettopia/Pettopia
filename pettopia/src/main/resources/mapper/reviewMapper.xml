@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.pettopia.review.mapper.ReviewMapper">
+
+	<!-- 작성 가능한 후기 목록 -->
+	<select id="selectReviewList" resultType="ReviewVO">
+		SELECT me_id, ordt.ordt_id, ordt.prdt_id,
+		TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, prdt_img, prdt_nm
+		FROM
+		order_header ordr
+		JOIN order_detail ordt
+		ON ordr.ordr_id = ordt.ordr_id
+		JOIN product pr
+		ON ordt.prdt_id = pr.prdt_id
+		JOIN product_img img
+		ON
+		pr.prdt_id = img.prdt_id
+		WHERE is_main = 'Y'
+		AND ship_st = 'SS3'
+		AND me_id = #{meId}
+
+	</select>
+
+	<!-- 내가 작성한 후기 목록 -->
+	<select id="selectWrittenList" resultType="ReviewVO">
+		SELECT RE_NO
+		TITLE
+		CONTENTS
+		CREAT_DT
+		RE_IMG
+		POINT
+		ME_ID
+		ORDT_ID
+		PRDT_ID
+		FROM review
+		ORDER BY RE_NO DESC
+	</select>
+
+
+	<!-- 후기 등록 -->
+	<insert id="insertReview" parameterType="ReviewVO">
+		INSERT INTO review (
+		RE_NO,
+		CONTENTS,
+		CREAT_DT,
+		RE_IMG,
+		POINT,
+		ME_ID,
+		ORDT_ID,
+		PRDT_ID
+		)
+		VALUES (
+		(SELECT NVL(MAX(re_No), 0) + 1 FROM review), 
+		#{contents},
+		sysdate,
+		#{reImg},
+		#{point},
+		#{meId},
+		#{ordtId},
+		#{prdtId}
+		)
+	</insert>
+
+
+
+
+
+</mapper>

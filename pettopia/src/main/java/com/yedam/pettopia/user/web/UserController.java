@@ -1,10 +1,10 @@
 package com.yedam.pettopia.user.web;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,20 +16,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.user.UserVO;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
-import com.yedam.pettopia.user.service.UserServiceImpl;
+import com.yedam.pettopia.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class UserController { 
-	private final UserServiceImpl service;
+public class UserController {
+	private final UserService service;
+	private final PasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/login")
-    public String login(@RequestParam(value="error", required = false) String error,
-    					@RequestParam(value="exception", required = false) String exception,
-    					Model model,
-    					HttpServletRequest request) {
+    public String login() {
 		/*String uri = request.getHeader("Referer");
 		
 		if(!uri.contains("/login")){
@@ -37,15 +35,15 @@ public class UserController {
 	    }*/
 
 		/* 에러와 예외를 모델에 담아 view resolve */
-		model.addAttribute("error", error);
-		model.addAttribute("exception", exception);
+		/*model.addAttribute("error", error);
+		model.addAttribute("exception", exception);*/
 		
     	return "login";
 	};
     
     @GetMapping("/loginInfo")
     @ResponseBody
-    public String loginInfo(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public String loginInfo(Authentication authentication){
         String result = "";
 
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
@@ -87,12 +85,15 @@ public class UserController {
     
     @PostMapping("/snsTokenChk")
     @ResponseBody
-    public Boolean snsTokenChk(@RequestParam(value = "meSnsToken", required = false) String meSnsToken) {
+    public Boolean snsTokenChk(String meSnsToken) {
     	Boolean result = false;
     	UserVO info = service.snsGetNullInfo(meSnsToken);
     	String a = info.getAddr();
     	String b = info.getPost();
     	String c = info.getPhone();
+    	System.out.println(a);
+    	System.out.println(a == "null");
+    	System.out.println(a.equals("null"));
     	//주소 상세는 없을 수 있기 때문에 뺐다.
     	if(a == "null" || b == "null" || c == "null") {
     		//정보가 없을 때 트루를 반환한다.
@@ -104,31 +105,32 @@ public class UserController {
     
     @GetMapping("userInfo")
     public String userInfo(Model model,
-			@AuthenticationPrincipal PrincipalDetails principalDetails,
-			Authentication authentication) {
-    	String result = "";
-    	
-		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        result += principal;
-        
+							@AuthenticationPrincipal PrincipalDetails principal) {
         String id = principal.getUser().getMeId();
-        
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("path", principal.getUser().getSignPath());
+        model.addAttribute("role", principal.getUser().getRole());
         model.addAttribute("info", service.getUserAccount(id));
     	return "mypage/userInfo";
     }
+    
+    
+    //=========영주 작업중 공용layout  ajax 통신용 사용자 정보 컨트롤러입니다
+    @GetMapping("userInfoAjax")
+    @ResponseBody
+    public Object userInfo(@AuthenticationPrincipal PrincipalDetails principal) {
+    	principal.getUser().setPw(null);//보안을위해 패스워드는 null처리후 보내줌
+    	return principal.getUser();
+    }
+    //=========영주 작업중 여기까지
+    
     
     //비밀번호체크
     @PostMapping("pwChk")
     @ResponseBody
     public boolean pwChk(@RequestParam String pw,
-			    		@AuthenticationPrincipal PrincipalDetails principalDetails,
-						Authentication authentication) {
-    	
-		PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-    	BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    		             @AuthenticationPrincipal PrincipalDetails principal) {
     	
     	String prinId = principal.getUser().getMeId();
     	
@@ -151,7 +153,6 @@ public class UserController {
 		if(result < 0) {
 			response = false;
 		}
-		System.out.println(response);
     	return response;
     };
     

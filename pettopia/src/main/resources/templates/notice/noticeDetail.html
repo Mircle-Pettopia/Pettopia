@@ -70,19 +70,23 @@
 							<dt id="viewCnt">조회수</dt>
 							<dd>[[${noticeDetail.viewCnt }]]</dd>
 						</dl>
+
 						<dl>
 							<dt id="files">첨부파일</dt>
-							<dd>[[${noticeDetail.files }]]</dd>
+							<dd>
+								<a th:href="@{/downloadFile(filepath=${noticeDetail.files})}"
+									th:text="${noticeDetail.files}"></a>
+							</dd>
 						</dl>
 					</div>
 					<div class="cont" id="contents">
 						<pre>[[${noticeDetail.contents }]]</pre>
 					</div>
 				</div>
-				<div class="bt_wrap" sec:authorize="hasAuthority('ROLE_ADMIN')">>
-					<a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
-							type="button" class="btn btnPush btnBlueGreen">수정</button></a> <a
-						th:href="@{noticeDelete(noNo=${noticeDetail.noNo})}"><button
+				<div class="bt_wrap" sec:authorize="hasAuthority('ROLE_ADMIN')">
+					> <a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
+							type="button" class="btn btnPush btnBlueGreen">수정</button></a> 
+							<a th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
 							type="button" class="btn btnPush btnRed">삭제</button></a>
 				</div>
 			</div>
@@ -106,13 +110,13 @@
 			<!--===============================================================================================-->
 			<script src="vendor/select2/select2.min.js"></script>
 			<script>
-      $(".js-select2").each(function () {
-        $(this).select2({
-          minimumResultsForSearch: 20,
-          dropdownParent: $(this).next(".dropDownSelect2"),
-        });
-      });
-    </script>
+				$(".js-select2").each(function() {
+					$(this).select2({
+						minimumResultsForSearch : 20,
+						dropdownParent : $(this).next(".dropDownSelect2"),
+					});
+				});
+			</script>
 
 
 			<!--===============================================================================================-->
@@ -120,22 +124,20 @@
 			<!--===============================================================================================-->
 			<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 			<script>
-      $(".js-pscroll").each(function () {
-        $(this).css("position", "relative");
-        $(this).css("overflow", "hidden");
-        var ps = new PerfectScrollbar(this, {
-          wheelSpeed: 1,
-          scrollingThreshold: 1000,
-          wheelPropagation: false,
-        });
+				$(".js-pscroll").each(function() {
+					$(this).css("position", "relative");
+					$(this).css("overflow", "hidden");
+					var ps = new PerfectScrollbar(this, {
+						wheelSpeed : 1,
+						scrollingThreshold : 1000,
+						wheelPropagation : false,
+					});
 
-        $(window).on("resize", function () {
-          ps.update();
-        });
-      });
-      
-      
-    </script>
+					$(window).on("resize", function() {
+						ps.update();
+					});
+				});
+			</script>
 			<!--===============================================================================================-->
 
 

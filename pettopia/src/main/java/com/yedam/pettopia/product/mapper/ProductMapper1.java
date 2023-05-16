@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.pettopia.admin.OptionDetailVO;
+import com.yedam.pettopia.admin.ProductVO;
+
 import com.yedam.pettopia.product.Product1VO;
 
 
@@ -35,6 +38,7 @@ public interface ProductMapper1 {
 	 //옵션상세조회
 	public List<Product1VO> selectOptionDetail(String prdtId);
 	
+
 	//관심상품등록
 	public void insertProduct(String prdtId, String meId);
     //관심상품해제
@@ -44,6 +48,83 @@ public interface ProductMapper1 {
 	
 	 int addCart(@Param("meId") String meId, @Param("prdtId") String prdtId, @Param("cnt") int cnt, @Param("optDetaIds") List<String> optDetaIds);
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 	}
-
-	 

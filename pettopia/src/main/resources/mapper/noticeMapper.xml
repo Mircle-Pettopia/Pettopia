@@ -39,7 +39,7 @@
 		WHERE no_no = #{noNo}
 	</select>
 
-
+	<!-- 등록 -->
 	<insert id="insertNotice" parameterType="NoticeVO">
 		INSERT INTO notice (
 		no_no
@@ -61,6 +61,7 @@
 		)
 	</insert>
 	
+	<!-- 수정 -->
 	<update id="updateNotice" parameterType="NoticeVO">
 		UPDATE notice
 			SET title = #{title},
@@ -69,12 +70,14 @@
 	
 	</update>
 	
+	<!-- 조회수 -->
 	<update id="viewCntUpdate" parameterType="int">
 		UPDATE notice
 			SET view_cnt=view_cnt+1
 			WHERE no_no=#{noNo}
 	</update>
 	
+	<!-- 삭제 -->
 	<delete id="deleteNotice" parameterType="int">
 		DELETE FROM notice WHERE no_no=#{noNo}
 	</delete>

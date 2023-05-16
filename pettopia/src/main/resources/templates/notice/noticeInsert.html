@@ -56,10 +56,11 @@
 				<strong>공지사항</strong>
 			</div>
 			<form th:action="@{/noticeInsert}" method="post"
-				th:object="${noticeVO}">
+				th:object="${noticeVO}" enctype="multipart/form-data">
 				<div class="board_write_wrap">
 					<div class="board_write">
 						<div class="title">
+
 							<dl>
 								<dt>제목</dt>
 								<dd>
@@ -72,7 +73,7 @@
 							<dl>
 								<dt>첨부파일</dt>
 								<dd>
-									<input type="file" id="files" th:field="*{files}">
+									<input type="file" id="files" th:field="*{partFile}">
 								</dd>
 							</dl>
 						</div>
@@ -108,32 +109,32 @@
 		<!--===============================================================================================-->
 		<script src="vendor/select2/select2.min.js"></script>
 		<script>
-      $(".js-select2").each(function () {
-        $(this).select2({
-          minimumResultsForSearch: 20,
-          dropdownParent: $(this).next(".dropDownSelect2"),
-        });
-      });
-    </script>
+			$(".js-select2").each(function() {
+				$(this).select2({
+					minimumResultsForSearch : 20,
+					dropdownParent : $(this).next(".dropDownSelect2"),
+				});
+			});
+		</script>
 		<!--===============================================================================================-->
 		<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 		<!--===============================================================================================-->
 		<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 		<script>
-      $(".js-pscroll").each(function () {
-        $(this).css("position", "relative");
-        $(this).css("overflow", "hidden");
-        var ps = new PerfectScrollbar(this, {
-          wheelSpeed: 1,
-          scrollingThreshold: 1000,
-          wheelPropagation: false,
-        });
+			$(".js-pscroll").each(function() {
+				$(this).css("position", "relative");
+				$(this).css("overflow", "hidden");
+				var ps = new PerfectScrollbar(this, {
+					wheelSpeed : 1,
+					scrollingThreshold : 1000,
+					wheelPropagation : false,
+				});
 
-        $(window).on("resize", function () {
-          ps.update();
-        });
-      });
-    </script>
+				$(window).on("resize", function() {
+					ps.update();
+				});
+			});
+		</script>
 		<!--===============================================================================================-->
 		<script src="js/main.js"></script>
 </body>

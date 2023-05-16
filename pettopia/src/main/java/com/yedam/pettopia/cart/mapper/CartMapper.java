@@ -9,4 +9,9 @@ public interface CartMapper {
 	public int setAmount(String crtId,int cnt);
 	public int delCart(String crtId);
 	public int delCartDetail(String crtId);
+	public int insertOrderHeader(CartVO vo);
+	public int insertOrderDetail(CartVO vo);
+	public int insertOrderOption(CartVO vo);
+	public int cartCount(String meId);
+	
 }

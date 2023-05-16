@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.admin.MemberVO;
 import com.yedam.pettopia.admin.service.MemberService;
+import com.yedam.pettopia.common.service.CodeService;
 
 @Controller
 public class MemberController {
@@ -17,8 +18,12 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
+	@Autowired
+	CodeService codeService;
+	
 	@GetMapping("memberMag")
 	public String memberMag(Model model) {
+		model.addAttribute("code", codeService.getCodes("SC"));
 		return "admin/memberMag";
 	}
 	

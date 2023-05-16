@@ -17,7 +17,13 @@ public class MemberVO {
 	private String addr;
 	private String addrDetail;
 
-	
+
 	private String start;
 	private String end;
+	
+	private String[] searchPath;
+	
+	//공통코드
+	private String codCd;
+	private String codTitle;
 }

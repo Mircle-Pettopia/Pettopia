@@ -7,6 +7,18 @@
   <head>
     <meta charset="UTF-8" />
     <title>Pettopia</title>
+    <style>
+      .trColor {
+        background-color: rgb(247, 247, 247);
+      }
+      #getOrderList th,
+      #getOrderList td {
+        text-align: center;
+      }
+      tbody img {
+        width: 100px;
+      }
+    </style>
   </head>
   <body>
     <div layout:fragment="content">
@@ -19,22 +31,36 @@
                 <div class="col-lg-12 p-4">
                   <table class="table table-bordered">
                     <tr class="table-primary">
-                      <td colspan="3">주문 현황</td>
+                      <td colspan="3" class="col-sm-6">주문 현황</td>
+                      <td colspan="3">배송 현황</td>
                     </tr>
                     <tr class="table-secondary text-center">
-                      <td>결제대기</td>
+                      <td class="col-sm-2">결제대기</td>
                       <td>결제완료</td>
                       <td>결제취소</td>
+                      <td class="col-sm-2">배송전</td>
+                      <td class="col-sm-2">배송중</td>
+                      <td class="col-sm-2">배송완료</td>
                     </tr>
-                    <tr class="text-center">
+                    <tr class="text-center" id="currentSt">
                       <td class="text-primary text-decoration-underline fs-3">
-                        <span>0</span>건
+                        <span th:text="${prcSt.prcSt1}">0</span>건
                       </td>
                       <td class="text-success text-decoration-underline fs-3">
-                        <span>0</span>건
+                        <span th:text="${prcSt.prcSt2}">0</span>건
                       </td>
                       <td class="text-danger text-decoration-underline fs-3">
-                        <span>0</span>건
+                        <span th:text="${prcSt.prcSt3}">0</span>건
+                      </td>
+
+                      <td class="text-primary text-decoration-underline fs-3">
+                        <span th:text="${shipSt.shipSt1}">0</span>건
+                      </td>
+                      <td class="text-success text-decoration-underline fs-3">
+                        <span th:text="${shipSt.shipSt2}">0</span>건
+                      </td>
+                      <td class="text-danger text-decoration-underline fs-3">
+                        <span th:text="${shipSt.shipSt3}">0</span>건
                       </td>
                     </tr>
                   </table>
@@ -45,55 +71,97 @@
                     <tr>
                       <th class="text-center col-sm-1" scope="row">주문자</th>
                       <td class="col-sm-4">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="orderNm" />
                       </td>
-                      <th class="text-center col-sm-1" scope="row">상품명</th>
+                      <th class="text-center col-sm-1" scope="row">결제수단</th>
                       <td class="col-sm-4">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="mthd" />
                       </td>
                     </tr>
                     <tr>
                       <th class="text-center" scope="row">주문일자</th>
                       <td>
                         <div class="d-flex align-items-center">
-                          <input type="date" class="form-control mr-2" />
+                          <input
+                            type="date"
+                            class="form-control mr-2"
+                            id="startDate"
+                          />
                           <span class="mx-2">~</span>
-                          <input type="date" class="form-control ml-2" />
+                          <input
+                            type="date"
+                            class="form-control ml-2"
+                            id="endDate"
+                          />
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <th class="text-center" scope="row">결제상태</th>
-                      <td>
+                      <td id="prcStTable">
                         <div class="d-flex">
-                          <div class="form-check me-3">
-                            <input class="form-check-input" type="checkbox" />
-                            <label class="form-check-label">전체</label>
-                          </div>
                           <div class="form-check me-3">
                             <input
                               class="form-check-input"
                               type="checkbox"
+                              id="selectAll"
+                              name="selectAll"
+                            />
+                            <label class="form-check-label" for="selectAll"
+                              >전체</label
+                            >
+                          </div>
+                          <div
+                            class="form-check me-3"
+                            th:each="prcSt : ${code.PS}"
+                          >
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              th:value="${prcSt.codCd}"
+                              th:id="${prcSt.codCd}"
                               name="chk"
                             />
-                            <label class="form-check-label">결제전</label>
+                            <label
+                              class="form-check-label"
+                              th:for="${prcSt.codCd}"
+                              th:text="${prcSt.codTitle}"
+                              >결제전</label
+                            >
                           </div>
                         </div>
                       </td>
                       <th class="text-center" scope="row">배송상태</th>
-                      <td>
+                      <td id="shipStTable">
                         <div class="d-flex">
-                          <div class="form-check me-3">
-                            <input class="form-check-input" type="checkbox" />
-                            <label class="form-check-label">전체</label>
-                          </div>
                           <div class="form-check me-3">
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              name="chk"
+                              id="selectAll1"
+                              name="selectAll1"
                             />
-                            <label class="form-check-label">배송대기</label>
+                            <label class="form-check-label" for="selectAll1"
+                              >전체</label
+                            >
+                          </div>
+                          <div
+                            class="form-check me-3"
+                            th:each="shipSt : ${code.SS}"
+                          >
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              th:value="${shipSt.codCd}"
+                              th:id="${shipSt.codCd}"
+                              name="chk1"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="${shipSt.codCd}"
+                              th:text="${shipSt.codTitle}"
+                              >배송대기</label
+                            >
                           </div>
                         </div>
                       </td>
@@ -108,6 +176,11 @@
                     초기화
                   </button>
                 </div>
+                <div class="text-end p-2">
+                  <button type="button" class="btn btn-primary" id="WaybillBtn">
+                    운송장 등록
+                  </button>
+                </div>
 
                 <div id="orderList"></div>
               </div>
@@ -115,16 +188,191 @@
           </div>
         </div>
       </section>
+
+      <!-- 상세조회 모달 -->
+      <div
+        class="modal fade"
+        id="detailModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">주문 상세조회</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="my-4">
+                <h5 class="my-4"><strong>주문 정보</strong></h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="40%" />
+                    <col width="60%" />
+                  </colgroup>
+
+                  <tr>
+                    <th>주문번호</th>
+                    <td id="detailNo"></td>
+                  </tr>
+                  <tr>
+                    <th>주문일자</th>
+                    <td id="detailDate"></td>
+                  </tr>
+                  <tr>
+                    <th>주문자</th>
+                    <td id="detailNm"></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="my-4">
+                <h5 class="my-4"><strong>배송 정보</strong></h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="40%" />
+                    <col width="60%" />
+                  </colgroup>
+                  <tr class="trColor">
+                    <th>받는 사람</th>
+                    <td id="rcvPsn"></td>
+                  </tr>
+                  <tr>
+                    <th>연락처</th>
+                    <td id="rcvPhone"></td>
+                  </tr>
+                  <tr>
+                    <th>주소</th>
+                    <td id="rcvAddr"></td>
+                  </tr>
+                  <tr>
+                    <th>운송장 번호</th>
+                    <td id="invo"></td>
+                  </tr>
+                  <tr>
+                    <th>배송 요청사항</th>
+                    <td id="note"></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="my-4">
+                <h5 class="my-4">
+                  <strong>상품 정보</strong>
+                </h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="30%" />
+                    <col width="30%" />
+                    <col width="13%" />
+                    <col width="13%" />
+                    <col width="14%" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th scope="col" style="text-align: center">이미지</th>
+                      <th scope="col" style="text-align: center">상품정보</th>
+                      <th scope="col" style="text-align: center">수량</th>
+                      <th scope="col" style="text-align: center">상품금액</th>
+                      <th scope="col" style="text-align: center">
+                        상품구매금액
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="getOrderList"></tbody>
+                </table>
+              </div>
+
+              <div class="my-4">
+                <h5 class="my-4"><strong>결제정보</strong></h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="40%" />
+                    <col width="60%" />
+                  </colgroup>
+                  <tr class="trColor">
+                    <th>상품 구매금액</th>
+                    <td id="ttPrc"></td>
+                  </tr>
+                  <tr>
+                    <th>배송비</th>
+                    <td id="shipPrc"></td>
+                  </tr>
+                  <tr>
+                    <th>할인금액</th>
+                    <td id="point"></td>
+                  </tr>
+                  <tr class="trColor">
+                    <th>총 결제금액</th>
+                    <td id="resultPrc" style="color: red"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <script>
         const Grid = tui.Grid;
+
+        $(document).ready(function () {
+          // 전체 체크박스 선택 시 모든 체크박스 선택(결제상태)
+          $("#selectAll").change(function () {
+            $("#prcStTable input:checkbox").prop(
+              "checked",
+              $(this).prop("checked")
+            );
+          });
+
+          $("input[name='chk']").change(function () {
+            if (!$(this).prop("checked")) {
+              $("#selectAll").prop("checked", false);
+            } else if (
+              $("#prcStTable input[name='chk']:not(:checked)").length === 0
+            ) {
+              $("#selectAll").prop("checked", true);
+            }
+          });
+
+          // 전체 체크박스 선택 시 모든 체크박스 선택(배송상태)
+          $("#selectAll1").change(function () {
+            $("#shipStTable input:checkbox").prop(
+              "checked",
+              $(this).prop("checked")
+            );
+          });
+
+          $("input[name='chk1']").change(function () {
+            if (!$(this).prop("checked")) {
+              $("#selectAll1").prop("checked", false);
+            } else if (
+              $("#shipStTable input[name='chk1']:not(:checked)").length === 0
+            ) {
+              $("#selectAll1").prop("checked", true);
+            }
+          });
+        });
+
         // 상품 리스트
         $.ajax({
           url: "orderList",
           success: function (result) {
-            console.log(result);
+            // 상태 넣기
             let prcSt = result.code.PS;
             let shipSt = result.code.SS;
-            console.log(shipSt);
             let prcStArr = [];
             let shipStArr = [];
             for (let i = 0; i < prcSt.length; i++) {
@@ -134,13 +382,34 @@
               };
               prcStArr.push(obj);
             }
-
             for (let i = 0; i < shipSt.length; i++) {
               let obj = {
                 text: shipSt[i].codTitle,
                 value: shipSt[i].codCd,
               };
               shipStArr.push(obj);
+            }
+
+            // 상품 이름 넣기
+            for (let i = 0; i < result.orderList.length; i++) {
+              let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
+              let prdtNm = ""; // 상품명
+
+              for (let j = 0; j < result.orderPrdList.length; j++) {
+                if (
+                  result.orderPrdList[j].ordrId == result.orderList[i].ordrId
+                ) {
+                  prdtCnt++; // 해당 주문에 속한 상품의 개수 증가
+                  prdtNm = result.orderPrdList[j].prdtNm; // 상품명 설정
+                }
+              }
+
+              if (prdtCnt > 1) {
+                result.orderList[i].prdtNm =
+                  prdtNm + " 외 " + (prdtCnt - 1) + "개";
+              } else {
+                result.orderList[i].prdtNm = prdtNm;
+              }
             }
 
             // 상품 관리 리스트(그리드)
@@ -180,6 +449,9 @@
                   align: "center",
                   sortingType: "asc",
                   sortable: true,
+                  formatter: function (e) {
+                    return formattedMoney(e.value);
+                  },
                 },
                 {
                   header: "결제수단",
@@ -201,18 +473,6 @@
                       listItems: prcStArr,
                     },
                   },
-                  relations: [
-                    {
-                      listItems({ value }) {
-                        console.log(value);
-                        return [value];
-                      },
-                      disabled({ value }) {
-                        console.log(value);
-                        return !value;
-                      },
-                    },
-                  ],
                 },
 
                 {
@@ -241,26 +501,373 @@
                 },
               ],
             });
-            orderList.resetData(result.orderList);
-            // orderList.on("afterChange", function (ev) {
-            //   console.log(ev);
-            //   let getRow = orderList.getRow(ev);
-            //   console.log(getRow);
-            //   let ordrId = getRow.ordrId;
-            //   let prcSt = ev.changes[0].value;
-            //   console.log(ordrId);
-            //   console.log(prcSt);
-            // });
-            orderList.on("afterChange", function (ev) {
-              console.log(ev);
-              ev.changes.forEach(function (change) {
-                console.log(change);
+            // 운송장 등록
+            $(document).on("click", "#WaybillBtn", function () {
+              let selectedRows = orderList.getCheckedRows();
+              if (selectedRows.length === 0) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "체크 해주세요",
+                });
+                return;
+              }
 
-                let row = orderList.getRow(change.rowKey);
-                let ordrId = row.ordrId;
-                let prcSt = change.value;
-                console.log(ordrId, prcSt);
+              let dataArr = [];
+              for (let i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i].prcSt != "PS2") {
+                  Swal.fire({
+                    icon: "error",
+                    title: "결제 완료된 건만 등록 할 수 있습니다.",
+                  });
+                  return;
+                }
+                if (selectedRows[i].invo != 0) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "이미 운송장 등록이 되었습니다.",
+                  });
+                  return;
+                }
+                // 12자리 랜덤 숫자값 생성
+                let randomNumber = Math.floor(
+                  100000000000 + Math.random() * 900000000000
+                );
+                let obj = {
+                  ordrId: selectedRows[i].ordrId,
+                  invo: randomNumber,
+                };
+                dataArr.push(obj);
+              }
+
+              Swal.fire({
+                title: "등록하시겠습니까?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "등록",
+                cancelButtonText: "취소",
+              }).then((result) => {
+                if (result.value) {
+                  $.ajax({
+                    url: "insertInvo",
+                    method: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(dataArr),
+                    success: function (result) {
+                      // 상품 이름 넣기
+                      for (let i = 0; i < result.orderList.length; i++) {
+                        let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
+                        let prdtNm = ""; // 상품명
+
+                        for (let j = 0; j < result.orderPrdList.length; j++) {
+                          if (
+                            result.orderPrdList[j].ordrId ==
+                            result.orderList[i].ordrId
+                          ) {
+                            prdtCnt++; // 해당 주문에 속한 상품의 개수 증가
+                            prdtNm = result.orderPrdList[j].prdtNm; // 상품명 설정
+                          }
+                        }
+
+                        if (prdtCnt > 1) {
+                          result.orderList[i].prdtNm =
+                            prdtNm + " 외 " + (prdtCnt - 1) + "개";
+                        } else {
+                          result.orderList[i].prdtNm = prdtNm;
+                        }
+                      }
+                      selectedRows.forEach((row, idx) => {
+                        orderList.setRow(
+                          row.rowKey,
+                          result.orderList[row.rowKey]
+                        );
+                      });
+
+                      let Toast = Swal.mixin({
+                        toast: true,
+                        position: "top",
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                          toast.addEventListener("mouseenter", Swal.stopTimer);
+                          toast.addEventListener(
+                            "mouseleave",
+                            Swal.resumeTimer
+                          );
+                        },
+                      });
+                      Toast.fire({
+                        icon: "success",
+                        title: "운송장 등록이 정상적으로 되었습니다.",
+                      });
+                    },
+                    error: function (error) {
+                      console.log(error);
+                    },
+                  });
+                }
               });
+            });
+
+            orderList.resetData(result.orderList);
+            orderList.on("afterChange", function (ev) {
+              ev.changes.forEach(function (change) {
+                let row = orderList.getRow(change.rowKey);
+                let rowKey = change.rowKey;
+                let ordrId = row.ordrId;
+                let value = change.value;
+                let prevValue = change.prevValue;
+
+                if (value.startsWith("PS")) {
+                  $.ajax({
+                    url: "updatePrcSt",
+                    method: "post",
+                    data: {
+                      ordrId: ordrId,
+                      prcSt: value,
+                    },
+                    success: function (result) {
+                      $("#currentSt td:nth-child(1) span").text(result.prcSt1);
+                      $("#currentSt td:nth-child(2) span").text(result.prcSt2);
+                      $("#currentSt td:nth-child(3) span").text(result.prcSt3);
+                      Swal.fire({
+                        icon: "success",
+                        title: "결제상태가 변경되었습니다.",
+                      });
+                    },
+                    error: function (reject) {
+                      console.log(reject);
+                    },
+                  });
+                } else if (value.startsWith("SS")) {
+                  $.ajax({
+                    url: "updateShipSt",
+                    method: "post",
+                    data: {
+                      ordrId: ordrId,
+                      shipSt: value,
+                    },
+                    success: function (result) {
+                      $("#currentSt td:nth-child(4) span").text(result.shipSt1);
+                      $("#currentSt td:nth-child(5) span").text(result.shipSt2);
+                      $("#currentSt td:nth-child(6) span").text(result.shipSt3);
+                      Swal.fire({
+                        icon: "success",
+                        title: "배송상태가 변경되었습니다.",
+                      });
+                    },
+                    error: function (reject) {
+                      console.log(reject);
+                    },
+                  });
+                }
+              });
+            });
+            // 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
+            $("#orderNm, #startDate, #endDate, #mthd").on(
+              "keypress",
+              function (event) {
+                if (event.which === 13) {
+                  event.preventDefault();
+                  $("#searchBtn").click();
+                }
+              }
+            );
+
+            $(document).on("click", "#searchBtn", function () {
+              let orderNm = $("#orderNm").val();
+              let startDate = $("#startDate").val();
+              let endDate = $("#endDate").val();
+              let mthd = $("#mthd").val();
+              let prcSt = [];
+              $("#prcStTable input:checkbox[name=chk]:checked").map(
+                function () {
+                  prcSt.push($(this).val());
+                }
+              );
+
+              let shipSt = [];
+              $("#shipStTable input:checkbox[name=chk1]:checked").map(
+                function () {
+                  shipSt.push($(this).val());
+                }
+              );
+
+              $.ajax({
+                url: "searchOrder",
+                data: {
+                  name: orderNm,
+                  mthd: mthd,
+                  ordrDate: startDate,
+                  endDate: endDate,
+                  prcStSearch: prcSt,
+                  shipStSearch: shipSt,
+                },
+                success: function (result) {
+                  // 상품 이름 넣기
+                  for (let i = 0; i < result.orderList.length; i++) {
+                    let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
+                    let prdtNm = ""; // 상품명
+
+                    for (let j = 0; j < result.orderPrdList.length; j++) {
+                      if (
+                        result.orderPrdList[j].ordrId ==
+                        result.orderList[i].ordrId
+                      ) {
+                        prdtCnt++; // 해당 주문에 속한 상품의 개수 증가
+                        prdtNm = result.orderPrdList[j].prdtNm; // 상품명 설정
+                      }
+                    }
+
+                    if (prdtCnt > 1) {
+                      result.orderList[i].prdtNm =
+                        prdtNm + " 외 " + (prdtCnt - 1) + "개";
+                    } else {
+                      result.orderList[i].prdtNm = prdtNm;
+                    }
+                  }
+                  orderList.resetData(result.orderList);
+                },
+                error: function (reject) {
+                  console.log(reject);
+                },
+              });
+            });
+
+            // 초기화
+            $(document).on("click", "#resetBtn", function () {
+              let orderNm = $("#orderNm").val("");
+              let mthd = $("#mthd").val("");
+              let startDate = $("#startDate").val("");
+              let endDate = $("#endDate").val("");
+
+              $("#prcStTable input:checkbox[name=chk]:checked").prop(
+                "checked",
+                false
+              );
+              $("#selectAll:checked").prop("checked", false);
+
+              $("#shipStTable input:checkbox[name=chk1]:checked").prop(
+                "checked",
+                false
+              );
+              $("#selectAll1:checked").prop("checked", false);
+
+              $.ajax({
+                url: "orderList",
+                success: function (result) {
+                  // 상품 이름 넣기
+                  for (let i = 0; i < result.orderList.length; i++) {
+                    let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
+                    let prdtNm = ""; // 상품명
+
+                    for (let j = 0; j < result.orderPrdList.length; j++) {
+                      if (
+                        result.orderPrdList[j].ordrId ==
+                        result.orderList[i].ordrId
+                      ) {
+                        prdtCnt++; // 해당 주문에 속한 상품의 개수 증가
+                        prdtNm = result.orderPrdList[j].prdtNm; // 상품명 설정
+                      }
+                    }
+
+                    if (prdtCnt > 1) {
+                      result.orderList[i].prdtNm =
+                        prdtNm + " 외 " + (prdtCnt - 1) + "개";
+                    } else {
+                      result.orderList[i].prdtNm = prdtNm;
+                    }
+                  }
+                  orderList.resetData(result.orderList);
+                },
+                error: function (reject) {
+                  console.log(reject);
+                },
+              });
+            });
+
+            // 더블클릭시 상세조회
+            orderList.on("dblclick", (e) => {
+              let rowData = orderList.getRow(e.rowKey);
+              if (e.columnName === "shipSt" || e.columnName === "prcSt") {
+                return;
+              }
+              let point = rowData.point;
+              let shipPrc = rowData.shipPrc;
+              let ttPrc = rowData.ttPrc;
+              let prdPrice = ttPrc - shipPrc - point;
+
+              $("#detailNo").text(rowData.ordrId);
+              $("#detailNm").text(rowData.name);
+              $("#detailDate").text(formattedDate(rowData.ordrDate));
+              $("#rcvPsn").text(rowData.rcvPsn);
+              $("#rcvPhone").text(rowData.rcvPhone);
+              $("#rcvAddr").text(rowData.rcvAddr);
+              $("#note").text(rowData.note);
+              $("#point").text(point.toLocaleString() + "원");
+              $("#shipPrc").text(shipPrc.toLocaleString() + "원");
+              $("#ttPrc").text(prdPrice.toLocaleString() + "원");
+              $("#resultPrc").text(ttPrc.toLocaleString() + "원");
+              $("#invo").text(rowData.invo);
+
+              $.ajax({
+                url: "orderDetailPrd",
+                data: { ordrId: rowData.ordrId },
+                success: function (data) {
+                  if (data) {
+                    $("#getOrderList").empty();
+                    for (let i = 0; i < data.length; i++) {
+                      getOrderList.innerHTML += `
+                      <tr>
+                        <td><img src="download/${data[i].prdtImg}" alt="img"></td>
+                        <td id=option>
+                          <strong>${data[i].prdtNm}</strong>
+                          <br/>
+                          <sapn id="${data[i].ordtId}_option"></sapn>
+                        </td>
+                        <td>${data[i].cnt}</td>
+                        <td><span>${data[i].prc}</span><span>원</span></td>
+                        <td><span>${data[i].price}<span>원</span></span></td>
+                      </tr>
+                    `;
+
+                      let ordtId = data[i].ordtId;
+
+                      $.ajax({
+                        url: "orderDetailOption",
+                        data: { ordtId: ordtId },
+                        success: function (result) {
+                          if (result) {
+                            let optDetaNm = result.optDetaNm;
+                            let arr = optDetaNm.split(",");
+                            let optionText = "";
+                            for (let i = 0; i < arr.length; i++) {
+                              if (i == arr.length - 1) {
+                                optionText += arr[i];
+                                break;
+                              }
+                              optionText += arr[i] + " / ";
+                            }
+                            $("#" + ordtId + "_option").text(
+                              "옵션정보 : " + optionText
+                            );
+                          }
+                        },
+                        error: function (reject) {
+                          console.log(reject);
+                        },
+                      });
+                    }
+                  }
+                },
+                error: function (reject) {
+                  console.log(reject);
+                },
+              });
+
+              $("#detailModal").modal("show");
             });
           },
 
@@ -277,6 +884,11 @@
           let day = String(date.getDate()).padStart(2, "0");
           let formattedDate = year + "-" + month + "-" + day;
           return formattedDate;
+        }
+
+        // 돈 변환
+        function formattedMoney(value) {
+          return value.toLocaleString() + "원";
         }
       </script>
     </div>

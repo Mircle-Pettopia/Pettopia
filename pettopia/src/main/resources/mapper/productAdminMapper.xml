@@ -210,14 +210,27 @@
 		ORDER BY opt_id
 	</select>
 	
-	<!-- 옵션 디테일 조회 -->
-	<select id="selectOptionDetail" resultType="OptionDetailVO">
+	<!-- 옵션아이디기준 디테일 받아오기 -->
+	<select id="selectOptionOptIdDetail" resultType="OptionDetailVO">
 		SELECT	opt_deta_id,
 				opt_deta_nm,
 				add_prc,
 				opt_id
 		FROM	product_option_detail
-		WHERE opt_id IN (SELECT opt_id
+		WHERE opt_id = #{optId}
+	    ORDER BY opt_deta_id
+	</select>
+	
+	<!-- 옵션 디테일 조회 -->
+	<select id="selectOptionDetail" resultType="OptionDetailVO">
+		SELECT	opt_deta_id,
+				opt_deta_nm,
+				add_prc,
+				pod.opt_id,
+		        opt_nm
+		FROM	product_option_detail pod JOIN product_option po
+		ON		pod.opt_id = po.opt_id
+		WHERE pod.opt_id IN (SELECT opt_id
 	                        FROM product_option
 	                        WHERE prdt_id = #{prdtId})
 	    ORDER BY opt_deta_id

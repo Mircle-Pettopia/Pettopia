@@ -2,12 +2,16 @@ package com.yedam.pettopia.common;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,4 +40,31 @@ public class FileController {
 
 		return "/download/" + filename;
 	}
+	
+	
+	 @GetMapping("/downloadFile")
+	    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	        try {
+	            String path = request.getParameter("filepath");
+	            File file = new File("C:\\upload", path);
+	            
+	            String fileName = new String(file.getName().getBytes("UTF-8"), "iso-8859-1");
+
+	            response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName +"\"");
+	            response.setContentType("application/octet-stream");
+	            
+	            FileInputStream fileInputStream = new FileInputStream(file);
+	            OutputStream out = response.getOutputStream();
+
+	            int read = 0;
+	            byte[] buffer = new byte[1024];
+	            while ((read = fileInputStream.read(buffer)) != -1) {
+	                out.write(buffer, 0, read);
+	            }
+
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            throw new Exception("download error");
+	        }
+	    }
 }
