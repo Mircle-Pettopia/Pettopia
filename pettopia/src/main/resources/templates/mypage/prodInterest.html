@@ -104,7 +104,7 @@
         <div class="row">
             <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
             <!-- 마이페이지 관심상품 -->
-            <div class="col-md-8 col-lg-10 p-b-80 fontSize">
+            <div class="col-md-8 col-lg-10 p-b-150 fontSize">
                 <div class="p-r-45 p-r-0-lg m-t-50">
                     <h2>
                         <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
@@ -113,7 +113,7 @@
                         <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${name}" ></sapn>
                         님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;"></h3>
                     <!--table-->
-                    <div>
+                    <div style="height: 500px;">
                         <table class="table">
                             <colgroup>
                                     <col width="15%">
@@ -222,19 +222,20 @@
                             </option>`
                     tempOptId = data[i].optionVal[j].optId;
 
-                    /*$(document).on("change", `#optDetaId_${data[i].optionVal[j].optDetaId}`, (e) => {
-                        console.log(e.target.value);
-                    });*/
+                    let totalPrice = document.querySelectorAll('option')
+                    for(let z = 0 ; z < totalPrice.length ; z++){
+                        console.log(totalPrice[i].value)
+                    }
+                    console.log(totalPrice);
                 };
                 opt += `</select>`;
-                
                 opt += `
                                         <br/>
                                         <div id="priceDiv">
                                             <div class="cntDiv">
                                                 <div class="optionTitle">개수 : </div><input type="number" name="cnt" class="cntInput" min="1" value="1" style="text-align: right;">
                                             </div>
-                                            <div class="optionTitle">구매금액 : </div><div class="optPriceDiv" id="totalPrice"></div>원
+                                            <div class="optionTitle">구매금액 : </div><div class="optPriceDiv" id="totalPrice_${data[i].prdtId}"></div>원
                                         </div> 
                                     </div> <!-- end div2 -->
                                     <div style="margin:0 auto; display:inline-block;">
@@ -353,10 +354,10 @@
                                 console.log(err);
                             }
                         });
-                    };
-                }// end for
-                list.innerHTML = opt;
-            };
+                    }
+                });
+            });
+        });
 
             function domId(id) { //id로 태그찾기 압축용
                 return document.getElementById(id);
@@ -448,13 +449,9 @@
                         };
                     });
                 });
-            })
-
-
-        </script>
-    </div>
+            });
+    </script>
+</div>
 </body>
-
 </html>
-
 </html>

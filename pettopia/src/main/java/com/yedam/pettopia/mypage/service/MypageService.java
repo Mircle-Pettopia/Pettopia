@@ -2,6 +2,7 @@ package com.yedam.pettopia.mypage.service;
 
 import java.util.List;
 
+import com.yedam.pettopia.board.vo.BoardVO;
 import com.yedam.pettopia.cart.service.vo.CartListVO;
 import com.yedam.pettopia.mypage.MypageVO;
 
@@ -25,6 +26,10 @@ public interface MypageService {
 	
 	//prodInterest -> cart insert
 	public int interstInCart(CartListVO vo);
+	
+	//mypage_작성글조회
+	public int myknowHowMaxPage(String keyword, String meId);
+	public List<BoardVO> getmyKnowHowWriterList(int page, String keyword, String meId);
 	
 	
 	

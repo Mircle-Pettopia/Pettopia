@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+<html lang="ko" itemscope itemtype="http://schema.org/WebPage">
+
+<head>
+    <title>Pettopia</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <style>
+        h3 {
+            text-align: center;
+            margin: 30px 0px;
+        }
+        button{
+            font-size: 11px !important;
+        }
+        td img {
+            width: 100px;
+        }
+        table input {
+            width: 30px !important;
+        }
+        th, td {
+            text-align: center;
+        }
+        td, tr, th{
+            vertical-align: middle !important;
+        }
+
+        .btnSet {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .radioInput{
+            height: 13px !important;
+            display: inline-block !important;
+            width: 30px !important;
+        }
+
+        .radioInputText{
+            margin-right: 20px !important;
+        }
+
+        #keyword{
+            width: 250px !important;
+            display: inline-block !important;
+            background-color: rgb(250, 246, 252) !important;
+        }
+
+        #rightSearch{
+            float: right;
+            margin-right: 10px;
+        }
+
+        .board_page{
+            text-align: center;
+        }
+
+        .board_page a {
+            display: inline-block;
+            width: 32px !important;
+            height: 32px !important;
+            box-sizing: border-box;
+            vertical-align: middle;
+            border: 1px solid #ffffff;
+            border-radius: 20px;
+            border-left: 0;
+            line-height: 100%;
+        }
+
+        .board_page a.num {
+            padding-top: 8px;
+            font-size: 1rem;
+        }
+
+        .board_page a.num.on {
+            border-color: rgb(250, 246, 252);
+            background: rgb(250, 246, 252);
+            color: #818181;
+        }
+
+        .board_page a:first-child {
+            border-left: 1px solid #ddd;
+        }
+
+        .board_page a.bt {
+            padding-top: 5px;
+            font-size: 1.2rem;
+            letter-spacing: -1px;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+            <!-- 마이페이지 게시판관리 -->
+            <div class="col-md-8 col-lg-10 p-b-150 fontSize">
+                <div class="p-r-45 p-r-0-lg m-t-50">
+                    <h2>
+                        <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>작성글 조회
+                    </h2>
+                    <h3 class="noonnu_font">
+                        <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${name}" ></sapn>
+                        님의 작성하신 글입니다. <img src="img/free-icon.png" style="width: 35px;"></h3>
+                    <!--table-->
+                    <div style="height: 500px;">
+                        <div style="margin-bottom: 20px; margin-left: 10px;">
+                            <input type="radio" name="myboard" id="" value="전체" class="radioInput"><span class="radioInputText">전체</span>
+                            <input type="radio" name="myboard" id="" value="지식공유게시판" class="radioInput"><span class="radioInputText">지식공유게시판</span>
+                            <input type="radio" name="myboard" id="" value="분양게시판" class="radioInput"><span class="radioInputText">분양게시판</span>
+                            <div id="rightSearch">
+                                <input type="text" id="keyword" placeholder="제목을 입력해주세요.">
+                                <button type="button" class="btn btnPush btnLightBlue"
+                                        style="float: right; margin:0 !important; margin-left: 10px !important;"
+                                        onclick="setkeyword();">검색</button>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <colgroup>
+                                    <col width="8%">
+                                    <col width="25%">
+                                    <col width="35%">
+                                    <col width="20%">
+                                    <col width="12%">
+                            </colgroup>
+                            <thead>
+                                <tr style="background-color: rgb(233, 222, 243);">
+                                    <th>No.</th>
+                                    <th>게시판</th>
+                                    <th>제목</th>
+                                    <th>작성일</th>
+                                    <th>조회수</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list"></tbody>
+                        </table>
+
+                        <!--paging-->
+                        <div class="board_page" id="pagenav">
+
+                        <!--<div class="btnSet"></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            let id = /*[[${id}]]*/
+
+            let NewKeyword = '';
+            function setkeyword() {
+                NewKeyword = keyword.value;
+                showList();
+            }
+
+            showList();
+            function showList(page) {
+                if (page == null) {
+                    page = 1;
+                }
+
+                $.ajax({
+                    url: "mypostList",
+                    method: "GET",
+                    async: false,
+                    dataType: "JSON",
+                    data: {
+                        meId : id,
+                        page: page,
+                        keyword: NewKeyword
+                    },
+                    success: function (data) {
+                        //console.log(data);
+                        list.innerHTML = '';
+                        for (i = 0; i < data.length; i++) {
+                            list.innerHTML += `
+                            <td><div class="num">${data[i].rn}</div></td>
+                            <td><div class="num">지식공유게시판</div></td>
+                            <td><div class="title">
+                                <a href="#" onclick="openArticle(${data[i].boNo})">${data[i].title}</a>
+                            </div></td>
+                            <td><div class="date" >${dateChange(data[i].regDt)}</div></td>
+                            <td><div class="count">${data[i].viewCnt}</div></td>
+                            `
+                        }
+                    },
+                    error: function (reject) {
+                        console.log(reject);
+                    },
+                })
+
+                $.ajax({
+                    url: "myKnowHowMaxPage",
+                    method: "GET",
+                    async: false,
+                    data: {
+                        meId : id,
+                        keyword: NewKeyword
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        paging(data, 10, 5, page);
+                    },
+                    error: function (reject) {
+                        console.log(reject);
+                    },
+                })
+        };
+
+        function paging(totalData, dataPerPage, pageCount, currentPage) {
+            console.log("currentPage : " + currentPage);
+
+            totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
+
+            if (totalPage < pageCount) {
+            pageCount = totalPage;
+            }
+
+            let pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
+            let last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
+
+            if (last > totalPage) {
+            last = totalPage;
+            }
+
+            let first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
+            let next = last + 1;
+            let prev = first - 1;
+
+            let pageHtml = pagenav.innerHTML;
+            pagenav.innerHTML = '';
+            if (prev > 0) {
+            pagenav.innerHTML += `<a href="#" class="bt prev" onclick="showList(${prev});">＜</a>`;
+            }
+
+            //페이징 번호 표시 
+            for (var i = first; i <= last; i++) {
+            if (currentPage == i) {
+                pagenav.innerHTML +=
+                `<a href="#" class="num on">${i}</a>`;
+            } else {
+                pagenav.innerHTML += `<a href="#" onclick="showList(${i});" class="num o">${i}</a>`;
+            }
+            }
+
+            if (last < totalPage) {
+            pagenav.innerHTML += `<a href="#" onclick="showList(${next});" class="bt next">＞</a>`;
+            }
+
+            $("#pagingul").html(pagenav.innerHTML);
+            let displayCount = "";
+            displayCount = "현재 1 - " + totalPage + " 페이지 / " + totalData + "건";
+            $("#displayCount").text(displayCount);
+        };
+
+        //날짜 변환함수
+        function dateChange(data) {
+            if (data != null && data != 0) {
+            let newData = new Date(data);
+            let result = newData.getFullYear() + "-" +
+                (newData.getMonth() < 10
+                ? "0" + (newData.getMonth() + 1)
+                : newData.getMonth() + 1) +
+                "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+            return result;
+            }
+            else return null;
+        };
+        </script>
+</div>
+</body>
+</html>
+</html>
