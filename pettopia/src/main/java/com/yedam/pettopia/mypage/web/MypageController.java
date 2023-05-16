@@ -8,9 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.cart.service.vo.CartListVO;
+import com.yedam.pettopia.cart.service.vo.CartVO;
 import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.service.MypageService;
@@ -120,7 +123,14 @@ public class MypageController {
 		return service.interestDelete(vo);
 	}
 	
-	
+	//cart + cart_detail INSERT ajax
+	@PostMapping("intrestInCartInsert")
+	@ResponseBody
+	public int intrestInCartInesrt(@RequestBody CartListVO vo) {
+		System.out.println(vo);
+		int result = service.interstInCart(vo);
+		return result;
+	}
 	
 	
 	

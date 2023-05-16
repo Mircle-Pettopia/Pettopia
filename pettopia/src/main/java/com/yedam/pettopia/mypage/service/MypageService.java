@@ -2,6 +2,7 @@ package com.yedam.pettopia.mypage.service;
 
 import java.util.List;
 
+import com.yedam.pettopia.cart.service.vo.CartListVO;
 import com.yedam.pettopia.mypage.MypageVO;
 
 public interface MypageService {
@@ -22,7 +23,8 @@ public interface MypageService {
 	
 	public int interestDelete(MypageVO vo);
 	
-	
+	//prodInterest -> cart insert
+	public int interstInCart(CartListVO vo);
 	
 	
 	

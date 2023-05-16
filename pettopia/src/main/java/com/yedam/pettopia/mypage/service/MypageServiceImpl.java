@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.pettopia.admin.mapper.ProductMapper;
+import com.yedam.pettopia.cart.mapper.CartMapper;
+import com.yedam.pettopia.cart.service.vo.CartListVO;
+import com.yedam.pettopia.cart.service.vo.CartVO;
 import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.mapper.MypageMapper;
 
@@ -13,6 +17,7 @@ import com.yedam.pettopia.mypage.mapper.MypageMapper;
 public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
 	@Autowired ProductMapper pmapper;
+	@Autowired CartMapper cmapper;
 	
 	@Override
 	public List<MypageVO> getOrder(String meId) {
@@ -29,7 +34,6 @@ public class MypageServiceImpl implements MypageService{
 	public List<MypageVO> pagingTest(MypageVO vo) {
 		return mapper.pagingTest(vo);
 	}
-	
 	
 	@Override
 	public MypageVO getOrdrList(String ordrId) {
@@ -95,16 +99,44 @@ public class MypageServiceImpl implements MypageService{
 			mvo.setMeId(id);
 			mvo.setPrdtId(check_prdtId_arr[i]);
 		}
-		
-		System.out.println("mvo>>>>>>>>>>>>>>>>>>>" + mvo);
-		
+		//System.out.println("mvo>>>>>>>>>>>>>>>>>>>" + mvo);
 		return mapper.interestDelete(mvo);
+	}
+
+	//	cart + cart_detail INSERT
+	@Transactional
+	@Override
+	public int interstInCart(CartListVO vo) {
+		CartVO cvo = new CartVO();
+		
+		cvo.setPrdtId(vo.getPrdtId());
+		cvo.setMeId(vo.getMeId());
+		cvo.setCnt(vo.getCnt());
+		
+		int cnt = cmapper.interstInCart(cvo);
+		for(int i = 0 ; i < vo.getOptDetaId().size() ; i++) {
+			cvo.setOptDetaId(vo.getOptDetaId().get(i));
+			cmapper.interstInCartDetail(cvo);
+		}
+		
+		System.out.println("cnt>>>" + cnt);
+		return cnt;
 	}
 
 
 	
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

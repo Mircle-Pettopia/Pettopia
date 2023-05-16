@@ -10,132 +10,137 @@
 </head>
 
 <body>
-    <div layout:fragment="content">
-        <style>
-            h3 {
-                text-align: center;
-                margin: 30px 0px;
-            }
+<div layout:fragment="content">
+    <style>
+        h3 {
+            text-align: center;
+            margin: 30px 0px;
+        }
+        button{
+            font-size: 11px !important;
+        }
+        td img {
+            width: 100px;
+        }
+        table input {
+            width: 30px !important;
+        }
+        th, td {
+            text-align: center;
+        }
+        td, tr, th{
+            vertical-align: middle !important;
+        }
 
-            button {
-                font-size: 11px !important;
-            }
+        .table-shopping-cart {
+            overflow: auto;
+            margin-top: 20px;
+        }
 
-            td img {
-                width: 100px;
-            }
-
-            table input {
-                width: 30px !important;
-            }
-
-            th,
-            td {
-                text-align: center;
-            }
-
-            td,
-            tr,
-            th {
-                vertical-align: middle !important;
-            }
-
-            .table-shopping-cart {
-                overflow: auto;
-                margin-top: 20px;
-            }
-
-            .table-shopping-cart>table {
-                width: 100%;
-            }
+        .table-shopping-cart>table {
+            width: 100%;
+        }
 
 
-            .btnSet {
-                display: flex;
-                justify-content: flex-end;
-                margin-top: 20px;
-            }
+        .btnSet {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
 
 
-            .optionW {
-                width: 200px;
-                margin-bottom: 10px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-            }
+        .optionW{
+            width: 200px;
+            margin-bottom: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
 
-            .optionTitle {
-                width: 100px !important;
-                display: inline-block;
+        .optionTitle{
+            width: 100px !important;
+            display: inline-block;
+            
+        }
 
-            }
+        #div2{
+            height: 250px;
+        }
 
-            #div2 {
-                height: 250px;
-            }
+        #div2 div{
+            text-align: left;
+            margin-bottom: 10px;
+        }
 
-            #div2 div {
-                text-align: left;
-                margin-bottom: 10px;
-            }
+        #priceDiv{
+            text-align: right !important;
+            font-size: 16px !important; 
+            margin-top:15px;
+            margin-right: 50px;
+        }
 
-            #priceDiv {
-                text-align: right !important;
-                font-size: 16px !important;
-                margin-top: 15px;
-                margin-right: 50px;
-            }
+        input[type="checkbox"]{
+            width: 20px;
+            height: 20px;
+        }
 
-            input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-            }
-        </style>
+        .cntInput{
+            width: 150px !important;
+            background-color: rgb(241, 241, 237) !important;
+            display: inline-block;
+        }
 
-        <div class="container">
-            <div class="row">
-                <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
-                <!-- 마이페이지 관심상품 -->
-                <div class="col-md-8 col-lg-10 p-b-80 fontSize">
-                    <div class="p-r-45 p-r-0-lg m-t-50">
-                        <h2>
-                            <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
-                        </h2>
-                        <h3 class="noonnu_font">
-                            <img src="img/free-icon.png" style="width: 35px;">
-                            <sapn id="name" th:text="${name}"></sapn>
-                            님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;">
-                        </h3>
-                        <!--table-->
-                        <div>
-                            <table class="table">
-                                <colgroup>
+        .cntDiv{
+            text-align: right !important;
+        }
+
+        .optPriceDiv{
+            display: inline-block;
+            margin-right: 20px;
+            margin-left: 90px;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+            <!-- 마이페이지 관심상품 -->
+            <div class="col-md-8 col-lg-10 p-b-80 fontSize">
+                <div class="p-r-45 p-r-0-lg m-t-50">
+                    <h2>
+                        <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
+                    </h2>
+                    <h3 class="noonnu_font">
+                        <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${name}" ></sapn>
+                        님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;"></h3>
+                    <!--table-->
+                    <div>
+                        <table class="table">
+                            <colgroup>
                                     <col width="15%">
                                     <col width="25%">
                                     <col width="30%">
                                     <col width="15%">
                                     <col width="15%">
-                                </colgroup>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <div style="margin:0 auto; display:inline-block;">
-                                                <input type="checkbox" id="cbx_chkAll">
-                                            </div>
-                                        </th>
-                                        <th>이미지</th>
-                                        <th>상품정보</th>
-                                        <th>판매가</th>
-                                        <th>선택</th>
-                                    </tr>
-                                </thead>
-                                <!-- ↓↓↓여기에 조회된 결과 출력 -->
-                                <tbody id="list"></tbody>
-                            </table>
-                            <div class="btnSet">
-                                <button itype="button" class="btn btnPush btnLightBlue">상품주문</button>
-                                <button type="button" class="btn btnPush btnRed" id="interestDeleteBtn">삭제</button>
-                            </div>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div style="margin:0 auto; display:inline-block;">
+                                            <input type="checkbox" id="cbx_chkAll">
+                                        </div>
+                                    </th>
+                                    <th>이미지</th>
+                                    <th>상품정보</th>
+                                    <th>판매가</th>
+                                    <th>선택</th>
+                                </tr>
+                            </thead>
+                            <!-- ↓↓↓여기에 조회된 결과 출력 -->
+                            <tbody id="list"></tbody>
+                        </table>
+                        <div class="btnSet">
+                            <button itype="button" class="btn btnPush btnLightBlue" onclick="location.href='/'">메인으로</button>
+                            <button type="button" class="btn btnPush btnRed" id="interestDeleteBtn">삭제</button>
                         </div>
                     </div>
                 </div>
@@ -202,65 +207,152 @@
                                             <div class="w3-container" style="height: 400px !important;">
                                                 <div id="div2">`;
 
-                    tempOptId = "";
-                    let priceOption = "";
-
-
-                    for (let j = 0; j < data[i].optionVal.length; j++) {
-                        if (j == 0) {
-                            opt += `<div class="optionTitle">${data[i].optionVal[j].optNm}</div><select name="optDetaId" class="optionW ${data[i].prdtId}_opt" id="optDetaId_${data[i].optionVal[j].optDetaId}">`;
-                        } else if (data[i].optionVal[j].optId != tempOptId) {                                                              //ㅇㅈ 클래스 ${data[i].prdtId}_opt 값찾아가기위해 추가
-                            opt += `</select><br/><div class="optionTitle">${data[i].optionVal[j].optNm}</div><select name="optDetaId" class="optionW ${data[i].prdtId}_opt" id="optDetaId_${data[i].optionVal[j].optDetaId}">`;
-                        }
-                        opt += `<option value="${data[i].optionVal[j].optDetaId}"
-                                                data-price = "${data[i].optionVal[j].addPrc}"> 
-                                            ${data[i].optionVal[j].optDetaNm}&nbsp;&nbsp;(+<span id="price_${data[i].optionVal[j].optDetaId}">${data[i].optionVal[j].addPrc}<span> 원)
-                                        </option>`
-                        tempOptId = data[i].optionVal[j].optId;
-
-                        /*$(document).on("change", `#optDetaId_${data[i].optionVal[j].optDetaId}`, (e) => {
-                            console.log(e.target.value);
-                        });*/
+                tempOptId  = "";
+                let priceOption = "";
+                
+                for(let j = 0 ; j < data[i].optionVal.length ; j++){
+                    if(j == 0){
+                        opt += `<div class="optionTitle">${data[i].optionVal[j].optNm}</div><select name="optDetaId" class="optionW" id="optDetaId_${data[i].optionVal[j].optDetaId}">`;
+                    } else if(data[i].optionVal[j].optId != tempOptId){
+                        opt += `</select><br/><div class="optionTitle">${data[i].optionVal[j].optNm}</div><select name="optDetaId" class="optionW" id="optDetaId_${data[i].optionVal[j].optDetaId}">`;
                     }
-                    // console.log(tempOptId);
-                    opt += `</select>`;
+                    opt += `<option value="${data[i].optionVal[j].optDetaId}"
+                                    data-price = "${data[i].optionVal[j].addPrc}"> 
+                                ${data[i].optionVal[j].optDetaNm}&nbsp;&nbsp;(+<span id="price_${data[i].optionVal[j].optDetaId}">${data[i].optionVal[j].addPrc}<span> 원)
+                            </option>`
+                    tempOptId = data[i].optionVal[j].optId;
 
-                    opt += `
-                                                    <br/>
-                                                    <div id="priceDiv">
-                                                        구매금액 : ${price}원
-                                                    </div>
-                                                </div> <!-- end div2 -->
-                                                <div style="margin:0 auto; display:inline-block;">
-                                                    <button type="button" id="cartInsert_${data[i].prdtId}" class="btn btnPush btnBlueGreen" style="width:150px" onclick="collectOption('${data[i].prdtId}');">장바구니 담기</button>
-                                                    <button type="button"  class="btn btnPush btnRed" style="width:150px"                                        <!-- ㅇㅈ========onclick 함수 실행할 추가함====== --> 
-                                                            onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'">취소</button>
-                                                </div>
-                                            </div> <!-- end w3-container -->
-                                        </div> <!-- end col-md-6 -->
-                                    </div> <!-- end row -->
-                                </div> <!-- end modal -->
-                            </td>
-                        </tr>
-                        `;
-                    //============================ㅇㅈ레거시코드========================
-                    // 장바구니 버튼 클릭 시 ....안돼요ㅠㅠ....
-                    // $(document).on('click', `#cartInsert_${data[i].prdtId}`, (e) => {
-                    //     console.log(e);
+                    /*$(document).on("change", `#optDetaId_${data[i].optionVal[j].optDetaId}`, (e) => {
+                        console.log(e.target.value);
+                    });*/
+                };
+                opt += `</select>`;
+                
+                opt += `
+                                        <br/>
+                                        <div id="priceDiv">
+                                            <div class="cntDiv">
+                                                <div class="optionTitle">개수 : </div><input type="number" name="cnt" class="cntInput" min="1" value="1" style="text-align: right;">
+                                            </div>
+                                            <div class="optionTitle">구매금액 : </div><div class="optPriceDiv" id="totalPrice"></div>원
+                                        </div> 
+                                    </div> <!-- end div2 -->
+                                    <div style="margin:0 auto; display:inline-block;">
+                                        <button type="button" class="btn btnPush btnBlueGreen cartInsert" style="width:150px">장바구니 담기</button>
+                                        <button type="button"  class="btn btnPush btnRed" style="width:150px"
+                                                onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'">취소</button>
+                                    </div>
+                                </div> <!-- end w3-container -->
+                            </div> <!-- end col-md-6 -->
+                        </div> <!-- end row -->
+                    </div> <!-- end modal -->
+                </td>
+            </tr>`;
+                //DB에 있는 값이 없으면 없다고 띄우기
+                if(data.length == 0){
+                    let tr = document.createElement('tr');
+                    let td = document.createElement('td');
+                    $(td).attr('colspan', '8');
+                    
+                    td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
+                    tr.appendChild(td);
+                    document.querySelector('#getOrderList').appendChild(tr);
+                };
+            }// end for
+            list.innerHTML = opt;
+        }; // end drawList
 
-                    // });
-                    //=========================================================
+        // 장바구니 버튼 클릭 시 장바구니로 값을 전달하는 버튼 이벤트
+        $(document).on('click', `.cartInsert`, (e) => {
+            let tr = $(e.target).closest('tr');                     //tr값 저장
+            let prdtId = tr.attr("id");                             //상품번호
+            let cnt = tr.find("[name=cnt]").val();                  //cnt인 input을 찾는다.
+            let select = tr.find("select");                         //select를 찾는다.
+            let optDetaId = []                                      //옵션 디테일 아이디 보낼 배열 초기화
+            for(let i = 0 ; i < select.length ; i++){               //select 길이만큼 반복해서
+                optDetaId.push(select.get(i).value);                //select.get(i) : 제이쿼리객체
+            }                                                       //선택값 받아 배열에 저장
+            let data = { meId : id, prdtId , cnt , optDetaId};      //위의 정보를 객체에 저장 ( 상품번호, 개수, 옵션디테일번호 )
+            //console.log(JSON.stringify(data));
+            $.ajax({
+                url:'intrestInCartInsert',
+                method : 'POST',
+                data : JSON.stringify(data),
+                dataType : 'json',
+                contentType : "application/json",
+                success : function(data) {
+                    console.log(data);
+                    Swal.fire({
+                        title: '장바구니 추가완료',
+                        text: "장바구니로 이동하시겠습니까?",
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: '확인',
+                        cancelButtonText: '취소',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if(data > 0){
+                                location.href = 'CartMain';
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '오류',
+                                    text: '오류가 발생하였습니다.',
+                                });
+                            }
+                        }
+                    })
+                },
+                error : function(err) {
+                    console.log(err);
+                }
+            });
+        });
 
+        //체크박스 클릭 후 삭제버튼 누르면 관심상품 삭제진행
+        $('#interestDeleteBtn').on('click',function(){
+            let check_prdtId = "";
+            $('#list input[type=checkbox]:checked').each(function (index, item) {
+                let tr = $(item).parent().parent().parent()[0];
+                check_prdtId += $(tr).attr("id") + ',';
 
-                    //DB에 있는 값이 없으면 없다고 띄우기
-                    if (data.length == 0) {
-                        let tr = document.createElement('tr');
-                        let td = document.createElement('td');
-                        $(td).attr('colspan', '8');
-
-                        td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
-                        tr.appendChild(td);
-                        document.querySelector('#getOrderList').appendChild(tr);
+                //삭제할건지 한 번 더 물어보고 진행하기
+                Swal.fire({
+                    title: '알림',
+                    text: "선택된 상품을 관심상품 리스트에서 삭제하시겠습니까?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '확인',
+                    cancelButtonText: '취소',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url : 'interestDelete',
+                            method : 'POST',
+                            data : {meId : id, prdtId : check_prdtId},
+                            success : (data) => {
+                                if(data > 0){
+                                    Swal.fire(
+                                        '삭제완료',
+                                        '관심상품 리스트에서 삭제되었습니다.',
+                                        'success'
+                                    )
+                                } else {
+                                    Swal.fire(
+                                        '삭제오류',
+                                        '삭제도중 오류가 발생하였습니다.',
+                                        'error'
+                                    )
+                                }
+                            },
+                            error : (err) => {
+                                console.log(err);
+                            }
+                        });
                     };
                 }// end for
                 list.innerHTML = opt;
