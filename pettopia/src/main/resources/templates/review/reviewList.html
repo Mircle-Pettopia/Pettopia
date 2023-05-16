@@ -5,11 +5,8 @@
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
 <head>
 <title>Pettopia</title>
-<meta charset="UTF-8">
-</head>
-<body>
-	<div layout:fragment="content">
-		<style>
+<meta charset="UTF-8" />
+<style>
 #backColor {
 	margin-top: 30px;
 	background: rgb(248, 245, 250);
@@ -53,6 +50,7 @@ td, tr, th {
 #myform fieldset {
 	display: inline-block;
 	direction: rtl;
+	text-align: left;
 	border: 0;
 }
 
@@ -60,7 +58,7 @@ td, tr, th {
 	text-align: right;
 }
 
-.star input[type=radio] {
+.star input[type="radio"] {
 	display: none;
 }
 
@@ -78,7 +76,7 @@ td, tr, th {
 	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
 
-.star input[type=radio]:checked ~ label {
+.star input[type="radio"]:checked ~ label {
 	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
 
@@ -87,13 +85,23 @@ td, tr, th {
 	height: 150px;
 	padding: 10px;
 	box-sizing: border-box;
-	border: solid 1.5px #D3D3D3;
+	border: solid 1.5px #d3d3d3;
 	border-radius: 5px;
 	font-size: 16px;
 	resize: none;
 }
-</style>
 
+.modal {
+	z-index: 2000;
+	position: fixed;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
 		<div class="container">
 			<div class="row">
 				<th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
@@ -102,40 +110,45 @@ td, tr, th {
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
 					<div class="p-r-45 p-r-0-lg m-t-50">
 						<h1>
-							<span style="font-weight: bold; color: rgb(201, 159, 240);">|
+							<span style="font-weight: bold; color: rgb(201, 159, 240)">|
 							</span>작성 가능한 리뷰
 						</h1>
-						<br> <br>
+						<br /> <br />
 
-
+	
 						<div th:each="review : ${reviewList}"
-							style="width: 925px; height: 150px; font-weight: bold;border-bottom: solid 1px #ddd;margin: 25px 0 0px 0;"}>
+							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
 							<div class="title">
-								<!--  <img th:src="${review.prdtImg}" />-->
-								<img src="images/item-cart-01.jpg" alt="IMG"
+								<img th:src="${review.prdtImg}"
 									style="width: 120px; height: 120px; float: left; margin-right: 20px;" />
+								<!--  <img
+                      src="images/item-cart-01.jpg"
+                      alt="IMG"
+                      style="
+                        width: 120px;
+                        height: 120px;
+                        float: left;
+                        margin-right: 20px;
+                      "
+                    />-->
 							</div>
 							<div
 								style="width: 160px; float: left; margin-right: 20px; height: 120px; line-height: 100px;"
-								font>구매 확정일 : [[ ${#dates.format(review.ordrDate,
-								'yyyy-MM-dd')}]]</div>
+								font>구매 확정일 : [[
+								${#dates.format(review.ordrDate, 'yyyy-MM-dd')}]]</div>
 
 							<div
 								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">
-								
-								[[${review.prdtNm}]]
-							</div>
-							<div style="height: 120px; float: left; line-height: 100px;">
-								옵션 어쩌구 저쩌구
-								[[${review.ordtId}]]
-							</div>
-							<div class="btnn" style="padding: 20px 0 0 0;">
+								[[${review.prdtNm}]]</div>
+							<div style="height: 120px; float: left; line-height: 100px">
+								옵션 어쩌구 저쩌구 [[${review.ordtId}]]</div>
+							<div class="btnn" style="padding: 20px 0 0 0">
 								<button type="button"
 									class="btn btnPush btnBlueGreen write-review-btn"
-									id="reviewBtn" data-toggle="modal"
-									data-target="#write-review-modal"
-									style="float: right; font-size: 13px; width: 63px;">후기
-									등록</button>
+									id="reviewBtn"
+									style="float: right; font-size: 13px; width: 63px">
+									후기 등록</button>
+									
 							</div>
 						</div>
 					</div>
@@ -143,12 +156,11 @@ td, tr, th {
 			</div>
 		</div>
 
-
-
 		<!-- 후기 등록 모달창 -->
-		<div class="modal fade" id="write-review-modal" tabindex="-1"
-			role="dialog" aria-labelledby="write-review-modal-label"
-			aria-hidden="true">
+		<div class="modal fade" id="writemodal" tabindex="-1" role="dialog"
+			aria-labelledby="write-review-modal-label" aria-hidden="true"
+			data-backdrop="static" stype="width: 700px;
+    height: 600px;">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -160,70 +172,73 @@ td, tr, th {
 					</div>
 					<div class="modal-body">
 						<!-- 후기 등록 폼 -->
-						<form class="mb-3" name="myform" id="myform" method="post">
+						<form class="mb-3" name="myform" id="myform" method="post" th:object="${reviewList}">
+					
 							<fieldset>
 								<span class="text-bold">별점을 선택해주세요</span>
 								<div class="star">
-									<input type="radio" name="reviewStar" value="5" id="rate1"><label
-										style="display: inline-block;" for="rate1">★</label> <input
-										type="radio" name="reviewStar" value="4" id="rate2"><label
-										style="display: inline-block;" for="rate2">★</label> <input
-										type="radio" name="reviewStar" value="3" id="rate3"><label
-										style="display: inline-block;" for="rate3">★</label> <input
-										type="radio" name="reviewStar" value="2" id="rate4"><label
-										style="display: inline-block;" for="rate4">★</label> <input
-										type="radio" name="reviewStar" value="1" id="rate5"><label
-										style="display: inline-block;" for="rate5">★</label>
+									<input type="radio" name="reviewStar" value="5" id="rate1" /><label
+										style="display: inline-block" for="rate1">★</label>
+									<input type="radio" name="reviewStar" value="4" id="rate2" /><label
+										style="display: inline-block" for="rate2">★</label>
+									<input type="radio" name="reviewStar" value="3" id="rate3" /><label
+										style="display: inline-block" for="rate3">★</label>
+									<input type="radio" name="reviewStar" value="2" id="rate4" /><label
+										style="display: inline-block" for="rate4">★</label>
+									<input type="radio" name="reviewStar" value="1" id="rate5" /><label
+										style="display: inline-block" for="rate5">★</label>
 								</div>
 							</fieldset>
-							<div class="form-group">
-								<label for="review-content">내용</label>
-								<textarea class="form-control" id="review-content"
-									name="contents" rows="5" placeholder="내용을 입력해주세요."></textarea>
+							<div class="form-group" id="editor"></div>
+							<div class="modal-footer" style="padding: 0px">
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">취소</button>
+								<button type="button" class="btn btn-primary"
+									onclick="insertReview()">등록</button>
 							</div>
-
 						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary"
-							onclick="insertReview()">등록</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<!-- ==========================ckeditor========================== -->
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
+		<!-- ==========================ckeditor END======================= -->
 
+		<script>
+          $(".write-review-btn").click(function () {
+            $("#writemodal").modal("show");
+          });
+
+          function insertReview() {
+            var contents = document.getElementById("editor").value;
+            var reviewStar = document.querySelector(
+              'input[name="reviewStar"]'
+            ).value;
+
+            $.ajax({
+              url: "reviewInsert",
+              method: "POST",
+              dataType: "JSON",
+              data: {
+                contents: editor.getData(),
+                point: reviewStar,
+              },
+              success: function (data) {
+                console.log(data);
+                alert("후기가 등록되었습니다.");
+              },
+              error: function (reject) {
+                console.log(reject);
+                alert("후기 등록에 실패하였습니다.");
+              },
+            });
+          }
+        </script>
 	</div>
-
-	<script>
-		$('#reviewBtn').click(function() {
-			$('#write-review-modal').modal('show');
-		});
-
-		function insertReview() {
-			$.ajax({
-				url : "reviewInsert",
-				method : "POST",
-				async : false,
-				dataType : "JSON",
-				data : {
-					contents : contents.value,
-				},
-				success : function(data) {
-					console.log(data);
-					alert("데이터 전송 완료");
-				},
-				error : function(reject) {
-					console.log(reject);
-					alert("에러");
-				},
-			})
-		}
-	</script>
-
-
 </body>
 </html>
 </html>

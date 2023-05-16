@@ -7,6 +7,18 @@
   <head>
     <meta charset="UTF-8" />
     <title>Pettopia</title>
+    <style>
+      .trColor {
+        background-color: rgb(247, 247, 247);
+      }
+      #getOrderList th,
+      #getOrderList td {
+        text-align: center;
+      }
+      tbody img {
+        width: 100px;
+      }
+    </style>
   </head>
   <body>
     <div layout:fragment="content">
@@ -185,7 +197,7 @@
         data-bs-keyboard="false"
         tabindex="-1"
       >
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">주문 상세조회</h5>
@@ -197,146 +209,108 @@
               ></button>
             </div>
             <div class="modal-body">
-              <div class="row mb-4">
-                <h6 class="my-4">주문정보</h6>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >주문번호</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="detailNo"
-                    readonly
-                  />
-                </div>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >주문자</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="detailNm"
-                    readonly
-                  />
-                </div>
+              <div class="my-4">
+                <h5 class="my-4"><strong>주문 정보</strong></h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="40%" />
+                    <col width="60%" />
+                  </colgroup>
+
+                  <tr>
+                    <th>주문번호</th>
+                    <td id="detailNo"></td>
+                  </tr>
+                  <tr>
+                    <th>주문일자</th>
+                    <td id="detailDate"></td>
+                  </tr>
+                  <tr>
+                    <th>주문자</th>
+                    <td id="detailNm"></td>
+                  </tr>
+                </table>
               </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >주문일자</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="Date"
-                    class="form-control"
-                    id="detailDate"
-                    readonly
-                  />
-                </div>
+              <div class="my-4">
+                <h5 class="my-4"><strong>배송 정보</strong></h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="40%" />
+                    <col width="60%" />
+                  </colgroup>
+                  <tr class="trColor">
+                    <th>받는 사람</th>
+                    <td id="rcvPsn"></td>
+                  </tr>
+                  <tr>
+                    <th>연락처</th>
+                    <td id="rcvPhone"></td>
+                  </tr>
+                  <tr>
+                    <th>주소</th>
+                    <td id="rcvAddr"></td>
+                  </tr>
+                  <tr>
+                    <th>운송장 번호</th>
+                    <td id="invo"></td>
+                  </tr>
+                  <tr>
+                    <th>배송 요청사항</th>
+                    <td id="note"></td>
+                  </tr>
+                </table>
               </div>
-              <div class="row mb-4">
-                <h6 class="my-4">상품정보</h6>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >상품명</label
-                >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" readonly />
-                </div>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >판매가</label
-                >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" readonly />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <h6 class="my-4">배송정보</h6>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >받는 사람</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    readonly
-                    id="rcvPsn"
-                  />
-                </div>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >연락처</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    readonly
-                    id="rcvPhone"
-                  />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >주소</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    readonly
-                    id="rcvAddr"
-                  />
-                </div>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >배송 요청사항</label
-                >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" readonly id="note" />
-                </div>
+              <div class="my-4">
+                <h5 class="my-4">
+                  <strong>상품 정보</strong>
+                </h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="30%" />
+                    <col width="30%" />
+                    <col width="13%" />
+                    <col width="13%" />
+                    <col width="14%" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th scope="col" style="text-align: center">이미지</th>
+                      <th scope="col" style="text-align: center">상품정보</th>
+                      <th scope="col" style="text-align: center">수량</th>
+                      <th scope="col" style="text-align: center">상품금액</th>
+                      <th scope="col" style="text-align: center">
+                        상품구매금액
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="getOrderList"></tbody>
+                </table>
               </div>
 
-              <div class="row mb-4">
-                <h6 class="my-4">결제정보</h6>
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >적립금</label
-                >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" readonly id="point" />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >배송비</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    readonly
-                    id="shipPrc"
-                  />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >총금액</label
-                >
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" readonly id="ttPrc" />
-                </div>
-              </div>
-              <div class="row mb-4">
-                <label class="col-sm-2 col-form-label fw-bolder text-center"
-                  >결제금액</label
-                >
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    class="form-control"
-                    readonly
-                    id="resultPrc"
-                  />
-                </div>
+              <div class="my-4">
+                <h5 class="my-4"><strong>결제정보</strong></h5>
+                <table class="table">
+                  <colgroup>
+                    <col width="40%" />
+                    <col width="60%" />
+                  </colgroup>
+                  <tr class="trColor">
+                    <th>상품 구매금액</th>
+                    <td id="ttPrc"></td>
+                  </tr>
+                  <tr>
+                    <th>배송비</th>
+                    <td id="shipPrc"></td>
+                  </tr>
+                  <tr>
+                    <th>할인금액</th>
+                    <td id="point"></td>
+                  </tr>
+                  <tr class="trColor">
+                    <th>총 결제금액</th>
+                    <td id="resultPrc" style="color: red"></td>
+                  </tr>
+                </table>
               </div>
             </div>
             <div class="modal-footer">
@@ -441,7 +415,7 @@
             // 상품 관리 리스트(그리드)
             const orderList = new Grid({
               el: document.getElementById("orderList"),
-              rowHeaders: ["rowNum"],
+              rowHeaders: ["checkbox", "rowNum"],
               bodyHeight: 430,
               pageOptions: {
                 useClient: true,
@@ -475,6 +449,9 @@
                   align: "center",
                   sortingType: "asc",
                   sortable: true,
+                  formatter: function (e) {
+                    return formattedMoney(e.value);
+                  },
                 },
                 {
                   header: "결제수단",
@@ -578,8 +555,33 @@
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(dataArr),
                     success: function (result) {
+                      // 상품 이름 넣기
+                      for (let i = 0; i < result.orderList.length; i++) {
+                        let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
+                        let prdtNm = ""; // 상품명
+
+                        for (let j = 0; j < result.orderPrdList.length; j++) {
+                          if (
+                            result.orderPrdList[j].ordrId ==
+                            result.orderList[i].ordrId
+                          ) {
+                            prdtCnt++; // 해당 주문에 속한 상품의 개수 증가
+                            prdtNm = result.orderPrdList[j].prdtNm; // 상품명 설정
+                          }
+                        }
+
+                        if (prdtCnt > 1) {
+                          result.orderList[i].prdtNm =
+                            prdtNm + " 외 " + (prdtCnt - 1) + "개";
+                        } else {
+                          result.orderList[i].prdtNm = prdtNm;
+                        }
+                      }
                       selectedRows.forEach((row, idx) => {
-                        orderList.setRow(row.rowKey, result[row.rowKey]);
+                        orderList.setRow(
+                          row.rowKey,
+                          result.orderList[row.rowKey]
+                        );
                       });
 
                       let Toast = Swal.mixin({
@@ -675,7 +677,6 @@
             );
 
             $(document).on("click", "#searchBtn", function () {
-              console.log("검색");
               let orderNm = $("#orderNm").val();
               let startDate = $("#startDate").val();
               let endDate = $("#endDate").val();
@@ -757,7 +758,6 @@
               $.ajax({
                 url: "orderList",
                 success: function (result) {
-                  console.log(result);
                   // 상품 이름 넣기
                   for (let i = 0; i < result.orderList.length; i++) {
                     let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
@@ -791,25 +791,81 @@
             // 더블클릭시 상세조회
             orderList.on("dblclick", (e) => {
               let rowData = orderList.getRow(e.rowKey);
-              console.log(rowData);
               if (e.columnName === "shipSt" || e.columnName === "prcSt") {
                 return;
               }
               let point = rowData.point;
               let shipPrc = rowData.shipPrc;
               let ttPrc = rowData.ttPrc;
+              let prdPrice = ttPrc - shipPrc - point;
 
-              $("#detailNo").val(rowData.ordrId);
-              $("#detailNm").val(rowData.name);
-              $("#detailDate").val(formattedDate(rowData.ordrDate));
-              $("#rcvPsn").val(rowData.rcvPsn);
-              $("#rcvPhone").val(rowData.rcvPhone);
-              $("#rcvAddr").val(rowData.rcvAddr);
-              $("#note").val(rowData.note);
-              $("#point").val(point);
-              $("#shipPrc").val(shipPrc);
-              $("#ttPrc").val(ttPrc);
-              $("#resultPrc").val(ttPrc + shipPrc - point);
+              $("#detailNo").text(rowData.ordrId);
+              $("#detailNm").text(rowData.name);
+              $("#detailDate").text(formattedDate(rowData.ordrDate));
+              $("#rcvPsn").text(rowData.rcvPsn);
+              $("#rcvPhone").text(rowData.rcvPhone);
+              $("#rcvAddr").text(rowData.rcvAddr);
+              $("#note").text(rowData.note);
+              $("#point").text(point.toLocaleString() + "원");
+              $("#shipPrc").text(shipPrc.toLocaleString() + "원");
+              $("#ttPrc").text(prdPrice.toLocaleString() + "원");
+              $("#resultPrc").text(ttPrc.toLocaleString() + "원");
+              $("#invo").text(rowData.invo);
+
+              $.ajax({
+                url: "orderDetailPrd",
+                data: { ordrId: rowData.ordrId },
+                success: function (data) {
+                  if (data) {
+                    $("#getOrderList").empty();
+                    for (let i = 0; i < data.length; i++) {
+                      getOrderList.innerHTML += `
+                      <tr>
+                        <td><img src="download/${data[i].prdtImg}" alt="img"></td>
+                        <td id=option>
+                          <strong>${data[i].prdtNm}</strong>
+                          <br/>
+                          <sapn id="${data[i].ordtId}_option"></sapn>
+                        </td>
+                        <td>${data[i].cnt}</td>
+                        <td><span>${data[i].prc}</span><span>원</span></td>
+                        <td><span>${data[i].price}<span>원</span></span></td>
+                      </tr>
+                    `;
+
+                      let ordtId = data[i].ordtId;
+
+                      $.ajax({
+                        url: "orderDetailOption",
+                        data: { ordtId: ordtId },
+                        success: function (result) {
+                          if (result) {
+                            let optDetaNm = result.optDetaNm;
+                            let arr = optDetaNm.split(",");
+                            let optionText = "";
+                            for (let i = 0; i < arr.length; i++) {
+                              if (i == arr.length - 1) {
+                                optionText += arr[i];
+                                break;
+                              }
+                              optionText += arr[i] + " / ";
+                            }
+                            $("#" + ordtId + "_option").text(
+                              "옵션정보 : " + optionText
+                            );
+                          }
+                        },
+                        error: function (reject) {
+                          console.log(reject);
+                        },
+                      });
+                    }
+                  }
+                },
+                error: function (reject) {
+                  console.log(reject);
+                },
+              });
 
               $("#detailModal").modal("show");
             });
@@ -828,6 +884,11 @@
           let day = String(date.getDate()).padStart(2, "0");
           let formattedDate = year + "-" + month + "-" + day;
           return formattedDate;
+        }
+
+        // 돈 변환
+        function formattedMoney(value) {
+          return value.toLocaleString() + "원";
         }
       </script>
     </div>

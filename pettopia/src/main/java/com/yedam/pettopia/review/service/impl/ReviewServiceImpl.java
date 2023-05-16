@@ -17,14 +17,16 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	//작성 가능한 후기 리스트
 	@Override
-	public List<ReviewVO> selectReviewList() {
-		return reviewMapper.selectReviewList();
+	public List<ReviewVO> selectReviewList(String meId) {
+		return reviewMapper.selectReviewList(meId);
 	}
+	
 	//후기 작성
 	@Override
 	public int insertReview(ReviewVO reviewVO) {
 		return reviewMapper.insertReview(reviewVO);
 	}
+	
 	//내가 작성한 후기 리스트
 	@Override
 	public List<ReviewVO> selectWrittenList() {

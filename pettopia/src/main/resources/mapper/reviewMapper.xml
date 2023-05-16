@@ -6,7 +6,7 @@
 
 	<!-- 작성 가능한 후기 목록 -->
 	<select id="selectReviewList" resultType="ReviewVO">
-		SELECT
+		SELECT me_id, ordt.ordt_id, ordt.prdt_id,
 		TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, prdt_img, prdt_nm
 		FROM
 		order_header ordr
@@ -19,6 +19,8 @@
 		pr.prdt_id = img.prdt_id
 		WHERE is_main = 'Y'
 		AND ship_st = 'SS3'
+		AND me_id = #{meId}
+
 	</select>
 
 	<!-- 내가 작성한 후기 목록 -->
@@ -37,32 +39,27 @@
 	</select>
 
 
-
-
 	<!-- 후기 등록 -->
 	<insert id="insertReview" parameterType="ReviewVO">
 		INSERT INTO review (
-		RE_NO
-		TITLE
-		CONTENTS
-		CREAT_DT
-		RE_IMG
-		POINT
-		ME_ID
-		ORDT_ID
+		RE_NO,
+		CONTENTS,
+		CREAT_DT,
+		RE_IMG,
+		POINT,
+		ME_ID,
+		ORDT_ID,
 		PRDT_ID
 		)
 		VALUES (
-		(SELECT NVL(MAX(re_No), 0) + 1 FROM review)
-		, #{title}
-		, #{contents}
-		,
-		sysdate
-		, #{reImg}
-		, #{point}
-		, #{meId}
-		, #{ordtId}
-		, #{prdtId}
+		(SELECT NVL(MAX(re_No), 0) + 1 FROM review), 
+		#{contents},
+		sysdate,
+		#{reImg},
+		#{point},
+		#{meId},
+		#{ordtId},
+		#{prdtId}
 		)
 	</insert>
 

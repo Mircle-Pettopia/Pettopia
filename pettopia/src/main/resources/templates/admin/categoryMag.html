@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/layout}">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Pettopia</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<section class="section">
+
+
+
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">카테고리관리</h5>
+					<div class="row ">
+						<div class="col-lg-6">
+							대분류
+							<div class="text-end p-2">
+								<button type="button" class="btn btn-secondary" id="">
+									삭제
+								</button>
+								<button type="button" class="btn btn-primary" id="" ondblclick="addLCat()">
+									추가
+								</button>
+							</div>
+							<div id="LargeCatGrid"></div>
+						</div>
+						<div class="col-lg-6">
+							<span id="catNmHd"></span>소분류
+							<div class="text-end p-2">
+								<button type="button" class="btn btn-secondary" id="">
+									삭제
+								</button>
+								<button type="button" class="btn btn-primary" id="">
+									추가
+								</button>
+							</div>
+							<div id="SmallCatGrid"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</section>
+
+
+
+
+		<script>
+			const Grid = tui.Grid;
+
+			const LargeCat = new Grid({
+				el: document.getElementById("LargeCatGrid"),
+				rowHeaders: ["checkbox", "rowNum"],
+				bodyHeight: 430,
+				pageOptions: {
+					useClient: true,
+					perPage: 10,
+				},
+				columns: [
+					{
+						header: "아이디",
+						name: "lcatId",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+					},
+					{
+						header: "분류명",
+						name: "lcatNm",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+						editor: {
+							type: 'text'
+						}
+					},
+					{
+						header: "사용여부",
+						name: "lcatSt",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+						formatter: "listItemText",
+						editor: {
+							type: 'select',
+							options: {
+								listItems: [
+									{ text: '사용', value: 'Y' },
+									{ text: '비사용', value: 'N' },
+								]
+							}
+						}
+					},
+				],
+			});
+
+			const SmallCat = new Grid({
+				el: document.getElementById("SmallCatGrid"),
+				rowHeaders: ["checkbox", "rowNum"],
+				bodyHeight: 430,
+				pageOptions: {
+					useClient: true,
+					perPage: 10,
+				},
+				columns: [
+					{
+						header: "대분류",
+						name: "lcatId",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+					},
+					{
+						header: "아이디",
+						name: "scatId",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+					},
+					{
+						header: "분류명",
+						name: "scatNm",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+						editor: {
+							type: 'text'
+						}
+					},
+					{
+						header: "사용여부",
+						name: "scatSt",
+						align: "center",
+						sortingType: "asc",
+						sortable: true,
+						formatter: "listItemText",
+						editor: {
+							type: 'select',
+							options: {
+								listItems: [
+									{ text: '사용', value: 'Y' },
+									{ text: '비사용', value: 'N' },
+								]
+							}
+						}
+					},
+				],
+			});
+
+			// 날짜 변환
+			function formattedDate(timestamp) {
+				let date = new Date(timestamp);
+				let year = date.getFullYear();
+				let month = String(date.getMonth() + 1).padStart(2, "0");
+				let day = String(date.getDate()).padStart(2, "0");
+				let formattedDate = year + "-" + month + "-" + day;
+				return formattedDate;
+			}
+			getLCat();
+			function getLCat() {
+				console.log();
+				$.ajax({
+					url: "getLCat",
+					method: "GET",
+					async: false,
+					success: function (data) {
+						console.log(data);
+						LargeCat.resetData(data);
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+					},
+				})
+			}
+
+			function getSCat(lcatId) {
+				console.log();
+				$.ajax({
+					url: "getSCat",
+					method: "GET",
+					async: false,
+					data: { lcatId: lcatId },
+					success: function (data) {
+						SmallCat.resetData(data);
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+					},
+				})
+			}
+
+			LargeCat.on("click", (e) => {
+				const rowData = LargeCat.getRow(e.rowKey);
+				getSCat(rowData.lcatId);
+				catNmHd.innerText = rowData.lcatNm;
+			});
+			function addLCat() {
+				LargeCat.appendRow({ lcatId: getNewLCatID(), lcatSt: 'N' });
+			}
+
+			LargeCat.on("editingFinish", (e) => {
+				const rowData = LargeCat.getRow(e.rowKey);
+				VariableUpdates('PRODUCT_L_CAT', e.value, (e.columnName == 'lcatSt' ? 'L_CAT_ST' : 'L_CAT_NM'), 'L_CAT_ID', rowData.lcatId);
+			})
+
+			function VariableUpdates(Table, Value, Column, ConCol, ConVal) {//변경할컬럼, 변경할값, 조건 컬럼, 조건
+				console.log({ Table, Column, Value, ConCol, ConVal });
+				$.ajax({
+					url: "VariableUpdates",
+					method: "Post",
+					async: false,
+					data: { Table, Column, Value, ConCol, ConVal },
+					success: function (data) {
+						result = data;
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+						alert(reject + '통신오류');
+					},
+				})
+				return result;
+			}
+
+			function getNewLCatID() {
+				let result = null;
+				$.ajax({
+					url: "getNewLCatID",
+					method: "GET",
+					async: false,
+					success: function (data) {
+						result = data;
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+					},
+				})
+				return result;
+			}
+		</script>
+	</div>
+</body>
+
+</html>

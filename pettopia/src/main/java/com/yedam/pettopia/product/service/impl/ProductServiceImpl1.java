@@ -6,11 +6,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.yedam.pettopia.admin.ProductVO;
 import com.yedam.pettopia.product.Product1VO;
 import com.yedam.pettopia.product.mapper.ProductMapper1;
 import com.yedam.pettopia.product.service.ProductService1;
+
 
 
 
@@ -71,7 +72,24 @@ public class ProductServiceImpl1 implements ProductService1{
 	
 		return productMapper.selectOptionDetail(prdtId);
 	}
-
-
+	//관심상품등록
+	@Override
+	public void insertProduct(String prdtId, String meId) {
+		
+		 productMapper.insertProduct(prdtId, meId);
+	}
+	//관심상품해제
+	@Override
+	public void deleteProduct(String prdtId, String meId) {
+		
+		productMapper.deleteProduct(prdtId, meId);
+	}
+	//장바구니등록
+	
+	  @Override
+	  @Transactional
+	    public int addCart(String meId, String prdtId, int cnt, List<String> optDetaIds) {
+	        return productMapper.addCart(meId, prdtId, cnt, optDetaIds);
+	    }
 
 }

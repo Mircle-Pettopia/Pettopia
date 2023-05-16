@@ -90,29 +90,19 @@
 			<!-- Topbar -->
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
-					<div class="right-top-bar flex-w h-full" id="lgnHdr">
+					<div class="right-top-bar flex-w h-full">
 					</div>
 
 
 					<!-- ============================================레거시 코드============================================ -->
-					<div class="right-top-bar flex-w h-full" th:if="${not #strings.isEmpty(id)}">
-						<!--로그인을 했을 때-->
-						<a id="wellcomeMag">
-							<span th:text="${name}"></span>님 어서오세요!
-						</a>
-						<a href="logout" class="flex-c-m trans-04 p-lr-25"
-							style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-						<!--권한별 나오는 버튼 다르게하기-->
-						<!--USER-->
-						<a th:if="${role == 'USER'}" class="flex-c-m trans-04 p-lr-25" href="mypage">마이페이지</a>
-						<!--ADMIN-->
-						<a th:if="${role == 'ADMIN'}" class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>
+					<div class="right-top-bar flex-w h-full" id="LoginHeader">
+						테스팅
 					</div>
 					<!--로그인이 되어있지 않을 때-->
-					<div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
+					<!-- <div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
 						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
 						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
-					</div>
+					</div> -->
 					<!-- ============================================레거시 코드끝============================================ -->
 				</div>
 			</div>
@@ -185,8 +175,8 @@
 							<i class="zmdi zmdi-shopping-cart" onclick="location.replace('CartMain');"></i>
 						</div>
 
-						<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0" id="interestCounter">
+						<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0"
+							id="interestCounter">
 							<i class="zmdi zmdi-favorite-outline" onclick="location.replace('prodInterest')"></i>
 						</div>
 					</div>
@@ -543,58 +533,58 @@
 
 
 
-		//==============AJAX로 로그인정보받아와서 layout 자체적으로 로그인 여부에따른 헤더 변화 코드작성중 InnerHTML 안먹히는 이슈로 잠시보류 내일와서확인함
-		//============== 위에 레거시코드라고 주석 적어놓은부분 대체예정==========================================================
-		// UpdateHeader();
-		// function UpdateHeader() { //레이아웃에 로그인여부, 관리자 여부에따라 레이아웃 헤더 바꾸는함수 컨트롤러는 User에있음
+		// ==============AJAX로 로그인정보받아와서 layout 자체적으로 로그인 여부에따른 헤더 변화 코드작성중 InnerHTML 안먹히는 이슈로 잠시보류 내일와서확인함
+		// ============== 위에 레거시코드라고 주석 적어놓은부분 대체예정==========================================================
+		UpdateHeader();
+		function UpdateHeader() { //레이아웃에 로그인여부, 관리자 여부에따라 레이아웃 헤더 바꾸는함수 컨트롤러는 User에있음
 
-		// 	$.ajax({
-		// 		url: "userInfoAjax",
-		// 		method: "GET",
-		// 		async: false,
-		// 		dataType: "json",
-		// 		success: function (data) {
-		// 			console.log(data);
-		// 			drawLoginHeader(data);
-		// 			console.log(lgnHdr.InnerHTML);
-		// 		},
-		// 		error: function (reject) {
-		// 			console.log(reject);
-		// 			console.log("로그인정보 가져오기 실패");
-		// 			drawNonLoginHeader();
-		// 		},
-		// 	})
+			$.ajax({
+				url: "userInfoAjax",
+				method: "GET",
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					console.log(data);
+					drawLoginHeader(data);
+					console.log(LoginHeader.InnerHTML);
+				},
+				error: function (reject) {
+					console.log(reject);
+					console.log("로그인정보 가져오기 실패");
+					drawNonLoginHeader();
+				},
+			})
 
-		// }
+		}
 
-		// function drawLoginHeader(data) {
-		// 	console.log(lgnHdr);
-		// 	lgnHdr.innerHTML = "test"
-		// 	console.log(lgnHdr.innerHTML);
-		// 	lgnHdr.InnerHTML = "";
-		// 	console.log('로그인헤더 작성');
-		// 	lgnHdr.InnerHTML += `
-		// 	<div class="right-top-bar flex-w h-full">
-		// 				<a id="wellcomeMag">
-		// 					<span>${data.name}</span>님 어서오세요!
-		// 				</a>
-		// 				<a href="logout" class="flex-c-m trans-04 p-lr-25"
-		// 					style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-		// 			${data.role == 'ADMIN' ?
-		// 			'<a class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>' :
-		// 			'<a a class="flex-c-m trans-04 p-lr-25" href="mypage" > 마이페이지	</a>'
-		// 		}
-		// 			</div > `
-
-		// }
-		// function drawNonLoginHeader() {
-		// 	lgnHdr.InnerHTML = ""
-		// 	console.log('비로그인헤더 작성');
-		// 	lgnHdr.InnerHTML += `< div class="right-top-bar flex-w h-full" >
-		// 				<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
-		// 				<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
-		// 			</div >`
-		// }
+		function drawLoginHeader(data) {
+			console.log(LoginHeader);
+			console.log(LoginHeader.innerHTML);
+			console.log('로그인헤더 작성');
+			LoginHeader.innerHTML =
+				`
+				<a id = "wellcomeMag">
+					<span>${data.name}</span>님 어서오세요!
+						</a>
+				<a href="logout" class="flex-c-m trans-04 p-lr-25"
+					style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
+			`
+			if (data.role == 'ADMIN') {
+				LoginHeader.innerHTML +=
+					`<a class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>`
+			}
+			else {
+				LoginHeader.innerHTML +=
+					`<a class="flex-c-m trans-04 p-lr-25" href="productMag">관리페이지</a>`
+			}
+		}
+		function drawNonLoginHeader() {
+			console.log('비로그인헤더 작성');
+			LoginHeader.innerHTML = `
+						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
+						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
+					`
+		}
 	</script>
 
 

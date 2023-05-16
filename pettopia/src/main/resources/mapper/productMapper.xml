@@ -48,13 +48,19 @@ LEFT JOIN PRODUCT_OPTION_DETAIL POD ON PO.OPT_ID = POD.OPT_ID
 WHERE P.PRDT_ID = #{prdtId}
 AND pi.is_main = 'Y' -->
 
-SELECT P.prdt_id, P.prdt_nm, P.prdt_prc, P.sale_st, P.reg_dt, P.mod_dt, P.prdt_desct,
-       pi.prdt_img, pi.is_main
-      
-FROM PRODUCT P
-LEFT JOIN PRODUCT_IMG PI ON P.PRDT_ID = PI.PRDT_ID
+SELECT P.prdt_id, 
+       P.prdt_nm, P.prdt_prc, P.sale_st, P.reg_dt, P.mod_dt, P.prdt_desct,
+       pi.prdt_img,
+       <if test="meId !=null">(select prdt_Id FROM interest_product
+       										WHERE me_id=#{meId}
+       										AND prdt_id=P.prdt_id) interestY,</if> 
+       pi.is_main
+ 
+ FROM PRODUCT P
+ LEFT JOIN PRODUCT_IMG PI 
+   ON P.PRDT_ID = PI.PRDT_ID
 WHERE P.PRDT_ID = #{prdtId}
-AND pi.is_main = 'Y'
+  AND pi.is_main = 'Y'
 
   </select>
   
@@ -82,5 +88,74 @@ AND pi.is_main = 'Y'
 	</select>
 	
 
-  
+<!--  관심상품등록  -->
+	<insert id="insertProduct" parameterType="Product1VO">
+		INSERT INTO  "INTEREST_PRODUCT"(
+			prdt_id,
+			me_id,
+			int_in_dt
+		)
+		VALUES(
+			#{prdtId},
+			#{meId},
+			SYSDATE
+		)
+	
+	</insert>	
+<!--  관심상품해제  -->	
+	<delete id="deleteProduct" parameterType="Product1VO">
+		 DELETE FROM INTEREST_PRODUCT
+ 		 WHERE me_id = #{meId} 
+ 		 AND prdt_id = #{prdtId}
+	</delete>
+	
+<!-- 장바구니 추가 -->
+<insert id="addCart" parameterType="map" statementType="CALLABLE">
+    <![CDATA[
+    { call register_shopping_cart(
+      #{meId, mode=IN, jdbcType=VARCHAR},
+      #{prdtId, mode=IN, jdbcType=VARCHAR},
+      #{cnt, mode=IN, jdbcType=NUMERIC},
+      #{optDetaIds, mode=IN, jdbcType=ARRAY}
+    ) }
+  ]]>
+</insert> 
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   </mapper>

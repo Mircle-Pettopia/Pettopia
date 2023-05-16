@@ -67,4 +67,14 @@ public class OrderServiceImpl implements OrderService {
 		map.put("shipSt3", orderMapper.shipStCnt3());
 		return map;
 	}
+
+	@Override
+	public List<OrderVO> orderDetailList(OrderVO vo) {
+		return orderMapper.orderDetailList(vo);
+	}
+
+	@Override
+	public OrderVO orderDetailOption(OrderVO vo) {
+		return orderMapper.orderDetailOption(vo);
+	}
 }

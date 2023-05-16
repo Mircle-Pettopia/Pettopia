@@ -256,7 +256,7 @@
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 
-						<a href="#"
+						<a href="#" 
 							class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
 							data-notify="0"> <i class="zmdi zmdi-favorite-outline"></i>
 						</a>
@@ -440,43 +440,14 @@
 							[[${ProductDetail.prdtNm}]]</h4>
 						<span class="mtext-106 cl2" id="prdtPrc">
 							[[${ProductDetail.prdtPrc}]]원 </span>
+						<input type="hidden" id="prdtId" th:value="${ProductDetail.prdtId}"/>
 						<p class="stext-102 cl3 p-t-23" id="prdtDesct">
-						<p th:utext="${ProductDetail.prdtDesct}" />
+						<p th:utext="${ProductDetail.prdtDesct}" >
 						</p>
 						<div class="p-t-33">
 
 
-							<!-- <div class="flex-w flex-r-m p-b-10" th:each="option: ${OptionList}" th:data="${option.optId}">
-								        <div class="size-203 flex-c-m respon6">
-								          <span th:text="${option.optNm}"></span>
-								        </div>
-								        <div class="size-204 respon6-next">
-								          <div class="rs1-select2 bor8 bg0">
-								            <select class="js-select2" name="time" onchange="updatePrice()">
-								              <option>Choose an option</option>
-								              <option th:each="optionDetail: ${optionDetailList}" th:data-add-prc="${optionDetail.addPrc}" th:data="${optionDetail.optId}" th:text="${optionDetail.optDetaNm} +' '+ '('+'+' +${optionDetail.addPrc}+원+')'" th:if="${optionDetail.optId == option.optId}"></option>
-								            </select>
-								            <div class="dropDownSelect2"></div>
-								          </div>
-								        </div>
-								      </div> -->
-															<!-- <div class="flex-w flex-r-m p-b-10" th:each="option: ${OptionList}" th:data="${option.optId}">
-								  <div class="size-203 flex-c-m respon6">
-								    <span th:text="${option.optNm}"></span>
-								  </div>
-								  <div class="size-204 respon6-next">
-								    <div class="rs1-select2 bor8 bg0">
-								      <select class="js-select2" name="time" onchange="updatePrice()">
-								        <option>Choose an option</option>
-								        <th:block th:if="${optionDetailList}">
-								          <option th:each="optionDetail: ${optionDetailList}" th:data-add-prc="${optionDetail.addPrc}" th:data="${optionDetail.optId}" th:text="${optionDetail.optDetaNm} + ' (' + '+' + ${optionDetail.addPrc} + '원)'"
-								            th:if="${optionDetail.optId == option.optId}"></option>
-								        </th:block>
-								      </select>
-								      <div class="dropDownSelect2"></div>
-								    </div>
-								  </div>
-								</div> -->
+						
 								
 						
 								
@@ -495,29 +466,16 @@
 														th:if="${optionDetail.optId == option.optId}"
 														th:data-add-prc="${optionDetail.addPrc}"
 														th:data="${optionDetail.optId}">
-														<span th:text="${optionDetail.optDetaNm} + ' (' + '+' + ${optionDetail.addPrc} + '원)'"></span>
+														<span th:text="|${optionDetail.optDetaNm}  (+ ${optionDetail.addPrc} 원)|"></span>
+														<span id="optDetaIds" th:text="${optionDetail.optDetaId}" hidden></span>
 													</option>
+													
 											</select>
 											<div class="dropDownSelect2"></div>
 										</div>
 									</div>
 								</div>
 							</th:block>
-					<!-- 		<th:block th:unless="${OptionList != null}">
-							  <div class="flex-w flex-r-m p-b-10"  th:data="${option.optId}">
-							    <div class="size-203 flex-c-m respon6">
-							      <span></span>
-							    </div>
-							    <div class="size-204 respon6-next">
-							      <div class="rs1-select2 bor8 bg0">
-							        
-							        <div class="dropDownSelect2"></div>
-							      </div>
-							    </div>
-							  </div>
-							</th:block>
-							 -->
-							
 	
 							
 							
@@ -529,7 +487,7 @@
 											class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
 											<i class="fs-16 zmdi zmdi-minus"></i>
 										</div>
-										<input class="mtext-104 cl3 txt-center num-product"
+										<input class="mtext-104 cl3 txt-center num-product" id="cnt"
 											type="number" name="num-product" value="1"
 											onchange="updatePrice()">
 										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
@@ -537,13 +495,13 @@
 										</div>
 									</div>
 									<!-- 아이디 값 불러옴 -->
-									<input type="hidden" th:value="${id}" />
+									<input type="hidden" th:value="${id}" id="meId"/>
 									<button
-										class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+										class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" id="addCart" type="submit">
 										Add to cart</button>
 								</div>
-								<a href="#"
-									class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
+								<a href="#" id="submitBtn"
+									class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ "
 									data-tooltip="Add to Wishlist"> <i
 									class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
 								</a>
@@ -1202,6 +1160,223 @@
 				ps.update();
 			})
 		});
+		
+
+			  //관심상품등록
+			  $(document).ready(function() {
+				  $("#submitBtn").click(function(e) {
+				    e.preventDefault();
+				    var prdtId = $("#prdtId").val();
+				    var meId = $("#meId").val();
+				    console.log(prdtId);
+				    console.log(meId);
+
+				    if ($("#submitBtn").hasClass("js-addedwish-detail")) {
+				      // Send an AJAX request to delete the product				      
+				      $.ajax({
+					        url: "InsertProduct",
+					        type: "POST",
+					        data: {
+					          prdtId: prdtId,
+					          meId: meId
+					        },
+					        success: function(response) {
+					      
+					        },
+					        error: function(xhr) {
+					        
+					        }
+					      });
+				    } else {
+				      // Send an AJAX request to add to wishlist
+				    	$.ajax({
+					        url: "deleteProduct",
+					        type: "GET",
+					        data: {
+					          prdtId: prdtId,
+					          meId: meId
+					        },
+					        success: function(response) {
+					
+					        },
+					        error: function(xhr) {
+					 
+					        }
+					      });
+				    }
+				  });
+				});
+			  //장바구니 등록
+/* 			  $(document).ready(function() {
+  // When the form is submitted
+  $("#addCart").click(function(event) {
+    event.preventDefault();
+
+    // Get the form values
+    var meId = $("#meId").val();
+    var prdtId = $("#prdtId").val();
+    var cnt = $("#cnt").val();
+    
+    // Create an array to store optDetaIds
+    var optDetaIds = [];
+
+    // Loop through the selected options
+    $("option:selected").each(function() {
+      // Get the optDetaId value
+      var optDetaId = $(this).find("#optDetaIds").text();
+      
+      // Add the optDetaId to the array
+      optDetaIds.push(optDetaId);
+    });
+
+    console.log(meId);
+    console.log(cnt);
+    console.log(optDetaIds);
+
+    // Create the data object
+    var data = {
+      meId: meId,
+      prdtId: prdtId,
+      cnt: cnt,
+      optDetaIds: optDetaIds
+    };
+
+    // Make the AJAX call
+    $.ajax({
+      url: "addCart", // Replace with the actual server-side script URL
+      method: "POST",
+      data: data,
+      success: function(response) {
+        // Handle the response
+        console.log(response);
+        // Display a success message or perform any other actions
+      },
+      error: function(xhr, status, error) {
+        // Handle the error
+        console.log(error);
+        // Display an error message or perform any other actions
+      }
+    });
+    console.log(optDetaIds);
+  });
+}); */
+/* $(document).ready(function() {
+	  // When the form is submitted
+	  $("#addCart").click(function(event) {
+	    event.preventDefault();
+
+	    // Get the form values
+	    var meId = $("#meId").val();
+	    var prdtId = $("#prdtId").val();
+	    var cnt = $("#cnt").val();
+
+	    // Create an array to store optDetaIds
+	    var optDetaIds = [];
+
+	    // Loop through the selected options
+	    $("option:selected").each(function() {
+	      // Get the optDetaId value
+	      var optDetaId = $(this).find("#optDetaIds").text();
+	      console.log(optDetaIds)
+
+	      // Add the optDetaId to the array
+	      optDetaIds.push(optDetaId);
+	    });
+
+	    console.log(meId);
+	    console.log(cnt);
+	    console.log(optDetaIds);
+
+	    // Unpack and check the optDetaIds array
+	    optDetaIds.forEach(function(optDetaId) {
+	      console.log("OptDetaId: " + optDetaId);
+	      // Perform any other actions or checks with each optDetaId
+	      // For example, you can check if a specific value is present
+	      if (optDetaId === "desiredValue") {
+	        console.log("Desired value found!");
+	      }
+	    });
+
+	    // Create the data object
+	    var data = {
+	      meId: meId,
+	      prdtId: prdtId,
+	      cnt: cnt,
+	      optDetaIds: optDetaIds
+	    };
+
+	    // Make the AJAX call
+	    $.ajax({
+	      url: "addCart", // Replace with the actual server-side script URL
+	      method: "POST",
+	      data: data,
+	      success: function(response) {
+	        // Handle the response
+	        console.log(response);
+	        // Display a success message or perform any other actions
+	      },
+	      error: function(xhr, status, error) {
+	        // Handle the error
+	        console.log(error);
+	        // Display an error message or perform any other actions
+	      }
+	    });
+	  });
+	}); */
+	$(document).ready(function() {
+		  // When the form is submitted
+		  $("#addCart").click(function(event) {
+		    event.preventDefault();
+
+		    // Get the form values
+		    var meId = $("#meId").val();
+		    var prdtId = $("#prdtId").val();
+		    var cnt = $("#cnt").val();
+
+		    // Create an array to store optDetaIds
+		    var optDetaIds = [];
+
+		    // Loop through the selected options
+		    $("option:selected").each(function() {
+		      // Get the optDetaId value
+		      var optDetaId = $(this).find("#optDetaIds").text();
+		      console.log(optDetaId);
+
+		      // Add the optDetaId to the array
+		      optDetaIds.push(optDetaId);
+		    });
+
+		    console.log(meId);
+		    console.log(cnt);
+		    console.log(optDetaIds);
+
+		    // Create the data object
+		    var data = {
+		      meId: meId,
+		      prdtId: prdtId,
+		      cnt: cnt,
+		      optDetaIds: optDetaIds
+		    };
+
+		    // Make the AJAX call
+		    $.ajax({
+		      url: "addCart", // Replace with the actual server-side script URL
+		      method: "POST",
+		      data: JSON.stringify(data), // Convert data to JSON string
+		      contentType: "application/json", // Set the request content type to JSON
+		      success: function(response) {
+		        // Handle the response
+		        console.log(response);
+		        // Display a success message or perform any other actions
+		      },
+		      error: function(xhr, status, error) {
+		        // Handle the error
+		        console.log(error);
+		        // Display an error message or perform any other actions
+		      }
+		    });
+		  });
+		});	
 	</script>
 
 	<script>
@@ -1374,6 +1549,7 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </body>
 

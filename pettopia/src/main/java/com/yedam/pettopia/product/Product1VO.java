@@ -44,4 +44,9 @@ public class Product1VO {
 	private String prdtImg; //상품 이미지
 	private String isMain; //대표이미지 여부 y or n 으로 구분
 	
+	//관심상품등록
+	private String meId;//유저아이디
+	private String interestY;//관심여부
+	
+	
 }
