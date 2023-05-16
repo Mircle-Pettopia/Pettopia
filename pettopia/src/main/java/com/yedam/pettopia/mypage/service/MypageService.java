@@ -15,10 +15,12 @@ public interface MypageService {
 	public List<MypageVO> ordrDetailList(String ordrId);
 	public List<MypageVO> getInterestList(String meId);
 	
+	public int interestCnt(String meId);
+	
 	public int countOrderList();
 	public List<MypageVO> pagingTest(MypageVO vo);
 	
-	
+	public int interestDelete(MypageVO vo);
 	
 	
 	

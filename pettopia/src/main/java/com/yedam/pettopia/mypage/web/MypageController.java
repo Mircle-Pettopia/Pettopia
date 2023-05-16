@@ -7,10 +7,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.pettopia.admin.OptionVO;
 import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.service.MypageService;
@@ -94,10 +94,6 @@ public class MypageController {
 	public String prodInterest(Model model,
 							   @AuthenticationPrincipal PrincipalDetails principal,
 							   String prdtId) {
-		String id = principal.getUser().getMeId();
-		//List<MypageVO> list = service.getInterestList(id); 
-		//System.out.println("list>>>>>>>>>>>>>>>>" + list);
-		//model.addAttribute("list", list);
 		model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
         model.addAttribute("role", principal.getUser().getRole());
@@ -111,9 +107,18 @@ public class MypageController {
 		return service.getInterestList(meId);
 	}
 	
+	//메인 - 본인 장바구니에 있는 상품의 개수 알려주기
+	@GetMapping("interestCount")
+	@ResponseBody
+	public int interestCount(String meId) {
+		return service.interestCnt(meId);
+	}
 	
-	
-	
+	@PostMapping("interestDelete")
+	@ResponseBody
+	public int interestDelete(MypageVO vo) {
+		return service.interestDelete(vo);
+	}
 	
 	
 	

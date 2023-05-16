@@ -165,10 +165,10 @@ td, tr, th{
 											<col width="20%">
 											<col width="19%">
 											<col width="10%">
+											<col width="8%">
 											<col width="10%">
 											<col width="9%">
 											<col width="10%">
-											<col width="8%">
 									</colgroup>
 									<thead style="text-align: center;" id="draw">
 										<tr>
@@ -180,9 +180,12 @@ td, tr, th{
 											<th scope="col">상품정보</th>
 											<th scope="col">수량</th>
 											<th scope="col">상품금액</th>
+											<th scope="col">배송비</th>
 											<th scope="col">총금액</th>
-											<th scope="col">주문처리상태</th>
-											<th scope="col">결제여부</th>
+											<th scope="col">
+												결제여부<br/>
+												주문상태
+											</th>
 										</tr>
 									</thead>
 									<tbody id="getOrderList" name="getOrderList"></tbody>
@@ -298,10 +301,10 @@ td, tr, th{
 					let date = dateChange(data[i].ordrDate);
 					let prc = AddComma(data[i].prc);
 					let total = AddComma(data[i].total);
+					let shipPrc = AddComma(data[i].shipPrc);
 
 					if(key != data[i].ordtId) {
 						key = data[i].ordtId;
-						//console.log(data[i].ordtId+"row 새로그림");
 						getOrderList.innerHTML += `
 								<tr id="${data[i].ordtId}">
 									<td>
@@ -323,10 +326,13 @@ td, tr, th{
 										<sapn id="${data[i].ordtId}_option"></sapn>
 									</td>
 									<td>${data[i].cnt}</td>
-									<td><span>${prc}</span><span>원</span></td>
-									<td><span>${total}</span><span>원</span></td>
-									<td>${data[i].shipSt}</td>
-									<td>${data[i].prcSt}</td>
+									<td><span>${prc}</span>원</td>
+									<td>${shipPrc}원</td>
+									<td><span>${total}</span>원</td>
+									<td>
+										${data[i].prcSt}
+										<br/>
+										${data[i].shipSt}</td>
 								</tr>
 								`;
 					};
