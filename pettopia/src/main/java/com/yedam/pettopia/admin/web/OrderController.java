@@ -64,19 +64,37 @@ public class OrderController {
 	// 운송장 등록
 	@PostMapping("insertInvo")
 	@ResponseBody
-	public List<OrderVO> insertInvo(@RequestBody OrderVO[] arr) {
+	public Map<String, Object> insertInvo(@RequestBody OrderVO[] arr) {
 		for(int i = 0; i < arr.length; i++) {
 			orderService.updateInvo(arr[i]);
 		}
-		return orderService.orderAllList();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("orderList", orderService.orderAllList());
+		map.put("orderPrdList", orderService.orderPrdList());
+		
+		return map;
 	}
 	
 	// 검색
 	@GetMapping("searchOrder")
 	@ResponseBody
 	public Map<String, List<OrderVO>> searchOrder(OrderVO vo){
-		System.out.println("출력 " + vo);
 		return orderService.searchList(vo);
+	}
+	
+	// 주문 디테일(상품)
+	@GetMapping("orderDetailPrd")
+	@ResponseBody
+	public List<OrderVO> orderDetailPrd(OrderVO vo){
+		return orderService.orderDetailList(vo);
+	}
+	
+	// 주문 디테일(옵션)
+	@GetMapping("orderDetailOption")
+	@ResponseBody
+	public OrderVO orderDetailOption(OrderVO vo){
+		return orderService.orderDetailOption(vo);
 	}
 	
 

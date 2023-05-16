@@ -27,8 +27,14 @@ public interface OrderService {
 
 	// 검색
 	public Map<String, List<OrderVO>> searchList(OrderVO vo);
-	
+
 	// 배송 상태 카운트
 	public Map<String, Integer> shipStCnt();
+
+	// 주문 디테일 리스트
+	public List<OrderVO> orderDetailList(OrderVO vo);
+
+	// 주문 디테일 리스트(옵션)
+	public OrderVO orderDetailOption(OrderVO vo);
 
 }

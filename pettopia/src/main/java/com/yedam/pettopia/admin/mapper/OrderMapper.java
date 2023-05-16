@@ -45,4 +45,10 @@ public interface OrderMapper {
 	// 배송완료 카운트
 	public int shipStCnt3();
 	
+	// 주문 디테일 리스트
+	public List<OrderVO> orderDetailList(OrderVO vo);
+	
+	// 주문 디테일 리스트(옵션)
+	public OrderVO orderDetailOption(OrderVO vo);
+	
 }
