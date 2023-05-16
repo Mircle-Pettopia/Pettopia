@@ -33,6 +33,9 @@ public class OrderVO {
 	private String optDetaId;
 	private int cnt;
 	private int prc;
+	private String prdtImg; // 제품 이미지
+	private int price; // 총 가격
+	private String optDetaNm; // 옵션 상세 이름
 	
 	// 회원
 	private String name;

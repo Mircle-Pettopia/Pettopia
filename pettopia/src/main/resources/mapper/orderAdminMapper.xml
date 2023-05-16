@@ -126,6 +126,7 @@
 		</where>
 		ORDER BY o.ordr_id
 	</select>
+	
 	<!-- 검색 상품 -->
 	<select id="searchPrdList" resultType="OrderVO">
 		SELECT 	o.ordr_id,
@@ -196,5 +197,45 @@
 		SELECT COUNT(*) as cnt
 		FROM order_header
 		WHERE ship_st = 'SS3'
+	</select>
+	
+	<!-- 주문번호별 주문디테일조회 -->
+	<select id="orderDetailList" resultType="OrderVO">
+		SELECT TO_DATE(ordr_date, 'rrrr-MM-dd') ordr_date, 
+		       ordr.ordr_id, 
+		       prdt_img, 
+		       prdt_nm,  
+		       invo,
+		       get_common(ship_st) ship_st, 
+		       get_common(prc_st) prc_st, 
+		       ordt.prdt_id, 
+		       ship_prc, 
+		       cnt,
+		       NVL(cnt, 0) * NVL(prc, 0) "PRICE", 
+		       ordt.ordt_id, 
+		       prc
+		 FROM  order_header ordr
+         JOIN  order_detail ordt
+           ON ordr.ordr_id = ordt.ordr_id
+         JOIN product pr
+           ON ordt.prdt_id = pr.prdt_id
+         JOIN product_img img
+           ON pr.prdt_id = img.prdt_id
+           
+	    WHERE 1=1
+		  AND ordr.ordr_id = #{ordrId}
+		  AND is_main = 'Y'
+	</select>
+	
+	<!-- 옵션정보 가져오기, LISTAGG를 사용, 선아의 도움으로 진행함!-->
+	<select id="orderDetailOption" resultType="OrderVO">
+		SELECT  DISTINCT odo.ordt_id,
+		    	LISTAGG(pod.opt_deta_nm, ',')
+		    	WITHIN GROUP (ORDER BY opt_deta_nm)
+		    	OVER(PARTITION BY odo.ordt_id) opt_deta_nm
+		  FROM 	ORDER_DETAIL_OPTION odo 
+		  JOIN 	PRODUCT_OPTION_DETAIL pod
+			ON  odo.OPT_DETA_ID = pod.OPT_DETA_ID
+		 WHERE	ORDT_ID = #{ordtId}
 	</select>
 </mapper>
