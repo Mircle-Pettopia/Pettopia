@@ -62,8 +62,8 @@
 							<dl>
 								<dt>제목</dt>
 								<dd>
-									<input type="hidden" name="noNo" th:value="*{noNo}"> <input
-										type="text" name="title" placeholder="제목 입력"
+									<input type="hidden" name="noNo" th:value="*{noNo}"> 
+									<input type="text" name="title" placeholder="제목 입력"
 										th:value="*{title}">
 								</dd>
 							</dl>
@@ -71,12 +71,11 @@
 						<div class="info"></div>
 						<div class="cont">
 							<textarea placeholder="내용 입력" name="contents"
-								th:text="*{contents}">
-</textarea>
+								th:text="*{contents}"></textarea>
 						</div>
 						<div >
 							<dl>
-								<dt id="files">첨부파일</dt>
+								<dt id="files"></dt>
 								<dd>
 									<a th:href="@{/downloadFile(filepath=${noticeDetail.files})}"
 										th:text="${noticeDetail.files}"></a>
