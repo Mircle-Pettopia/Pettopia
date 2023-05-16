@@ -45,4 +45,5 @@ public interface ProductService {
 
 	// 상품 수정
 	public int updatePrd(ProductVO vo);
+	
 }

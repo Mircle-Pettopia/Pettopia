@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.pettopia.admin.mapper.CategoryMapper">
+
+	<select id="selectL" resultType="CategoryVO">
+		select * from Product_L_CAT
+	</select>
+	
+	<select id="selectS" resultType="CategoryVO">
+		select * from Product_S_CAT where L_CAT_ID=#{lcatId}
+	</select>
+	
+	<insert id="getNewLCatID" parameterType="CategoryVO">
+	<selectKey keyProperty="lCatId" resultType="String" order="BEFORE">
+		select 'LCAT'||(MAX(TO_NUMBER(SUBSTR(L_CAT_ID,5)))+1)L_CAT_ID from PRODUCT_L_CAT
+	</selectKey>
+		insert into PRODUCT_L_CAT (L_CAT_ID,L_CAT_ST) VALUES (#{lCatId},'N')
+	</insert>
+	
+	<update id='VariableUpdates' parameterType="CategoryVO">
+		update ${Table} set ${Column}=#{Value} where ${ConCol}=#{ConVal}
+	</update>
+	
+</mapper>
