@@ -23,7 +23,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res,
 										Authentication authdata) throws IOException, ServletException {
-        String uri = "/";
+        String uri = "";
         String id = req.getParameter("meId");
 		String pw = req.getParameter("password");
 		String message = "";
