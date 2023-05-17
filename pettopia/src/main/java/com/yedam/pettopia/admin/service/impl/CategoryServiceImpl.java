@@ -38,6 +38,36 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryMapper.VariableUpdates(vo);
 	}
 
+	@Override
+	public String getNewSCatID(CategoryVO vo) {
+		categoryMapper.getNewSCatID(vo);
+		System.out.println(vo.getSCatId()+"반환한 소분류 아이디");
+		// TODO Auto-generated method stub
+		return vo.getSCatId();
+	}
+
+	@Override
+	public int DeleteLCat(List<String> lCatId) {
+		// TODO Auto-generated method stub
+		
+		int result = 0;
+		for(int i=0;i<lCatId.size();i++) {
+			result+=categoryMapper.DeleteLCat(lCatId.get(i));
+			result+=categoryMapper.DeleteLSCat(lCatId.get(i));
+		}
+		return result;
+	}
+
+	@Override
+	public int DeleteSCat(List<String> sCatId) {
+		// TODO Auto-generated method stub
+		int result = 0;
+		for(int i=0;i<sCatId.size();i++) {
+			result+=categoryMapper.DeleteSCat(sCatId.get(i));
+		}
+		return result;
+	}
+
 	
 
 }

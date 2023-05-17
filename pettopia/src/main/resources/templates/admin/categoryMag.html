@@ -20,7 +20,7 @@
 						<div class="col-lg-6">
 							대분류
 							<div class="text-end p-2">
-								<button type="button" class="btn btn-secondary" id="">
+								<button type="button" class="btn btn-secondary" id="" ondblclick="deleteLCat()">
 									삭제
 								</button>
 								<button type="button" class="btn btn-primary" id="" ondblclick="addLCat()">
@@ -30,12 +30,13 @@
 							<div id="LargeCatGrid"></div>
 						</div>
 						<div class="col-lg-6">
+							<input type="hidden" value="" id="catIdHd">
 							<span id="catNmHd"></span>소분류
 							<div class="text-end p-2">
-								<button type="button" class="btn btn-secondary" id="">
+								<button type="button" class="btn btn-secondary" id="" ondblclick="deleteSCat()">
 									삭제
 								</button>
-								<button type="button" class="btn btn-primary" id="">
+								<button type="button" class="btn btn-primary" id="" ondblclick="addSCat()">
 									추가
 								</button>
 							</div>
@@ -196,13 +197,27 @@
 				})
 			}
 
+
+			var selectedLCat;
 			LargeCat.on("click", (e) => {
 				const rowData = LargeCat.getRow(e.rowKey);
+				selectedLCat = rowData.lcatId;
 				getSCat(rowData.lcatId);
 				catNmHd.innerText = rowData.lcatNm;
+				catIdHd.value = rowData.lcatId;
 			});
+
 			function addLCat() {
 				LargeCat.appendRow({ lcatId: getNewLCatID(), lcatSt: 'N' });
+			}
+
+			function addSCat() {
+				if (selectedLCat == "" || selectedLCat == null) {
+					alert("대분류를 먼저 선택해주세요")
+				}
+				else {
+					SmallCat.appendRow({ lcatId: selectedLCat, scatId: getNewSCatID(selectedLCat), scatSt: 'N' });
+				}
 			}
 
 			LargeCat.on("editingFinish", (e) => {
@@ -210,7 +225,13 @@
 				VariableUpdates('PRODUCT_L_CAT', e.value, (e.columnName == 'lcatSt' ? 'L_CAT_ST' : 'L_CAT_NM'), 'L_CAT_ID', rowData.lcatId);
 			})
 
-			function VariableUpdates(Table, Value, Column, ConCol, ConVal) {//변경할컬럼, 변경할값, 조건 컬럼, 조건
+			SmallCat.on("editingFinish", (e) => {
+				const rowData = SmallCat.getRow(e.rowKey);
+				VariableUpdates('PRODUCT_S_CAT', e.value, (e.columnName == 'scatSt' ? 'S_CAT_ST' : 'S_CAT_NM'), 'S_CAT_ID', rowData.scatId);
+			})
+
+			function VariableUpdates(Table, Value, Column, ConCol, ConVal) //다용도 업데이터
+			{//변경할테이블,변경할컬럼, 변경할값, 조건 컬럼, where조건값
 				console.log({ Table, Column, Value, ConCol, ConVal });
 				$.ajax({
 					url: "VariableUpdates",
@@ -237,6 +258,71 @@
 					async: false,
 					success: function (data) {
 						result = data;
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+					},
+				})
+				return result;
+			}
+
+			function getNewSCatID(lCatId) {
+				console.log(lCatId);
+				let result = null;
+				$.ajax({
+					url: "getNewSCatID",
+					method: "GET",
+					data: { lCatId },
+					async: false,
+					success: function (data) {
+						result = data;
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+					},
+				})
+				return result;
+			}
+
+			function deleteLCat() {
+				let checkedID = LargeCat.getCheckedRows().map(row => row.lcatId);
+				console.log(checkedID);
+				result = 0;
+				$.ajax({
+					url: "DeleteLCat",
+					method: "Delete",
+					data: { lCatId: checkedID },
+					async: false,
+					success: function (data) {
+						result = data;
+						catIdHd.value = "";
+						catNmHd.innerText = "";
+						getLCat();
+						SmallCat.clear();
+
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("통신오류");
+					},
+				})
+				return result;
+			}
+
+			function deleteSCat() {
+				let checkedID = SmallCat.getCheckedRows().map(row => row.scatId);
+				console.log(checkedID);
+				result = 0;
+				$.ajax({
+					url: "DeleteSCat",
+					method: "Delete",
+					data: { sCatId: checkedID },
+					async: false,
+					success: function (data) {
+						result = data;
+						getSCat(catIdHd.value);
 					},
 					error: function (reject) {
 						console.log(reject);
