@@ -75,6 +75,10 @@
 	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 
+<!-- Toast chart -->
+<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+
 <!-- summbernote -->
 <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script> -->
 <link
@@ -105,7 +109,7 @@
 	<header id="header" class="header fixed-top d-flex align-items-center">
 
 		<div class="d-flex align-items-center justify-content-between">
-			<a href="index.html" class="logo d-flex align-items-center"> <img
+			<a th:href="@{/productMag}" class="logo d-flex align-items-center"> <img
 				src="admin/assets/img/pet로고.png" alt=""> <span
 				class="d-none d-lg-block">Pettopia</span>
 			</a> <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -128,6 +132,9 @@
 
 		<ul class="sidebar-nav" id="sidebar-nav">
 
+			<li class="nav-item"><a class="nav-link collapsed"
+				th:href="@{/dashboard}"> <i class="bi bi-bar-chart"></i> <span>대시보드</span>
+			</a></li>
 			<li class="nav-item"><a class="nav-link collapsed"
 				th:href="@{/productMag}"> <i class="bi bi-grid"></i> <span>상품관리</span>
 			</a></li>

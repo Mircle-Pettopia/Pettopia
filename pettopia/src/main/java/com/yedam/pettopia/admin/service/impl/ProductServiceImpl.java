@@ -152,8 +152,65 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional
 	public int updatePrd(ProductVO vo) {
-		return productMapper.updatePrd(vo);
+		// 상품 update
+		int result = productMapper.updatePrd(vo);
+		if (result == 1) {
+			// 이미지 업로드
+			if (vo.getImg() != null) {
+				// 기존 이미지 삭제
+				productMapper.deletePrdImg(vo);
+				
+				for (int i = 0; i < vo.getImg().length; i++) {
+					String filename = FileUtil.fileupload(vo.getImg()[i]);
+
+					vo.setPrdtImg(filename);
+					result = productMapper.insertImg(vo);
+				}
+			}
+
+			if (vo.getImgMain() != null) {
+				// 대표 이미지 업로드
+				String filename = FileUtil.fileupload(vo.getImgMain());
+
+				vo.setIsMain("Y");
+				vo.setPrdtImg(filename);
+				result = productMapper.insertImg(vo);
+			}
+
+			// 옵션 insert
+			if (vo.getOption() != null) {
+				// 기존 옵션 삭제
+				productMapper.deleteOptionDetail(vo.getPrdtId());
+				productMapper.deleteOption(vo.getPrdtId());
+				
+				ObjectMapper objectMapper = new ObjectMapper();
+
+				try {
+					OptionVO[] list = objectMapper.readValue(vo.getOption(), OptionVO[].class);
+					System.out.println(list[0]);
+					for (int i = 0; i < list.length; i++) {
+						list[i].setPrdtId(vo.getPrdtId());
+						productMapper.insertOption(list[i]);
+
+						// 옵션 detail insert
+						for (int j = 0; j < list[i].getOptionVal().size(); j++) {
+							list[i].getOptionVal().get(j).setOptId(list[i].getOptId());
+							productMapper.insertOptionDetail(list[i].getOptionVal().get(j));
+						}
+					}
+
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			return 0;
+		}
+		return result;
 	}
 
 }
