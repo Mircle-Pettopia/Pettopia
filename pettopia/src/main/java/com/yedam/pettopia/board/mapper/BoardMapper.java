@@ -22,6 +22,6 @@ public interface BoardMapper {
 	public int delKnowHowReply(int commentId);
 	
 	//은애!!!
-	public List<BoardVO> getmyKnowHowWriterList(int page, String keyword, String meId);
-	public int myknowHowMaxPage(String keyword, String meId);
+	public List<BoardVO> getBoardAllList(int page, String keyword, String meId, String boType);
+	public int boardAllMaxPage(String keyword, String meId, String boType);
 }

@@ -21,7 +21,7 @@ public interface MypageMapper {
 	public int interestCnt(String meId);
 	
 	//페이징
-	public int countOrderList();
+	public int countOrderList(String meId);
 	public List<MypageVO> pagingTest(MypageVO vo);
 	
 	//관심상품 삭제

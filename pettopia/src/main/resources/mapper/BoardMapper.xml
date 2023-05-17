@@ -86,27 +86,31 @@ select *  from ( select rownum as rn,a.*   from (
 	</delete>
 	
 	<!-- 은애!!!!!! -->
-	<select id="getmyKnowHowWriterList" resultType="BoardVO">
+	<select id="getBoardAllList" resultType="BoardVO">
 		SELECT * FROM ( SELECT ROWNUM AS rn, a.*
 		                FROM(
 	                            SELECT
+	                            	get_common(bo_type) bo_type,
 	                            	bo_no,
 	                                title,
 	                                subject,
 	                                reg_dt,
 	                                view_cnt
-	                            FROM knowhow_board
+	                            FROM board
 	                            WHERE 1=1
 	                            AND me_id = #{meId}
 	                            AND title LIKE '%' || #{keyword} || '%'
+	                            <if test="boType != null and !boType.equals('')">
+	                            AND bo_type = #{boType}
+	                            </if>
 	                            ORDER BY bo_no DESC) a
 		                )
 		WHERE RN between (#{page}-1)*10 and #{page}*10
 	</select>
 	
-	<select id="myknowHowMaxPage" resultType="int">
+	<select id="boardAllMaxPage" resultType="int">
 		SELECT count(*)
-		FROM knowhow_board 
+		FROM board 
 		WHERE 1=1
 		AND title LIKE '%'||#{keyword}||'%'
 		AND me_id = #{meId}

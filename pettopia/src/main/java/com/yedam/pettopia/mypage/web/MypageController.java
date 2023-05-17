@@ -30,7 +30,8 @@ public class MypageController {
 	@GetMapping("mypage")
 	public String orderList(Model model,
 							@AuthenticationPrincipal PrincipalDetails principal,
-							MypageVO vo, String nowPage, String cntPerPage) {
+							MypageVO vo, 
+							String nowPage, String cntPerPage) {
         String id = principal.getUser().getMeId();
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
@@ -39,9 +40,8 @@ public class MypageController {
         model.addAttribute("list",service.getOrder(id));
         model.addAttribute("getprcSt", service.getPrcCount(id));
         model.addAttribute("getShipSt", service.getShipCount(id));
-        
-        int total = service.countOrderList();
-        cntPerPage = "8";
+        System.out.println(vo);
+        int total = service.countOrderList(id);
         //한 페이지 당 1~9개의 제품을 보이게 하는 곳
   		//cntPerPage = 제품별로 최대 나올 수 있는 값
         if (nowPage == null && cntPerPage == null) {
@@ -139,20 +139,21 @@ public class MypageController {
 			   @AuthenticationPrincipal PrincipalDetails principal) {
 		model.addAttribute("id", principal.getUser().getMeId());
 		model.addAttribute("name", principal.getUser().getName());
+		model.addAttribute("code", codeService.getCodes("BY"));
 		return "mypage/mypost";
 	}
 	
 	@GetMapping("mypostList")
 	@ResponseBody
 	public List<BoardVO> mypoastList(@RequestParam(defaultValue = "1", required = false) int page,
-									String keyword, String meId){
-		return service.getmyKnowHowWriterList(page, keyword, meId);
+									String keyword, String meId, String boType){
+		return service.getBoardAllList(page, keyword, meId, boType);
 	}
 	
-	@GetMapping("myKnowHowMaxPage")
+	@GetMapping("boardAllMaxPage")
 	@ResponseBody
-	public int myKnowHowMaxPage(String keyword, String meId) {
-		return service.myknowHowMaxPage(keyword, meId);
+	public int myKnowHowMaxPage(String keyword, String meId, String boType) {
+		return service.boardAllMaxPage(keyword, meId, boType);
 	}
 	
 	
