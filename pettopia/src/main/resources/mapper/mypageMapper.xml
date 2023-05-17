@@ -24,7 +24,11 @@
 	
 	<!-- 주문내역 총 개수 -->
 	<select id="countOrderList" resultType="int">
-		SELECT COUNT(*) FROM order_detail
+		SELECT COUNT(*)
+		FROM order_detail od
+			JOIN order_header oh
+				ON od.ordr_id = oh.ordr_id
+		WHERE me_id = #{meId}
 	</select>
 	
 	<select id="getOrdrList" resultType="MypageVO">

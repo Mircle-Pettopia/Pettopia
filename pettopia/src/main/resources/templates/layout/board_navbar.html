@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<th:block th:fragment="board_navbar">
+<!--참고 : https://velog.io/@hellocdpa/220218-타임리프-레이아웃-나누기-->
+<!--메뉴-->
+<div class="col-md-4 col-lg-2 p-b-80 ">
+    <div class="side-menu">
+        <div class="p-t-55">
+            <h4 class="mtext-112 cl2 p-b-20">
+                <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>커뮤니티
+            </h4>
+
+            <ul>
+                <li class="p-b-7">
+                    <a href="#ddd" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                        분양게시판
+                    </a>
+                </li>
+
+                <li class="p-b-7">
+                    <a href="knowhow" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                        지식공유게시판
+                    </a>
+                </li>
+
+                <li class="p-b-7">
+                    <a href="#ttd" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                        출석체크
+                    </a>
+                </li>
+                <th:block th:if="">
+                    <li class="p-b-7">
+                        <a href="#" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                            내가 쓴 글보기
+                        </a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--End 메뉴-->

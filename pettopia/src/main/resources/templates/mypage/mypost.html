@@ -31,69 +31,16 @@
         td, tr, th{
             vertical-align: middle !important;
         }
-
-        .btnSet {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        .radioInput{
-            height: 13px !important;
-            display: inline-block !important;
-            width: 30px !important;
-        }
-
-        .radioInputText{
-            margin-right: 20px !important;
-        }
-
         #keyword{
             width: 250px !important;
             display: inline-block !important;
             background-color: rgb(250, 246, 252) !important;
         }
-
-        #rightSearch{
-            float: right;
-            margin-right: 10px;
+        .boadr_title {
+            cursor: pointer;
         }
-
-        .board_page{
-            text-align: center;
-        }
-
-        .board_page a {
-            display: inline-block;
-            width: 32px !important;
-            height: 32px !important;
-            box-sizing: border-box;
-            vertical-align: middle;
-            border: 1px solid #ffffff;
-            border-radius: 20px;
-            border-left: 0;
-            line-height: 100%;
-        }
-
-        .board_page a.num {
-            padding-top: 8px;
-            font-size: 1rem;
-        }
-
-        .board_page a.num.on {
-            border-color: rgb(250, 246, 252);
-            background: rgb(250, 246, 252);
-            color: #818181;
-        }
-
-        .board_page a:first-child {
-            border-left: 1px solid #ddd;
-        }
-
-        .board_page a.bt {
-            padding-top: 5px;
-            font-size: 1.2rem;
-            letter-spacing: -1px;
+        .boadr_title:hover {
+            color: plum !important;
         }
     </style>
 
@@ -103,6 +50,22 @@
             <!-- 마이페이지 게시판관리 -->
             <div class="col-md-8 col-lg-10 p-b-150 fontSize">
                 <div class="p-r-45 p-r-0-lg m-t-50">
+
+                    <!--modal-->
+                    <div class="w3-container">
+                        
+                        <div id="boardDetail" class="w3-modal m-t-50">
+                            <div class="w3-modal-content w3-animate-opacity">
+                                <div class="w3-container">
+                                    <span onclick="document.getElementById('boardDetail').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                    <div class="row">
+                                        <h3>게시판 조회</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end modal-->
+
                     <h2>
                         <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>작성글 조회
                     </h2>
@@ -111,10 +74,14 @@
                         님의 작성하신 글입니다. <img src="img/free-icon.png" style="width: 35px;"></h3>
                     <!--table-->
                     <div style="height: 500px;">
-                        <div style="margin-bottom: 20px; margin-left: 10px;">
-                            <input type="radio" name="myboard" id="" value="전체" class="radioInput"><span class="radioInputText">전체</span>
-                            <input type="radio" name="myboard" id="" value="지식공유게시판" class="radioInput"><span class="radioInputText">지식공유게시판</span>
-                            <input type="radio" name="myboard" id="" value="분양게시판" class="radioInput"><span class="radioInputText">분양게시판</span>
+                        <div style="margin-bottom: 20px; margin-left: 10px;" >
+                            <input type="radio" name="myboard" class="radioInput" id="radio" checked value=""><span class="radioInputText">전체</span>
+                            <th:block th:each="boardType : ${code.BY}">
+                                <input type="radio" name="myboard" id="radio"
+                                        th:value="${boardType.codCd}" class="radioInput">
+                                <span class="radioInputText" th:text="${boardType.codTitle}"></span>
+                            </th:block>
+                            <!--<input type="radio" name="myboard" id="" value="분양게시판" class="radioInput"><span class="radioInputText">분양게시판</span>-->
                             <div id="rightSearch">
                                 <input type="text" id="keyword" placeholder="제목을 입력해주세요.">
                                 <button type="button" class="btn btnPush btnLightBlue"
@@ -131,7 +98,7 @@
                                     <col width="12%">
                             </colgroup>
                             <thead>
-                                <tr style="background-color: rgb(233, 222, 243);">
+                                <tr style="background-color: rgb(247, 247, 247);">
                                     <th>No.</th>
                                     <th>게시판</th>
                                     <th>제목</th>
@@ -154,10 +121,20 @@
             let id = /*[[${id}]]*/
 
             let NewKeyword = '';
+            let boType = "";
+            let checked;
+            
             function setkeyword() {
                 NewKeyword = keyword.value;
+                boType : radio.value;
                 showList();
             }
+
+            $('input[name="myboard"]').change(function(){
+                boType = $(this).val();
+                checked = $(this).prop('checked');
+                setkeyword();
+            });
 
             showList();
             function showList(page) {
@@ -173,21 +150,36 @@
                     data: {
                         meId : id,
                         page: page,
+                        boType : boType,
                         keyword: NewKeyword
                     },
                     success: function (data) {
-                        //console.log(data);
                         list.innerHTML = '';
-                        for (i = 0; i < data.length; i++) {
+                        if(data.length > 0) {
+                            for (i = 0; i < data.length; i++) {
+                                list.innerHTML += `
+                                <tr>
+                                    <td><div class="num">${data[i].rn}</div></td>
+                                    <td><div class="num">${data[i].boType}</div></td>
+                                    <td><div class="title">
+                                        <a onclick="document.getElementById('boardDetail').style.display='block'" class="boadr_title">${data[i].title}</a>
+                                    </div></td>
+                                    <td><div class="date" >${dateChange(data[i].regDt)}</div></td>
+                                    <td><div class="count">${data[i].viewCnt}</div></td>
+                                </tr>`;
+                            }
+                        } else {
                             list.innerHTML += `
-                            <td><div class="num">${data[i].rn}</div></td>
-                            <td><div class="num">지식공유게시판</div></td>
-                            <td><div class="title">
-                                <a href="#" onclick="openArticle(${data[i].boNo})">${data[i].title}</a>
-                            </div></td>
-                            <td><div class="date" >${dateChange(data[i].regDt)}</div></td>
-                            <td><div class="count">${data[i].viewCnt}</div></td>
-                            `
+                                <tr>
+                                    <td colspan="5">
+                                        <div style="height: 600px;">
+                                            <p style="color:gray; font-size:20px;">
+                                                <strong>조회할 정보가 없습니다.</strong>
+                                            </p>
+                                        <div>
+                                    </td>
+                                </tr>
+                                `
                         }
                     },
                     error: function (reject) {
@@ -195,16 +187,17 @@
                     },
                 })
 
+                console.log(boType);
                 $.ajax({
-                    url: "myKnowHowMaxPage",
+                    url: "boardAllMaxPage",
                     method: "GET",
                     async: false,
                     data: {
+                        boType : boType,
                         meId : id,
                         keyword: NewKeyword
                     },
                     success: function (data) {
-                        console.log(data);
                         paging(data, 10, 5, page);
                     },
                     error: function (reject) {
@@ -214,8 +207,7 @@
         };
 
         function paging(totalData, dataPerPage, pageCount, currentPage) {
-            console.log("currentPage : " + currentPage);
-
+            //console.log("currentPage : " + currentPage);
             totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
 
             if (totalPage < pageCount) {

@@ -19,7 +19,7 @@ public interface MypageService {
 	
 	public int interestCnt(String meId);
 	
-	public int countOrderList();
+	public int countOrderList(String meId);
 	public List<MypageVO> pagingTest(MypageVO vo);
 	
 	public int interestDelete(MypageVO vo);
@@ -28,8 +28,8 @@ public interface MypageService {
 	public int interstInCart(CartListVO vo);
 	
 	//mypage_작성글조회
-	public int myknowHowMaxPage(String keyword, String meId);
-	public List<BoardVO> getmyKnowHowWriterList(int page, String keyword, String meId);
+	public List<BoardVO> getBoardAllList(int page, String keyword, String meId, String boType);
+	public int boardAllMaxPage(String keyword, String meId, String boType);
 	
 	
 	

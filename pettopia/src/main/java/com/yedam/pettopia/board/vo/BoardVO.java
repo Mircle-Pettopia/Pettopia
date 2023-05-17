@@ -20,5 +20,6 @@ public class BoardVO {
 	private String re;
 	private String keyword;
 	private int rn;
+	private String boType;
 	
 }

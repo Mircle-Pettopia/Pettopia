@@ -150,7 +150,9 @@ td, th {
                   <td colspan="5" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
                     상품구매금액 <span th:text="${#numbers.formatInteger(list.ttPrc - list.shipPrc - list.point, 3, 'COMMA') + '원'}"></span>
                     + 배송비 <span th:text="${#numbers.formatInteger(list.shipPrc, 3, 'COMMA') + '원'}"></span>
-                    - 적립금 <span th:text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span>
+                    - 적립금
+											<span th:if="${list.point == 0}" th:text="0원"></span>
+											<span th:if="${list.point > 0}" th:text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span>
                     = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;"
                                   th:text="${#numbers.formatInteger(list.ttPrc, 3, 'COMMA') + '원'}"></span>
                   </td>

@@ -145,24 +145,128 @@ background-color: rgb(233, 233, 233);
 .fontColor{
 	color: black;
 }
-
-/*----------------------------------------------------------*/
+/*-----------------------------------------------------------*/
 /* 페이징 CSS */
-.pagination {
+.board_page{
+	text-align: center;
+}
+
+.board_page a {
+	display: inline-block;
+	width: 32px !important;
+	height: 32px !important;
+	box-sizing: border-box;
+	vertical-align: middle;
+	border: 1px solid #ffffff;
+	border-radius: 20px;
+	border-left: 0;
+	line-height: 100%;
+}
+
+.board_page a.num {
+	padding-top: 8px;
+	font-size: 1rem;
+}
+
+.board_page a.num.on {
+	border-color: rgb(250, 246, 252);
+	background: rgb(250, 246, 252);
+	color: #818181;
+}
+
+.board_page a:first-child {
+	border-left: 1px solid #ddd;
+}
+
+.board_page a.bt {
+	padding-top: 5px;
+	font-size: 1.2rem;
+	letter-spacing: -1px;
+}
+
+/*-----------------------------------------------------------*/
+/* mypage.html */
+.filter{
+	margin-top: 25px;
+}
+
+.filter li {
+display: inline-block;
+padding-top: 10px;
+border: 1px solid rgb(235, 235, 235);
+border-radius: 10px;
+background-color: white;
+padding: 8px 22px 5px 22px;
+} 
+
+#clickLi, .status-link a{
+	cursor: pointer;
+}
+
+/*-----------------------------------------------------------*/
+/* mypost.html */
+.btnSet {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+
+.radioInput{
+	height: 13px !important;
+	display: inline-block !important;
+	width: 30px !important;
+}
+
+.radioInputText{
+	margin-right: 20px !important;
+}
+
+#rightSearch{
+	float: right;
+	margin-right: 10px;
+}
+
+/*-----------------------------------------------------------*/
+/* prodInterest.html */
+.btnSet {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+.optionW{
+	width: 200px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.optionTitle{
+	width: 100px !important;
+	display: inline-block;
+	
+}
+#div2{
+	height: 250px;
+}
+#div2 div{
+	text-align: left;
+	margin-bottom: 10px;
+}
+#priceDiv{
+	text-align: right !important;
+	font-size: 16px !important; 
+	margin-top:15px;
+	margin-right: 50px;
+}
+.cntInput{
+	width: 150px !important;
+	background-color: rgb(241, 241, 237) !important;
 	display: inline-block;
 }
-
-.pagination a {
-	color: black;
-	float: left;
-	padding: 8px 16px;
-	text-decoration: none;
-	border-radius:50%;
+.cntDiv{
+	text-align: right !important;
 }
-
-.pagination a.active {
-	background-color: tomato;
-	color: white;
+.optPriceDiv{
+	display: inline-block;
+	margin-right: 20px;
+	margin-left: 90px;
 }
-
-.pagination a:hover:not(.active) {background-color: silver;}

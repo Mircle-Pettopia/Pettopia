@@ -29,8 +29,8 @@ public class MypageServiceImpl implements MypageService{
 	
 	//전체 주문디테일 개수 들고온다
 	@Override
-	public int countOrderList() {
-		return mapper.countOrderList();
+	public int countOrderList(String meId) {
+		return mapper.countOrderList(meId);
 	}
 	//페이징기능
 	@Override
@@ -128,13 +128,13 @@ public class MypageServiceImpl implements MypageService{
 	
 	//나의 작성한 게시글 조회!
 	@Override
-	public List<BoardVO> getmyKnowHowWriterList(int page, String keyword, String meId) {
-		return bmapper.getmyKnowHowWriterList(page, keyword, meId);
+	public List<BoardVO> getBoardAllList(int page, String keyword, String meId, String boType) {
+		return bmapper.getBoardAllList(page, keyword, meId, boType);
 	}
 
 	@Override
-	public int myknowHowMaxPage(String keyword, String meId) {
-		return bmapper.myknowHowMaxPage(keyword, meId);
+	public int boardAllMaxPage(String keyword, String meId, String boType) {
+		return bmapper.boardAllMaxPage(keyword, meId, boType);
 	}
 
 
