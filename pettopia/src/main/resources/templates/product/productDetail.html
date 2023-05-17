@@ -357,7 +357,7 @@
 								<div class="item-slick3"
 									data-thumb="images/product-detail-01.jpg">
 									<div class="wrap-pic-w pos-relative">
-										<img src="images/product-detail-01.jpg" alt="IMG-PRODUCT">
+										<img th:src="'download/'+${ProductDetail.prdtImg}">
 
 										<a
 											class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
@@ -465,9 +465,8 @@
 													<option th:each="optionDetail: ${optionDetailList}"
 														th:if="${optionDetail.optId == option.optId}"
 														th:data-add-prc="${optionDetail.addPrc}"
-														th:data="${optionDetail.optId}">
-														<span th:text="|${optionDetail.optDetaNm}  (+ ${optionDetail.addPrc} 원)|"></span>
-														<span id="optDetaIds" th:text="${optionDetail.optDetaId}" hidden></span>
+														th:value="${optionDetail.optDetaId}" 
+														th:text="|${optionDetail.optDetaNm}  (+ ${optionDetail.addPrc} 원)|">	
 													</option>
 													
 											</select>
@@ -1039,12 +1038,26 @@
 	<!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
 	<script>
-		$(".js-select2").each(function() {
+		/* $(".js-select2").each(function() {
 			$(this).select2({
 				minimumResultsForSearch : 20,
-				dropdownParent : $(this).next('.dropDownSelect2')
+				dropdownParent : $(this).next('.dropDownSelect2')	
+			
 			});
-		})
+			  
+			
+		}) */
+		$(".js-select2").each(function() {
+			  $(this).select2({
+			    minimumResultsForSearch: 20,
+			    dropdownParent: $(this).next('.dropDownSelect2'),
+			    formatSelection: function (option) {
+			      // Add custom attributes to the <option> tag for the selected option
+			      $(option.element).attr('data-custom-attribute', option.customValue);
+			      return option.text;
+			    }
+			  });
+			});
 	</script>
 	<!--===============================================================================================-->
 	<script src="vendor/daterangepicker/moment.min.js"></script>
@@ -1339,7 +1352,7 @@
 		    // Loop through the selected options
 		    $("option:selected").each(function() {
 		      // Get the optDetaId value
-		      var optDetaId = $(this).find("#optDetaIds").text();
+		      var optDetaId = $(this).val();
 		      console.log(optDetaId);
 
 		      // Add the optDetaId to the array
@@ -1355,7 +1368,7 @@
 		      meId: meId,
 		      prdtId: prdtId,
 		      cnt: cnt,
-		      optDetaIds: optDetaIds
+		      optDetaIds: optDetaIds.join(",")
 		    };
 
 		    // Make the AJAX call

@@ -116,7 +116,8 @@ WHERE P.PRDT_ID = #{prdtId}
       #{meId, mode=IN, jdbcType=VARCHAR},
       #{prdtId, mode=IN, jdbcType=VARCHAR},
       #{cnt, mode=IN, jdbcType=NUMERIC},
-      #{optDetaIds, mode=IN, jdbcType=ARRAY}
+      #{optDetaIds, mode=IN, jdbcType=VARCHAR},
+      #{result, mode=OUT, jdbcType=NUMERIC}
     ) }
   ]]>
 </insert> 

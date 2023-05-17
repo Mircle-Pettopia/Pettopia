@@ -38,6 +38,6 @@ public interface ProductService1 {
 	public void deleteProduct(String prdtId, String meId);
 	
 	//장바구니등록
-	int addCart(String meId, String prdtId, int cnt, List<String> optDetaIds);
+	int addCart(Map<String, Object> requestMap);
 
 }
