@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yedam.pettopia.notice.Criteria;
 import com.yedam.pettopia.review.ReviewVO;
 import com.yedam.pettopia.review.mapper.ReviewMapper;
 import com.yedam.pettopia.review.service.ReviewService;
@@ -18,15 +17,10 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	//작성 가능한 후기 리스트
 	@Override
-	public List<ReviewVO> selectReviewList(String meId, Criteria Cri) {
-		return reviewMapper.selectReviewList(meId, Cri);
+	public List<ReviewVO> selectReviewList(String meId) {
+		return reviewMapper.selectReviewList(meId);
 	}
-	
-	@Override
-	public int totalCount(Criteria Cri) {
-		return reviewMapper.totalCount(Cri);
-	}
-	
+
 	//후기 작성
 	@Override
 	public int insertReview(ReviewVO reviewVO) {

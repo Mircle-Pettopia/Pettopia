@@ -24,12 +24,9 @@ ReviewService reviewService;
 
 	//작성 가능한 후기 목록
 	@GetMapping("reviewList")
-	public String reviewList(Model model, @ModelAttribute("cri") Criteria cri, @AuthenticationPrincipal PrincipalDetails principal) {
+	public String reviewList(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
 		String id = principal.getUser().getMeId();
-		model.addAttribute("reviewList", reviewService.selectReviewList(id, cri));
-		int total = reviewService.totalCount(cri);
-		PageVO pageVO = new PageVO(cri, total);
-		model.addAttribute("pageMaker", pageVO);
+		model.addAttribute("reviewList", reviewService.selectReviewList(id));
 		return "review/reviewList";
 	}
 	

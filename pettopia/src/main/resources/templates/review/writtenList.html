@@ -47,6 +47,39 @@ td, tr, th {
 	vertical-align: middle !important;
 }
 
+fieldset {
+	display: inline-block;
+	direction: rtl;
+	text-align: left;
+	border: 0;
+}
+
+fieldset legend {
+	text-align: right;
+}
+
+.star input[type="radio"] {
+	display: none;
+}
+
+.star label {
+	font-size: 1.5em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+.star label:hover {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star label:hover ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star input[type="radio"]:checked ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
 </style>
 </head>
 <body>
@@ -65,24 +98,45 @@ td, tr, th {
 						<br /> <br />
 						<div th:each="written : ${writtenList}"
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
-											<div class="title">
+											<div class="title" >
 										<img th:src="${written.prdtImg}"
-									style="width: 40px; height: 40px; float: left; margin-right: 20px;" />
+									style="width: 40px; height: 40px; float: left; margin-right: 20px;"  />
 				
 							</div>
-							<div class="title" style="border-bottom: solid 1px #ddd;">
+							<div class="title">
 								[[${written.prdtNm}]]
+								
 							</div>
-							<div
-								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">
-								[[${written.contents}]]</div>
+							
+							<div class="star"
+								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">	
+							<fieldset>
+									<input type="radio" name="reviewStar" value="5" id="rate1" /><label
+										style="display: inline-block" for="rate1">★</label> <input
+										type="radio" name="reviewStar" value="4" id="rate2" /><label
+										style="display: inline-block" for="rate2">★</label> <input
+										type="radio" name="reviewStar" value="3" id="rate3" /><label
+										style="display: inline-block" for="rate3">★</label> <input
+										type="radio" name="reviewStar" value="2" id="rate4" /><label
+										style="display: inline-block" for="rate4">★</label> <input
+										type="radio" name="reviewStar" value="1" id="rate5" /><label
+										style="display: inline-block" for="rate5">★</label>
+							</fieldset>
+							&nbsp
+								<span>[[${written.point}]]</span>
+								
+							</div>
+								
 							<div style="height: 120px; float: left; line-height: 100px">
-								  [[${written.point}]]</div>
-							<div class="btnn" style="padding: 20px 0 0 0">
+								 </div>
+							<div class="btnn" style="padding: 25px 0 0 0; border-bottom: solid 1px #eee;">
 								<button type="button" 
 									class="btn btnPush btnBlueGreen write-review-btn"
 									id="reviewBtn"
-									style="float: right; font-size: 13px; width: 63px">후기 수정</button>
+									style="float: right; font-size: 13px; width: 63px">수정하기</button>
+
+
+
 
 							</div>
 						</div>
@@ -96,6 +150,9 @@ td, tr, th {
 
 
 		<script>
+		const point = '${writtenList.point}';
+		const radio = document.querySelector(`input[name="reviewStar"][value='${writtenList.point}');
+		radio.checked = true;
 
 		</script>
 	</div>

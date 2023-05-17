@@ -11,10 +11,7 @@ import com.yedam.pettopia.review.ReviewVO;
 public interface ReviewMapper {
 	
 	//후기 작성 가능한 리스트
-	public List<ReviewVO> selectReviewList(String meId, Criteria Cri);
-	
-	//전체 데이터 개수
-	public int totalCount(Criteria Cri);
+	public List<ReviewVO> selectReviewList(String meId);
 	
 	//후기 등록
 	public int insertReview(ReviewVO reviewVO);
