@@ -19,8 +19,26 @@
 		insert into PRODUCT_L_CAT (L_CAT_ID,L_CAT_ST) VALUES (#{lCatId},'N')
 	</insert>
 	
+	<insert id="getNewSCatID" parameterType="CategoryVO">
+	<selectKey keyProperty="sCatId" resultType="String" order="BEFORE">
+		select 'SCAT'||(MAX(TO_NUMBER(SUBSTR(S_CAT_ID,5)))+1)S_CAT_ID from PRODUCT_S_CAT
+	</selectKey>
+		insert into PRODUCT_S_CAT (L_CAT_ID,S_CAT_ID,S_CAT_ST) VALUES (#{lCatId},#{sCatId},'N')
+	</insert>
+	
 	<update id='VariableUpdates' parameterType="CategoryVO">
 		update ${Table} set ${Column}=#{Value} where ${ConCol}=#{ConVal}
 	</update>
+	
+	<delete id="DeleteLCat" parameterType="String">
+		Delete PRODUCT_L_CAT where L_CAT_ID=#{lCatId}
+	</delete>
+	<delete id="DeleteLSCat" parameterType="String">
+		Delete PRODUCT_S_CAT where L_CAT_ID=#{lCatId}
+	</delete>
+	
+	<delete id="DeleteSCat" parameterType="String">
+		Delete PRODUCT_S_CAT where S_CAT_ID=#{sCatId}
+	</delete>
 	
 </mapper>

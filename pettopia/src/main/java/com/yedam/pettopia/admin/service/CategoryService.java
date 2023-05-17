@@ -9,4 +9,7 @@ public interface CategoryService {
 	public List<CategoryVO> selectS(String lcatId);
 	public String getNewLCatID();
 	public int VariableUpdates(CategoryVO vo);
+	public String getNewSCatID(CategoryVO vo);
+	public int DeleteLCat(List<String> lCatId);
+	public int DeleteSCat(List<String> sCatId);
 }
