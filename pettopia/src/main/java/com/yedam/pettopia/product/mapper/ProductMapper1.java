@@ -46,7 +46,7 @@ public interface ProductMapper1 {
 	
 	//장바구니등록
 	
-	 int addCart(@Param("meId") String meId, @Param("prdtId") String prdtId, @Param("cnt") int cnt, @Param("optDetaIds") List<String> optDetaIds);
+	 int addCart(Map<String, Object> requestMap);
 
   
   

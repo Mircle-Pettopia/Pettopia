@@ -1,5 +1,6 @@
 package com.yedam.pettopia.product.service.impl;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,8 +89,11 @@ public class ProductServiceImpl1 implements ProductService1{
 	
 	  @Override
 	  @Transactional
-	    public int addCart(String meId, String prdtId, int cnt, List<String> optDetaIds) {
-	        return productMapper.addCart(meId, prdtId, cnt, optDetaIds);
+	    public int addCart(Map<String, Object> requestMap) {
+		  	requestMap.put("result",0);
+	        productMapper.addCart(requestMap);
+	        return ((BigDecimal) requestMap.get("result")).intValue();
+	        
 	    }
 
 }
