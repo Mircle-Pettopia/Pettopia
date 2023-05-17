@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.pettopia.admin.mapper.ProductMapper;
+import com.yedam.pettopia.board.mapper.BoardMapper;
+import com.yedam.pettopia.board.vo.BoardVO;
 import com.yedam.pettopia.cart.mapper.CartMapper;
 import com.yedam.pettopia.cart.service.vo.CartListVO;
 import com.yedam.pettopia.cart.service.vo.CartVO;
@@ -18,6 +20,7 @@ public class MypageServiceImpl implements MypageService{
 	@Autowired MypageMapper mapper;
 	@Autowired ProductMapper pmapper;
 	@Autowired CartMapper cmapper;
+	@Autowired BoardMapper bmapper;
 	
 	@Override
 	public List<MypageVO> getOrder(String meId) {
@@ -103,7 +106,7 @@ public class MypageServiceImpl implements MypageService{
 		return mapper.interestDelete(mvo);
 	}
 
-	//	cart + cart_detail INSERT
+	//cart + cart_detail INSERT
 	@Transactional
 	@Override
 	public int interstInCart(CartListVO vo) {
@@ -121,6 +124,17 @@ public class MypageServiceImpl implements MypageService{
 		
 		System.out.println("cnt>>>" + cnt);
 		return cnt;
+	}
+	
+	//나의 작성한 게시글 조회!
+	@Override
+	public List<BoardVO> getmyKnowHowWriterList(int page, String keyword, String meId) {
+		return bmapper.getmyKnowHowWriterList(page, keyword, meId);
+	}
+
+	@Override
+	public int myknowHowMaxPage(String keyword, String meId) {
+		return bmapper.myknowHowMaxPage(keyword, meId);
 	}
 
 

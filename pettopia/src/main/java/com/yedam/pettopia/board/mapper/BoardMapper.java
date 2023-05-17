@@ -20,4 +20,8 @@ public interface BoardMapper {
 	public String getKnowHowWriter(int boNo);
 	public int updateKnowHow(BoardVO vo);
 	public int delKnowHowReply(int commentId);
+	
+	//은애!!!
+	public List<BoardVO> getmyKnowHowWriterList(int page, String keyword, String meId);
+	public int myknowHowMaxPage(String keyword, String meId);
 }

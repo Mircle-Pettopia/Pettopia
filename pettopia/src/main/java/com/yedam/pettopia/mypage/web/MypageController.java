@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.board.vo.BoardVO;
 import com.yedam.pettopia.cart.service.vo.CartListVO;
-import com.yedam.pettopia.cart.service.vo.CartVO;
 import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.mypage.MypageVO;
 import com.yedam.pettopia.mypage.service.MypageService;
@@ -117,6 +117,7 @@ public class MypageController {
 		return service.interestCnt(meId);
 	}
 	
+	//interest list delete
 	@PostMapping("interestDelete")
 	@ResponseBody
 	public int interestDelete(MypageVO vo) {
@@ -132,11 +133,27 @@ public class MypageController {
 		return result;
 	}
 	
+	//myboard page
+	@GetMapping("mypost")
+	public String mypost(Model model,
+			   @AuthenticationPrincipal PrincipalDetails principal) {
+		model.addAttribute("id", principal.getUser().getMeId());
+		model.addAttribute("name", principal.getUser().getName());
+		return "mypage/mypost";
+	}
 	
+	@GetMapping("mypostList")
+	@ResponseBody
+	public List<BoardVO> mypoastList(@RequestParam(defaultValue = "1", required = false) int page,
+									String keyword, String meId){
+		return service.getmyKnowHowWriterList(page, keyword, meId);
+	}
 	
-	
-	
-	
+	@GetMapping("myKnowHowMaxPage")
+	@ResponseBody
+	public int myKnowHowMaxPage(String keyword, String meId) {
+		return service.myknowHowMaxPage(keyword, meId);
+	}
 	
 	
 	

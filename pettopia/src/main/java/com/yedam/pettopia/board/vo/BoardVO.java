@@ -19,5 +19,6 @@ public class BoardVO {
 	private String division;
 	private String re;
 	private String keyword;
+	private int rn;
 	
 }
