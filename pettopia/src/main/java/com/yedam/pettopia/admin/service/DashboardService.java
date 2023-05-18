@@ -1,5 +1,9 @@
 package com.yedam.pettopia.admin.service;
 
-public interface DashboardService {
+import java.util.List;
 
+import com.yedam.pettopia.admin.DashBoardVO;
+
+public interface DashboardService {
+	public List<DashBoardVO> saleChart();
 }
