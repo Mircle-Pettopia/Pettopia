@@ -159,6 +159,9 @@ td, tr, th {
 
 							</div>
 						</div>
+						
+						
+						
 					</div>
 				</div>
 			</div>
@@ -166,9 +169,8 @@ td, tr, th {
 
 		<!-- 후기 등록 모달창 -->
 <div class="modal fade" id="writemodal" tabindex="-1" role="dialog"
-			aria-labelledby="write-review-modal-label" aria-hidden="true"
-			data-backdrop="static" stype="width: 700px;
-    height: 600px;">
+     aria-labelledby="write-review-modal-label" aria-hidden="true"
+     data-backdrop="static" style="width: 700px; height: 610px; overflow: hidden;">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -203,7 +205,7 @@ td, tr, th {
 						<textarea name="content" id="editor"></textarea></div>
 							<div class="modal-footer" style="padding: 0px">
 								<button type="button" class="btn btn-secondary"
-									data-dismiss="modal">취소</button>
+									data-dismiss="modal" onclick="resetForm()">취소</button>
 								<button type="button" class="btn btn-primary"
 									onclick="insertReview()">등록</button>
 							</div>
@@ -234,6 +236,8 @@ td, tr, th {
 			    console.log(parentDiv); // .parentDiv 요소 출력
 
 			});
+			
+			
 
 			
 
@@ -268,7 +272,10 @@ td, tr, th {
 			}
 			
 			
-			
+			function resetForm() {
+				  document.getElementById("myform").reset();
+				  CKEDITOR.instances.editor.setData("");
+				}
 		</script>
 	</div>
 </body>

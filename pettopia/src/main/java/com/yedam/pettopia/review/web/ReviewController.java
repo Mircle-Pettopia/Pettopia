@@ -5,16 +5,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.pettopia.notice.Criteria;
-import com.yedam.pettopia.notice.PageVO;
 import com.yedam.pettopia.review.ReviewVO;
 import com.yedam.pettopia.review.service.ReviewService;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
-
 
 @Controller
 public class ReviewController {
@@ -32,8 +29,9 @@ ReviewService reviewService;
 	
 	//내가 작성한 후기 목록
 	@GetMapping("writtenList")
-	public String writtenList(Model model) {
-		model.addAttribute("writtenList", reviewService.selectWrittenList());
+	public String writtenList(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
+		String id = principal.getUser().getMeId();
+		model.addAttribute("writtenList", reviewService.selectWrittenList(id));
 		return "review/writtenList";
 	}
 	
@@ -45,5 +43,19 @@ ReviewService reviewService;
 		return "success";
 	}
 	
+	//후기 수정
+	@PostMapping("reviewUpdate")
+	@ResponseBody
+	public String reviewUpdate(ReviewVO reviewVO) {
+		reviewService.updateReview(reviewVO);
+		return "success";
+	}
 	
+	//후기 삭제
+	@GetMapping("reviewDelete/{reNo}")
+	private String reviewDelete(@PathVariable String reNo) {
+	    int reviewNo = Integer.parseInt(reNo);
+	    reviewService.deleteReview(reviewNo);
+	    return "redirect:/writtenList";
+	}
 }
