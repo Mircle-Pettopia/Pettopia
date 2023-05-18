@@ -135,4 +135,11 @@ public class BoardController {
 	public int delKnowHowReply(int commentId) {
 		return boardService.delKnowHowReply(commentId);
 	}
+	
+	//---------------------------------------------------
+	//분양게시판페이지
+	@GetMapping("adopt")
+	public String adopt() {
+		return "Board/adopt";
+	}
 }

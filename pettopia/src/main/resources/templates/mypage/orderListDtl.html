@@ -48,7 +48,7 @@ td, th {
 
     <div class="container">
 			<div class="row">
-        <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+        <th:block th:replace="layout/navbar :: navbarFragment"></th:block>
 
         <!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80">
@@ -231,7 +231,14 @@ td, th {
 					let date = dateChange(data[i].ordrDate);
 					let prc = AddComma(data[i].prc);
 					let price = AddComma(data[i].price);
-          let invo = numSorting(String(data[i].invo));
+          let invo = "";
+					console.log(data[i].invo);
+
+					if(data[i].invo != 0){
+						invo = numSorting(String(data[i].invo))
+					} else {
+						invo = "";
+					}
 
 					if(key != data[i].ordtId) {
 						key = data[i].ordtId;
@@ -268,7 +275,11 @@ td, th {
 								var afterStr = beforeStr.split(',');
 								/*console.log(afterStr[0]);
 								console.log(afterStr[1]);*/
-								domId(ordtId + "_option").innerHTML += `옵션정보 : ${afterStr[0]} / ${afterStr[1]}`;
+								if(afterStr[2] == undefined){
+									afterStr[2] = "-";
+								}
+
+								domId(ordtId + "_option").innerHTML += `옵션정보 : ${afterStr[0]} / ${afterStr[1]} / ${afterStr[2]}`;
 							}
 						},
 						error : function(rej) {
