@@ -10,8 +10,11 @@ import com.yedam.pettopia.product.Product1VO;
 
 public interface ProductService1 {
 
-	// 상품 전체 조회
+	// 상품 전체 조회 4개
 	public List<Product1VO> selectPrdAllList();
+	
+	// 신상품 조회 4개 
+	public List<Product1VO> selectPrdFList();
 	
 	// 상품 전체 조회
 	public List<Product1VO> selectPrdAllList2();

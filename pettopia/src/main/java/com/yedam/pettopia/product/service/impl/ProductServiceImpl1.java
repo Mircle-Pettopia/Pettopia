@@ -96,4 +96,10 @@ public class ProductServiceImpl1 implements ProductService1{
 	        
 	    }
 
+	@Override
+	public List<Product1VO> selectPrdFList() {
+
+		return productMapper.selectPrdFList();
+	}
+
 }
