@@ -174,10 +174,11 @@ public class ProductCategoryController {
 			;
 		}
 		;
+		System.out.println("인덱스정보"+ productService.selectPrdAllList2());
 		model.addAttribute("index", productService.selectPrdAllList2());
 		model.addAttribute("categories", productService.selectCategoryList());
 
-		return "product/ProductCategory";
+		return "product/productCategory";
 	}
 
 	// 제품 상세조회
@@ -216,7 +217,7 @@ public class ProductCategoryController {
 		model.addAttribute("OptionList", productService.selectOption(prdtId));
 		System.out.println("옵션디테일" + productService.selectOptionDetail(prdtId));
 		model.addAttribute("optionDetailList", productService.selectOptionDetail(prdtId));
-		return "product/ProductDetail";
+		return "product/productDetail";
 	}
 
 	/*
@@ -236,6 +237,10 @@ public class ProductCategoryController {
 	public String productList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
 			Authentication authentication) {
 		model.addAttribute("index", productService.selectPrdAllList());
+		System.out.println("인덱스원" + productService.selectPrdAllList());
+		model.addAttribute("index2", productService.selectPrdFList());
+		System.out.println("인덱스투" + productService.selectPrdFList());
+		
 
 		// ======은애
 		// Authentication 객체를 통해 유저 정보를 가져올 수 있다.

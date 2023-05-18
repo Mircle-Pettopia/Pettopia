@@ -4,26 +4,47 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.yedam.pettopia.product.mapper.ProductMapper1">
   
-  <!-- 전체상품 리스트 4개만 가져옴-->
-  
+
+  <!-- 최신상품 4개 들고옴 -->
 <select id="selectPrdAllList" resultType="Product1VO">
-  SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
+   SELECT *
   FROM (
-    SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
-    FROM product
-    ORDER BY prdt_id
-  )
-  WHERE ROWNUM &lt;= 4
+    SELECT p.prdt_id, p.prdt_nm, p.prdt_prc, p.sale_st, p.reg_dt, p.mod_dt, p.s_cat_id, p.l_cat_id, pi.prdt_img AS prdt_Img
+    FROM product p
+    INNER JOIN product_img pi ON p.prdt_id = pi.prdt_id AND pi.is_main = 'Y'
+    ORDER BY p.prdt_id desc
+  )   WHERE ROWNUM &lt;= 4
+</select>
+  <!-- 전체상품 리스트 4개만 가져옴-->
+<select id="selectPrdFList" resultType="Product1VO">
+  SELECT *
+  FROM (
+    SELECT p.prdt_id, p.prdt_nm, p.prdt_prc, p.sale_st, p.reg_dt, p.mod_dt, p.s_cat_id, p.l_cat_id, pi.prdt_img AS prdt_Img
+    FROM product p
+    INNER JOIN product_img pi ON p.prdt_id = pi.prdt_id AND pi.is_main = 'Y'
+    ORDER BY p.mod_dt desc
+  )   WHERE ROWNUM &lt;= 4
 </select>
 
+
+
+
+
 <!-- 전체 목록 조회 -->
-<select id="selectPrdAllList2" resultType="Product1VO">
-  SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
+<!-- <select id="selectPrdAllList2" resultType="Product1VO">
+  SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id, 
   FROM (
     SELECT prdt_id, prdt_nm, prdt_prc, sale_st, reg_dt, mod_dt, s_cat_id, l_cat_id
     FROM product
     ORDER BY prdt_id
   )
+</select> -->
+
+<select id="selectPrdAllList2" resultType="Product1VO">
+  SELECT p.prdt_id, p.prdt_nm, p.prdt_prc, p.sale_st, p.reg_dt, p.mod_dt, p.s_cat_id, p.l_cat_id, pi.prdt_img AS prdt_Img
+  FROM product p
+  INNER JOIN product_img pi ON p.prdt_id = pi.prdt_id AND pi.is_main = 'Y'
+  ORDER BY p.prdt_id
 </select>
 
 <!--  카테고리 항목  -->

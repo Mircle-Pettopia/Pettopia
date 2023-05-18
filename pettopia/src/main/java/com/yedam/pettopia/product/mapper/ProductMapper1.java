@@ -17,6 +17,8 @@ public interface ProductMapper1 {
 	
 	// 상품 전체 조회 4개
 	public List<Product1VO> selectPrdAllList();
+	// 신상품 조회 4개 
+	public List<Product1VO> selectPrdFList();
 	
 	// 상품 전체 조회
 	public List<Product1VO> selectPrdAllList2();
