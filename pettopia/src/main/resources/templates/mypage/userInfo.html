@@ -185,6 +185,7 @@
             // 수정할 데이터를 DB로 넘기기 전에 조건문 걸기
             /*<![CDATA[*/
             let path = /*[[${path}]]*/
+            console.log(path);
             
             $('#modifyBtn').on('click',()=>{
                 let name = $('#name').val();
@@ -201,7 +202,7 @@
                 let datas;
 
                 //가입경로가 자사일 경우 패스워드까지 update를 진행한다
-                if(path == 'company'){
+                if(path == 'SC1'){
                     //비밀번호, 연락처가 없을 경우 알림 띄우기
                     if(pw=='' || pw.trim() === "") {
                         Toast.fire({
@@ -298,6 +299,7 @@
                             data :  JSON.stringify(datas),
                             contentType: "application/json; charset=utf-8",
                             dataType : 'json',
+                            async: false,
                             success : function(data) {
                                 if(data) {
                                     console.log(data);

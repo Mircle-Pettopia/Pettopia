@@ -1,6 +1,5 @@
 package com.yedam.pettopia.user.service;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -108,12 +107,12 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		int result = 0;
 		String pw = "";
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		UserVO uvo = new UserVO();
 		
 		if(vo.getSignPath() != "company") {
 			result = mapper.userInfoUpdate(vo);
 		}
 		
-		pw = passwordEncoder.encode(vo.getPw());
 		vo.setPw(pw);
 		
 		result = mapper.userInfoUpdate(vo);

@@ -1,6 +1,5 @@
 package com.yedam.pettopia.user.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -150,6 +149,7 @@ public class UserController {
     public boolean userInfoUpdate(@RequestBody UserVO vo) {
     	boolean response = true;
 		int result = service.userInfoUpdate(vo);
+		System.out.println(vo);
 		if(result < 0) {
 			response = false;
 		}

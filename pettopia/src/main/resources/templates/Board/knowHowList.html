@@ -1,142 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout}">
-
+<html lang="ko" itemscope itemtype="http://schema.org/WebPage">
 <head>
   <title>지식 게시판</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!--===============================================================================================-->
-  <link rel="icon" type="image/png" href="images/icons/favicon.png" />
   <link rel="stylesheet" href="css/css.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css" />
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="css/util.css" />
-  <link rel="stylesheet" type="text/css" href="css/main.css" />
-  <!--===============================================================================================-->
-  <style>
-    .board_list .title {
-      width: 50%;
-    }
-  </style>
-</head>
-
-
-<class="animsition">
 
   <div layout:fragment="content">
+    <style>
+      .board_list .title {
+        width: 50%;
+      }
+
+      .customBtn{
+        width: 100px !important;
+        font-size: 13px !important;
+        height: 50px !important;
+      }
+    </style>
+</head>
+
+<!--<class="animsition">-->
     <div class="container">
+      
       <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
           Home
           <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
-
         <span class="stext-109 cl4"> 지식공유게시판 </span>
       </div>
-    </div>
+      
+      <div class="row">
+      <th:block th:replace="/layout/boardNavbar :: boardNavFragment"></th:block>
 
-    <div class="board_wrap">
-      <div class="board_title">
-        <strong>지식공유게시판</strong>
-
-        <div style="display: inline-block; float: right; width: 70%;margin-top: 10px;">
-          <button type="button" class="btn btnPush btnLightBlue" style="float:right;display: inline-block;margin: auto;"
-            onclick="setkeyword();">검색</button>
-          <input type="text" style="float:right;display: inline-block;width: 30%;" id="keyword">
+      <div class="col-md-8 col-lg-10 p-b-150 m-t-50">
+        <div class="board_title">
+          <h3>지식공유게시판</h3>
+          <!--search-->
+          <div style="display: inline-block; float: right; width: 70%; margin-top: 10px; margin-bottom: 20px !important;">
+            <button type="button" class="btn btnPush btnLightBlue" style="float:right; display: inline-block;margin: auto;"
+              onclick="setkeyword();">검색</button>
+            <input type="text" style="float:right; display: inline-block; width: 30%; margin-right: 10px;" id="keyword">
+          </div> <!--end search-->
         </div>
-
-      </div>
-      <div style="margin-bottom: 10px; text-align: end">
-        <div class="board_list_wrap">
-          <div class="board_list">
-            <div class="top">
-              <div class="num">번호</div>
-              <div class="title">제목</div>
-              <div class="writer">작성자</div>
-              <div class="date">작성일</div>
-              <div class="count">조회</div>
+        <div style="clear:both"></div>
+        <div style="margin-bottom: 10px; text-align: end">
+          <div class="board_list_wrap">
+            <div class="board_list">
+              <div class="top">
+                <div class="num">번호</div>
+                <div class="title">제목</div>
+                <div class="writer">작성자</div>
+                <div class="date">작성일</div>
+                <div class="count">조회</div>
+              </div>
+              <div id="lists"></div>
             </div>
-
-            <div id="lists">
-
-            </div>
-          </div>
-
-
-          <div class="board_page" id="pagenav">
-          </div>
-          <div class="bt_wrap" id="bt_warp">
-
+            <!--paging-->
+            <div class="board_page" id="pagenav"></div>
+            <div class="bt_wrap" id="bt_warp"></div>
           </div>
         </div>
+      </div> <!-- end div class="board_wrap"-->
+
+        <!-- Back to top -->
+        <div class="btn-back-to-top" id="myBtn">
+          <span class="symbol-btn-back-to-top">
+            <i class="zmdi zmdi-chevron-up"></i>
+          </span>
+        </div>
       </div>
     </div>
-
-
-
-    <!-- Back to top -->
-    <div class="btn-back-to-top" id="myBtn">
-      <span class="symbol-btn-back-to-top">
-        <i class="zmdi zmdi-chevron-up"></i>
-      </span>
-    </div>
-
-    <!--===============================================================================================-->
-    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/animsition/js/animsition.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/bootstrap/js/popper.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/select2/select2.min.js"></script>
-    <script>
-      $(".js-select2").each(function () {
-        $(this).select2({
-          minimumResultsForSearch: 20,
-          dropdownParent: $(this).next(".dropDownSelect2"),
-        });
-      });
-    </script>
-    <!--===============================================================================================-->
-    <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script>
-      $(".js-pscroll").each(function () {
-        $(this).css("position", "relative");
-        $(this).css("overflow", "hidden");
-        var ps = new PerfectScrollbar(this, {
-          wheelSpeed: 1,
-          scrollingThreshold: 1000,
-          wheelPropagation: false,
-        });
-
-        $(window).on("resize", function () {
-          ps.update();
-        });
-      });
-    </script>
-    <!--===============================================================================================-->
-    <script src="js/main.js"></script>
+    
     <script>
       let NewKeyword = ''
       function setkeyword() {
@@ -148,7 +86,11 @@
         let Uid = GetUser();
         if (Uid != "" && Uid != null) {
           console.log(GetUser())
-          bt_warp.innerHTML = `<a href="knowHowWriter" class="on">등록</a>`
+          bt_warp.innerHTML = `<div style="margin:0 auto; display:inline-block;">
+                                  <button type="button" onclick="location.href='knowHowWriter'" class="btn btnPush btnBlueGreen customBtn">
+                                    등록
+                                  </button>
+                              </div>`
         }
       }
 
@@ -305,5 +247,5 @@
     </script>
   </div>
   </body>
-
+</html>
 </html>
