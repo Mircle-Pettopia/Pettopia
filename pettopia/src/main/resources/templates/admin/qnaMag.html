@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pettopia</title>
+    <style>
+      .thColor th {
+        background-color: #f6f6f6;
+      }
+    </style>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">QnA 관리</h5>
+                <div class="col-lg-12 p-4">
+                  <table class="table table-bordered">
+                    <tr class="table-primary">
+                      <td colspan="3">답변 현황</td>
+                    </tr>
+                    <tr class="table-secondary text-center">
+                      <td>답변대기</td>
+                      <td>답변완료</td>
+                    </tr>
+                    <tr class="text-center">
+                      <td class="text-primary text-decoration-underline fs-3">
+                        <span th:text="${cnt.qstStCnt1}">0</span>개
+                      </td>
+                      <td class="text-success text-decoration-underline fs-3">
+                        <span th:text="${cnt.qstStCnt2}">0</span>개
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <hr />
+                <table class="table table-borderless mt-5">
+                  <tbody>
+                    <tr>
+                      <th class="text-center col-sm-1" scope="row">문의자</th>
+                      <td class="col-sm-4">
+                        <input type="text" class="form-control" />
+                      </td>
+
+                      <th class="text-center col-sm-1" scope="row">상품명</th>
+                      <td class="col-sm-4">
+                        <input type="text" class="form-control" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-center col-sm-1" scope="row">등록일</th>
+                      <td class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                          <input
+                            type="date"
+                            class="form-control mr-2"
+                            id="startDate"
+                          />
+                          <span class="mx-2">~</span>
+                          <input
+                            type="date"
+                            class="form-control ml-2"
+                            id="endDate"
+                          />
+                        </div>
+                      </td>
+
+                      <th class="text-center col-sm-1" scope="row">문의상태</th>
+                      <td class="col-sm-4" id="qstStTable">
+                        <div class="d-flex">
+                          <div class="form-check me-3">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="selectAll"
+                              name="selectAll"
+                            />
+                            <label class="form-check-label" for="selectAll"
+                              >전체</label
+                            >
+                          </div>
+                          <div
+                            class="form-check me-3"
+                            th:each="qstSt : ${code.QS}"
+                          >
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="chk"
+                              th:value="${qstSt.codCd}"
+                              th:id="${qstSt.codCd}"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="${qstSt.codCd}"
+                              th:text="${qstSt.codTitle}"
+                              >판매중</label
+                            >
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="text-center pb-5">
+                  <button type="button" class="btn btn-primary" id="searchBtn">
+                    검색
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="resetBtn">
+                    초기화
+                  </button>
+                </div>
+                <div class="text-end p-2">
+                  <button type="button" class="btn btn-success" id="excelBtn">
+                    Excel
+                  </button>
+                </div>
+                <div id="qnaList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 상세조회 모달 -->
+      <div
+        class="modal fade"
+        id="detailModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">QnA 상세조회</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="my-4">
+                <table class="table">
+                  <colgroup>
+                    <col width="20%" />
+                    <col width="80%" />
+                  </colgroup>
+
+                  <tr class="thColor">
+                    <th>상품ID</th>
+                    <td id="detailPrdtId"></td>
+                  </tr>
+                  <tr class="thColor">
+                    <th>상품명</th>
+                    <td id="detailPrdtNm"></td>
+                  </tr>
+                  <tr class="thColor">
+                    <th>작성자</th>
+                    <td id="detailName"></td>
+                  </tr>
+                  <tr class="thColor">
+                    <th>제목</th>
+                    <td id="detailTitle"></td>
+                  </tr>
+                  <tr class="thColor">
+                    <th>사진</th>
+                    <td><img id="detailImg" /></td>
+                  </tr>
+                  <tr class="thColor">
+                    <th>내용</th>
+                    <td>
+                      <textarea
+                        class="form-control"
+                        id="detailContent"
+                        cols="60"
+                        rows="10"
+                        readonly
+                      ></textarea>
+                    </td>
+                  </tr>
+                </table>
+                <hr />
+                <div class="my-4">
+                  <h4>QnA 답변</h4>
+                  <textarea
+                    class="form-control"
+                    id="detailAns"
+                    cols="60"
+                    rows="5"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                닫기
+              </button>
+              <button type="button" class="btn btn-primary" id="insertBtn">
+                등록
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        const Grid = tui.Grid;
+
+        // 상품 관리 리스트(그리드)
+        const qnaList = new Grid({
+          el: document.getElementById("qnaList"),
+          rowHeaders: ["rowNum"],
+          bodyHeight: 430,
+          pageOptions: {
+            useClient: true,
+            perPage: 10,
+          },
+          columns: [
+            {
+              header: "작성자",
+              name: "name",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "상품ID",
+              name: "prdtId",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "상품명",
+              name: "prdtNm",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "제목",
+              name: "title",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "문의상태",
+              name: "qstStatus",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+            },
+            {
+              header: "등록일자",
+              name: "regDt",
+              align: "center",
+              sortingType: "asc",
+              sortable: true,
+              formatter: function (e) {
+                return formattedDate(e.value);
+              },
+            },
+          ],
+        });
+
+        // qna 리스트
+        $.ajax({
+          url: "qnaList",
+          success: function (data) {
+            qnaList.resetData(data);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        });
+
+        $(document).ready(function () {
+          let qstNo;
+          // 더블클릭시 상세 조회
+          qnaList.on("dblclick", (e) => {
+            let rowData = qnaList.getRow(e.rowKey);
+            console.log(rowData);
+            qstNo = rowData.qstNo;
+            $("#detailPrdtId").text(rowData.prdtId);
+            $("#detailPrdtNm").text(rowData.prdtNm);
+            $("#detailName").text(rowData.name);
+            $("#detailTitle").text(rowData.title);
+            $("#detailImg")
+              .attr("src", "download/" + rowData.qstImg)
+              .css("width", "400px");
+            $("#detailContent").val(rowData.content);
+
+            $("#detailModal").modal("show");
+          });
+
+          // 답변 등록
+          $(document).on("click", "#insertBtn", function () {
+            console.log("클릭");
+            let subject = $("#detailAns").val();
+
+            if ($("#detailAns").val() === "") {
+              $("#detailAns").focus();
+              Swal.fire({
+                icon: "warning",
+                title: "작성 해주세요",
+              });
+              return;
+            }
+            let meId = "admin";
+            console.log(qstNo);
+            Swal.fire({
+              title: "등록하시겠습니까?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "등록",
+              cancelButtonText: "취소",
+            }).then((result) => {
+              if (result.value) {
+                $.ajax({
+                  url: "qnaAnswer",
+                  method: "post",
+                  data: { meId: meId, subject: subject, boNo: qstNo },
+                  success: function (result) {
+                    console.log(result);
+                  },
+                  error: function (reject) {
+                    console.log(reject);
+                  },
+                });
+              }
+            });
+          });
+          //엑셀버튼 클릭 이벤트
+          const options = {
+            includeHiddenColumns: true,
+            onlySelected: true,
+            fileName: "qnaExport",
+          };
+
+          //엑셀버튼을 누르면 해당되는 발주상세목록을 엑셀로 만들어준다
+          $("#excelBtn").on("click", function () {
+            Swal.fire({
+              title: "엑셀파일로 받아보시겠습니까?",
+              text: "원하지 않는다면 취소를 눌러주세요",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "확인",
+              cancelButtonText: "취소",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                qnaList.export("xlsx", options);
+              }
+            });
+          });
+
+          // 전체 체크박스 선택 시 모든 체크박스 선택(문의상태)
+          $("#selectAll").change(function () {
+            $("#qstStTable input:checkbox").prop(
+              "checked",
+              $(this).prop("checked")
+            );
+          });
+
+          $("input[name='chk']").change(function () {
+            if (!$(this).prop("checked")) {
+              $("#selectAll").prop("checked", false);
+            } else if (
+              $("#qstStTable input[name='chk']:not(:checked)").length === 0
+            ) {
+              $("#selectAll").prop("checked", true);
+            }
+          });
+        });
+
+        // 날짜 변환
+        function formattedDate(timestamp) {
+          let date = new Date(timestamp);
+          let year = date.getFullYear();
+          let month = String(date.getMonth() + 1).padStart(2, "0");
+          let day = String(date.getDate()).padStart(2, "0");
+          let formattedDate = year + "-" + month + "-" + day;
+          return formattedDate;
+        }
+      </script>
+    </div>
+  </body>
+</html>
