@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.pettopia.admin.mapper.QnaMagMapper">
+
+	<!-- qna 전체조회 -->
+	<select id="qnaAllList" resultType="QnaMagVO">
+		SELECT	q.qst_no,
+				q.me_id,
+				q.title,
+				q.reg_dt,
+				q.qst_img,
+				q.prdt_id,
+				get_common(q.qst_status) qstStatus,
+				q.qst_yn,
+				q.content,
+				m.name,
+				p.prdt_nm
+		FROM 	qna q 
+		JOIN 	member m
+		ON 		q.me_id = m.me_id
+		JOIN    product p
+		ON      q.prdt_id = p.prdt_id
+		ORDER BY q.qst_no
+	</select>
+	
+	<!-- qna 답변 대기 카운트 -->
+	<select id="qstStCnt1" resultType="int">
+		SELECT 	COUNT(*) cnt
+		FROM 	qna
+		WHERE 	qst_status = 'QS1'
+	</select>
+	
+	<!-- qna 답변 완료 카운트 -->
+	<select id="qstStCnt2" resultType="int">
+		SELECT 	COUNT(*) cnt
+		FROM 	qna
+		WHERE 	qst_status = 'QS2'
+	</select>
+	
+	<!-- qna 답변 등록 -->
+	<insert id="insertQnaReply" parameterType="QnaMagVO">
+		<selectKey keyProperty="commentId" resultType="int" order="BEFORE">
+			SELECT 	NVL(MAX(comment_id),0) + 1
+			FROM 	reply
+		</selectKey>
+		INSERT INTO reply ( comment_id,
+							me_id,
+							subject,
+							reg_dt,
+							division,
+							bo_no
+							)
+					VALUES ( #{commentId},
+							 #{meId},
+							 #{subject},
+							 sysdate,
+							 'DR3',
+							 #{boNo}
+							 )
+	
+	</insert>
+</mapper>

@@ -73,10 +73,12 @@
 	src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 
 <!-- Toast chart -->
-<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
 <script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
 
 <!-- summbernote -->
@@ -109,8 +111,8 @@
 	<header id="header" class="header fixed-top d-flex align-items-center">
 
 		<div class="d-flex align-items-center justify-content-between">
-			<a th:href="@{/productMag}" class="logo d-flex align-items-center"> <img
-				src="admin/assets/img/pet로고.png" alt=""> <span
+			<a th:href="@{/productMag}" class="logo d-flex align-items-center">
+				<img src="admin/assets/img/pet로고.png" alt=""> <span
 				class="d-none d-lg-block">Pettopia</span>
 			</a> <i class="bi bi-list toggle-sidebar-btn"></i>
 		</div>
@@ -142,10 +144,13 @@
 				th:href="@{/orderMag}"> <i class="bi bi-menu-button-wide"></i> <span>주문관리</span>
 			</a></li>
 			<li class="nav-item"><a class="nav-link collapsed"
-				th:href="@{/memberMag}"> <i class="bi bi-journal-text"></i> <span>회원관리</span>
+				th:href="@{/memberMag}"> <i class="bi bi-person"></i> <span>회원관리</span>
 			</a></li>
-						<li class="nav-item"><a class="nav-link collapsed"
-				th:href="@{/categoryMag}"> <i class="bi bi-journal-text"></i> <span>카테고리관리</span>
+			<li class="nav-item"><a class="nav-link collapsed"
+				th:href="@{/categoryMag}"> <i class="bi bi-layout-text-window-reverse"></i> <span>카테고리관리</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link collapsed"
+				th:href="@{/qnaMag}"> <i class="bi bi-question-circle"></i> <span>QnA관리</span>
 			</a></li>
 
 		</ul>
