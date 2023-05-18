@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{../templates/layout}">
+
+
+<head>
+  <title>지식공유게시판</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <span style="display: none;" id="meId" th:text="${Article.meId}"></span>
+    <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
+    <div id="container">
+      <div id="boNo" th:text="${Article.boNo}"></div>
+      <div class="form-group">
+        <div class="row">
+          <div class="bg0 p-t-100 p-b-85 m-lr-auto col-lg-8">
+            <h2>지식공유게시판</h2>
+            <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50 border">
+              <h4 th:text="${Article.title}"></h4>
+              <hr>
+              <span>작성자:</span>
+              <span th:text="${Article.meId}"></span>
+              <span>/ 작성일:</span>
+              <span th:text="${Article.regDt}"></span>
+              <span>/ 글번호:</span>
+              <span th:text="${Article.boNo}"></span>
+              <hr>
+              <div id="Viewer" th:utext="${ Article.subject }">
+              </div>
+              <hr>
+              <div id="ownerOnly">
+
+              </div>
+            </div>
+            <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-20 border">
+
+              <div id="replyLoginOnly">
+              </div>
+              <hr>
+              <div id="replys">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
+    </div>
+
+    <script>
+      let path = /*[[${path}]]*/
+        console.log(meId.innerText);
+
+      let user = GetUser();
+      getReply();
+      function getReply() {
+        $.ajax({
+          url: "getknowHowReply",
+          method: "Get",
+          async: false,
+          dataType: "JSON",
+          data: { boNo: boNo.innerText },
+          success: function (data) {
+            console.log(data);
+            replys.innerHTML = '';
+            for (i = 0; i < data.length; i++) {
+              replys.innerHTML +=
+                `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
+                <h5 style="display:inline-block;">작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5> 
+                ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
+                <hr>
+                <div class="Viewer">${data[i].subject}
+                </div>
+              </div>`
+            }
+
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("댓글불러오기에러");
+          },
+        })
+      }
+      function deleteReply(commentId, meId) {
+        if (meId == user) {
+          console.log("여기까진됨")
+          $.ajax({
+            url: "delKnowHowReply",
+            method: "delete",
+            async: false,
+            dataType: "JSON",
+            data: { commentId: commentId },
+            success: function (data) {
+              console.log(data);
+              Swal.fire('삭제완료', '', 'success');
+              getReply();
+            },
+            error: function (reject) {
+              console.log(reject);
+              Swal.fire('에러발생', '', 'error');
+              getReply();
+            },
+          })
+        }
+        else {
+          Swal.fire('계정을 확인바랍니다', '', 'info');
+        }
+      }
+
+      loginOnly();
+      function loginOnly() {
+        let loginId = GetUser();
+        if (loginId != "" && loginId != null) {
+          replyLoginOnly.innerHTML =
+            `<h4 style="display: inline-block; width: 100px;">댓글</h4>
+                <button type="button" class="btn btnPush btnBlueGreen" style="float:right;margin: auto;"
+                  onclick="InsertReply();">작성</button>
+                <hr>
+                <textarea class="form-control" rows="4" style="resize: none;" id="replySubject"></textarea>`
+        }
+        else {
+          replyLoginOnly.innerHTML = `<h4 style="display: inline-block; width: 100px;">댓글</h4>`
+        }
+
+        console.log(loginId);
+        if (meId.innerText == loginId) {
+          ownerOnly.innerHTML = `                
+                <button type="button" class="btn btnPush btnLightBlue" onclick="location.replace('modKnowHow?boNo='+${boNo.innerText});">수정</button>
+                <button type="button" class="btn btnPush btnRed" onclick="deleteArticle()">삭제</button>`
+        }
+        console.log("로그인온리")
+      }
+
+      function InsertReply() {
+        let meId = GetUser();
+        console.log(meId);
+        console.log(replySubject.value);
+        $.ajax({
+          url: "insertKnowHowReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: {
+            boNo: boNo.innerText,
+            subject: replySubject.value,
+            meId: meId
+          },
+          success: function (data) {
+            replySubject.value = "";
+            getReply();
+            alert("작성완료");
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("작성에러");
+          },
+        })
+      }
+
+      function GetUser() {
+        let result = "";
+        $.ajax({
+          url: "getUser",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            console.log("비로그인");
+          },
+        })
+        return result;
+      }
+
+
+      function dateChange(data) {
+        if (data != null && data != 0) {
+          let newData = new Date(data);
+          let result = newData.getFullYear() + "-" +
+            (newData.getMonth() < 10
+              ? "0" + (newData.getMonth() + 1)
+              : newData.getMonth() + 1) +
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+          return result;
+        }
+        else return null;
+      };
+      const urlParams = new URL(location.href).searchParams;
+      const writer = urlParams.get('boNo');
+
+      function deleteArticle() {
+        Swal.fire({
+          title: '정말로 삭제하시겠습니까?',
+          showCancelButton: true,
+          confirmButtonText: '삭제',
+          denyButtonText: `취소`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            $.ajax({
+              url: "delKnowHow",
+              method: "delete",
+              async: false,
+              dataType: 'json',
+              data: {
+                Uid: meId.innerText,
+                boNo: boNo.innerText
+              },
+              success: function (data) {
+                console.log(data);
+                if (data == -1) {
+                  swal.fire('삭제실패 작성자가 아닙니다', '', 'info')
+                }
+                else if (data == 1) {
+                  console.log("성공")
+                  Swal.fire('정상적으로 삭제 되었습니다', '', 'success')
+                    .then(() => {
+                      location.replace("knowhow")
+                    })
+
+                }
+                else {
+                  Swal.fire('삭제실패 잠시뒤 다시 시도해주세요', '', 'error')
+                }
+              },
+              error: function (reject) {
+                console.log(reject);
+                console.log("비로그인");
+                Swal.fire('삭제실패 잠시뒤 다시 시도해주세요', '', 'error')
+                  .then(() => {
+                    location.replace("knowhow")
+                  })
+              },
+            })
+          }
+        })
+      }
+    </script>
+  </div>
+
+</body>
+
+
+
+</html>
