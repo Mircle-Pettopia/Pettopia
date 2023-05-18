@@ -40,7 +40,7 @@ td, tr, th{
 
     <div class="container">
 			<div class="row">
-                <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+                <th:block th:replace="layout/navbar :: navbarFragment"></th:block>
 
 				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
@@ -252,8 +252,9 @@ td, tr, th{
 			let date = new Date();
 			let start_date_change;
 			let end_date_change;
-			let stars = page.stars;
-			let ends = page.ends;
+
+			console.log(stars)
+			console.log(ends)
 			
 			//주문내역 ajax
 			const orderList = (start = undefined, end = undefined, shipSt = undefined, prcSt = undefined) => {
@@ -269,7 +270,22 @@ td, tr, th{
 							ends : ends},
 					async: false,
 					success: function(data){
-						drawOrderList(data);
+						console.log(data.length ==0);
+						if(data.length==0){
+							let tr = document.createElement('tr');
+							let td = document.createElement('td');
+							$(td).attr('colspan', '8');
+							
+							td.innerHTML = `<div style="height: 600px;">
+																<p style="color:gray; font-size:20px;">
+																	<strong>조회할 정보가 없습니다.</strong>
+																</p>
+															<div>`
+							tr.appendChild(td);
+							document.querySelector('#getOrderList').appendChild(tr);
+						} else {
+							drawOrderList(data);
+						}
 					},
 					error : function(rej) {
 						console.log(rej);
@@ -340,19 +356,7 @@ td, tr, th{
 						error : function(rej) {
 							console.log(rej);
 						}
-					})
-					//domId(data[i].ordtId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
-					//console.log((data[i].ordtId + "Options").innerText);
-
-					if(data.length == 0){
-						let tr = document.createElement('tr');
-						let td = document.createElement('td');
-						$(td).attr('colspan', '8');
-						
-						td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
-						tr.appendChild(td);
-						document.querySelector('#getOrderList').appendChild(tr);
-					};
+					});
 				}; // end for
 				//rowspan 자동으로 진행될 수 있도록 버튼 항시 클릭 이벤트 넣음
 				fn_cellMerge('orderList', [0,5,6,7]);
@@ -399,12 +403,12 @@ td, tr, th{
 					url: "getOrder",
 					method: "GET",
 					data : {meId : id,
-							shipSt : ship,
-							prcSt : prcSt,
-							start : start,
-							end : end,
-							stars : stars,
-							ends : ends},
+								shipSt : ship,
+								prcSt : prcSt,
+								start : start,
+								end : end,
+								stars : stars,
+								ends : ends},
 					success: function(data){
 						if(data.length > 0){
 							$('#orderList > tbody').empty();	//table 초기화

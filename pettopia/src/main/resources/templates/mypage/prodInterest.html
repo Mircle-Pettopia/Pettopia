@@ -42,7 +42,7 @@
 
     <div class="container">
         <div class="row">
-            <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+            <th:block th:replace="layout/navbar :: navbarFragment"></th:block>
             <!-- 마이페이지 관심상품 -->
             <div class="col-md-8 col-lg-10 p-b-150 fontSize">
                 <div class="p-r-45 p-r-0-lg m-t-50">
@@ -96,8 +96,18 @@
                     method: 'GET',
                     data: { meId: id },
                     success: (data) => {
-                        console.log(data);
-                        drawList(data);
+                        if(data == 0){
+                            $('#interestDeleteBtn').css('display','none');
+                            let tr = document.createElement('tr');
+                            let td = document.createElement('td');
+                            $(td).attr('colspan', '5');
+                            
+                            td.innerHTML = `<div style="height: 500px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
+                            tr.appendChild(td);
+                            document.querySelector('#list').appendChild(tr);
+                        } else {
+                            drawList(data);
+                        }
                     },
                     error: (err) => {
                         console.log(err);
@@ -212,20 +222,6 @@
                         </div> <!-- end modal -->
                     </td>
                 </tr>`;
-
-
-
-
-                //DB에 있는 값이 없으면 없다고 띄우기
-                if(data.length == 0){
-                    let tr = document.createElement('tr');
-                    let td = document.createElement('td');
-                    $(td).attr('colspan', '8');
-                    
-                    td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
-                    tr.appendChild(td);
-                    document.querySelector('#getOrderList').appendChild(tr);
-                };
                 
             }// end for
             list.innerHTML = opt;

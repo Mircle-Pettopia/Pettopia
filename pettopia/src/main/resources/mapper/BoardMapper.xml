@@ -12,77 +12,90 @@
 		values(#{no},#{title},#{contents})
 	</insert>
 	
-	<insert id="insertKnowhowArticle"
-		parameterType="BoardVO">
-		insert into knowhow_board
+	<!-- 은애수정 2023/05/18 , 지식공유게시판 글작성 -->
+	<insert id="insertKnowhowArticle" parameterType="BoardVO">
+		INSERT INTO board
 					(BO_NO,
-					TITLE,
-					SUBJECT,
-					ME_ID)
-		values(
-					(select TO_NUMBER(NVL(MAX(BO_NO),0))+1 BO_NO from knowhow_board)
+					 TITLE,
+					 SUBJECT,
+					 ME_ID,
+					 bo_type)
+		VALUES(
+					(SELECT TO_NUMBER(NVL(MAX(bo_no),0))+1 bo_no FROM board)
 					,#{title}
 					,#{subject}
-					,#{meId})
+					,#{meId}
+					,'BY1')
 	</insert>
 	
+	<!-- 은애수정 2023/05/18 , 지식공유게시판 전체조회 -->
 	<select id="knowHowList" resultType="BoardVO">
-select *  from ( select rownum as rn,a.*   from (
-
-				   select bo_no,title,reg_dt,view_cnt,me_id 
-                    from knowhow_board 
-                   where title Like '%'||#{keyword}||'%'
-                   order by bo_no desc
-                          
-) a	) where RN between (#{page}-1)*10 and #{page}*10
+		SELECT *  FROM ( SELECT ROWNUM AS rn,a.*
+		                 FROM (
+		                       SELECT bo_no,title,reg_dt,view_cnt,me_id 
+		                       FROM board 
+		                       WHERE title LIKE '%'||''||'%'
+		                       AND bo_type = 'BY1'
+		                       ORDER BY bo_no DESC
+		) a	) WHERE RN BETWEEN (#{page}-1)*10 and #{page}*10
 	</select>
 	
+	<!-- 은애수정 2023/05/18 -->
 	<select id="showKnowHow" resultType="BoardVO">
-		select * from knowhow_board where bo_no=#{boNo}
+		SELECT * FROM board WHERE bo_no=#{boNo}
 	</select>
 	
+	<!-- 은애수정 2023/05/18, 지식공유게시판 글 개수 -->
 	<select id="knowHowMaxPage" resultType="int">
-		select count(*)
-		from knowhow_board 
-		where title Like '%'||#{keyword}||'%'
+		SELECT COUNT(*)
+		FROM board
+		WHERE title LIKE '%'|| #{keyword} ||'%'
+		AND bo_type = 'BY1'
 	</select>
 	
 	<select id="getknowHowReply" resultType="BoardVO">
-		select * from reply 
-		where DIVISION = 'DR2' 
-		  and BO_NO=#{boNo} 
-		  and RE IS NULL
+		SELECT * from reply 
+		WHERE DIVISION = 'DR2' 
+		  AND BO_NO=#{boNo} 
+		  AND RE IS NULL
 		ORDER BY comment_id desc
 	</select>
 	
+	<!-- 은애수정 2023/05/18 -->
 	<insert id="insertKnowHowReply" parameterType="BoardVO">
-		insert into reply
-		(comment_id,me_id,subject,division,bo_no)
-		values(reply_seq.nextval,#{meId},#{subject},'DR2',#{boNo})
+		INSERT INTO reply
+			(comment_id,me_id,subject,division,bo_no)
+		VALUES
+			(reply_seq.nextval,#{meId},#{subject},'DR2',#{boNo})
 	</insert>
 	
+	<!-- 은애수정 2023/05/18 -->
 	<update id="KnowHowAddhit" parameterType="int">
-		update KNOWHOW_BOARD set view_cnt=view_cnt+1 where BO_NO = #{boNo}
+		UPDATE board SET view_cnt=view_cnt+1 WHERE BO_NO = #{boNo}
 	</update>
 	
+	<!-- 은애수정 2023/05/18 -->
 	<delete id="delKnowHow" parameterType="int">
-		delete KNOWHOW_BOARD where BO_NO = #{boNo}
+		DELETE board WHERE bo_no = #{boNo}
 	</delete>
 	
 	<delete id="delKnowHow2" parameterType="int">
-		delete REPLY where  BO_NO = #{boNo} and DIVISION = 'DR2'
+		DELETE reply WHERE BO_NO = #{boNo} AND DIVISION = 'DR2'
 	</delete>
 	
 	<select id="getKnowHowWriter" parameterType="int" resultType="String">
-		select ME_ID FROM KNOWHOW_BOARD where BO_NO = #{boNo}
+		SELECT ME_ID FROM KNOWHOW_BOARD where BO_NO = #{boNo}
 	</select>
 	
+	<!-- 은애수정 2023/05/18 -->
 	<update id="updateKnowHow" parameterType="BoardVO">
-		UPDATE KNOWHOW_BOARD SET title=#{title},subject=#{subject} WHERE BO_NO=#{boNo}
+		UPDATE board
+			SET title = #{title}, subject=#{subject}
+		WHERE BO_NO=#{boNo}
 	</update>
 	
 	<delete id="delKnowHowReply" parameterType="int">
-		delete REPLY where comment_id=#{commentId} and DIVISION = 'DR2'
+		DELETE REPLY WHERE comment_id=#{commentId} AND DIVISION = 'DR2'
 	</delete>
 	
 	<!-- 은애!!!!!! -->

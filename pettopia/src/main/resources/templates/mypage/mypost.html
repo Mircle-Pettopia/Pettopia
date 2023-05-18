@@ -46,20 +46,24 @@
 
     <div class="container">
         <div class="row">
-            <th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+            <th:block th:replace="layout/navbar :: navbarFragment"></th:block>
             <!-- 마이페이지 게시판관리 -->
             <div class="col-md-8 col-lg-10 p-b-150 fontSize">
                 <div class="p-r-45 p-r-0-lg m-t-50">
 
                     <!--modal-->
                     <div class="w3-container">
-                        
                         <div id="boardDetail" class="w3-modal m-t-50">
                             <div class="w3-modal-content w3-animate-opacity">
                                 <div class="w3-container">
                                     <span onclick="document.getElementById('boardDetail').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                    <h3>게시판 조회</h3>
                                     <div class="row">
-                                        <h3>게시판 조회</h3>
+                                        <div class="col-12">
+                                            <div id="boardDetailList">
+                                                test
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -162,11 +166,28 @@
                                     <td><div class="num">${data[i].rn}</div></td>
                                     <td><div class="num">${data[i].boType}</div></td>
                                     <td><div class="title">
-                                        <a onclick="document.getElementById('boardDetail').style.display='block'" class="boadr_title">${data[i].title}</a>
+                                        <a  class="boadr_title" href="showKnowHow?boNo=${data[i].boNo}">${data[i].title}</a>
                                     </div></td>
-                                    <td><div class="date" >${dateChange(data[i].regDt)}</div></td>
+                                    <td><div class="date">${dateChange(data[i].regDt)}</div></td>
                                     <td><div class="count">${data[i].viewCnt}</div></td>
                                 </tr>`;
+
+                                //모달로 띄우고 싶었으나 실패
+                                //onclick="document.getElementById('boardDetail').style.display='block'" id="${data[i].boNo}_board"
+                                /*let boNo = data[i].boNo;
+                                let test = "";
+                                $.ajax({
+                                    url : 'boardDetail',
+                                    method : 'POST',
+                                    data : {boNo : boNo},
+                                    success : (detail) => {
+                                        console.log(detail);
+                                        console.log(detail.length);
+                                    },
+                                    error : (rej) => {
+                                        console.log(rej);
+                                    }
+                                })*/
                             }
                         } else {
                             list.innerHTML += `
@@ -187,7 +208,6 @@
                     },
                 })
 
-                console.log(boType);
                 $.ajax({
                     url: "boardAllMaxPage",
                     method: "GET",

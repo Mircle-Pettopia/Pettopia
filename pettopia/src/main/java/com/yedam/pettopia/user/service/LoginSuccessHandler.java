@@ -33,6 +33,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 		UserVO idChk = service.getUserAccount(id);
         String yn = idChk.getOutYn();
         
+        //res.sendRedirect("/");
+        //res.sendRedirect("/productMag");
+        //res.sendRedirect("/login?error=true&exception=" + message);
+        
         // 로그인한 아이디 권한 확인하기
         //System.out.println(authdata.getAuthorities().toString());
         

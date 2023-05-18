@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.board.service.BoardService;
 import com.yedam.pettopia.board.vo.BoardVO;
 import com.yedam.pettopia.cart.service.vo.CartListVO;
 import com.yedam.pettopia.common.service.CodeService;
@@ -25,6 +26,7 @@ public class MypageController {
 	@Autowired MypageService service;
 	@Autowired CodeService codeService;
 	@Autowired ProductService1 productService;
+	@Autowired BoardService bservice;
 	
 	//마이페이지-주문내역
 	@GetMapping("mypage")
@@ -147,8 +149,16 @@ public class MypageController {
 	@ResponseBody
 	public List<BoardVO> mypoastList(@RequestParam(defaultValue = "1", required = false) int page,
 									String keyword, String meId, String boType){
+		//model.addAttribute("Article",bservice.showKnowHow(boNo));
 		return service.getBoardAllList(page, keyword, meId, boType);
 	}
+	
+	@PostMapping("boardDetail")
+	@ResponseBody
+	public BoardVO boardDetail(@RequestParam int boNo) {
+		return bservice.showKnowHow(boNo);
+	}
+	
 	
 	@GetMapping("boardAllMaxPage")
 	@ResponseBody

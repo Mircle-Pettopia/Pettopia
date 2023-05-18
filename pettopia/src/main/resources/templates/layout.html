@@ -118,11 +118,11 @@
 					<div class="menu-desktop">
 						<ul class="main-menu">
 							<li class="menu">
-								<a href="/">Home</a>
+								<a href="/" class="noonnu_font">메인</a>
 							</li>
 
 							<li>
-								<a href="ProductCategory">Shop</a>
+								<a href="ProductCategory" class="noonnu_font">상품</a>
 							</li>
 
 							<!--<li class="label1" data-label1="hot">
@@ -130,12 +130,16 @@
 							</li>-->
 
 							<li class="menu">
-								<a href="#eee">Community</a>
+								<a href="#eee" class="noonnu_font">게시판</a>
 								<ul class="sub-menu">
-									<li><a href="index.html"> 분양게시판</a></li>
-									<li><a href="knowhow">지식공유게시판</a></li>
+									<li><a href="adopt" class="noonnu_font"> 분양게시판</a></li>
+									<li><a href="knowhow" class="noonnu_font">지식공유게시판</a></li>
 									<!--<li><a href="home-03.html">출석체크</a></li>-->
 								</ul>
+							</li>
+
+							<li class="menu">
+								<a href="noticeList" class="noonnu_font">공지사항</a>
 							</li>
 
 							<!--<li>
@@ -382,7 +386,7 @@
 				method: "GET",
 				async: false,
 				success: function (data) {
-					console.log(data);
+					//console.log(data);
 					result = data;
 				},
 				error: function (reject) {
