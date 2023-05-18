@@ -3,7 +3,7 @@
   layout:decorate="~{layout}">
 <html lang="ko" itemscope itemtype="http://schema.org/WebPage">
 <head>
-  <title>지식 게시판</title>
+  <title>Pettopia</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/css.css" />
@@ -34,11 +34,11 @@
       </div>
       
       <div class="row">
-      <th:block th:replace="/layout/boardNavbar :: boardNavFragment"></th:block>
+      <th:block th:replace="layout/boardNavbar :: boardNavFragment"></th:block>
 
       <div class="col-md-8 col-lg-10 p-b-150 m-t-50">
         <div class="board_title">
-          <h3>지식공유게시판</h3>
+          <h1><span style="font-weight: bold; color: rgb(159, 204, 240);">| </span>지식공유게시판</h1>
           <!--search-->
           <div style="display: inline-block; float: right; width: 70%; margin-top: 10px; margin-bottom: 20px !important;">
             <button type="button" class="btn btnPush btnLightBlue" style="float:right; display: inline-block;margin: auto;"
