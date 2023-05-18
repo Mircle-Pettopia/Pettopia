@@ -252,9 +252,8 @@ td, tr, th{
 			let date = new Date();
 			let start_date_change;
 			let end_date_change;
-
-			console.log(stars)
-			console.log(ends)
+			let stars = page.stars;
+			let ends = page.ends;
 			
 			//주문내역 ajax
 			const orderList = (start = undefined, end = undefined, shipSt = undefined, prcSt = undefined) => {

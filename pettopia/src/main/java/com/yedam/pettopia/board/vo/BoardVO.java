@@ -22,4 +22,16 @@ public class BoardVO {
 	private int rn;
 	private String boType;
 	
+	
+	//ADOPT(분양정보)
+	private int adoptId;
+	private String petType;
+	private String breed;
+	private String sex;
+	private String netuered;
+	private int age;
+	private String status;
+	private String phone;
+	private String city;
+	private int charge;
 }

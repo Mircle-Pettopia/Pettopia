@@ -100,6 +100,13 @@ public class BoardServiceImpl implements BoardService{
 		// TODO Auto-generated method stub
 		return boardMapper.delKnowHowReply(commentId);
 	}
+
+	
+	// 분양게시판 전체조회
+	@Override
+	public List<BoardVO> adoptAllList(BoardVO vo) {
+		return boardMapper.adoptAllList(vo);
+	}
 	
 
 }

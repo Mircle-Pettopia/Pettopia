@@ -24,4 +24,7 @@ public interface BoardMapper {
 	//은애!!!
 	public List<BoardVO> getBoardAllList(int page, String keyword, String meId, String boType);
 	public int boardAllMaxPage(String keyword, String meId, String boType);
+	
+	//분양게시판
+	public List<BoardVO> adoptAllList(BoardVO vo);
 }
