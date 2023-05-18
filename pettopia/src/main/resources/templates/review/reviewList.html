@@ -98,6 +98,13 @@ td, tr, th {
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+.ck.ck-editor {
+    max-width: 500px;
+}
+.ck-editor__editable {
+    min-height: 300px;
+}
+
 </style>
 </head>
 <body>
@@ -158,7 +165,7 @@ td, tr, th {
 		</div>
 
 		<!-- 후기 등록 모달창 -->
-		<div class="modal fade" id="writemodal" tabindex="-1" role="dialog"
+<div class="modal fade" id="writemodal" tabindex="-1" role="dialog"
 			aria-labelledby="write-review-modal-label" aria-hidden="true"
 			data-backdrop="static" stype="width: 700px;
     height: 600px;">
@@ -189,10 +196,11 @@ td, tr, th {
 										style="display: inline-block" for="rate5">★</label>
 								</div>
 							</fieldset>
-							<br/>
+							<br/><br/>
 							<span class="text-bold">후기 등록</span>
-							<br/>
-							<div class="form-group" id="editor"></div>
+							<br/><br/>
+							<div>
+						<textarea name="content" id="editor"></textarea></div>
 							<div class="modal-footer" style="padding: 0px">
 								<button type="button" class="btn btn-secondary"
 									data-dismiss="modal">취소</button>
@@ -209,6 +217,8 @@ td, tr, th {
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
 		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
+		
+		
 		<!-- ==========================ckeditor END======================= -->
 
 		<script>
@@ -256,6 +266,9 @@ td, tr, th {
 					},
 				});
 			}
+			
+			
+			
 		</script>
 	</div>
 </body>

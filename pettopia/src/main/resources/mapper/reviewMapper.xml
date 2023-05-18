@@ -35,7 +35,7 @@
 
 
 	<select id="totalCount" resultType="int">
-		SELECT COUNT(*)
+		<!--  SELECT COUNT(*)
 		FROM (
 		select me_id, ordt.ordt_id, ordt.prdt_id,
 		TO_DATE(ordr_date, 'rrrr-MM-dd')
@@ -54,7 +54,7 @@
 		AND ship_st = 'SS3'
 		AND not exists ( SELECT re_no from review r where r.ordt_id =
 		ordt.ordt_id)
-		)
+		)-->
 	</select>
 
 	<!-- 내가 작성한 후기 목록 -->
@@ -94,7 +94,7 @@
 		)
 	</insert>
 
-
+	
 
 
 
