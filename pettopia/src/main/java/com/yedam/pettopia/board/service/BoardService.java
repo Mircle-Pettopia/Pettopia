@@ -24,5 +24,20 @@ public interface BoardService {
 	//--분양게시판
 	
 	//전체조회
-	public List<BoardVO> adoptAllList(BoardVO vo);
+	public List<BoardVO> adoptAllList(int page, String petType, String breed, String sex, String city);
+	//분양게시판 개수
+	public int adoptMaxPage(String petType, String breed, String sex, String city);
+	//분양게시판 단건조회
+	public BoardVO adoptDetail(int boNo);
+	//분양게시판 단건조회 - 게시글 + 댓글 삭제
+	public int delAdopt(int boNo,String Uid);
+	//분양게시판 단건조회 - 게시글 댓글 삭제시 본인글을 삭제하는지 확인
+	public String getAdoptWriter(int boNo);
+	//분양게시판 단건조회 - 댓글
+	public List<BoardVO> getAdoptReply(int boNo);
+	//분양게시판 단건조회 - 댓글등록
+	public int insertAdoptReply(BoardVO vo);
+	//분양게시판 단건조회 - 댓글삭제
+	public int deleteAdoptReply(int commentId);
+	
 }

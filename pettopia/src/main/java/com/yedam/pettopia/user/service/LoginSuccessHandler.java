@@ -56,7 +56,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 	    		// 권한이 ADMIN이면 어드민 페이지로 이동
 				case "[ROLE_ADMIN]":
 					//uri += "http://localhost:81/productMag";
-					res.sendRedirect("/productMag");
+					res.sendRedirect("/dashboard");
 					break;
 				// 권한이 USER면 메인 페이지로 이동
 				case "[ROLE_USER]":

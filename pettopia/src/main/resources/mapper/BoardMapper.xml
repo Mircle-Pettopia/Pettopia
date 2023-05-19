@@ -83,8 +83,9 @@
 		DELETE reply WHERE BO_NO = #{boNo} AND DIVISION = 'DR2'
 	</delete>
 	
+	<!-- 은애수정 2023/05/19 -->
 	<select id="getKnowHowWriter" parameterType="int" resultType="String">
-		SELECT ME_ID FROM KNOWHOW_BOARD where BO_NO = #{boNo}
+		SELECT ME_ID FROM board WHERE BO_NO = #{boNo} AND bo_type = 'BY1'
 	</select>
 	
 	<!-- 은애수정 2023/05/18 -->
@@ -133,28 +134,107 @@
 	<select id="adoptAllList" resultType="BoardVO">
 		SELECT *  FROM ( SELECT ROWNUM AS rn, a.*
 		                 FROM (
-		                       SELECT bo.bo_no, title, reg_dt, view_cnt, me_id 
+		                       SELECT bo.bo_no, title, reg_dt, view_cnt, me_id,
+		                       		  get_common(breed) breed, get_common(city) city, get_common(sex) sex, get_common(pet_type) pet_type,
+		                       		  phone, get_common(status) status
 		                         FROM board bo
 		                         JOIN adopt ad
 		                           ON bo.bo_no = ad.bo_no
 		                        WHERE 1=1
 		                          AND bo_type = 'BY2'
 		                         <if test="petType != null and !petType.equals('')">
-		                          AND get_common(pet_type) = #{petType}
+		                          AND pet_type = #{petType}
 		                         </if>
 		                         <if test="breed != null and !breed.equals('')">
-  		                          AND get_common(breed) = #{breed}
+  		                          AND breed = #{breed}
 		                         </if>
 		                         <if test="sex != null and !sex.equals('')">
-		                          AND get_common(sex) = #{sex}
+		                          AND sex = #{sex}
 		                         </if>
 		                         <if test="city != null and !city.equals('')">
-		                          AND get_common(city) = #{city}
-		                         </if>
-		                         <if test="age != null and !age.equals('')">
-		                          AND age = #{age}
+		                          AND city = #{city}
 		                         </if>
 		                       ORDER BY bo_no DESC
 		) a	) WHERE RN BETWEEN (#{page}-1)*10 and #{page}*10
 	</select>
+	
+	<select id="adoptMaxPage" resultType="int">
+		SELECT COUNT(*)
+		  FROM board bo
+		  JOIN adopt ad
+            ON bo.bo_no = ad.bo_no
+		 WHERE 1=1
+		   AND bo_type = 'BY2'
+		<if test="petType != null and !petType.equals('')">
+           AND pet_type = #{petType}
+        </if>
+        <if test="breed != null and !breed.equals('')">
+           AND breed = #{breed}
+        </if>
+        <if test="sex != null and !sex.equals('')">
+           AND sex = #{sex}
+        </if>
+        <if test="city != null and !city.equals('')">
+           AND city = #{city}
+        </if>
+	</select>
+	
+	<!-- 분양게시판 단건조회 -->
+	<select id="adoptDetail" resultType="BoardVO">
+		SELECT 
+	        bo.bo_no,
+	        adopt_id,
+	        get_common(pet_type) pet_type,
+	        get_common(breed) breed,
+	        get_common(sex) sex,
+	        get_common(city) city,
+	        get_common(status) status,
+	        netuered,
+	        age,
+	        phone,
+	        charge,
+            title,
+	        subject,
+	        reg_dt,
+	        view_cnt,
+	        me_id
+		FROM board bo 
+		JOIN adopt ad
+		ON bo.bo_no = ad.bo_no
+		WHERE bo.bo_no = #{boNo}
+		AND bo_type = 'BY2'
+	</select>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="delAdoptBoardAndReply" parameterType="int">
+		DELETE reply WHERE BO_NO = #{boNo} AND DIVISION = 'DR1'
+	</delete>
+	<!-- 본인글을 삭제하는건지 확인 -->
+	<select id="getAdoptWriter" parameterType="int" resultType="String">
+		SELECT me_id FROM board WHERE bo_no = #{boNo} AND bo_type = 'BY2'
+	</select>
+	
+	<!-- 댓글 조회 -->
+	<select id="getAdoptReply" resultType="BoardVO">
+		SELECT * FROM reply 
+		WHERE DIVISION = 'DR1'
+		  AND BO_NO= #{boNo}
+		  AND RE IS NULL
+		ORDER BY comment_id DESC
+	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertAdoptReply" parameterType="BoardVO">
+		INSERT INTO reply
+			(comment_id, me_id, subject, division, bo_no)
+		VALUES
+			(reply_seq.NEXTVAL, #{meId}, #{subject}, 'DR1', #{boNo})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteAdoptReply" parameterType="int">
+		DELETE reply WHERE comment_id = #{commentId} AND DIVISION = 'DR1'
+	</delete>
+	
+	
 </mapper>
