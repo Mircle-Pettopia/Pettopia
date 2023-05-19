@@ -150,7 +150,7 @@ public class BoardController {
 		model.addAttribute("id", principal.getUser().getMeId());
 		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA"));
 		//												멍품종  냥품종   성별  분양상태  동물   지역
-		return "Board/adopt";
+		return "board/adopt";
 	};
 	
 	//분양게시판 전체목록
