@@ -249,9 +249,15 @@ fieldset legend {
 
 		<script>
 			$(".write-review-btn").click(function(event) {
+				
+				//이거 아닌듯
+				//document.getElementsByClassName("star").value = '${writtenList.point}';
+				//document.getElementById("editor").value = "${written.contents }";
+				
 				$("#writemodal").modal("show");
 				parentDiv = event.target;
-			});
+				});
+
 			
 			// 이전 별점값 가져오는 부분..?
 			let start = document.getElementsByClassName('starR');
