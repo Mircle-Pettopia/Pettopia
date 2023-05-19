@@ -107,14 +107,12 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		int result = 0;
 		String pw = "";
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		UserVO uvo = new UserVO();
 		
-		if(vo.getSignPath() != "company") {
+		if(vo.getSignPath() != "SC1") {
 			result = mapper.userInfoUpdate(vo);
 		}
 		
 		vo.setPw(pw);
-		
 		result = mapper.userInfoUpdate(vo);
 		
 		System.out.println(vo);

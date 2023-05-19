@@ -61,38 +61,45 @@
         </div>
         <!--search-->
         <div style="width: 100%; margin-bottom: 20px !important;">
+          <div>
+            <span th:text="${code}"></span>
+          </div>
           <!--<div style="display: inline-block; width: 40%;">-->
             <label>
               동물선택 : 
-              <select>
+              <select onchange="change_ba(value)">
                 <option>동물선택</option>
-                <option>강아지</option>
-                <option>고양이</option>
+                <option th:each="balist : ${code.BA}"
+                        th:value="${balist?.codCd}"
+                        th:utext="${balist?.codTitle}" name="petType"></option>
               </select>
             </label>
             <label>
               품종선택 : 
               <select>
-                <option>품종선택</option>
-                <option>치왕왕</option>
-                <option>시바방</option>
+                <option value="">품종선택</option>
+                <option th:each="bslist : ${code.BS}"
+                        th:value="${bslist?.codCd}" 
+                        th:utext="${bslist?.codTitle}" name="breed"></option>
               </select>
             </label>
             <label>
               지역선택 : 
               <select>
-                <option>지역선택</option>
-                <option>경상도</option>
-                <option>충청도</option>
+                <option value="">지역선택</option>
+                <option th:each="aalist : ${code.AA}"
+                        th:value="${aalist?.codCd}" 
+                        th:utext="${aalist?.codTitle}" name="city"></option>
               </select>
             </label>
             <label>
               성별선택 : 
               <select>
-                <option>성별선택</option>
-                <option>남&녀</option>
-                <option>남</option>
-                <option>녀</option>
+                <option value="">성별선택</option>
+                <option value="">암컷&수컷</option>
+                <option th:each="sxlist : ${code.SX}"
+                        th:value="${sxlist?.codCd}" 
+                        th:utext="${sxlist?.codTitle}" name="sex"></option>
               </select>
             </label>
 
@@ -151,6 +158,7 @@
             </table>
           <!--paging-->
           <div class="board_page" id="pagenav"></div>
+          <div class="bt_wrap" id="bt_warp"></div>
         </div>
       </div> <!-- end div class="board_wrap"-->
 
@@ -163,7 +171,27 @@
       </div>
     </div>
     
-    <script>
+    <script th:inline="javascript">
+      //select 하위 select
+
+      let code = /*[[${code}]]*/
+      let ba_code = /*[[${code.BA}]]*/   //종류
+      let bs_code = /*[[${code.BS}]]*/   //품종
+      console.log(ba_code);
+      console.log(bs_code);
+
+      function change_ba(ba){
+        if(ba == "DG") {
+          console.log("강아지");
+          //title이 DG인 codTitle을 보여주고 싶다!
+        } else if(ba == "CT") {
+          console.log("고양이");
+          //title이 CT인 codTitle을 보여주고 싶다!
+        }
+      }
+
+
+
       loginOnly()
       function loginOnly() {
         let Uid = GetUser();
@@ -190,6 +218,25 @@
         }
         else return null;
       };
+
+      function GetUser() {
+        let result = null;
+        $.ajax({
+          url: "getUser",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            console.log("로그인되어있지않음");
+          },
+        })
+        return result;
+      }
+
     </script>
   </div>
   </body>

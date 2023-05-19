@@ -19,4 +19,10 @@ public interface BoardService {
 	public String getKnowHowWriter(int boNo);
 	public int updateKnowHow(BoardVO vo);
 	public int delKnowHowReply(int commentId);
+	
+	//=========================================
+	//--분양게시판
+	
+	//전체조회
+	public List<BoardVO> adoptAllList(BoardVO vo);
 }

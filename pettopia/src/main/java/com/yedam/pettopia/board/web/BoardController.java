@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.pettopia.board.service.BoardService;
 import com.yedam.pettopia.board.vo.BoardTestVO;
 import com.yedam.pettopia.board.vo.BoardVO;
+import com.yedam.pettopia.common.service.CodeService;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 import lombok.AllArgsConstructor;
@@ -23,8 +24,8 @@ import lombok.AllArgsConstructor;
 @Controller
 @AllArgsConstructor
 public class BoardController {
-	@Autowired
-	BoardService boardService;
+	@Autowired BoardService boardService;
+	@Autowired CodeService codeService;
 	
 	//======================테스트파트=============
 	@GetMapping("editor")
@@ -139,7 +140,41 @@ public class BoardController {
 	//---------------------------------------------------
 	//분양게시판페이지
 	@GetMapping("adopt")
-	public String adopt() {
+	public String adopt(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
+		model.addAttribute("id", principal.getUser().getMeId());
+		model.addAttribute("code", codeService.getCodes("BA", "SX", "AS", "BS", "AA"));
 		return "Board/adopt";
+	};
+	
+	@PostMapping("adoptList")
+	@ResponseBody
+	public List<BoardVO> adoptList(BoardVO vo){
+		return boardService.adoptAllList(vo);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

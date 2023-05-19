@@ -129,5 +129,32 @@
 		AND me_id = #{meId}
 	</select>
 	
-	
+	<!-- 이것은 분양게시판입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	<select id="adoptAllList" resultType="BoardVO">
+		SELECT *  FROM ( SELECT ROWNUM AS rn, a.*
+		                 FROM (
+		                       SELECT bo.bo_no, title, reg_dt, view_cnt, me_id 
+		                         FROM board bo
+		                         JOIN adopt ad
+		                           ON bo.bo_no = ad.bo_no
+		                        WHERE 1=1
+		                          AND bo_type = 'BY2'
+		                         <if test="petType != null and !petType.equals('')">
+		                          AND get_common(pet_type) = #{petType}
+		                         </if>
+		                         <if test="breed != null and !breed.equals('')">
+  		                          AND get_common(breed) = #{breed}
+		                         </if>
+		                         <if test="sex != null and !sex.equals('')">
+		                          AND get_common(sex) = #{sex}
+		                         </if>
+		                         <if test="city != null and !city.equals('')">
+		                          AND get_common(city) = #{city}
+		                         </if>
+		                         <if test="age != null and !age.equals('')">
+		                          AND age = #{age}
+		                         </if>
+		                       ORDER BY bo_no DESC
+		) a	) WHERE RN BETWEEN (#{page}-1)*10 and #{page}*10
+	</select>
 </mapper>

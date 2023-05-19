@@ -47,24 +47,27 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
         if(yn.equals("Y")) {
         	message = "탈퇴된 아이디는 로그인이 불가합니다.";
         	message = URLEncoder.encode(message, "UTF-8"); // 한글 인코 깨진 문제 방지
-        	uri += "http://localhost:81/login?error=true&exception=" + message;
+        	//uri += "http://localhost:81/login?error=true&exception=" + message;
+        	res.sendRedirect("/login?error=true&exception=" + message);
         // 그게 아니라면 정상 로그인 시키기
         } else {
 	    	//참고 URL : https://okky.kr/questions/1132748
 	    	switch (authdata.getAuthorities().toString()) {
 	    		// 권한이 ADMIN이면 어드민 페이지로 이동
 				case "[ROLE_ADMIN]":
-					uri += "http://localhost:81/productMag";
+					//uri += "http://localhost:81/productMag";
+					res.sendRedirect("/productMag");
 					break;
 				// 권한이 USER면 메인 페이지로 이동
 				case "[ROLE_USER]":
-					uri = "http://localhost:81/";
+					//uri = "http://localhost:81/";
+					res.sendRedirect("/");
 				break;
 	        }
         }
         
         // 위의 결과에 맞춰 uri 변수가 담은 주소를 리다이렉트
-        res.sendRedirect(uri);
+        //res.sendRedirect(uri);
 	}
 	
 	/* 보면 좋을 거 같은 URL : https://velog.io/@bey1548/Spring-Security-로그인-성공-대응-로직 */
