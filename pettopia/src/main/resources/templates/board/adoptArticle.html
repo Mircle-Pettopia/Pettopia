@@ -15,6 +15,7 @@
       margin-bottom: 20px; 
       padding-top: 10px; 
       padding-bottom: 10px;
+      background-color: ;
     }
 
     #boNo{
@@ -53,7 +54,9 @@
         </a>
       </div>
     </div>
+
     <div id="boNo" th:text="${Article.boNo}"></div>
+
     <div class="row">
       <th:block th:replace="layout/boardNavbar :: boardNavFragment"></th:block>
 
@@ -65,9 +68,10 @@
       <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
         <div class="form-group">
             <div class="col-md-8 col-lg-12 p-b-150">
-              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50">
+              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-10 p-t-20 p-b-10 border">
                 <!--분양할 동물 정보 보여주기-->
-                <div class="border">
+                <div class="">
+                  <h3 style="font-weight: bold;">분양정보</h3>
                   <table class="table" style="margin-bottom: 20px;">
                     <colgroup>
 											<col width="20%">
@@ -95,13 +99,15 @@
                     </tr>
                     <tr>
                       <th>분양상태</th>
-                      <td><span th:text="${Article.status}"></span>6</td>
+                      <td><span th:text="${Article.status}"></span></td>
                     </tr>
                   </table>
                 </div>
+              </div>
                 
-                <div class="border">
-                  <h3 th:text="${Article.title}"></h3>
+              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-10 p-t-20 p-b-90 border">
+                <div class="">
+                  <h3 th:text="${Article.title}" style="font-weight: bold;"></h3>
                   <div style="float: right !important;">
                     <span th:text="${'조회수 : ' + Article.viewCnt}"></span>
                     <span th:text="${'글번호 : ' + Article.boNo}"></span>
@@ -112,8 +118,7 @@
                     <span th:text="${'작성일 : ' + Article.regDt}"></span>
                   </div>
 
-                  <div id="Viewer" th:utext="${ Article.subject }"></div>
-                  
+                  <div id="Viewer" th:utext="${ Article.subject }" style="height: auto;"></div>
                 </div>
                 
                 <hr>
@@ -145,10 +150,8 @@
 
 
     <script th:inline="javascript">
-      console.log(meId.innerText);
       let user = GetUser();
       let article = /*[[${Article}]]*/
-      console.log(article);
 
       // 작성글 출력
       getReply();
@@ -160,12 +163,11 @@
           dataType: "JSON",
           data: { boNo: boNo.innerText },   //html div id에 해당되는 text를 읽는다.
           success: function (data) {
-            console.log(data);
             replys.innerHTML = '';
             for (i = 0; i < data.length; i++) {
               replys.innerHTML +=
                 `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
-                <h5 style="display:inline-block;">작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5> 
+                <h5 style="display:inline-block;">${data[i].meId}</h5>&nbsp;&nbsp;&nbsp;<span style="font-size: 11px !important; color: gray;">${dateChange(data[i].regDt)}</span>
                 ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
                 <hr>
                 <div class="Viewer">${data[i].subject}
@@ -211,7 +213,7 @@
         let loginId = GetUser();
         if (loginId != "" && loginId != null) {
           replyLoginOnly.innerHTML =
-            `<h4 style="display: inline-block; width: 100px;">댓글</h4>
+            `<h3 style="display: inline-block; width: 100px; font-weight: bold;">댓글</h3>
                 <button type="button" class="btn btnPush btnBlueGreen" style="float:right;margin: auto;"
                 onclick="InsertReply();">작성</button>
                 <hr>
@@ -250,8 +252,6 @@
       // 댓글 등록
       function InsertReply() {
         let meId = GetUser();
-        console.log(meId);
-        console.log(replySubject.value);
         $.ajax({
           url: "insertAdoptReply",
           method: "POST",
@@ -331,7 +331,6 @@
                 boNo: boNo.innerText
               },
               success: function (data) {
-                console.log(data);
                 if (data == -1) {
                   swal.fire('삭제실패 작성자가 아닙니다', '', 'info')
                 }

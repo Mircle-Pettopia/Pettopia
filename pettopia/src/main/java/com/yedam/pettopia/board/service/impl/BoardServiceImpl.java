@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.pettopia.board.mapper.BoardMapper;
 import com.yedam.pettopia.board.service.BoardService;
@@ -104,6 +105,19 @@ public class BoardServiceImpl implements BoardService{
 	public BoardVO adoptDetail(int boNo) {
 		return boardMapper.adoptDetail(boNo);
 	}
+	
+	@Transactional
+	@Override
+	public int insertAdoptArticle(BoardVO vo) {
+		int result = boardMapper.insertAdoptArticle(vo);
+		
+		if(result > 0) {
+			vo.getBoNo();
+			boardMapper.insertAdoptInfo(vo);
+		}
+		
+		return result;
+	}
 
 	@Override
 	public List<BoardVO> getAdoptReply(int boNo) {
@@ -135,6 +149,8 @@ public class BoardServiceImpl implements BoardService{
 	public String getAdoptWriter(int boNo) {
 		return boardMapper.getAdoptWriter(boNo);
 	}
+
+	
 	
 
 }

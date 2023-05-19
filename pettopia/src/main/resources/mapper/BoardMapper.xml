@@ -205,6 +205,32 @@
 		AND bo_type = 'BY2'
 	</select>
 	
+	<!-- 게시글 등록 -->
+	<insert id="insertAdoptArticle" parameterType="BoardVO">
+	    INSERT INTO board
+	                (bo_no,
+	                 title,
+	                 subject,
+	                 me_id,
+	                 bo_type)
+	    VALUES(
+	                (SELECT TO_NUMBER(NVL(MAX(bo_no),0))+1 bo_no FROM board)
+	                ,#{title}
+	                ,#{subject}
+	                ,#{meId}
+	                ,'BY2')
+	</insert>
+	
+	<!-- 게시판 등록(분양정보) -->
+	<insert id="insertAdoptInfo" parameterType="BoardVO">
+		INSERT
+			INTO adopt ( adopt_id, pet_type, breed, sex, netuered, age,
+	                     phone, city, charge, bo_no)
+	            VALUES ( (SELECT TO_NUMBER(NVL(MAX(adopt_id),0))+1 bo_no FROM adopt),
+	                      #{petType}, #{breed}, #{sex}, #{netuered}, #{age},
+	                      #{phone}, #{city}, #{charge}, #{boNo} )
+	</insert>
+	
 	<!-- 게시글 삭제 -->
 	<delete id="delAdoptBoardAndReply" parameterType="int">
 		DELETE reply WHERE BO_NO = #{boNo} AND DIVISION = 'DR1'

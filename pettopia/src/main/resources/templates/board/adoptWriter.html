@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{../templates/layout}">
+<head>
+<title>Pettopia</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+    .ck-editor__editable {
+    min-height: 600px;
+    max-height: 300px;
+    }
+
+    .ck-editor__main{ 
+        min-height: 650px; 
+    }
+
+    .signUpFontColor {
+    color: rgb(233, 90, 168);
+    font-size: large;
+    }
+
+    a,
+    span,
+    label {
+    font-size: 15px;
+    }
+
+    .customInput {
+        display: inline-flex !important;
+        margin-bottom: 10px;
+        font-size: 13px !important;
+        height: 50px;
+        font-size: 20px;
+        width: 59%;
+        margin-right: 10px;
+        background-color: white !important;
+        border: 1px solid gray !important;
+    }
+
+    #btnStyle {
+    padding: 0 !important;
+    margin: 0px !important;
+    width: 70px;
+    height: 47px;
+    }
+
+    .formBtn {
+    width: 80px !important;
+    }
+
+    #writer{
+        height: 50px;
+        width: 29%;
+        background-color: white !important;
+        border: 1px solid gray !important;
+    }
+
+    select {
+        width: 40%;
+        height: 50px;
+        border-radius: 5px;
+    }
+
+    label{
+        font-weight: bold;
+        margin-top: 30px;
+        width: 100px;
+        margin-left: 10px;
+    }
+
+    .input_style{
+        width: 40% !important;
+        height: 50px;
+        border-radius: 5px !important;
+        background-color: white !important;
+        border: 1px solid gray !important;
+        display: inline-block !important;
+    }
+
+</style>
+<!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div id="container">
+        <div class="row">
+            <div class="bg0 p-t-100 p-b-85 m-lr-auto ">
+                <div class="col-lg-8 col-xl-10 m-lr-auto m-b-50 p-t-20 p-b-90 border">
+                    <h2>분양게시판</h2>
+                    <hr>
+                    <div class="input-group" style=" margin-top: 20px;">
+                        <h4 class="" id="" style="margin-right: 20px;">제목</h4>
+                        <input type="text" class="customInput" placeholder="제목을 입력해주세요" id="title">
+
+                        <h4 style="margin-right: 20px;">작성자</h4>
+                        <input type="text" id="writer" th:value="${id}" readonly>
+                    </div>
+
+                    <!--분양정보-->
+                    <div style="margin-bottom: 20px !important;">
+                    <!--<div style="display: inline-block; width: 40%;">-->
+                        <label>동물선택</label>
+                        <select onchange="category_Change(value)" id="step1" name="petType">
+                            <option value="">동물선택</option>
+                            <option th:each="balist : ${code.BA}"
+                                    th:value="${balist?.codCd}"
+                                    th:utext="${balist?.codTitle}" ></option>
+                        </select>
+                        
+                        <label>품종선택</label>
+                        <select id="step2">
+                            <option value="">품종선택</option>
+                        </select>
+                        
+                        <label>성별선택</label>
+                        <select id="se" name="sex">
+                            <option value="">성별선택</option>
+                            <option th:each="sxlist : ${code.SX}"
+                                    th:value="${sxlist?.codCd}" 
+                                    th:utext="${sxlist?.codTitle}"></option>
+                        </select>
+
+                        <label>중성화여부</label>
+                        <select id="st" name="netuered">
+                            <option value="">여부선택</option>
+                            <option th:each="ynlist : ${code.YN}"
+                                    th:value="${ynlist?.codCd}" 
+                                    th:utext="${ynlist?.codCd}"></option>
+                        </select>
+                        
+                        <label>나이</label> 
+                        <input type="number" id="age" name="age" class="input_style" autocomplete='off' min="0">
+
+                        <label>책임비</label>
+                        <input type="text" name="charge" id="charge" class="input_style" value="0" autocomplete='off'>
+
+                        <label>지역선택</label>
+                        <select id="ct" name="city">
+                            <option value="">지역선택</option>
+                            <option th:each="aalist : ${code.AA}"
+                                    th:value="${aalist?.codCd}" 
+                                    th:utext="${aalist?.codTitle}"></option>
+                        </select>
+
+                        <label>연락처</label>
+                        <input type="text" id="phone" name="phone" class="input_style" oninput="autoHyphen(this)" maxlength='13' autocomplete='off'>
+                    </div>
+
+                    <div id="editor"></div>
+                    <!--<div>
+                        <hr>
+                        <button onclick="showData()">담긴 데이터 보기(debug)</button>
+                    </div>-->
+                    <div class="form-group" style="position: absolute; left: 45%;">
+                        <button type="button" class="btn btnPush btnBlueGreen formBtn" id="" onclick="insertArticle()">작성</button>
+                        <button type="button" class="btn btnPush btnOrange formBtn" onclick="goBack()">뒤로가기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================ckeditor========================== -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+    <script type="text/javascript" src="CKeditorSuperBuild.js"></script>
+    <!-- ==========================ckeditor END======================= -->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
+    <script th:inline="javascript">
+        //뒤로가기
+        function goBack(){
+            window.history.back();
+        };
+
+        function showData() {
+            let Data = editor.getData();
+            console.log(Data);
+        }
+
+        function insertArticle() {
+            $.ajax({
+            url: "insertAdopt",
+            method: "POST",
+            async: false,
+            dataType: "JSON",
+            data: {
+                meId: GetUser(),
+                title: title.value,
+                subject: editor.getData(),
+                petType : step1.value,
+                breed : step2.value,
+                sex : se.value,
+                netuered : st.value,
+                age : age.value,
+                phone : phone.value,
+                city : ct.value,
+                charge : charge.value,
+            },
+            success: function (data) {
+                console.log(data);
+                alert("데이터 전송 완료");
+            },
+            error: function (reject) {
+                console.log(reject);
+                alert("에러");
+            },
+            })
+        };
+
+        function GetUser() {
+            let result = "";
+            $.ajax({
+            url: "getUser",
+            method: "GET",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                result = data;
+            },
+            error: function (reject) {
+                console.log(reject);
+                alert("유저호출에러");
+            },
+            })
+            return result;
+        };
+
+        //분양정보 동물->품종 select
+        function category_Change(val){
+            //2차 카테고리
+            // 강아지
+            var dg = ["품종선택"];
+            /*[# th:each="article, st : ${code.DG}"]*/
+            idx = /*[[${st.index}]]*/;
+            dg.push(/*[[${article.codTitle}]]*/);
+            /*[/]*/
+
+            // 고양이
+            var ct = ["품종선택"];
+            /*[# th:each="article, st : ${code.CT}"]*/
+            idx = /*[[${st.index}]]*/;
+            ct.push(/*[[${article.codTitle}]]*/);
+            /*[/]*/
+
+            var basic = ["품종선택"];
+            var val = "";
+            var select_item = $('#step1').val();
+
+            if(select_item == "DG"){    //강아지
+            val = [""];
+            change_item = dg;
+            /*[# th:each="article, st : ${code.DG}"]*/
+            idx = /*[[${st.index}]]*/;
+            val.push(/*[[${article.codCd}]]*/);
+            /*[/]*/
+            } else if(select_item == "CT") {  //고양이
+            val = [""];
+            change_item = ct;
+            /*[# th:each="article, st : ${code.CT}"]*/
+            idx = /*[[${st.index}]]*/;
+            val.push(/*[[${article.codCd}]]*/);
+            /*[/]*/
+            } else if(select_item == "") {
+            change_item = basic;
+            val = [""];
+            };
+
+            $('#step2').empty();  //선택된 엘리먼트의 내부 요소를 지운다.
+            for(var i = 0; i < change_item.length ; i++){
+            var option = $("<option value=" + val[i] + ">" + change_item[i] + "</option>");
+            $('#step2').append(option);
+            };
+        }; // end category_Change
+
+        //연락처 하이픈 삽입
+        const autoHyphen = (target) => {
+            target.value = target.value
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+        };
+
+        //금액 자동 콤마
+        const input = document.querySelector('#charge');
+            input.addEventListener('keyup', function(e) {
+            let value = e.target.value;
+            value = Number(value.replaceAll(',', ''));
+            if(isNaN(value)) {
+                input.value = 0;
+            }else {
+                const formatValue = value.toLocaleString('ko-KR');
+                input.value = formatValue;
+            }
+        });
+
+    </script>
+</div>
+
+</body>
+
+</html>

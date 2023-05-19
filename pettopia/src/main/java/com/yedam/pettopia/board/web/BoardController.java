@@ -175,6 +175,23 @@ public class BoardController {
 		return boardService.adoptMaxPage(petType, breed, sex, city);
 	};
 	
+	//분양게시판 글등록 페이지
+	@GetMapping("adoptWriter")
+	public String adoptWriter(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
+		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA", "YN"));
+		//												멍품종  냥품종   성별  분양상태  동물   지역  중성화여부
+		model.addAttribute("id", principal.getUser().getMeId());
+		return "board/adoptWriter";
+	}
+	
+	
+	//분양게시판 글등록
+	@PostMapping("insertAdopt")
+	@ResponseBody
+	public int insertAdopt(BoardVO vo) {
+		return boardService.insertAdoptArticle(vo);
+	}
+	
 	//분양게시판 단건조회
 	@GetMapping("adoptAticle")
 	public String adoptDetail(Model model, int boNo) {
@@ -191,6 +208,7 @@ public class BoardController {
 		return boardService.delAdopt(boNo, Uid);
 	};
 	
+	//분양게시판 게시글 수정페이지
 	@GetMapping("modAdopt")
 	public String modAdopt(Model model, int boNo) {
 		model.addAttribute("Article", boardService.adoptDetail(boNo));

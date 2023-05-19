@@ -114,8 +114,8 @@
                 <col width="10%">
                 <col width="15%">
                 <col width="10%">
-                <col width="10%">
-                <col width="24%">
+                <col width="11%">
+                <col width="23%">
                 <col width="8%">
                 <col width="8%">
                 <col width="15%">
@@ -236,34 +236,43 @@
           async: false,
           data		:  data, 
           success : (data)=>{
-            for(let i = 0; i < data.length ; i++){
-              
-              let status = data[i].status;
-              lists.innerHTML += `
-                  <tr>
-                    <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
-                    <td><img src="images/about-01.jpg"></td>
-                    <td>${data[i].petType}</td>
-                    <td>${data[i].breed}</td>
-                    <td>
-                      <div style="text-align: left;">
-                        <div style="margin-bottom: 10px;"><p style="font-size: 16px;">
-                          <a href="adoptAticle?boNo=${data[i].boNo}">${data[i].title}</a>
+            if(data != ""){
+              for(let i = 0; i < data.length ; i++){
+                let status = data[i].status;
+                lists.innerHTML += `
+                    <tr>
+                      <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
+                      <td><img src="images/about-01.jpg"></td>
+                      <td>${data[i].petType}</td>
+                      <td>${data[i].breed}</td>
+                      <td>
+                        <div style="text-align: left;">
+                          <div style="margin-bottom: 10px;"><p style="font-size: 16px;">
+                            <a href="adoptAticle?boNo=${data[i].boNo}">${data[i].title}</a>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>${data[i].sex}</td>
-                    <td>${data[i].city}</td>
-                    <td>${dateChange(data[i].regDt)}</td>`;
+                      </td>
+                      <td>${data[i].sex}</td>
+                      <td>${data[i].city}</td>
+                      <td>${dateChange(data[i].regDt)}</td>`;
 
-              if(status == "분양완료"){
-                $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
-              } else if(status == "분양중"){
-                $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
-              } else {
-                $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
-              }
+                if(status == "분양완료"){
+                  $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
+                } else if(status == "분양중"){
+                  $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
+                } else {
+                  $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
+                }
+              } 
+            } else {
+                lists.innerHTML = `
+                    <tr>
+                      <td colspan="8">
+                        <div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>
+                      </td>
+                    </tr>`;
             }
+
           },
           error : (err) => {
             console.log(err);
@@ -294,7 +303,7 @@
         if (Uid != "" && Uid != null) {
           console.log(GetUser())
           bt_warp.innerHTML = `<div style="margin:0 auto; display:inline-block;">
-                                  <button type="button" onclick="location.href='knowHowWriter'" class="btn btnPush btnBlueGreen customBtn">
+                                  <button type="button" onclick="location.href='adoptWriter'" class="btn btnPush btnBlueGreen customBtn">
                                     등록
                                   </button>
                               </div>`
