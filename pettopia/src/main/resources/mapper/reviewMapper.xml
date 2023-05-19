@@ -70,8 +70,8 @@
 		AND r.me_id = #{meId}
 		ORDER BY RE_NO DESC
 	</select>
-
-
+	
+		
 	<!-- 후기 등록 -->
 	<insert id="insertReview" parameterType="ReviewVO">
 		INSERT INTO review (
@@ -105,12 +105,17 @@
 	
 	
 	
-	
 	<!-- 후기 삭제 -->
 	<delete id="deleteReview" parameterType="int">
 		DELETE FROM review WHERE re_no=#{reNo}
 	</delete>
 
-
+	<!-- 작성한 후기 상세 -->
+	<select id="writtenDetail" resultType="ReviewVO">
+		SELECT contents, point
+		FROM review
+		WHERE re_no = #{reNo}
+	</select>
+	
 
 </mapper>
