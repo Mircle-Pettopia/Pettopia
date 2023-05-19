@@ -2,6 +2,8 @@ package com.yedam.pettopia.admin;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +12,7 @@ public class QnaMagVO {
 	private int qstNo;
 	private String meId;
 	private String title;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date regDt;
 	private String qstImg;
 	private String prdtId;
@@ -26,4 +29,9 @@ public class QnaMagVO {
 	private String division; 
 	private int boNo;
 	private int re;
+	
+	//검색
+	private String[] searchQstSt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDt;
 }

@@ -1,6 +1,8 @@
 package com.yedam.pettopia.admin.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +40,43 @@ public class QnaMagController {
 	// QnA 답변 등록
 	@PostMapping("qnaAnswer")
 	@ResponseBody
-	public String qnaAnswer(QnaMagVO vo) {
-		System.out.println("여기 출력 " + vo);
+	public Map<String, Object> qnaAnswer(QnaMagVO vo) {
 		qnaMagService.insertQnaReply(vo);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("answerList", qnaMagService.selectAnswerList(vo));
+		map.put("qnaList", qnaMagService.selectQnaList(vo));
+		map.put("cnt", qnaMagService.qstStCnt());
+		return map;
+	}
+	
+	// 내가 쓴 답글 조회
+	@GetMapping("selectAnswer")
+	@ResponseBody
+	public List<QnaMagVO> selectAnswer(QnaMagVO vo){
+		return qnaMagService.selectAnswerList(vo);
+	}
+	
+	// 댓글 삭제
+	@PostMapping("delComment")
+	@ResponseBody
+	public String deleteComment(QnaMagVO vo) {
+		qnaMagService.deleteComment(vo);
 		return "success";
+	}
+	
+	// 댓글 수정
+	@PostMapping("updComment")
+	@ResponseBody
+	public String updateComment(QnaMagVO vo) {
+		qnaMagService.updateComment(vo);
+		return "success";
+	}
+	
+	// 검색
+	@GetMapping("searchQna")
+	@ResponseBody
+	public List<QnaMagVO> searchQna(QnaMagVO vo){
+		return qnaMagService.searchQnaList(vo);
 	}
 }

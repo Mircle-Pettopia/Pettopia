@@ -33,6 +33,39 @@ public class QnaMagServiceImpl implements QnaMagService {
 
 	@Override
 	public int insertQnaReply(QnaMagVO vo) {
-		return qnaMagMapper.insertQnaReply(vo);
+		int result = qnaMagMapper.insertQnaReply(vo);
+		if(result == 1) {
+			int qstNo = vo.getBoNo();
+			vo.setQstNo(qstNo);
+			qnaMagMapper.updateQstSt(vo);
+		} else {
+			return 0;
+		}
+		return result;
+	}
+
+	@Override
+	public List<QnaMagVO> selectAnswerList(QnaMagVO vo) {
+		return qnaMagMapper.selectAnswerList(vo);
+	}
+
+	@Override
+	public QnaMagVO selectQnaList(QnaMagVO vo) {
+		return qnaMagMapper.selectQnaList(vo);
+	}
+
+	@Override
+	public int deleteComment(QnaMagVO vo) {
+		return qnaMagMapper.deleteComment(vo);
+	}
+
+	@Override
+	public int updateComment(QnaMagVO vo) {
+		return qnaMagMapper.updateComment(vo);
+	}
+
+	@Override
+	public List<QnaMagVO> searchQnaList(QnaMagVO vo) {
+		return qnaMagMapper.searchQnaList(vo);
 	}
 }
