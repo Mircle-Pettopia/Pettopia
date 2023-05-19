@@ -58,4 +58,11 @@ ReviewService reviewService;
 	    reviewService.deleteReview(reviewNo);
 	    return "redirect:/writtenList";
 	}
+	
+	//후기 상세
+	@GetMapping("writtenDetail")
+	@ResponseBody
+	public ReviewVO writtenDetail(ReviewVO reviewVO){
+		return reviewService.writtenDetail(reviewVO);
+	}
 }

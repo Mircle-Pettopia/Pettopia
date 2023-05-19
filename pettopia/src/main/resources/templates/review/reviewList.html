@@ -180,7 +180,7 @@ td, tr, th {
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body">
+					<div class="modal-body" style="height: 400px; overflow-y: auto;">
 						<!-- 후기 등록 폼 -->
 						<form class="mb-3" name="myform" id="myform" method="post">
 							<fieldset>
@@ -274,7 +274,8 @@ td, tr, th {
 			
 			function resetForm() {
 				  document.getElementById("myform").reset();
-				  CKEDITOR.instances.editor.setData("");
+				  var editor = CKEDITOR.instances.editor;
+				  editor.setData(""); // 에디터 내용을 비웁니다.
 				}
 		</script>
 	</div>

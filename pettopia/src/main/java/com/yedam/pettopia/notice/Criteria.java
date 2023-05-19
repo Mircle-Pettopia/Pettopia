@@ -20,7 +20,14 @@ public class Criteria {
 		this.pageNo = pageNo;
 		this.amount = amount;
 	}
+	
+	public String Keyword() {
+		return keyword;
+	}
 
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
 
 
 	}

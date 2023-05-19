@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.yedam.pettopia.review.ReviewVO;
 import com.yedam.pettopia.review.mapper.ReviewMapper;
 import com.yedam.pettopia.review.service.ReviewService;
@@ -26,6 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
 	public int insertReview(ReviewVO reviewVO) {
 		return reviewMapper.insertReview(reviewVO);
 	}
+
 	
 	//내가 작성한 후기 리스트
 	@Override
@@ -47,6 +47,10 @@ public class ReviewServiceImpl implements ReviewService {
 		
 	}
 
+	@Override
+	public ReviewVO writtenDetail(ReviewVO reviewVO) {
+		return reviewMapper.writtenDetail(reviewVO);
+	}
 
 
 
