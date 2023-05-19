@@ -13,5 +13,13 @@ public interface ReviewService {
 	public int insertReview(ReviewVO reviewVO);
 	
 	//내가 작성한 리뷰 리스트
-	public List<ReviewVO> selectWrittenList();
+	public List<ReviewVO> selectWrittenList(String meId);
+	
+	//후기 수정
+	public void updateReview(ReviewVO reviewVO);
+	
+	//후기 삭제
+	public void deleteReview(int reNo);
 }
+
+

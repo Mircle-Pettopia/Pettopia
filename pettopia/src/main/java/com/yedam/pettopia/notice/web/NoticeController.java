@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yedam.pettopia.notice.Criteria;
 import com.yedam.pettopia.notice.NoticeVO;
@@ -15,7 +14,6 @@ import com.yedam.pettopia.notice.PageVO;
 import com.yedam.pettopia.notice.service.NoticeService;
 
 /*
- * 김무준 5/10
  * 공지사항
  */
 @Controller
@@ -54,6 +52,7 @@ public class NoticeController {
 		noticeService.insertNotice(noticeVO);
 		return "redirect:noticeList";
 	}
+	
 	//공지사항 수정 페이지
 	@GetMapping("noticeUpdateForm")
 	public String noticeUpdateForm(Model model, NoticeVO noticeVO) {
@@ -68,8 +67,9 @@ public class NoticeController {
 	}
 	//공지사항 삭제 처리
 	@GetMapping("noticeDelete/{noNo}")
-	private String noticeDelete(@PathVariable int noNo) {
-		noticeService.deleteNotice(noNo);
-		return "redirect:noticeList";
+	private String noticeDelete(@PathVariable String noNo) {
+	    int noticeNo = Integer.parseInt(noNo);
+	    noticeService.deleteNotice(noticeNo);
+	    return "redirect:/noticeList";
 	}
 }

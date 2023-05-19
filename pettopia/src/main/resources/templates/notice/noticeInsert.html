@@ -64,6 +64,7 @@
 							<dl>
 								<dt>제목</dt>
 								<dd>
+									<input type="hidden" name="meId" th:value="*{meId}">
 									<input type="text" placeholder="제목 입력" id="title"
 										th:field="*{title}" required>
 								</dd>
@@ -83,7 +84,7 @@
 						</div>
 					</div>
 					<div class="bt_wrap">
-						<button type="submit" class="btn btnPush btnBlueGreen" style="">등록</button>
+						<a><button type="submit" class="btn btnPush btnBlueGreen">등록</button></a>
 						<a href="javascript:window.history.back();"><button
 								type="button" class="btn btnPush btnRed">취소</button></a>
 					</div>

@@ -68,7 +68,7 @@
 						</button>
 						<input class="form-control" type="text" name="keyword" id="keyword"
 							th:value="${pageMaker.cri.keyword}"
-							style="width: 200px; float: right;">
+							style="width: 200px; float: right;margin-top: 9px;">
 					</div>
 				</div>
 
@@ -88,14 +88,15 @@
 							<div th:each=" notice : ${noticeList}">
 								<div class="num" th:text="${notice.noNo }"></div>
 								<div class="title">
+								<input type="hidden" name="meId" th:value="${notice.meId}">
 									<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title
 										}]]</a>
 								</div>
 								<div class="date">[[ ${#dates.format(notice.rDate,
 									'yyyy-MM-dd HH-mm')}]]</div>
 								<div class="count">[[${notice.viewCnt }]]</div>
-							</div>
-
+						
+	</div>
 							<div sec:authorize="hasAuthority('ROLE_ADMIN')">
 								<a href="noticeInsertForm">
 								<button type="button" class="btn btnPush btnBlueGreen" style="float: right; font-size: 13px;">등록</button></a>
@@ -187,6 +188,8 @@
 					$("#moveForm").find("input[name='keyword']").val(val);
 					moveForm.submit();
 				});
+				
+				
 			</script>
 			<!--===============================================================================================-->
 			<script src="js/main.js"></script>
