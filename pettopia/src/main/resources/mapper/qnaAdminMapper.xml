@@ -62,4 +62,98 @@
 							 )
 	
 	</insert>
+	
+	<!-- 내가 쓴 답변 조회 -->
+	<select id="selectAnswerList" resultType="QnaMagVO">
+		SELECT	comment_id,
+				me_id,
+				subject,
+				reg_dt,
+				division,
+				bo_no
+		FROM	reply
+		WHERE	division = 'DR3'
+		AND		bo_no = #{boNo}
+		ORDER BY comment_id
+	</select>
+	
+	<!-- 답변 완료 상태 변경 -->
+	<update id="updateQstSt" parameterType="QnaMagVO">
+		UPDATE 	qna
+		SET		qst_status = 'QS2'
+		WHERE	qst_no = #{qstNo}
+	</update>
+	
+	<!-- QnA 단건조회 -->
+	<select id="selectQnaList" resultType="QnaMagVO">
+		SELECT	q.qst_no,
+				q.me_id,
+				q.title,
+				q.reg_dt,
+				q.qst_img,
+				q.prdt_id,
+				get_common(q.qst_status) qstStatus,
+				q.qst_yn,
+				q.content,
+				m.name,
+				p.prdt_nm
+		FROM 	qna q 
+		JOIN 	member m
+		ON 		q.me_id = m.me_id
+		JOIN    product p
+		ON      q.prdt_id = p.prdt_id
+		WHERE	qst_no = #{qstNo}
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="QnaMagVO">
+		DELETE FROM reply
+		WHERE comment_id = #{commentId}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="QnaMagVO">
+		UPDATE 	reply
+		SET		subject = #{subject},
+				reg_dt = sysdate
+		WHERE	comment_id = #{commentId}
+	</update>
+	
+	<!-- 검색 조회 -->
+	<select id="searchQnaList" resultType="QnaMagVO">
+		SELECT	q.qst_no,
+				q.me_id,
+				q.title,
+				q.reg_dt,
+				q.qst_img,
+				q.prdt_id,
+				get_common(q.qst_status) qstStatus,
+				q.qst_yn,
+				q.content,
+				m.name,
+				p.prdt_nm
+		FROM 	qna q 
+		JOIN 	member m
+		ON 		q.me_id = m.me_id
+		JOIN    product p
+		ON      q.prdt_id = p.prdt_id
+		<where>
+			<if test="name != null and !name.equals('')">
+				AND m.name LIKE '%' || #{name} || '%'
+			</if>
+			<if test="prdtNm != null and !prdtNm.equals('')">
+				AND p.prdt_nm LIKE '%' || #{prdtNm} || '%'
+			</if>
+			<if test="regDt != null and !regDt.equals('')">
+				AND <![CDATA[q.reg_dt >= #{regDt}]]> and <![CDATA[TRUNC(q.reg_dt) <= #{endDt}]]>
+			</if>
+			<if test="searchQstSt != null and searchQstSt.length > 0">
+    			AND q.qst_status IN
+    			<foreach collection="searchQstSt" item="item" open="(" separator="," close=")">
+        			#{item}
+    			</foreach>
+			</if>
+		</where>
+		ORDER BY q.qst_no
+	</select>
 </mapper>

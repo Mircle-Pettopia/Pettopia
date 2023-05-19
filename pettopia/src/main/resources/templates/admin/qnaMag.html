@@ -6,10 +6,17 @@
 >
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pettopia</title>
     <style>
       .thColor th {
         background-color: #f6f6f6;
+      }
+      .highlight {
+        font-weight: bold;
+        color: red;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -30,7 +37,7 @@
                       <td>답변대기</td>
                       <td>답변완료</td>
                     </tr>
-                    <tr class="text-center">
+                    <tr class="text-center" id="currentSt">
                       <td class="text-primary text-decoration-underline fs-3">
                         <span th:text="${cnt.qstStCnt1}">0</span>개
                       </td>
@@ -44,14 +51,14 @@
                 <table class="table table-borderless mt-5">
                   <tbody>
                     <tr>
-                      <th class="text-center col-sm-1" scope="row">문의자</th>
+                      <th class="text-center col-sm-1" scope="row">작성자</th>
                       <td class="col-sm-4">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="name" />
                       </td>
 
                       <th class="text-center col-sm-1" scope="row">상품명</th>
                       <td class="col-sm-4">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="prdtNm" />
                       </td>
                     </tr>
                     <tr>
@@ -192,13 +199,42 @@
                 </table>
                 <hr />
                 <div class="my-4">
-                  <h4>QnA 답변</h4>
-                  <textarea
-                    class="form-control"
-                    id="detailAns"
-                    cols="60"
-                    rows="5"
-                  ></textarea>
+                  <div id="app">
+                    <h4>
+                      <span
+                        @click="answer = true"
+                        :class="{ 'highlight': answer }"
+                        style="cursor: pointer"
+                        >답변 쓰기</span
+                      >
+                      /
+                      <span
+                        @click="answer = false"
+                        :class="{ 'highlight': !answer }"
+                        style="cursor: pointer"
+                        >내 답변</span
+                      >
+                    </h4>
+                    <div v-show="answer">
+                      <button
+                        type="button"
+                        class="btn btn-success float-end my-2"
+                        id="insertBtn"
+                      >
+                        작성
+                      </button>
+                      <textarea
+                        class="form-control"
+                        id="detailAns"
+                        cols="60"
+                        rows="5"
+                        placeholder="입력해주세요"
+                      ></textarea>
+                    </div>
+                    <div v-show="!answer">
+                      <div id="replys"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -210,14 +246,33 @@
               >
                 닫기
               </button>
-              <button type="button" class="btn btn-primary" id="insertBtn">
-                등록
-              </button>
             </div>
           </div>
         </div>
       </div>
       <script>
+        // Vue
+        const app = Vue.createApp({
+          data() {
+            return {
+              answer: true,
+              isCurrentUser: false,
+            };
+          },
+          methods: {
+            setAnswer(value) {
+              this.answer = value;
+            },
+          },
+          mounted() {
+            const currentUser = GetUser();
+            const writer = "작성자 아이디";
+            this.isCurrentUser = currentUser === writer;
+          },
+        });
+
+        const vm = app.mount("#app");
+
         const Grid = tui.Grid;
 
         // 상품 관리 리스트(그리드)
@@ -279,23 +334,27 @@
         });
 
         // qna 리스트
-        $.ajax({
-          url: "qnaList",
-          success: function (data) {
-            qnaList.resetData(data);
-          },
-          error: function (reject) {
-            console.log(reject);
-          },
-        });
+        function qnaListAjax() {
+          $.ajax({
+            url: "qnaList",
+            success: function (data) {
+              qnaList.resetData(data);
+            },
+            error: function (reject) {
+              console.log(reject);
+            },
+          });
+        }
+        qnaListAjax();
 
         $(document).ready(function () {
           let qstNo;
+          let rowKey;
           // 더블클릭시 상세 조회
           qnaList.on("dblclick", (e) => {
             let rowData = qnaList.getRow(e.rowKey);
-            console.log(rowData);
             qstNo = rowData.qstNo;
+            rowKey = rowData.rowKey;
             $("#detailPrdtId").text(rowData.prdtId);
             $("#detailPrdtNm").text(rowData.prdtNm);
             $("#detailName").text(rowData.name);
@@ -305,12 +364,26 @@
               .css("width", "400px");
             $("#detailContent").val(rowData.content);
 
+            // 내가 쓴 답글 조회
+            $.ajax({
+              url: "selectAnswer",
+              data: { boNo: qstNo },
+              success: function (result) {
+                $("#replys").empty();
+                result.forEach(function (value) {
+                  comment(value);
+                });
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+
             $("#detailModal").modal("show");
           });
 
-          // 답변 등록
+          // 답변 작성
           $(document).on("click", "#insertBtn", function () {
-            console.log("클릭");
             let subject = $("#detailAns").val();
 
             if ($("#detailAns").val() === "") {
@@ -321,10 +394,9 @@
               });
               return;
             }
-            let meId = "admin";
-            console.log(qstNo);
+            let meId = GetUser();
             Swal.fire({
-              title: "등록하시겠습니까?",
+              title: "작성 하시겠습니까?",
               icon: "question",
               showCancelButton: true,
               confirmButtonColor: "#3085d6",
@@ -336,9 +408,26 @@
                 $.ajax({
                   url: "qnaAnswer",
                   method: "post",
-                  data: { meId: meId, subject: subject, boNo: qstNo },
+                  data: {
+                    meId: meId,
+                    subject: subject,
+                    boNo: qstNo,
+                    qstNo: qstNo,
+                  },
                   success: function (result) {
-                    console.log(result);
+                    $("#replys").empty();
+                    result.answerList.forEach(function (value) {
+                      comment(value);
+                    });
+                    vm.setAnswer(false);
+                    $("#detailAns").val("");
+                    qnaList.setRow(rowKey, result.qnaList);
+                    $("#currentSt td:first-child span").text(
+                      result.cnt.qstStCnt1
+                    );
+                    $("#currentSt td:last-child span").text(
+                      result.cnt.qstStCnt2
+                    );
                   },
                   error: function (reject) {
                     console.log(reject);
@@ -347,6 +436,145 @@
               }
             });
           });
+
+          // 수정 누르면 textarea로 바뀜
+          $(document).on("click", ".changeBtn", function (e) {
+            let btn = $(e.target);
+            btn.removeClass("changeBtn").addClass("updBtn");
+            btn.text("수정 완료");
+
+            let parentDiv = btn.closest("div");
+            let text = parentDiv.find(".Viewer").text();
+
+            let textarea = $("<textarea>")
+              .addClass("form-control")
+              .val(text)
+              .attr("rows", "5")
+              .attr("placeholder", "수정 내용을 입력해주세요");
+
+            parentDiv.find(".Viewer").replaceWith(textarea);
+          });
+
+          // 수정 버튼
+          $(document).on("click", ".updBtn", function (e) {
+            let subject = $(this).closest("div").find("textarea").val();
+            let commentId = $(this).closest("div").find(".commentId").val();
+
+            $.ajax({
+              url: "updComment",
+              method: "post",
+              data: { commentId: commentId, subject: subject },
+              success: function (result) {
+                if (result === "success") {
+                  let btn = $(e.target);
+                  btn.removeClass("updBtn").addClass("changeBtn");
+                  btn.text("수정");
+
+                  let parentDiv = btn.closest("div");
+                  let textarea = parentDiv.find("textarea");
+
+                  let text = textarea.val();
+                  let viewer = $("<div>").addClass("Viewer").text(text);
+
+                  textarea.replaceWith(viewer);
+
+                  Swal.fire({
+                    icon: "success",
+                    title: "수정 되었습니다.",
+                  });
+                }
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+
+          //삭제버튼
+          $(document).on("click", ".delBtn", function (e) {
+            let div = e.target.closest("div");
+            let commentId = $(this).closest("div").find(".commentId").val();
+
+            $.ajax({
+              url: "delComment",
+              method: "post",
+              data: { commentId: commentId },
+              success: function (result) {
+                if (result === "success") {
+                  div.remove();
+                  Swal.fire({
+                    icon: "success",
+                    title: "삭제 되었습니다.",
+                  });
+                }
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+
+          // 검색기능
+          $(document).on("click", "#searchBtn", function () {
+            let name = $("#name").val();
+            let prdtNm = $("#prdtNm").val();
+            let startDate = $("#startDate").val();
+            let endDate = $("#endDate").val();
+            let qstSt = [];
+            $("#qstStTable input:checkbox[name=chk]:checked").map(function () {
+              qstSt.push($(this).val());
+            });
+
+            console.log(name);
+            console.log(prdtNm);
+            console.log(startDate);
+            console.log(endDate);
+            console.log(qstSt);
+
+            $.ajax({
+              url: "searchQna",
+              data: {
+                name: name,
+                prdtNm: prdtNm,
+                regDt: startDate,
+                endDt: endDate,
+                searchQstSt: qstSt,
+              },
+              success: function (result) {
+                qnaList.resetData(result);
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
+          });
+
+          // 초기화
+          $(document).on("click", "#resetBtn", function () {
+            let name = $("#name").val("");
+            let prdtNm = $("#prdtNm").val("");
+            let startDate = $("#startDate").val("");
+            let endDate = $("#endDate").val("");
+            $("#qstStTable input:checkbox[name=chk]:checked").prop(
+              "checked",
+              false
+            );
+            $("#selectAll:checked").prop("checked", false);
+
+            qnaListAjax();
+          });
+
+          // 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
+          $("#name, #prdtNm, #startDate, #endDate").on(
+            "keypress",
+            function (event) {
+              if (event.which === 13) {
+                event.preventDefault();
+                $("#searchBtn").click();
+              }
+            }
+          );
+
           //엑셀버튼 클릭 이벤트
           const options = {
             includeHiddenColumns: true,
@@ -391,6 +619,79 @@
           });
         });
 
+        // 내 답변 출력
+        function comment(value) {
+          // HTML 요소를 동적으로 생성
+          let div = $("<div>").addClass("mb-4 px-4 py-3 border");
+          let h6 = $("<h6>");
+          let input = $("<input>")
+            .val(value.commentId)
+            .addClass("commentId")
+            .css("display", "none");
+          div.append(input);
+
+          // 작성자 정보 추가
+          let spanAuthor = $("<span>").text("작성자: " + value.meId);
+          h6.append(spanAuthor);
+
+          // 작성일 정보 추가
+          let spanDate = $("<span>").text(
+            " / 작성일: " + formattedDateToast(value.regDt)
+          );
+          h6.append(spanDate);
+
+          // 삭제 버튼 추가
+          let spanDelete = $("<span>")
+            .addClass("float-end")
+            .addClass("delBtn")
+            .text("| 삭제")
+            .css("cursor", "pointer");
+          h6.append(spanDelete);
+
+          // 수정 버튼 추가
+          let spanEdit = $("<span>")
+            .addClass("float-end")
+            .addClass("changeBtn")
+            .text("수정 |")
+            .css("cursor", "pointer");
+          h6.append(spanEdit);
+          div.append(h6);
+
+          // hr 요소 추가
+          let hr = $("<hr>");
+          div.append(hr);
+
+          // 내용 추가
+          let divViewer = $("<div>").addClass("Viewer").text(value.subject);
+          div.append(divViewer);
+
+          // 생성한 HTML 요소를 적절한 위치에 추가
+          $("#replys").append(div);
+        }
+        // 날짜 변환(댓글)
+        function formattedDateToast(timestamp) {
+          let date = new Date(timestamp);
+          let year = date.getFullYear();
+          let month = String(date.getMonth() + 1).padStart(2, "0");
+          let day = String(date.getDate()).padStart(2, "0");
+          let hours = String(date.getHours()).padStart(2, "0");
+          let minutes = String(date.getMinutes()).padStart(2, "0");
+          let seconds = String(date.getSeconds()).padStart(2, "0");
+          let formattedDate =
+            year +
+            "-" +
+            month +
+            "-" +
+            day +
+            " " +
+            hours +
+            ":" +
+            minutes +
+            ":" +
+            seconds;
+          return formattedDate;
+        }
+
         // 날짜 변환
         function formattedDate(timestamp) {
           let date = new Date(timestamp);
@@ -399,6 +700,23 @@
           let day = String(date.getDate()).padStart(2, "0");
           let formattedDate = year + "-" + month + "-" + day;
           return formattedDate;
+        }
+
+        // 로그인 아이디 불러오기
+        function GetUser() {
+          $.ajax({
+            url: "getUser",
+            method: "GET",
+            async: false,
+            success: function (data) {
+              result = data;
+            },
+            error: function (reject) {
+              console.log(reject);
+              result = null;
+            },
+          });
+          return result;
         }
       </script>
     </div>
