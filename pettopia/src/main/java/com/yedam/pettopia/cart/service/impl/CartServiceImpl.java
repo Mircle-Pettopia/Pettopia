@@ -47,8 +47,11 @@ public class CartServiceImpl implements CartService {
 			}
 			//제품 옵션 넣기
 			//옵션은 어차피 모든줄 들어가야되서 중복거르지 않는다. 다만, 주문디테일 키값을 담아서 insert해준다
+			
 			orderList.get(i).setOrdtId(ordtId);
+			if(orderList.get(i).getOptDetaId()!=null) {
 			cartMapper.insertOrderOption(orderList.get(i));
+			}
 		}
 		
 		

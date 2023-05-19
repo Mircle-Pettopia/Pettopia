@@ -16,8 +16,22 @@ public class DashboardServiceImpl implements DashboardService {
 	DashboardMapper dashboardMapper;
 
 	@Override
-	public List<DashBoardVO> saleChart() {
+	public List<DashBoardVO> saleChart(DashBoardVO vo) {
 		// TODO Auto-generated method stub
-		return dashboardMapper.saleChart();
+		System.out.println(vo+"테스트");
+		return dashboardMapper.saleChart(vo);
 	}
+
+	@Override
+	public List<DashBoardVO> categoryChart() {
+		// TODO Auto-generated method stub
+		return dashboardMapper.categoryChart();
+	}
+
+	@Override
+	public List<DashBoardVO> memberChart() {
+		// TODO Auto-generated method stub
+		return dashboardMapper.memberChart();
+	}
+	
 }

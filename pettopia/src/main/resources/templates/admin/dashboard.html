@@ -9,46 +9,88 @@
 
 <body>
   <div layout:fragment="content">
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">대시보드</h5>
-              <div class="col-lg-12">
-                <div id="chart_div" style="width: 100%; height: 500px"></div>
-                <div id="chart_div2" style="width: 100%; height: 500px"></div>
+    <div id="app">
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">대시보드</h5>
+                <div class="row">
+                  <div class="col-lg-8">
+                    <h4>기간별 주문건/판매액</h4>
+                  </div>
+                  <div class="col-lg-4">
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="d-flex align-items-center">
+                      <input type="date" class="form-control mr-2" id="startDate">
+                      <span class="mx-2">~</span>
+                      <input type="date" class="form-control ml-2" id="endDate">
+                    </div>
+                  </div>
+                  <div class="col-lg-2">
+                    <button type="button" class="btn btn-primary" id="searchBtn"
+                      onclick="SaleChart.updateOptions(getSaleChart(), true)">
+                      검색
+                    </button><button type="button" class="btn btn-secondary" id="resetBtn"
+                      onclick="resetTime();SaleChart.updateOptions(getSaleChart(), true)">
+                      초기화
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-8">
+                    <div id="SaleChart">
+                      <apexchart type="line" height="200" :options="chartOptions" :series="series"></apexchart>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <h2>카테고리별 판매량</h2>
+                    <div id="CategoryChart">
+                      <apexchart type="pie" height="200" :options="chartOptions" :series="series"></apexchart>
+                    </div>
+                    <h2>가입/탈퇴 유저현황</h2>
+                    <div id="UserChart">
+                      <apexchart type="pie" height="200" :options="chartOptions" :series="series"></apexchart>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+      </section>
+    </div>
+
+
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript">
-      google.charts.load('current', { 'packages': ['corechart'] });
-      google.charts.setOnLoadCallback(drawChart);
+      resetTime();
+      var SaleChart = new ApexCharts(document.querySelector("#SaleChart"), getSaleChart());
+      SaleChart.render();
+      var CategoryChart = new ApexCharts(document.querySelector("#CategoryChart"), getCategoryChart());
+      CategoryChart.render();
+      var UserChart = new ApexCharts(document.querySelector("#UserChart"), getUserChart());
+      UserChart.render();
 
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2013', 1000, 400],
-          ['2014', 1170, 460],
-          ['2015', 660, 1120],
-          ['2016', 1030, 540]
-        ]);
+      function resetTime() {
+        let today = new Date();
 
-        var options = {
-          title: 'Company Performance',
-          hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
-          vAxis: { minValue: 0 }
-        };
-
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        var chart2 = new google.visualization.AreaChart(document.getElementById('chart_div2'));
-        chart.draw(formater(getSaleChart(), 'sales'), options);
-        chart2.draw(formater(getSaleChart(), 'profit'), options);
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1;  // 월
+        let date = today.getDate();  // 날짜
+        endDate.value = formattedDate(today);
+        // let data = year + '/' + month + '/' + date;
+        let aMonthAgo = today.setMonth(today.getMonth() - 1);
+        startDate.value = formattedDate(aMonthAgo);
+        console.log(startDate.value)
       }
 
 
@@ -60,10 +102,29 @@
           url: "saleChart",
           dataType: "json",
           method: "GET",
+          data: { stDate: startDate.value, endDate: endDate.value },
           async: false,
           success: function (data) {
             console.log(data);
-            result = data;
+            result = SaleChartformater(data);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        })
+        return result;
+      }
+      getCategoryChart();
+      function getCategoryChart() {
+        let result = new Object();
+        $.ajax({
+          url: "categoryChart",
+          dataType: "json",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = CategoryChartformater(data);
           },
           error: function (reject) {
             console.log(reject);
@@ -72,22 +133,146 @@
         return result;
       }
 
-      function formater(data, col) {
-        let result = [];
-        if (col == 'sales') {
-          result.push(['date', 'sales']);
-          for (let i = 0; i < data.length; i++) {
-            result.push([data[i].oddt, data[i].cnt * 1])
-          }
-        }
-        else if (col == 'profit') {
-          result.push(['date', 'profit']);
-          for (let i = 0; i < data.length; i++) {
-            result.push([data[i].oddt, data[i].sum * 1])
-          }
-        }
-        return google.visualization.arrayToDataTable(result);
+      function getUserChart() {
+        let result = new Object();
+        $.ajax({
+          url: "memberChart",
+          dataType: "json",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = UserChartformater(data);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        })
+        return result;
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //======================포매터=================
+      function SaleChartformater(data) {
+        let result = new Object();
+
+        result = {
+          chart: {
+            type: 'area',
+          },
+          series: [
+            {
+              name: '주문건수',
+              data: data.map(row => row.cnt)
+            },
+            {
+              name: '판매액',
+              data: data.map(row => row.sum)
+            },
+          ],
+          yaxis: [
+            {
+              title: {
+                text: '주문건수'
+              }
+            },
+            {
+              opposite: true,
+              title: {
+                text: '판매액'
+              }
+            }
+          ],
+          xaxis: {
+            categories: data.map(row => row.oddt)
+          }
+        }
+        console.log(result);
+        return result;
+      }
+
+      function formattedDate(timestamp) {
+        let date = new Date(timestamp);
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, "0");
+        let day = String(date.getDate()).padStart(2, "0");
+        let formattedDate = year + "-" + month + "-" + day;
+        return formattedDate;
+      }
+
+      function CategoryChartformater(data) {
+        console.log(data);
+        let result = new Object();
+        result = {
+          series: data.map(row => row.cnt * 1),
+          chart: {
+            type: 'pie',
+          },
+          labels: data.map(row => row.lcatNm + " " + row.scatNm),
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }]
+        }
+        console.log(result);
+        return result;
+      }
+
+      function UserChartformater(data) {
+        console.log(data);
+        let result = new Object();
+        result = {
+          series: data.map(row => row.cnt * 1),
+          chart: {
+            type: 'donut',
+          },
+          labels: data.map(row => (row.outYn == 'N' ? '가입한 유저' : '탈퇴한 유저')),
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }]
+        }
+        console.log(result);
+        return result;
+      }
+      //=================================================================
     </script>
   </div>
 </body>
