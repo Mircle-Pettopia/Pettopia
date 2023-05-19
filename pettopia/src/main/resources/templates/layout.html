@@ -92,18 +92,9 @@
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="right-top-bar flex-w h-full">
 					</div>
-
-
-					<!-- ============================================레거시 코드============================================ -->
 					<div class="right-top-bar flex-w h-full" id="LoginHeader">
-						테스팅
+
 					</div>
-					<!--로그인이 되어있지 않을 때-->
-					<!-- <div th:if="${#strings.isEmpty(id)}" class="right-top-bar flex-w h-full">
-						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
-						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
-					</div> -->
-					<!-- ============================================레거시 코드끝============================================ -->
 				</div>
 			</div>
 			<div class="wrap-menu-desktop" style="background-color: white;">
@@ -141,7 +132,11 @@
 							<li class="menu">
 								<a href="noticeList" class="noonnu_font">공지사항</a>
 							</li>
-
+							<!-- =================================영주추가함======================= -->
+							<li class="menu">
+								<button class="noonnu_font"
+									onclick="document.getElementById('id01').style.display='block'">재미난것들(예정?)</button>
+							</li>
 							<!--<li>
 								<a href="about.html" class="menu">About</a>
 								<ul class="sub-menu">
@@ -216,9 +211,9 @@
 						</div>
 						<div>
 							운영시간 AM09:00 ~ PM17:00
-							<br/>
+							<br />
 							점심시간 PM12:00 ~ PM13:00
-							<br/>
+							<br />
 							주말 및 공휴일은 휴무입니다.
 						</div>
 					</div>
@@ -261,7 +256,7 @@
 							</li>
 						</ul>
 					</div>
-					
+
 				</div>
 
 				<div class="col-sm-6 col-lg-3 p-b-50">
@@ -388,7 +383,32 @@
 
 
 	<!-- 여기서부턴 영주작업중 -->
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!-- 뷰넣음 -->
+	<!-- =================모달임========-->
+	<!-- The Modal -->
+	<div id="id01" class="w3-modal">
+		<div class="w3-modal-content">
+			<div class="w3-container">
+				<span onclick="document.getElementById('id01').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+				<p>Some text. Some text. Some text.</p>
+			</div>
+		</div>
+	</div>
+	<!--  ===========   -->
+
 	<script>
+
 
 		function GetUser() { //사용자ID가져오는 함수 컨트롤러는 Cart에있음
 			$.ajax({

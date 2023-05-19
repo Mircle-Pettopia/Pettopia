@@ -136,6 +136,11 @@ public class BoardController {
 	public int delKnowHowReply(int commentId) {
 		return boardService.delKnowHowReply(commentId);
 	}
+	@GetMapping("ageComp")
+	public String ageComp() {
+		return "fun/ageComp";	
+	}
+	
 	
 	//---------------------------------------------------
 	//분양게시판페이지

@@ -3,13 +3,31 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.pettopia.admin.mapper.DashboardMapper">
-<select id="saleChart" resultType="DashBoardVO">
+<select id="saleChart" resultType="DashBoardVO" parameterType="DashBoardVO">
 	select 
-    to_char(ORDR_DATE,'YY/MM/DD') ODDT ,count(*)CNT,SUM(TT_PRC-SHIP_PRC)SUM
+    to_char(ORDR_DATE,'YYYY-MM-DD') ODDT ,count(*)CNT,SUM(TT_PRC-SHIP_PRC)SUM
 	FROM order_Header 
-	where to_char(ORDR_DATE,'YY/MM/DD') between '23/05/01'AND '23/05/30'
-	group by to_char(ORDR_DATE,'YY/MM/DD')
+	where to_char(ORDR_DATE,'YYYY-MM-DD') between #{stDate}AND #{endDate}
+	group by to_char(ORDR_DATE,'YYYY-MM-DD')
 	ORDER BY ODDT
+</select>
+
+<select id="categoryChart" resultType="DashBoardVO">
+	select cnt,L_CAT_NM,S_CAT_NM
+    from 
+    (select sum(cnt) cnt ,L_CAT_ID,S_CAT_ID from order_detail o
+    left join product p
+    on o.prdt_id = p.prdt_id 
+    group by S_CAT_ID,L_CAT_ID) a
+    left join PRODUCT_L_CAT l
+    ON a.L_CAT_ID = l.L_CAT_ID
+    left join PRODUCT_S_CAT s
+    ON a.S_CAT_ID = s.S_CAT_ID
+    ORDER BY L_CAT_NM
+</select>
+
+<select id="memberChart" resultType="DashBoardVO">
+	select count(*) cnt ,OUT_YN from member group by OUT_YN ORDER BY OUT_YN
 </select>
 
 </mapper>
