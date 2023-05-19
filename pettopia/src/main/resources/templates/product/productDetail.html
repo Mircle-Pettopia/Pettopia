@@ -141,11 +141,16 @@
 									<div class="wrap-pic-w pos-relative">
 										<img th:src="'download/'+${ProductDetail.prdtImg}">
 
-										<a
+										<!-- <a
 											class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-											href="images/product-detail-01.jpg"> <i
+											href=""> <i
 											class="fa fa-expand"></i>
-										</a>
+										</a> -->
+										<a th:href="'download/' + ${ProductDetail.prdtImg}"
+   class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04">
+  <i class="fa fa-expand"></i>
+</a>
+										
 									</div>
 								</div>
 							</div>
@@ -224,8 +229,8 @@
 							[[${ProductDetail.prdtPrc}]]원 </span>
 						<input type="hidden" id="prdtId" th:value="${ProductDetail.prdtId}"/>
 						<p class="stext-102 cl3 p-t-23" id="prdtDesct">
-						<p th:utext="${ProductDetail.prdtDesct}" >
-						</p>
+<!-- 						<p th:utext="${ProductDetail.prdtDesct}" >
+						</p> -->
 						<div class="p-t-33">
 
 
@@ -298,10 +303,9 @@
 				<!-- Tab01 -->
 				<div class="tab01">
 					<!-- 상품상세 -->
-					<div class="item_goods_sec">
-						<div id="detail">
+					<div id="detail">
 							<div class="item_goods_tab">
-								<ul>
+								<ul style="margin-left: 400px;">
 									<li class="on"><a href="#detail">상세정보</a></li>
 									<li><a href="#reviews">상품후기 <strong>(0)</strong></a></li>
 									<li><a href="#qna">상품문의 <strong>(0)</strong></a></li>
@@ -310,8 +314,11 @@
 							<!-- //item_goods_tab -->
 							<div class="detail_cont">
 								<div class="detail_explain_box">
-									<div class="image-manual">
+									<div  style="margin-left: 320px;"class="image-manual">
 										<!-- 이미지 -->
+										<p  class="stext-102 cl3 p-t-23" id="prdtDesct" >
+						<p th:utext="${ProductDetail.prdtDesct}" >
+						</p>
 									</div>
 									<div class="txt-manual">
 										<!-- 상품상세 공통정보 관리를 상세정보 상단에 노출-->
@@ -322,12 +329,12 @@
 							</div>
 							<!-- //detail_cont -->
 						</div>
-						<!-- //#detail -->
+					<div class="item_goods_sec">
 						<!-- //#exchange -->
 						<div id="reviews">
 							<div class="item_goods_tab">
-								<ul>
-									<li><a href="#detail">상세정보</a></li>
+								<ul style="margin-left: 400px;">
+								    <li><a href="#detail">상세정보</a></li>
 									<li class="on"><a href="#reviews">상품후기 <strong>(0)</strong></a></li>
 									<li><a href="#qna">상품문의 <strong>(0)</strong></a></li>
 								</ul>
@@ -354,7 +361,7 @@
 						<!-- //#reviews -->
 						<div id="qna">
 							<div class="item_goods_tab">
-								<ul>
+								<ul style="margin-left: 400px;">
 									<li><a href="#detail">상세정보</a></li>
 									<li><a href="#reviews">상품후기 <strong>(0)</strong></a></li>
 									<li class="on"><a href="#qna">상품문의 <strong>(0)</strong></a></li>

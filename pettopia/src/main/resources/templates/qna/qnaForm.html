@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<!-- saved from url=(0070)https://www.gegomall.com/board/list.php?bdId=qa&noheader=y&memNo=51481 -->
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{../templates/layout}">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>반려동물쇼핑몰</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+      <div layout:fragment="content">
 
 
 
@@ -170,7 +171,7 @@
                                     <col style="width:85%">
                                 </colgroup>
                                 <tbody>
-                                    <tr>
+<!--                                     <tr>
                                         <th scope="row">말머리</th>
                                         <td>
                                             <div class="category_select">
@@ -187,30 +188,31 @@
                                                 </select>
                                             </div>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <th scope="row">작성자</th>
                                         <td>
-                                            병완
+                                            <span id="meName" name="meName" th:text="${meName}"></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">휴대폰</th>
-                                        <td><input type="text" id="time" class="write_title" name="writerMobile"
+                                        <td><input style="border-radius:0px; background-color:rgb(255, 255, 255); width:312px;" type="text" id="time" class="write_title" name="writerMobile"
                                                 value="" placeholder="- -없이 입력하세요" autocomplete="off"></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">제목
                                         </th>
-                                        <td><input type="text" name="subject" value=""></td>
+                                        <td><input style="border-radius:0px;background-color:rgb(255, 255, 255);" type="text" name="subject" value=""></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">본문</th>
-                                        <td class="write_editor">
+                                        <!-- <td class="write_editor">
                                             <textarea name="content" id="content" rows="10" cols="100"
                                                 style="width:766px; height:412px;">
                                               </textarea>
-                                        </td>
+                                        </td> -->
+                                               <td>     <div id="editor"> </div> </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">첨부파일</th>
@@ -219,7 +221,7 @@
 
                                             <div class="file_upload_sec">
                                                 <label for="attach1">
-                                                    <input type="text" class="file_text" title="파일 첨부하기"
+                                                    <input style="border-radius:0px; background-color:rgb(255, 255, 255);" type="text" class="file_text" title="파일 첨부하기"
                                                         readonly="readonly">
                                                 </label>
                                                 <div class="btn_upload_box">
@@ -308,6 +310,10 @@
             fCreator: "createSEditor2"
         });
     </script>
+        <!-- ==========================ckeditor========================== -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+    <script type="text/javascript" src="CKeditorSuperBuild.js"></script>
+    <!-- ==========================ckeditor END======================= -->
 </body>
 
 </html>

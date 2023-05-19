@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.pettopia.qna.mapper.QnaMapper">
+  <select id="qnaAllList" resultType="QnaVO">
+SELECT
+  q.qst_no,
+  q.me_id,
+  q.title,
+  q.reg_dt,
+  q.qst_img,
+  q.prdt_id,
+  CASE WHEN q.qst_status = cd.cod_cd THEN cd.cod_title ELSE q.qst_status END AS qst_status,
+  q.qst_yn,
+  q.content
+FROM
+  qna q
+  JOIN member m ON q.me_id = m.me_id
+  LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
+ WHERE M.me_id = #{meId}
+
+  
+  </select>
+  
+  
+  </mapper>
