@@ -26,5 +26,16 @@ public interface BoardMapper {
 	public int boardAllMaxPage(String keyword, String meId, String boType);
 	
 	//분양게시판
-	public List<BoardVO> adoptAllList(BoardVO vo);
+	public List<BoardVO> adoptAllList(int page, String petType, String breed, String sex, String city);
+	public int adoptMaxPage(String petType, String breed, String sex, String city);
+	public BoardVO adoptDetail(int boNo);
+	
+	//분양게시판 + 댓글 삭제
+	public int delAdoptBoardAndReply(int boNo);
+	public String getAdoptWriter(int boNo);
+	
+	//분양게시판 댓글
+	public List<BoardVO> getAdoptReply(int boNo);
+	public int insertAdoptReply(BoardVO vo);
+	public int deleteAdoptReply(int commentId);
 }

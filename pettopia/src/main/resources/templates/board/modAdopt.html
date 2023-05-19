@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{../templates/layout}">
-
-
 <head>
   <title>글작성</title>
   <meta charset="UTF-8" />
@@ -48,17 +46,14 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
 </head>
-
 <body>
   <div layout:fragment="content">
-
     <div id="container">
       <div class="row">
         <div class="bg0 p-t-100 p-b-85 m-lr-auto ">
           <div class="col-lg-8 col-xl-8 m-lr-auto m-b-50 p-t-20 p-b-50 border">
-            <h2>지식공유게시판</h2>
+            <h2>분양게시판</h2>
             <hr>
-
             <div class="input-group">
               <span class="" id="">제목
                 <input type="text" class="customInput" placeholder="제목을 입력해주세요" id="title" th:value="${Article.title}">
@@ -85,13 +80,11 @@
     <script type="text/javascript" src="CKeditorSuperBuild.js"></script>
     <!-- ==========================ckeditor END======================= -->
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
-    <script th:inline="javascript">
+
+  <script th:inline="javascript">
       var articleObject = [[${ Article }]];
       editor.setData(articleObject.subject);
-    </script>
-
-    <script>
-      function showData() {
+      /*function showData() {
         let Data = editor.getData();
         console.log(Data);
       }
@@ -128,7 +121,7 @@
               location.replace("showKnowHow?boNo=" + articleObject.boNo);
             })
         }
-      }
+      }*/
 
       function GetUser() {
         let result = "";

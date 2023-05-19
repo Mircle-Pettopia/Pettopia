@@ -36,6 +36,7 @@
       select{
         width: 120px !important;
         padding: 5px !important;
+        font-size: 11px !important;
       }
     </style>
 </head>
@@ -61,40 +62,37 @@
         </div>
         <!--search-->
         <div style="width: 100%; margin-bottom: 20px !important;">
-          <div>
-            <span th:text="${code}"></span>
-          </div>
           <!--<div style="display: inline-block; width: 40%;">-->
             <label>
               동물선택 : 
-              <select onchange="change_ba(value)">
-                <option>동물선택</option>
+              <select onchange="category_Change(value)" id="step1">
+                <option value="">동물선택</option>
                 <option th:each="balist : ${code.BA}"
                         th:value="${balist?.codCd}"
-                        th:utext="${balist?.codTitle}" name="petType"></option>
+                        th:utext="${balist?.codTitle}" ></option>
               </select>
             </label>
+
             <label>
               품종선택 : 
-              <select>
+              <select id="step2">
                 <option value="">품종선택</option>
-                <option th:each="bslist : ${code.BS}"
-                        th:value="${bslist?.codCd}" 
-                        th:utext="${bslist?.codTitle}" name="breed"></option>
               </select>
             </label>
+
             <label>
               지역선택 : 
-              <select>
+              <select id="ct">
                 <option value="">지역선택</option>
                 <option th:each="aalist : ${code.AA}"
                         th:value="${aalist?.codCd}" 
                         th:utext="${aalist?.codTitle}" name="city"></option>
               </select>
             </label>
+
             <label>
               성별선택 : 
-              <select>
+              <select id="se">
                 <option value="">성별선택</option>
                 <option value="">암컷&수컷</option>
                 <option th:each="sxlist : ${code.SX}"
@@ -104,14 +102,9 @@
             </label>
 
             <div id="rightSearch">
-              <button type="button" class="btn btnPush btnLightBlue" style="margin: auto; width: 60px !important;" onclick="">검색</button>
+              <button type="button" class="btn btnPush btnLightBlue"
+                      style="margin: auto; width: 60px !important;" onclick="setkeyword();">검색</button>
             </div>
-          <!--<div style="clear:both"></div>-->
-          <!--<div style="float: right; width: 60%; margin-top: 10px; margin-bottom: 20px !important;">-->
-            <!--<button type="button" class="btn btnPush btnLightBlue" style="float: right; margin: auto;"
-              onclick="">검색</button>
-            <input type="text" style="float: right; width: 250px; margin-right: 10px;" id="keyword">-->
-          <!--</div>--> <!--end search-->
         </div>
 
         <div style="margin-bottom: 10px; text-align: end">
@@ -119,13 +112,13 @@
             <table class="table">
               <colgroup>
                 <col width="10%">
-                <col width="20%">
+                <col width="15%">
                 <col width="10%">
                 <col width="10%">
-                <col width="25%">
-                <col width="10%">
-                <col width="10%">
-                <col width="10%">
+                <col width="24%">
+                <col width="8%">
+                <col width="8%">
+                <col width="15%">
               </colgroup>
               <thead>
                 <tr>
@@ -139,22 +132,8 @@
                   <th>작성일</th>
                 </tr>
               </thead>
-              <tbody id="lists">
-                <tr>
-                  <td>미분양</td>
-                  <td><img src="images/about-01.jpg"></td>
-                  <td>강아지</td>
-                  <td>치왕왕</td>
-                  <td>
-                    <div style="text-align: left;">
-                      <div style="margin-bottom: 10px;"><p style="font-size: 16px;">제목제목제목</p></div>
-                    </div>
-                  </td>
-                  <td>남아</td>
-                  <td>경상도</td>
-                  <td>10/18</td>
-                </tr>
-              </tbody>
+              <!--DB data 받는 곳!!!-->
+              <tbody id="lists"></tbody>
             </table>
           <!--paging-->
           <div class="board_page" id="pagenav"></div>
@@ -168,29 +147,146 @@
             <i class="zmdi zmdi-chevron-up"></i>
           </span>
         </div>
+        
       </div>
     </div>
     
     <script th:inline="javascript">
-      //select 하위 select
-
       let code = /*[[${code}]]*/
-      let ba_code = /*[[${code.BA}]]*/   //종류
-      let bs_code = /*[[${code.BS}]]*/   //품종
-      console.log(ba_code);
-      console.log(bs_code);
+      
+      // select 하위 select
+      function category_Change(val){
+        //2차 카테고리
+        // 강아지
+        var dg = ["품종선택"];
+        /*[# th:each="article, st : ${code.DG}"]*/
+        idx = /*[[${st.index}]]*/;
+        dg.push(/*[[${article.codTitle}]]*/);
+        /*[/]*/
 
-      function change_ba(ba){
-        if(ba == "DG") {
-          console.log("강아지");
-          //title이 DG인 codTitle을 보여주고 싶다!
-        } else if(ba == "CT") {
-          console.log("고양이");
-          //title이 CT인 codTitle을 보여주고 싶다!
-        }
+        // 고양이
+        var ct = ["품종선택"];
+        /*[# th:each="article, st : ${code.CT}"]*/
+        idx = /*[[${st.index}]]*/;
+        ct.push(/*[[${article.codTitle}]]*/);
+        /*[/]*/
+
+        var basic = ["품종선택"];
+        var val = "";
+        var select_item = $('#step1').val();
+
+        if(select_item == "DG"){    //강아지
+          val = [""];
+          change_item = dg;
+          /*[# th:each="article, st : ${code.DG}"]*/
+          idx = /*[[${st.index}]]*/;
+          val.push(/*[[${article.codCd}]]*/);
+          /*[/]*/
+        } else if(select_item == "CT") {  //고양이
+          val = [""];
+          change_item = ct;
+          /*[# th:each="article, st : ${code.CT}"]*/
+          idx = /*[[${st.index}]]*/;
+          val.push(/*[[${article.codCd}]]*/);
+          /*[/]*/
+        } else if(select_item == "") {
+          change_item = basic;
+          val = [""];
+        };
+
+        $('#step2').empty();  //선택된 엘리먼트의 내부 요소를 지운다.
+        for(var i = 0; i < change_item.length ; i++){
+          var option = $("<option value=" + val[i] + ">" + change_item[i] + "</option>");
+          $('#step2').append(option);
+        };
+      }; // end category_Change
+
+      let ba = '';
+      let bs = '';
+      let se = '';
+      let ct = '';
+
+      //검색버튼
+      function setkeyword(){
+        ba = $('#step1').val();
+        bs = $('#step2').val();
+        se = $('#se').val();
+        ct = $('#ct').val();
+        $('#lists').empty();  //tbody 초기화
+        showLists();
       }
 
+      //목록조회 ajax
+      const showLists = (page) => {
+        let data = {
+          petType : ba,
+          breed : bs,
+          sex : se,
+          ctiy : ct,
+          page : page
+        };
+        
+        if(page == null){
+          page = 1;
+        };
 
+        $.ajax({
+          url : 'adoptList',
+          method : 'post',
+          async: false,
+          data		:  data, 
+          success : (data)=>{
+            for(let i = 0; i < data.length ; i++){
+              
+              let status = data[i].status;
+              lists.innerHTML += `
+                  <tr>
+                    <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
+                    <td><img src="images/about-01.jpg"></td>
+                    <td>${data[i].petType}</td>
+                    <td>${data[i].breed}</td>
+                    <td>
+                      <div style="text-align: left;">
+                        <div style="margin-bottom: 10px;"><p style="font-size: 16px;">
+                          <a href="adoptAticle?boNo=${data[i].boNo}">${data[i].title}</a>
+                        </div>
+                      </div>
+                    </td>
+                    <td>${data[i].sex}</td>
+                    <td>${data[i].city}</td>
+                    <td>${dateChange(data[i].regDt)}</td>`;
+
+              if(status == "분양완료"){
+                $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
+              } else if(status == "분양중"){
+                $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
+              } else {
+                $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
+              }
+            }
+          },
+          error : (err) => {
+            console.log(err);
+          }
+        })
+
+        $.ajax({
+          url: "adoptMaxPage",
+          method: "GET",
+          async: false,
+          data: data,
+          success: function (data) {
+            //console.log(data);
+            paging(data, 10, 5, page)
+
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("에러");
+          },
+        })
+      }; // end showLists
+      showLists();
 
       loginOnly()
       function loginOnly() {
@@ -237,6 +333,51 @@
         return result;
       }
 
+      function paging(totalData, dataPerPage, pageCount, currentPage) {
+        console.log("currentPage : " + currentPage);
+
+        totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
+
+        if (totalPage < pageCount) {
+          pageCount = totalPage;
+        }
+
+        let pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
+        let last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
+
+        if (last > totalPage) {
+          last = totalPage;
+        }
+
+        let first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
+        let next = last + 1;
+        let prev = first - 1;
+
+        let pageHtml = pagenav.innerHTML;
+        pagenav.innerHTML = '';
+        if (prev > 0) {
+          pagenav.innerHTML += `<a href="#" class="bt prev" onclick="showLists(${prev});">＜</a>`;
+        }
+
+        //페이징 번호 표시 
+        for (var i = first; i <= last; i++) {
+          if (currentPage == i) {
+            pagenav.innerHTML +=
+              `<a href="#" class="num on">${i}</a>`;
+          } else {
+            pagenav.innerHTML += `<a href="#" onclick="showLists(${i});" class="num o">${i}</a>`;
+          }
+        }
+
+        if (last < totalPage) {
+          pagenav.innerHTML += `<a href="#" onclick="showLists(${next});" class="bt next">＞</a>`;
+        }
+
+        $("#pagingul").html(pagenav.innerHTML);
+        let displayCount = "";
+        displayCount = "현재 1 - " + totalPage + " 페이지 / " + totalData + "건";
+        $("#displayCount").text(displayCount);
+      }
     </script>
   </div>
   </body>

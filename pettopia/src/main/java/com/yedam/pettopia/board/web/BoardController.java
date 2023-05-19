@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -143,26 +144,79 @@ public class BoardController {
 	
 	
 	//---------------------------------------------------
-	//분양게시판페이지
+	//분양게시판 페이지
 	@GetMapping("adopt")
 	public String adopt(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
 		model.addAttribute("id", principal.getUser().getMeId());
-		model.addAttribute("code", codeService.getCodes("BA", "SX", "AS", "BS", "AA"));
+		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA"));
+		//												멍품종  냥품종   성별  분양상태  동물   지역
 		return "Board/adopt";
 	};
 	
+	//분양게시판 전체목록
 	@PostMapping("adoptList")
 	@ResponseBody
-	public List<BoardVO> adoptList(BoardVO vo){
-		return boardService.adoptAllList(vo);
+	public List<BoardVO> adoptList(@RequestParam(defaultValue = "1", required = false) int page,
+								   @RequestParam(required=false) String petType,
+								   @RequestParam(required=false) String breed,
+								   @RequestParam(required=false) String sex,
+								   @RequestParam(required=false) String city){
+		
+		System.out.println(page +  petType +  breed +  sex +  city);
+		return boardService.adoptAllList(page, petType, breed, sex, city);
+	};
+	
+	@GetMapping("adoptMaxPage")
+	@ResponseBody
+	public int adoptCount(@RequestParam(required=false) String petType,
+						  @RequestParam(required=false) String breed,
+					      @RequestParam(required=false) String sex,
+						  @RequestParam(required=false) String city) {
+		return boardService.adoptMaxPage(petType, breed, sex, city);
+	};
+	
+	//분양게시판 단건조회
+	@GetMapping("adoptAticle")
+	public String adoptDetail(Model model, int boNo) {
+		model.addAttribute("Article", boardService.adoptDetail(boNo));
+		//model.addAttribute("reply", boardService.getAdoptReply(boNo));
+		return "board/adoptArticle";
+	};
+	
+	//분양게시판 게시글 + 댓글 삭제
+	@DeleteMapping("delAdopt")
+	@ResponseBody
+	public int delAdopt(int boNo, String Uid) {
+		System.out.println(boNo + ", " + Uid);
+		return boardService.delAdopt(boNo, Uid);
+	};
+	
+	@GetMapping("modAdopt")
+	public String modAdopt(Model model, int boNo) {
+		model.addAttribute("Article", boardService.adoptDetail(boNo));
+		return "board/modAdopt";
 	}
 	
+	//분양게시판 댓글조회
+	@PostMapping("getAdoptReply")
+	@ResponseBody
+	public List<BoardVO> getAdoptReply(int boNo){
+		return boardService.getAdoptReply(boNo);
+	};
+
+	//분양게시판 댓글등록
+	@PostMapping("insertAdoptReply")
+	@ResponseBody
+	public int insertAdoptReply(BoardVO vo) {
+		return boardService.insertAdoptReply(vo);
+	};
 	
-	
-	
-	
-	
-	
+	//분양게시판 댓글삭제
+	@DeleteMapping("deleteAdoptReply")
+	@ResponseBody
+	public int deleteAdoptReply(int commentId) {
+		return boardService.deleteAdoptReply(commentId);
+	};
 	
 	
 	

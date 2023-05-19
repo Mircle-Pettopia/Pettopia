@@ -17,62 +17,52 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int insertArticle(BoardTestVO vo) {
-		// TODO Auto-generated method stub
 		return boardMapper.insertArticle(vo);
 	}
 
 	@Override
 	public BoardTestVO showArticle(String no) {
-		// TODO Auto-generated method stub
 		System.out.println(no);
 		return boardMapper.showArticle(no);
 	}
 
 	@Override
 	public int insertKnowhowArticle(BoardVO vo) {
-		// TODO Auto-generated method stub
 		return boardMapper.insertKnowhowArticle(vo);
 	}
 
 	@Override
 	public List<BoardVO> knowHowList (int page,String keyword){
-		// TODO Auto-generated method stub
 		return boardMapper.knowHowList(page,keyword);
 	}
 
 	@Override
 	public int knowHowMaxPage(String keyword) {
-		// TODO Auto-generated method stub
 		return boardMapper.knowHowMaxPage(keyword);
 	}
 
 	@Override
 	public BoardVO showKnowHow(int boNo) {
-		// TODO Auto-generated method stub
 		return boardMapper.showKnowHow(boNo);
 	}
 
 	@Override
 	public List<BoardVO> getknowHowReply(int boNo) {
-		// TODO Auto-generated method stub
 		return boardMapper.getknowHowReply(boNo);
 	}
 
 	@Override
 	public int insertKnowHowReply(BoardVO vo) {
-		// TODO Auto-generated method stub
 		return boardMapper.insertKnowHowReply(vo);
 	}
 
 	@Override
 	public void KnowHowAddhit(int boNo) {
-		// TODO Auto-generated method stub
 		boardMapper.KnowHowAddhit(boNo);
 	}
 
 	@Override
 	public int delKnowHow(int boNo, String Uid) {
-		// TODO Auto-generated method stub
 		System.out.println("test:"+Uid);
 		int result = -1;
 		if(getKnowHowWriter(boNo).equals(Uid))
@@ -85,27 +75,65 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public String getKnowHowWriter(int boNo) {
-		// TODO Auto-generated method stub
 		return boardMapper.getKnowHowWriter(boNo);
 	}
 
 	@Override
 	public int updateKnowHow(BoardVO vo) {
-		// TODO Auto-generated method stub
 		return boardMapper.updateKnowHow(vo);
 	}
 
 	@Override
 	public int delKnowHowReply(int commentId) {
-		// TODO Auto-generated method stub
 		return boardMapper.delKnowHowReply(commentId);
 	}
 
 	
 	// 분양게시판 전체조회
 	@Override
-	public List<BoardVO> adoptAllList(BoardVO vo) {
-		return boardMapper.adoptAllList(vo);
+	public List<BoardVO> adoptAllList(int page, String petType, String breed, String sex, String city) {
+		return boardMapper.adoptAllList(page, petType, breed, sex, city);
+	}
+
+	@Override
+	public int adoptMaxPage(String petType, String breed, String sex, String city) {
+		return boardMapper.adoptMaxPage(petType, breed, sex, city);
+	}
+
+	@Override
+	public BoardVO adoptDetail(int boNo) {
+		return boardMapper.adoptDetail(boNo);
+	}
+
+	@Override
+	public List<BoardVO> getAdoptReply(int boNo) {
+		return boardMapper.getAdoptReply(boNo);
+	}
+
+	@Override
+	public int insertAdoptReply(BoardVO vo) {
+		return boardMapper.insertAdoptReply(vo);
+	}
+
+	@Override
+	public int deleteAdoptReply(int commentId) {
+		return boardMapper.deleteAdoptReply(commentId);
+	}
+
+	@Override
+	public int delAdopt(int boNo, String Uid) {
+		System.out.println("test:" + Uid);
+		int result = -1;
+		if(getAdoptWriter(boNo).equals(Uid)) {
+			result = boardMapper.delKnowHow(boNo);
+			boardMapper.delKnowHow2(boNo);
+		};
+		return result;
+	}
+
+	@Override
+	public String getAdoptWriter(int boNo) {
+		return boardMapper.getAdoptWriter(boNo);
 	}
 	
 

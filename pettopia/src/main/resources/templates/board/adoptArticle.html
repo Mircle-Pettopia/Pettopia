@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{../templates/layout}">
+
+<head>
+  <title>Pettopia</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <div layout:fragment="content">
+  <style>
+    #infoDiv{
+      font-size: 12px !important;
+      border-top: 1px solid black; 
+      border-bottom: 1px solid black; 
+      margin-bottom: 20px; 
+      padding-top: 10px; 
+      padding-bottom: 10px;
+    }
+
+    #boNo{
+      display: none !important;
+    }
+
+    .aColor{
+      color: rgb(104, 178, 238);
+      font-size: 12px;
+      border: 1px solid rgb(104, 178, 238);
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    .aColor:hover,
+    .aColor:focus {
+      color: rgb(159, 204, 240);
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+      <div>
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+          Home
+          <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+        <a href="adopt" class="stext-109 cl8 hov-cl1 trans-04">지식공유게시판</a>
+        <a th:href="@{adopt(boNo=${Article.boNo})}" class="stext-109 cl8 hov-cl1 trans-04">
+          <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+          게시판 상세
+        </a>
+      </div>
+    </div>
+    <div id="boNo" th:text="${Article.boNo}"></div>
+    <div class="row">
+      <th:block th:replace="layout/boardNavbar :: boardNavFragment"></th:block>
+
+      <div class="col-md-8 col-lg-10 p-b-150 m-t-50">
+      <span style="display: none;" id="meId" th:text="${Article.meId}"></span>
+      <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
+        <div class="form-group">
+            <div class="col-md-8 col-lg-12 p-b-150">
+              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50">
+                <!--분양할 동물 정보 보여주기-->
+                <div class="border">
+                  <table class="table" style="margin-bottom: 20px;">
+                    <colgroup>
+											<col width="20%">
+											<col width="80%">
+                    </colgroup>
+                    <tr>
+                      <th>분류</th>
+                      <td><span th:text="${Article.petType}"></span></td>
+                    </tr>
+                    <tr>
+                      <th>품종</th>
+                      <td><span th:text="${Article.breed}"></span></td>
+                    </tr>
+                    <tr>
+                      <th>연락처</th>
+                      <td><span th:text="${Article.phone}"></span></td>
+                    </tr>
+                    <tr>
+                      <th>중성화여부</th>
+                      <td><span th:text="${Article.netuered}"></span></td>
+                    </tr>
+                    <tr>
+                      <th>지역</th>
+                      <td><span th:text="${Article.city}"></span></td>
+                    </tr>
+                    <tr>
+                      <th>분양상태</th>
+                      <td><span th:text="${Article.status}"></span>6</td>
+                    </tr>
+                  </table>
+                </div>
+                
+                <div class="border">
+                  <h3 th:text="${Article.title}"></h3>
+                  <div style="float: right !important;">
+                    <span th:text="${'조회수 : ' + Article.viewCnt}"></span>
+                    <span th:text="${'글번호 : ' + Article.boNo}"></span>
+                  </div>
+                  <div style="clear:both"></div>
+                  <div id="infoDiv">
+                    <span th:text="${'작성자 : ' + Article.meId}"></span>
+                    <span th:text="${'작성일 : ' + Article.regDt}"></span>
+                  </div>
+
+                  <div id="Viewer" th:utext="${ Article.subject }"></div>
+                  
+                </div>
+                
+                <hr>
+                
+                <!--수정,삭제 버튼-->
+                <div>
+                  <div id="ownerOnly"></div>
+                  <div id="listBackBtn">
+                    <button type="button" class="btn btnPush btnBlueGreen" style="float:right;"
+                            onclick="location.href='adopt'">목록</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-20 border">
+                <div id="replyLoginOnly"></div>
+                <hr>
+                <!--댓글-->
+                <div id="replys"></div>
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
+
+
+    <script th:inline="javascript">
+      console.log(meId.innerText);
+      let user = GetUser();
+      let article = /*[[${Article}]]*/
+      console.log(article);
+
+      // 작성글 출력
+      getReply();
+      function getReply() {
+        $.ajax({
+          url: "getAdoptReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: { boNo: boNo.innerText },   //html div id에 해당되는 text를 읽는다.
+          success: function (data) {
+            console.log(data);
+            replys.innerHTML = '';
+            for (i = 0; i < data.length; i++) {
+              replys.innerHTML +=
+                `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
+                <h5 style="display:inline-block;">작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5> 
+                ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
+                <hr>
+                <div class="Viewer">${data[i].subject}
+                </div>
+              </div>`
+            }
+          },
+          error: function (reject) {
+            console.log(reject);
+            console.log("댓글불러오기에러");
+          },
+        })
+      }
+
+      // 댓글 삭제
+      function deleteReply(commentId, meId) {
+        if (meId == user) {
+          $.ajax({
+            url: "deleteAdoptReply",
+            method: "delete",
+            async: false,
+            dataType: "JSON",
+            data: { commentId: commentId },
+            success: function (data) {
+              Swal.fire('삭제완료', '', 'success');
+              getReply();
+            },
+            error: function (reject) {
+              console.log(reject);
+              Swal.fire('에러발생', '', 'error');
+              getReply();
+            },
+          })
+        }
+        else {
+          Swal.fire('계정을 확인바랍니다', '', 'info');
+        }
+      }
+
+      // 로그인한 유저만 댓글을 사용할 수 있고, 게시글 삭제와 수정은 게시글 작성자만 가능하도록 진행
+      loginOnly();
+      function loginOnly() {
+        let loginId = GetUser();
+        if (loginId != "" && loginId != null) {
+          replyLoginOnly.innerHTML =
+            `<h4 style="display: inline-block; width: 100px;">댓글</h4>
+                <button type="button" class="btn btnPush btnBlueGreen" style="float:right;margin: auto;"
+                onclick="InsertReply();">작성</button>
+                <hr>
+                <textarea class="form-control" rows="4" style="resize: none;" id="replySubject"></textarea>`
+        } else {
+          replyLoginOnly.innerHTML = `<h4 style="display: inline-block; width: 100px;">댓글</h4>
+                                      <hr>
+                                      <div style="text-align: center; padding:20px;">
+                                        <h3>로그인시 이용 가능합니다.</h3>
+                                        <br/>
+                                        <a href="login" class="aColor">로그인</a>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <a href="signUp" class="aColor">회원가입</a>
+                                      </div>`
+        };
+        if (meId.innerText == loginId) {
+          ownerOnly.innerHTML = `   
+                <button type="button" class="btn btnPush btnLightBlue" onclick="location.replace('modAdopt?boNo='+${boNo.innerText});">수정</button>
+                <button type="button" class="btn btnPush btnRed" onclick="deleteArticle()">삭제</button>`
+        };
+      }
+
+      // sweet alert toast type
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+
+      // 댓글 등록
+      function InsertReply() {
+        let meId = GetUser();
+        console.log(meId);
+        console.log(replySubject.value);
+        $.ajax({
+          url: "insertAdoptReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: {
+            boNo: boNo.innerText,
+            subject: replySubject.value,
+            meId: meId
+          },
+          success: function (data) {
+            replySubject.value = "";
+            Toast.fire({
+              icon: 'success',
+              title: '댓글이 정상적으로 등록되었습니다.'
+            });
+            getReply();
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        })
+      }
+
+      // 유저정보 가져오기
+      function GetUser() {
+        let result = "";
+        $.ajax({
+          url: "getUser",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            console.log("비로그인");
+          },
+        })
+        return result;
+      }
+
+      // 날짜변환
+      function dateChange(data) {
+        if (data != null && data != 0) {
+          let newData = new Date(data);
+          let result = newData.getFullYear() + "-" +
+            (newData.getMonth() < 10
+              ? "0" + (newData.getMonth() + 1)
+              : newData.getMonth() + 1) +
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+          return result;
+        }
+        else return null;
+      };
+
+      //특정 URL Parameter 얻어낸다.
+      const urlParams = new URL(location.href).searchParams;
+      const writer = urlParams.get('boNo');
+      
+      // 글+댓글 삭제
+      function deleteArticle() {
+        Swal.fire({
+          title: '정말로 삭제하시겠습니까?',
+          showCancelButton: true,
+          confirmButtonText: '삭제',
+          denyButtonText: `취소`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: "delAdopt",
+              method: "delete",
+              async: false,
+              dataType: 'json',
+              data: {
+                Uid: meId.innerText,
+                boNo: boNo.innerText
+              },
+              success: function (data) {
+                console.log(data);
+                if (data == -1) {
+                  swal.fire('삭제실패 작성자가 아닙니다', '', 'info')
+                }
+                else if (data == 1) {
+                  console.log("성공")
+                  Swal.fire('정상적으로 삭제 되었습니다', '', 'success')
+                    .then(() => {
+                      location.replace("adopt")
+                    })
+                }
+                else {
+                  Swal.fire('삭제실패 잠시뒤 다시 시도해주세요', '', 'error')
+                }
+              },
+              error: function (reject) {
+                console.log(reject);
+                console.log("비로그인");
+                Swal.fire('삭제실패 잠시뒤 다시 시도해주세요', '', 'error')
+                  /*.then(() => {
+                    location.replace("knowhow")
+                  })*/
+              },
+            })
+          }
+        })
+      }
+    </script>
+  </div>
+
+</body>
+
+
+
+</html>
