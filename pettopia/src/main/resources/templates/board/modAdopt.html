@@ -2,13 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{../templates/layout}">
 <head>
-  <title>글작성</title>
+  <title>Pettopia</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     .ck-editor__editable {
-      min-height: 300px;
+      min-height: 600px;
       max-height: 300px;
+    }
+
+    .ck-editor__main{ 
+        min-height: 650px; 
     }
 
     .signUpFontColor {
@@ -26,8 +30,12 @@
       display: inline-flex !important;
       margin-bottom: 10px;
       font-size: 13px !important;
-      height: 50px;
+      height: 40px;
       font-size: 20px;
+      width: 59%;
+      margin-right: 10px;
+      background-color: white !important;
+      border: 1px solid gray !important;
     }
 
     #btnStyle {
@@ -40,6 +48,35 @@
     .formBtn {
       width: 80px !important;
     }
+
+    #writer{
+      height: 40px;
+      width: 29%;
+      background-color: white !important;
+      border: 1px solid gray !important;
+    }
+
+    select {
+        width: 40%;
+        height: 40px;
+        border-radius: 5px;
+    }
+
+    label{
+        font-weight: bold;
+        margin-top: 30px;
+        width: 100px;
+        margin-left: 10px;
+    }
+
+    .input_style{
+        width: 40% !important;
+        height: 40px;
+        border-radius: 5px !important;
+        background-color: white !important;
+        border: 1px solid gray !important;
+        display: inline-block !important;
+    }
   </style>
   <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -48,7 +85,7 @@
 </head>
 <body>
   <div layout:fragment="content">
-    <div id="container">
+    <!--<div id="container">
       <div class="row">
         <div class="bg0 p-t-100 p-b-85 m-lr-auto ">
           <div class="col-lg-8 col-xl-8 m-lr-auto m-b-50 p-t-20 p-b-50 border">
@@ -66,13 +103,100 @@
               <hr>
               <button onclick="showData()">담긴 데이터 보기(debug)</button>
             </div>
-            <div class="form-group" style="position: absolute; left: 45%;">
-              <button type="button" class="btn btnPush btnBlueGreen formBtn" id=""
-                onclick="updateArticle()">수정완료</button>
-            </div>
+
           </div>
         </div>
       </div>
+    </div>-->
+
+      <div id="container">
+        <div class="row">
+            <div class="bg0 p-t-100 p-b-85 m-lr-auto ">
+                <div class="col-lg-8 col-xl-10 m-lr-auto m-b-50 p-t-20 p-b-90 border">
+                    <h2>분양게시판</h2>
+                    <hr>
+                    <div class="input-group" style=" margin-top: 20px;">
+                        <h4 class="" id="" style="margin-right: 20px;">제목</h4>
+                        <input type="text" class="customInput" placeholder="제목을 입력해주세요" id="title" th:value="${Article.title}">
+
+                        <h4 style="margin-right: 20px;">작성자</h4>
+                        <input type="text" id="writer" th:value="${id}" readonly>
+                    </div>
+                    <!--분양정보-->
+                    <div style="margin-bottom: 20px !important;">
+                    <!--<div style="display: inline-block; width: 40%;">-->
+                        <label>동물선택</label>
+                        <select onchange="category_Change(value)" id="step1" name="petType">
+                            <option value="">동물선택</option>
+                            <option th:each="balist : ${code.BA}"
+                                    th:value="${balist?.codCd}"
+                                    th:utext="${balist?.codTitle}"
+                                    th:selected="${balist?.codTitle} == ${Article.petType}"></option>
+                        </select>
+                        
+                        <label>품종선택</label>
+                        <select id="step2">
+                            <option value="">품종선택</option>
+                        </select>
+                        
+                        <label>성별선택</label>
+                        <select id="se" name="sex">
+                            <option value="">성별선택</option>
+                            <option th:each="sxlist : ${code.SX}"
+                                    th:value="${sxlist?.codCd}" 
+                                    th:utext="${sxlist?.codTitle}"
+                                    th:selected="${sxlist?.codTitle} == ${Article.sex}"></option>
+                        </select>
+
+                        <label>중성화여부</label>
+                        <select id="st" name="netuered">
+                            <option value="">여부선택</option>
+                            <option th:each="ynlist : ${code.YN}"
+                                    th:value="${ynlist?.codCd}" 
+                                    th:utext="${ynlist?.codCd}"
+                                    th:selected="${ynlist?.codCd} == ${Article.netuered}"></option>
+                        </select>
+                        
+                        <label>나이</label> 
+                        <input type="number" id="age" name="age" class="input_style" autocomplete='off' min="0" th:value="${Article.age}">
+
+                        <label>책임비</label>
+                        <input type="text" name="charge" id="charge" class="input_style" value="0" autocomplete='off' th:value="${Article.charge}">
+
+                        <label>지역선택</label>
+                        <select id="ct" name="city">
+                            <option value="">지역선택</option>
+                            <option th:each="aalist : ${code.AA}"
+                                    th:value="${aalist?.codCd}" 
+                                    th:utext="${aalist?.codTitle}"
+                                    th:selected="${aalist?.codTitle} == ${Article.city}"></option>
+                        </select>
+
+                        <label>연락처</label>
+                        <input type="text" id="phone" name="phone" class="input_style" oninput="autoHyphen(this)" maxlength='13' autocomplete='off' th:value="${Article.phone}">
+
+                        <label>분양상태</label>
+                        <select id="as" name="status">
+                            <option value="">지역선택</option>
+                            <option th:each="aslist : ${code.AS}"
+                                    th:value="${aslist?.codCd}" 
+                                    th:utext="${aslist?.codTitle}"
+                                    th:selected="${aslist?.codTitle} == ${Article.status}"></option>
+                        </select>
+                    </div>
+
+                    <div id="editor"></div>
+                    <!--<div>
+                        <hr>
+                        <button onclick="showData()">담긴 데이터 보기(debug)</button>
+                    </div>-->
+                    <div class="form-group" style="position: absolute; left: 45%;">
+                      <button type="button" class="btn btnPush btnBlueGreen formBtn" id="" onclick="updateArticle()">수정</button>
+                      <button type="button" class="btn btnPush btnOrange formBtn" onclick="goBack()">뒤로가기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ==========================ckeditor========================== -->
@@ -82,46 +206,71 @@
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
 
   <script th:inline="javascript">
+
+
       var articleObject = [[${ Article }]];
-      editor.setData(articleObject.subject);
-      /*function showData() {
+      var originalInfo = [[${originalInfo}]];
+      //품종선택에 게시글에 해당되는 품종 넣어주기
+      step2.innerHTML = `
+        <option value=${originalInfo.breed}>${articleObject.breed}</option>
+      `;
+
+      //뒤로가기
+      function goBack(){
+          window.history.back();
+      };
+
+      function showData() {
         let Data = editor.getData();
         console.log(Data);
       }
 
       function updateArticle() {
-        if (articleObject.meId == GetUser()) {
-          $.ajax({
-            url: "updateKnowHow",
-            method: "POST",
-            async: false,
-            dataType: "JSON",
-            data: {
+        let charges = charge.value;
+        let replaced_str = charges.replace(',', '');
+
+        let data = {
               boNo: articleObject.boNo,
               title: title.value,
               subject: editor.getData(),
-            },
+              petType : step1.value,      //동물
+              breed : step2.value,        //품종
+              sex : se.value,             //성별
+              netuered : st.value,        //중성화여부
+              age : age.value,            //나이
+              phone : phone.value,        //연락처
+              city : ct.value,            //지역
+              charge : replaced_str,      //책임비
+              status : as.value           //분양상태
+            };
 
+        console.log(data);
+
+        if (articleObject.meId == GetUser()) {
+          $.ajax({
+            url: "updateAdopt",
+            method: "POST",
+            async: false,
+            dataType: "JSON",
+            data: data,
             success: function (data) {
-              console.log(data);
               Swal.fire('정상적으로 수정 되었습니다', '', 'success')
                 .then(() => {
-                  location.replace("showKnowHow?boNo=" + articleObject.boNo);
-                })
+                  location.replace("adoptAticle?boNo=" + articleObject.boNo);
+                });
             },
             error: function (reject) {
               console.log(reject);
               alert("에러");
             },
           })
-        }
-        else {
+        } else {
           Swal.fire('이글의 작성자가 아닙니다', '', 'error')
             .then(() => {
-              location.replace("showKnowHow?boNo=" + articleObject.boNo);
-            })
-        }
-      }*/
+              location.replace("adoptAticle?boNo=" + articleObject.boNo);
+            });
+        };
+      };
 
       function GetUser() {
         let result = "";
@@ -139,7 +288,76 @@
           },
         })
         return result;
-      }
+      };
+
+
+
+      //분양정보 동물->품종 select
+      function category_Change(val){
+          //2차 카테고리
+          // 강아지
+          var dg = ["품종선택"];
+          /*[# th:each="article, st : ${code.DG}"]*/
+          idx = /*[[${st.index}]]*/;
+          dg.push(/*[[${article.codTitle}]]*/);
+          /*[/]*/
+
+          // 고양이
+          var ct = ["품종선택"];
+          /*[# th:each="article, st : ${code.CT}"]*/
+          idx = /*[[${st.index}]]*/;
+          ct.push(/*[[${article.codTitle}]]*/);
+          /*[/]*/
+
+          var basic = ["품종선택"];
+          var val = "";
+          var select_item = $('#step1').val();
+
+          if(select_item == "DG"){    //강아지
+            val = [""];
+            change_item = dg;
+            /*[# th:each="article, st : ${code.DG}"]*/
+            idx = /*[[${st.index}]]*/;
+            val.push(/*[[${article.codCd}]]*/);
+          /*[/]*/
+          } else if(select_item == "CT") {  //고양이
+            val = [""];
+            change_item = ct;
+            /*[# th:each="article, st : ${code.CT}"]*/
+            idx = /*[[${st.index}]]*/;
+            val.push(/*[[${article.codCd}]]*/);
+          /*[/]*/
+          } else if(select_item == "") {
+            change_item = basic;
+            val = [""];
+          };
+
+          $('#step2').empty();  //선택된 엘리먼트의 내부 요소를 지운다.
+          for(var i = 0; i < change_item.length ; i++){
+            var option = $("<option value=" + val[i] + ">" + change_item[i] + "</option>");
+            $('#step2').append(option);
+          };
+      }; // end category_Change
+
+      //연락처 하이픈 삽입
+      const autoHyphen = (target) => {
+          target.value = target.value
+          .replace(/[^0-9]/g, '')
+          .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+      };
+
+      //금액 자동 콤마
+      const input = document.querySelector('#charge');
+          input.addEventListener('keyup', function(e) {
+          let value = e.target.value;
+          value = Number(value.replaceAll(',', ''));
+          if(isNaN(value)) {
+              input.value = 0;
+          }else {
+              const formatValue = value.toLocaleString('ko-KR');
+              input.value = formatValue;
+          }
+      });
     </script>
   </div>
 

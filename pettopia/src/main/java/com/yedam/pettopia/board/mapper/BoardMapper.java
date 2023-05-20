@@ -31,6 +31,8 @@ public interface BoardMapper {
 	public BoardVO adoptDetail(int boNo);
 	public int insertAdoptArticle(BoardVO vo);
 	public int insertAdoptInfo(BoardVO vo);
+	public int updateAdopt(BoardVO vo);
+	public BoardVO getadoptInfo(int boNo);
 	
 	//분양게시판 + 댓글 삭제
 	public int delAdoptBoardAndReply(int boNo);

@@ -91,8 +91,8 @@
 	<!-- 은애수정 2023/05/18 -->
 	<update id="updateKnowHow" parameterType="BoardVO">
 		UPDATE board
-			SET title = #{title}, subject=#{subject}
-		WHERE BO_NO=#{boNo}
+			SET title = #{title}, subject = #{subject}
+		WHERE bo_no = #{boNo}
 	</update>
 	
 	<delete id="delKnowHowReply" parameterType="int">
@@ -205,6 +205,11 @@
 		AND bo_type = 'BY2'
 	</select>
 	
+	<!-- test -->
+	<select id="getadoptInfo" resultType="BoardVO">
+		SELECT * FROM adopt WHERE bo_no = #{boNo}
+	</select>
+	
 	<!-- 게시글 등록 -->
 	<insert id="insertAdoptArticle" parameterType="BoardVO">
 	    INSERT INTO board
@@ -223,6 +228,9 @@
 	
 	<!-- 게시판 등록(분양정보) -->
 	<insert id="insertAdoptInfo" parameterType="BoardVO">
+		<selectKey resultType="int" keyProperty="boNo" order="BEFORE">
+			SELECT NVL(MAX(bo_no),0) as bo_no FROM board
+		</selectKey>
 		INSERT
 			INTO adopt ( adopt_id, pet_type, breed, sex, netuered, age,
 	                     phone, city, charge, bo_no)
@@ -230,6 +238,22 @@
 	                      #{petType}, #{breed}, #{sex}, #{netuered}, #{age},
 	                      #{phone}, #{city}, #{charge}, #{boNo} )
 	</insert>
+	
+	<!-- 분양정보 수정 -->
+	<update id="updateAdopt" parameterType="BoardVO">
+		UPDATE adopt
+		    SET 
+		        pet_type = #{petType},
+		        breed = #{breed},
+		        sex = #{sex},
+		        netuered = #{netuered},
+		        age = #{age},
+		        status = #{status},
+		        phone = #{phone},
+		        city = #{city},
+		        charge = #{charge}
+		WHERE bo_no = #{boNo}
+	</update>
 	
 	<!-- 게시글 삭제 -->
 	<delete id="delAdoptBoardAndReply" parameterType="int">

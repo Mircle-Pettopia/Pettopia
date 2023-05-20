@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -210,9 +209,20 @@ public class BoardController {
 	
 	//분양게시판 게시글 수정페이지
 	@GetMapping("modAdopt")
-	public String modAdopt(Model model, int boNo) {
+	public String modAdopt(Model model, int boNo, @AuthenticationPrincipal PrincipalDetails principal) {
 		model.addAttribute("Article", boardService.adoptDetail(boNo));
+		model.addAttribute("id", principal.getUser().getMeId());
+		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA", "YN"));
+		//												멍품종  냥품종   성별  분양상태  동물   지역  중성화여부
+		model.addAttribute("originalInfo",boardService.getadoptInfo(boNo));
 		return "board/modAdopt";
+	};
+	
+	//분양게시판 게시글 수정(+분양정보)
+	@PostMapping("updateAdopt")
+	@ResponseBody
+	public int updateAdopt(BoardVO vo) {
+		return boardService.updateAdopt(vo);
 	}
 	
 	//분양게시판 댓글조회

@@ -86,6 +86,10 @@
                       <td><span th:text="${Article.breed}"></span></td>
                     </tr>
                     <tr>
+                      <th>나이</th>
+                      <td><span th:text="${Article.age}"></span></td>
+                    </tr>
+                    <tr>
                       <th>연락처</th>
                       <td><span th:text="${Article.phone}"></span></td>
                     </tr>
@@ -96,6 +100,13 @@
                     <tr>
                       <th>지역</th>
                       <td><span th:text="${Article.city}"></span></td>
+                    </tr>
+                    <tr>
+                      <th>책임비용</th>
+                      <td>
+                        <span th:if="${Article.charge == 0}" th:text="0원" ></span>
+                        <span th:if="${Article.charge != 0}" th:text="${#numbers.formatInteger(Article.charge, 3, 'COMMA') + '원'}" ></span>
+                      </td>
                     </tr>
                     <tr>
                       <th>분양상태</th>

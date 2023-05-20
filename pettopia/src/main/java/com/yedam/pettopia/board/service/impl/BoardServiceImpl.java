@@ -112,9 +112,20 @@ public class BoardServiceImpl implements BoardService{
 		int result = boardMapper.insertAdoptArticle(vo);
 		
 		if(result > 0) {
-			vo.getBoNo();
 			boardMapper.insertAdoptInfo(vo);
 		}
+		
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public int updateAdopt(BoardVO vo) {
+		int result = boardMapper.updateKnowHow(vo);
+		
+		if(result > 0) {
+			boardMapper.updateAdopt(vo);
+		};
 		
 		return result;
 	}
@@ -149,6 +160,13 @@ public class BoardServiceImpl implements BoardService{
 	public String getAdoptWriter(int boNo) {
 		return boardMapper.getAdoptWriter(boNo);
 	}
+
+	@Override
+	public BoardVO getadoptInfo(int boNo) {
+		return boardMapper.getadoptInfo(boNo);
+	}
+
+
 
 	
 	

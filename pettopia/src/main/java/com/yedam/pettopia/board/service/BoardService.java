@@ -31,6 +31,8 @@ public interface BoardService {
 	public BoardVO adoptDetail(int boNo);
 	//분양게시판 게시글 등록
 	public int insertAdoptArticle(BoardVO vo);
+	//분양게시판 게시글 수정
+	public int updateAdopt(BoardVO vo);
 	//분양게시판 단건조회 - 게시글 + 댓글 삭제
 	public int delAdopt(int boNo,String Uid);
 	//분양게시판 단건조회 - 게시글 댓글 삭제시 본인글을 삭제하는지 확인
@@ -41,5 +43,7 @@ public interface BoardService {
 	public int insertAdoptReply(BoardVO vo);
 	//분양게시판 단건조회 - 댓글삭제
 	public int deleteAdoptReply(int commentId);
+	
+	public BoardVO getadoptInfo(int boNo);
 	
 }
