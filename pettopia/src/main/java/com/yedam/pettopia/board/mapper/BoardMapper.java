@@ -42,4 +42,5 @@ public interface BoardMapper {
 	public List<BoardVO> getAdoptReply(int boNo);
 	public int insertAdoptReply(BoardVO vo);
 	public int deleteAdoptReply(int commentId);
+	public int updateReply(int commentId, String subject);
 }

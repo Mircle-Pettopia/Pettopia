@@ -111,19 +111,17 @@
           <div class="board_list_wrap">
             <table class="table">
               <colgroup>
-                <col width="10%">
-                <col width="15%">
-                <col width="10%">
+                <col width="12%">
+                <col width="14%">
                 <col width="11%">
-                <col width="23%">
-                <col width="8%">
-                <col width="8%">
+                <col width="28%">
+                <col width="10%">
+                <col width="10%">
                 <col width="15%">
               </colgroup>
               <thead>
                 <tr>
                   <th>분양여부</th>
-                  <th>이미지</th>
                   <th>품종</th>
                   <th>종류</th>
                   <th>제목</th>
@@ -222,7 +220,7 @@
           petType : ba,
           breed : bs,
           sex : se,
-          ctiy : ct,
+          city : ct,
           page : page
         };
         
@@ -242,13 +240,12 @@
                 lists.innerHTML += `
                     <tr>
                       <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
-                      <td><img src="images/about-01.jpg"></td>
                       <td>${data[i].petType}</td>
                       <td>${data[i].breed}</td>
                       <td>
                         <div style="text-align: left;">
                           <div style="margin-bottom: 10px;"><p style="font-size: 16px;">
-                            <a href="adoptAticle?boNo=${data[i].boNo}">${data[i].title}</a>
+                            <a href="adoptAticle?boNo=${data[i].boNo}" onclick='openArticle(${data[i].boNo})'>${data[i].title}</a>
                           </div>
                         </div>
                       </td>
@@ -297,6 +294,22 @@
       }; // end showLists
       showLists();
 
+      //조회수증가
+      function openArticle(boNo) {
+        $.ajax({
+          url: "knowHowAddHit",
+          method: "GET",
+          async: false,
+          data: {
+            boNo: boNo
+          },
+          success: function (data) {
+          },
+          error: function (reject) {
+          },
+        });
+      }
+
       loginOnly()
       function loginOnly() {
         let Uid = GetUser();
@@ -317,11 +330,10 @@
           let result = newData.getFullYear() + "-" +
             (newData.getMonth() < 10
               ? "0" + (newData.getMonth() + 1)
-              : newData.getMonth() + 1) +
-            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+              : newData.getMonth() + 1) +                                                         //참고 : https://gurtn.tistory.com/65
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
           return result;
-        }
-        else return null;
+        } else return null;
       };
 
       function GetUser() {

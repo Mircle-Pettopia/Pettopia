@@ -125,8 +125,8 @@
                   </div>
                   <div style="clear:both"></div>
                   <div id="infoDiv">
-                    <span th:text="${'작성자 : ' + Article.meId}"></span>
-                    <span th:text="${'작성일 : ' + Article.regDt}"></span>
+                    <span th:text="${'작성자 : ' + Article.meId}"></span>&nbsp;&nbsp;
+                    <span th:text="${'작성일 : ' + #dates.format(Article.regDt, 'yyyy-MM-dd HH:mm:ss')}"></span>
                   </div>
 
                   <div id="Viewer" th:utext="${ Article.subject }" style="height: auto;"></div>
@@ -180,8 +180,10 @@
                 `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
                 <h5 style="display:inline-block;">${data[i].meId}</h5>&nbsp;&nbsp;&nbsp;<span style="font-size: 11px !important; color: gray;">${dateChange(data[i].regDt)}</span>
                 ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
+                ${data[i].meId == user ? `<button type="button" class="btn btnPush btnLightBlue" id="replyUpdate_${data[i].commentId}" onclick="updateReply(${data[i].commentId},'${data[i].meId}', '${data[i].subject}');" style="display:inline-block; float:right; margin-top:0px">수정</button>` : ''}
                 <hr>
-                <div class="Viewer">${data[i].subject}
+                <div class="Viewer" id="Viewer_${data[i].commentId}">
+                  ${data[i].subject}
                 </div>
               </div>`
             }
@@ -191,6 +193,41 @@
             console.log("댓글불러오기에러");
           },
         })
+      }
+      
+      // 댓글 수정 작업
+      function updateReply(commentId, meId, subject) {
+        if (meId == user) {
+          document.getElementById('Viewer_' + commentId).innerHTML = 
+              `<textarea name="" id="subject_${commentId}" cols="90" rows="3" style="resize:none;" class="form-control">${subject}</textarea>`
+          document.getElementById('replyUpdate_' + commentId).setAttribute('onclick', 'RealUpdateReply('+commentId+')');
+        } else {
+          Swal.fire('계정을 확인바랍니다', '', 'info');
+        };
+      };
+
+      // 찐 댓글 수정
+      function RealUpdateReply(commentId){
+        let subject = document.getElementById('subject_' + commentId).value;
+
+        $.ajax({
+          url: "updateReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: { commentId: commentId,
+                  subject : subject},
+          success: function (data) {
+            console.log(data);
+            Swal.fire('수정완료', '', 'success');
+            getReply();
+          },
+          error: function (reject) {
+            console.log(reject);
+            Swal.fire('에러발생', '', 'error');
+            getReply();
+          },
+        });
       }
 
       // 댓글 삭제
@@ -216,7 +253,8 @@
         else {
           Swal.fire('계정을 확인바랍니다', '', 'info');
         }
-      }
+      };
+
 
       // 로그인한 유저만 댓글을 사용할 수 있고, 게시글 삭제와 수정은 게시글 작성자만 가능하도록 진행
       loginOnly();
@@ -278,8 +316,9 @@
             Toast.fire({
               icon: 'success',
               title: '댓글이 정상적으로 등록되었습니다.'
+            }).then(() => {
+              getReply();
             });
-            getReply();
           },
           error: function (reject) {
             console.log(reject);
@@ -313,7 +352,7 @@
             (newData.getMonth() < 10
               ? "0" + (newData.getMonth() + 1)
               : newData.getMonth() + 1) +
-            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
           return result;
         }
         else return null;

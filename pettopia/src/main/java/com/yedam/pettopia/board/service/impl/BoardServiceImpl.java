@@ -166,6 +166,11 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.getadoptInfo(boNo);
 	}
 
+	@Override
+	public int updateReply(int commentId, String subject) {
+		return boardMapper.updateReply(commentId, subject);
+	}
+
 
 
 	

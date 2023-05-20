@@ -146,7 +146,7 @@ public class BoardController {
 	//분양게시판 페이지
 	@GetMapping("adopt")
 	public String adopt(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
-		model.addAttribute("id", principal.getUser().getMeId());
+		//model.addAttribute("id", principal.getUser().getMeId());
 		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA"));
 		//												멍품종  냥품종   성별  분양상태  동물   지역
 		return "board/adopt";
@@ -246,7 +246,12 @@ public class BoardController {
 		return boardService.deleteAdoptReply(commentId);
 	};
 	
-	
+	//분양게시판 댓글수정
+	@PostMapping("updateReply")
+	@ResponseBody
+	public int updateReply(int commentId, String subject) {
+		return boardService.updateReply(commentId, subject);
+	}
 	
 	
 	

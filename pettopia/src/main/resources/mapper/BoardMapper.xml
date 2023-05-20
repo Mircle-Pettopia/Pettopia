@@ -205,7 +205,7 @@
 		AND bo_type = 'BY2'
 	</select>
 	
-	<!-- test -->
+	<!-- 게시글 수정할 때 품종 select value 값 넣어줄려고 만든거임 -->
 	<select id="getadoptInfo" resultType="BoardVO">
 		SELECT * FROM adopt WHERE bo_no = #{boNo}
 	</select>
@@ -286,5 +286,11 @@
 		DELETE reply WHERE comment_id = #{commentId} AND DIVISION = 'DR1'
 	</delete>
 	
+	<!-- 댓글 수정 -->
+	<update id="updateReply" parameterType="BoardVO">
+		UPDATE reply
+		   SET subject = #{subject}
+		 WHERE comment_id = #{commentId}
+	</update>
 	
 </mapper>

@@ -177,7 +177,7 @@
 
                         <label>분양상태</label>
                         <select id="as" name="status">
-                            <option value="">지역선택</option>
+                            <option value="">분양상태선택</option>
                             <option th:each="aslist : ${code.AS}"
                                     th:value="${aslist?.codCd}" 
                                     th:utext="${aslist?.codTitle}"
@@ -244,26 +244,104 @@
               status : as.value           //분양상태
             };
 
-        console.log(data);
-
         if (articleObject.meId == GetUser()) {
-          $.ajax({
-            url: "updateAdopt",
-            method: "POST",
-            async: false,
-            dataType: "JSON",
-            data: data,
-            success: function (data) {
-              Swal.fire('정상적으로 수정 되었습니다', '', 'success')
-                .then(() => {
-                  location.replace("adoptAticle?boNo=" + articleObject.boNo);
-                });
-            },
-            error: function (reject) {
-              console.log(reject);
-              alert("에러");
-            },
-          })
+          if(title.value == ""){
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '제목이 입력되지 않았습니다.',
+              }).then(() => {
+                  document.getElementById("title").focus();
+              });
+              return;
+          } else if (step1.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '동물이 선택되지 않았습니다.',
+              });
+              return;
+          } else if (step2.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '품종이 선택되지 않았습니다.',
+              });
+              return;
+          } else if (se.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '성별이 선택되지 않았습니다.',
+              });
+              return;
+          } else if (st.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '중성화여부 선택이 되지 않았습니다.',
+              });
+              return;
+          } else if (age.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '나이가 입력되지 않았습니다.',
+              }).then(() => {
+                  document.getElementById("age").focus();
+              });
+              return;
+          } else if (phone.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '연락처가 입력되지 않았습니다.',
+              }).then(() => {
+                  document.getElementById("phone").focus();
+              });
+              return;
+          } else if (ct.value == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '지역이 선택되지 않았습니다.',
+              });
+              return; 
+          } else if (charges == "") {
+              Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '책임비가 입력되지 않았습니다.',
+              }).then(() => {
+                  document.getElementById("charge").focus();
+              });
+              return;
+          } else if(as.value == "") {
+            Swal.fire({
+                  icon: 'warning',
+                  title: '알림',
+                  text: '분양상태가 선택되지 않았습니다.',
+              });
+              return;
+          } else {
+            $.ajax({
+              url: "updateAdopt",
+              method: "POST",
+              async: false,
+              dataType: "JSON",
+              data: data,
+              success: function (data) {
+                Swal.fire('정상적으로 수정 되었습니다', '', 'success')
+                  .then(() => {
+                    location.replace("adoptAticle?boNo=" + articleObject.boNo);
+                  });
+              },
+              error: function (reject) {
+                console.log(reject);
+                alert("에러");
+              },
+            });
+          }
         } else {
           Swal.fire('이글의 작성자가 아닙니다', '', 'error')
             .then(() => {
@@ -289,8 +367,6 @@
         })
         return result;
       };
-
-
 
       //분양정보 동물->품종 select
       function category_Change(val){
