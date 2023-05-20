@@ -18,6 +18,9 @@
         color: red;
         cursor: pointer;
       }
+      .date-input {
+        width: 250px;
+      }
     </style>
   </head>
   <body>
@@ -63,22 +66,55 @@
                     </tr>
                     <tr>
                       <th class="text-center col-sm-1" scope="row">등록일</th>
-                      <td class="col-sm-4">
+                      <td class="col-sm-10" colspan="3">
                         <div class="d-flex align-items-center">
-                          <input
-                            type="date"
-                            class="form-control mr-2"
-                            id="startDate"
-                          />
-                          <span class="mx-2">~</span>
-                          <input
-                            type="date"
-                            class="form-control ml-2"
-                            id="endDate"
-                          />
+                          <div class="btn-group me-4">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="1"
+                            >
+                              오늘
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="7"
+                            >
+                              1주일
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="30"
+                            >
+                              1개월
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="90"
+                            >
+                              3개월
+                            </button>
+                          </div>
+                          <div class="d-flex align-items-center">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="startDate"
+                            />
+                            <span class="mx-2">~</span>
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="endDate"
+                            />
+                          </div>
                         </div>
                       </td>
-
+                    </tr>
+                    <tr>
                       <th class="text-center col-sm-1" scope="row">문의상태</th>
                       <td class="col-sm-4" id="qstStTable">
                         <div class="d-flex">
@@ -565,7 +601,7 @@
           });
 
           // 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
-          $("#name, #prdtNm, #startDate, #endDate").on(
+          $("#name, #prdtNm, #startDate, #endDate, #1, #7, #30, #90").on(
             "keypress",
             function (event) {
               if (event.which === 13) {
@@ -617,6 +653,39 @@
               $("#selectAll").prop("checked", true);
             }
           });
+
+          let date = new Date();
+          //기간버튼-------------------------------
+          $("#1").on("click", () => {
+            start_date_change = document.getElementById("startDate").value =
+              formattedDate(date);
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
+
+          $("#7").on("click", () => {
+            //console.log(lastWeek());
+            start_date_change = document.getElementById("startDate").value =
+              lastWeek();
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
+
+          $("#30").on("click", () => {
+            //console.log(lastMonth());
+            start_date_change = document.getElementById("startDate").value =
+              lastMonth();
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
+
+          $("#90").on("click", () => {
+            //console.log(threeMonth());
+            start_date_change = document.getElementById("startDate").value =
+              threeMonth();
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
         });
 
         // 내 답변 출력
@@ -644,7 +713,7 @@
           let spanDelete = $("<span>")
             .addClass("float-end")
             .addClass("delBtn")
-            .text("| 삭제")
+            .text("/ 삭제")
             .css("cursor", "pointer");
           h6.append(spanDelete);
 
@@ -652,7 +721,7 @@
           let spanEdit = $("<span>")
             .addClass("float-end")
             .addClass("changeBtn")
-            .text("수정 |")
+            .text("수정 ")
             .css("cursor", "pointer");
           h6.append(spanEdit);
           div.append(h6);
@@ -717,6 +786,28 @@
             },
           });
           return result;
+        }
+
+        //일주일전
+        function lastWeek() {
+          var d = new Date();
+          var dayOfMonth = d.getDate();
+          d.setDate(dayOfMonth - 7);
+          return formattedDate(d);
+        }
+        //한달전
+        function lastMonth() {
+          var d = new Date();
+          var monthOfYear = d.getMonth();
+          d.setMonth(monthOfYear - 1);
+          return formattedDate(d);
+        }
+        //세달전
+        function threeMonth() {
+          var d = new Date();
+          var monthOfYear = d.getMonth();
+          d.setMonth(monthOfYear - 3);
+          return formattedDate(d);
         }
       </script>
     </div>
