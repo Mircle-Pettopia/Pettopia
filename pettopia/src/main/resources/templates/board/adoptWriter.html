@@ -255,6 +255,15 @@ layout:decorate="~{../templates/layout}">
                     document.getElementById("phone").focus();
                 });
                 return;
+            } else if (phone.value.length < 13){
+                Swal.fire({
+                    icon: 'warning',
+                    title: '알림',
+                    text: '연락처가 올바르게 입력되지 않았습니다.',
+                }).then(() => {
+                    document.getElementById("phone").focus();
+                });
+                return;
             } else if (ct.value == "") {
                 Swal.fire({
                     icon: 'warning',

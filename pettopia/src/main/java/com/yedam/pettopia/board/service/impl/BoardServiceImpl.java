@@ -145,13 +145,18 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.deleteAdoptReply(commentId);
 	}
 
+	@Transactional
 	@Override
-	public int delAdopt(int boNo, String Uid) {
+	public int delAdopt(int boNo, String Uid) {			// 글삭제 + 댓글삭제 + 분양정보삭제
 		System.out.println("test:" + Uid);
 		int result = -1;
 		if(getAdoptWriter(boNo).equals(Uid)) {
 			result = boardMapper.delKnowHow(boNo);
-			boardMapper.delKnowHow2(boNo);
+			
+			if(result > 0) {
+				boardMapper.delKnowHow2(boNo);
+				boardMapper.delAdoptInfo(boNo);
+			}
 		};
 		return result;
 	}

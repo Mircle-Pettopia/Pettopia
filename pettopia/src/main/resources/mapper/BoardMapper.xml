@@ -182,25 +182,19 @@
 	<!-- 분양게시판 단건조회 -->
 	<select id="adoptDetail" resultType="BoardVO">
 		SELECT 
-	        bo.bo_no,
-	        adopt_id,
+	        bo.bo_no, adopt_id,
 	        get_common(pet_type) pet_type,
 	        get_common(breed) breed,
 	        get_common(sex) sex,
 	        get_common(city) city,
-	        get_common(status) status,
-	        netuered,
-	        age,
-	        phone,
-	        charge,
-            title,
-	        subject,
-	        reg_dt,
-	        view_cnt,
-	        me_id
+	        get_common(status) status, netuered,
+	        age, ad.phone, charge, title, subject,
+            reg_dt, bo.me_id, out_yn, name
 		FROM board bo 
 		JOIN adopt ad
 		ON bo.bo_no = ad.bo_no
+		JOIN member mem
+		ON bo.me_id = mem.me_id
 		WHERE bo.bo_no = #{boNo}
 		AND bo_type = 'BY2'
 	</select>
@@ -258,6 +252,11 @@
 	<!-- 게시글 삭제 -->
 	<delete id="delAdoptBoardAndReply" parameterType="int">
 		DELETE reply WHERE BO_NO = #{boNo} AND DIVISION = 'DR1'
+	</delete>
+	
+	<!-- 분양정보 삭제 -->
+	<delete id="delAdoptInfo" parameterType="int">
+		DELETE adopt WHERE bo_no = #{boNo}
 	</delete>
 	<!-- 본인글을 삭제하는건지 확인 -->
 	<select id="getAdoptWriter" parameterType="int" resultType="String">

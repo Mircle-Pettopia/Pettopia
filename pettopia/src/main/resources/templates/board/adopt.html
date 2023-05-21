@@ -234,6 +234,9 @@
           async: false,
           data		:  data, 
           success : (data)=>{
+            //이거 넣으니까 페이징 진행할 때 목록이 append가 되지 않는다 0ㅇ0..?
+            lists.innerHTML = '';
+            
             if(data != ""){
               for(let i = 0; i < data.length ; i++){
                 let status = data[i].status;
@@ -283,7 +286,7 @@
           data: data,
           success: function (data) {
             //console.log(data);
-            paging(data, 10, 5, page)
+            paging(data, 10, 5, page);
 
           },
           error: function (reject) {
@@ -320,6 +323,11 @@
                                     등록
                                   </button>
                               </div>`
+          myboard.innerHTML += `<li class="p-b-7">
+                                    <a href="mypost" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        내가 쓴 글보기
+                                    </a>
+                                </li>`
         }
       }
 
@@ -377,21 +385,21 @@
         let pageHtml = pagenav.innerHTML;
         pagenav.innerHTML = '';
         if (prev > 0) {
-          pagenav.innerHTML += `<a href="#" class="bt prev" onclick="showLists(${prev});">＜</a>`;
+          pagenav.innerHTML += `<a class="bt prev" onclick="showLists(${prev});">＜</a>`;
         }
 
         //페이징 번호 표시 
         for (var i = first; i <= last; i++) {
           if (currentPage == i) {
             pagenav.innerHTML +=
-              `<a href="#" class="num on">${i}</a>`;
+              `<a class="num on">${i}</a>`;
           } else {
-            pagenav.innerHTML += `<a href="#" onclick="showLists(${i});" class="num o">${i}</a>`;
+            pagenav.innerHTML += `<a onclick="showLists(${i});" class="num o">${i}</a>`;
           }
         }
 
         if (last < totalPage) {
-          pagenav.innerHTML += `<a href="#" onclick="showLists(${next});" class="bt next">＞</a>`;
+          pagenav.innerHTML += `<a onclick="showLists(${next});" class="bt next">＞</a>`;
         }
 
         $("#pagingul").html(pagenav.innerHTML);

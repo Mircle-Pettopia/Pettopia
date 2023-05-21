@@ -34,9 +34,10 @@ public interface BoardMapper {
 	public int updateAdopt(BoardVO vo);
 	public BoardVO getadoptInfo(int boNo);
 	
-	//분양게시판 + 댓글 삭제
+	//분양게시판 + 댓글 삭제 + 분양정보
 	public int delAdoptBoardAndReply(int boNo);
 	public String getAdoptWriter(int boNo);
+	public int delAdoptInfo(int boNo);
 	
 	//분양게시판 댓글
 	public List<BoardVO> getAdoptReply(int boNo);

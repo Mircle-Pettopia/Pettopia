@@ -177,6 +177,12 @@
                   onclick="InsertReply();">작성</button>
                 <hr>
                 <textarea class="form-control" rows="4" style="resize: none;" id="replySubject"></textarea>`
+
+          myboard.innerHTML += `<li class="p-b-7">
+                                    <a href="mypost" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        내가 쓴 글보기
+                                    </a>
+                                </li>`
         }
         else {
           replyLoginOnly.innerHTML = `<h4 style="display: inline-block; width: 100px;">댓글</h4>
