@@ -13,6 +13,9 @@
         flex-direction: row;
         padding-right: 5px;
       }
+      .date-input {
+        width: 250px;
+      }
     </style>
   </head>
   <body>
@@ -75,23 +78,58 @@
                       </td>
                     </tr>
                     <tr>
-                      <th class="text-center" scope="row">상품등록일</th>
-                      <td>
+                      <th class="text-center col-sm-1" scope="row">
+                        상품등록일
+                      </th>
+                      <td class="col-sm-10" colspan="3">
                         <div class="d-flex align-items-center">
-                          <input
-                            type="date"
-                            class="form-control mr-2"
-                            id="startDate"
-                          />
-                          <span class="mx-2">~</span>
-                          <input
-                            type="date"
-                            class="form-control ml-2"
-                            id="endDate"
-                          />
+                          <div class="btn-group me-4">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="1"
+                            >
+                              오늘
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="7"
+                            >
+                              1주일
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="30"
+                            >
+                              1개월
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="90"
+                            >
+                              3개월
+                            </button>
+                          </div>
+                          <div class="d-flex align-items-center">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="startDate"
+                            />
+                            <span class="mx-2">~</span>
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="endDate"
+                            />
+                          </div>
                         </div>
                       </td>
-
+                    </tr>
+                    <tr>
                       <th class="text-center" scope="row">판매상태</th>
                       <td id="saleStTable">
                         <div class="d-flex">
@@ -603,6 +641,38 @@
       </div>
       <script>
         $(document).ready(function () {
+          let date = new Date();
+          //기간버튼-------------------------------
+          $("#1").on("click", () => {
+            start_date_change = document.getElementById("startDate").value =
+              formattedDate(date);
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
+
+          $("#7").on("click", () => {
+            //console.log(lastWeek());
+            start_date_change = document.getElementById("startDate").value =
+              lastWeek();
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
+
+          $("#30").on("click", () => {
+            //console.log(lastMonth());
+            start_date_change = document.getElementById("startDate").value =
+              lastMonth();
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
+
+          $("#90").on("click", () => {
+            //console.log(threeMonth());
+            start_date_change = document.getElementById("startDate").value =
+              threeMonth();
+            end_date_change = document.getElementById("endDate").value =
+              formattedDate(date);
+          });
           //엑셀버튼 클릭 이벤트
           const options = {
             includeHiddenColumns: true,
@@ -1148,12 +1218,15 @@
           });
 
           // 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
-          $("#searchNm, #startDate, #endDate").on("keypress", function (event) {
-            if (event.which === 13) {
-              event.preventDefault();
-              $("#searchBtn").click();
+          $("#searchNm, #startDate, #endDate, #1, #7, #30, #90").on(
+            "keypress",
+            function (event) {
+              if (event.which === 13) {
+                event.preventDefault();
+                $("#searchBtn").click();
+              }
             }
-          });
+          );
 
           // 검색 select 대분류
           $("select[name=lCatId]").change(function () {
@@ -1644,6 +1717,28 @@
         // 돈 변환
         function formattedMoney(value) {
           return value.toLocaleString() + "원";
+        }
+
+        //일주일전
+        function lastWeek() {
+          var d = new Date();
+          var dayOfMonth = d.getDate();
+          d.setDate(dayOfMonth - 7);
+          return formattedDate(d);
+        }
+        //한달전
+        function lastMonth() {
+          var d = new Date();
+          var monthOfYear = d.getMonth();
+          d.setMonth(monthOfYear - 1);
+          return formattedDate(d);
+        }
+        //세달전
+        function threeMonth() {
+          var d = new Date();
+          var monthOfYear = d.getMonth();
+          d.setMonth(monthOfYear - 3);
+          return formattedDate(d);
         }
       </script>
     </div>
