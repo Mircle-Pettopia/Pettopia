@@ -67,11 +67,14 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collect = new ArrayList<>();
 		
-    	if(user.getRole().equals("ADMIN")) {
+		System.out.println(collect);
+		
+		// SNS으로 회원가입을 하면 해당 값이 null이 뜬다
+		if(user.getRole() == null) {
+			collect.add(new SimpleGrantedAuthority("ROLE_USER"));
+		} else if(user.getRole().equals("ADMIN")) {
     		collect.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
     	} else if(user.getRole().equals("USER")){
-    		collect.add(new SimpleGrantedAuthority("ROLE_USER"));
-    	} else {
     		collect.add(new SimpleGrantedAuthority("ROLE_USER"));
     	}
         return collect;

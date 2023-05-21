@@ -29,13 +29,19 @@ public interface BoardMapper {
 	public List<BoardVO> adoptAllList(int page, String petType, String breed, String sex, String city);
 	public int adoptMaxPage(String petType, String breed, String sex, String city);
 	public BoardVO adoptDetail(int boNo);
+	public int insertAdoptArticle(BoardVO vo);
+	public int insertAdoptInfo(BoardVO vo);
+	public int updateAdopt(BoardVO vo);
+	public BoardVO getadoptInfo(int boNo);
 	
-	//분양게시판 + 댓글 삭제
+	//분양게시판 + 댓글 삭제 + 분양정보
 	public int delAdoptBoardAndReply(int boNo);
 	public String getAdoptWriter(int boNo);
+	public int delAdoptInfo(int boNo);
 	
 	//분양게시판 댓글
 	public List<BoardVO> getAdoptReply(int boNo);
 	public int insertAdoptReply(BoardVO vo);
 	public int deleteAdoptReply(int commentId);
+	public int updateReply(int commentId, String subject);
 }

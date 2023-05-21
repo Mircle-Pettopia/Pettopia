@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -147,10 +146,10 @@ public class BoardController {
 	//분양게시판 페이지
 	@GetMapping("adopt")
 	public String adopt(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
-		model.addAttribute("id", principal.getUser().getMeId());
+		//model.addAttribute("id", principal.getUser().getMeId());
 		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA"));
 		//												멍품종  냥품종   성별  분양상태  동물   지역
-		return "Board/adopt";
+		return "board/adopt";
 	};
 	
 	//분양게시판 전체목록
@@ -175,6 +174,23 @@ public class BoardController {
 		return boardService.adoptMaxPage(petType, breed, sex, city);
 	};
 	
+	//분양게시판 글등록 페이지
+	@GetMapping("adoptWriter")
+	public String adoptWriter(Model model, @AuthenticationPrincipal PrincipalDetails principal) {
+		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA", "YN"));
+		//												멍품종  냥품종   성별  분양상태  동물   지역  중성화여부
+		model.addAttribute("id", principal.getUser().getMeId());
+		return "board/adoptWriter";
+	}
+	
+	
+	//분양게시판 글등록
+	@PostMapping("insertAdopt")
+	@ResponseBody
+	public int insertAdopt(BoardVO vo) {
+		return boardService.insertAdoptArticle(vo);
+	}
+	
 	//분양게시판 단건조회
 	@GetMapping("adoptAticle")
 	public String adoptDetail(Model model, int boNo) {
@@ -191,10 +207,22 @@ public class BoardController {
 		return boardService.delAdopt(boNo, Uid);
 	};
 	
+	//분양게시판 게시글 수정페이지
 	@GetMapping("modAdopt")
-	public String modAdopt(Model model, int boNo) {
+	public String modAdopt(Model model, int boNo, @AuthenticationPrincipal PrincipalDetails principal) {
 		model.addAttribute("Article", boardService.adoptDetail(boNo));
+		model.addAttribute("id", principal.getUser().getMeId());
+		model.addAttribute("code", codeService.getCodes("DG", "CT", "SX", "AS", "BA", "AA", "YN"));
+		//												멍품종  냥품종   성별  분양상태  동물   지역  중성화여부
+		model.addAttribute("originalInfo",boardService.getadoptInfo(boNo));
 		return "board/modAdopt";
+	};
+	
+	//분양게시판 게시글 수정(+분양정보)
+	@PostMapping("updateAdopt")
+	@ResponseBody
+	public int updateAdopt(BoardVO vo) {
+		return boardService.updateAdopt(vo);
 	}
 	
 	//분양게시판 댓글조회
@@ -218,7 +246,12 @@ public class BoardController {
 		return boardService.deleteAdoptReply(commentId);
 	};
 	
-	
+	//분양게시판 댓글수정
+	@PostMapping("updateReply")
+	@ResponseBody
+	public int updateReply(int commentId, String subject) {
+		return boardService.updateReply(commentId, subject);
+	}
 	
 	
 	

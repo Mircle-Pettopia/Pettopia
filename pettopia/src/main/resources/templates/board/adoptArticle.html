@@ -15,6 +15,7 @@
       margin-bottom: 20px; 
       padding-top: 10px; 
       padding-bottom: 10px;
+      background-color: ;
     }
 
     #boNo{
@@ -53,7 +54,9 @@
         </a>
       </div>
     </div>
+
     <div id="boNo" th:text="${Article.boNo}"></div>
+
     <div class="row">
       <th:block th:replace="layout/boardNavbar :: boardNavFragment"></th:block>
 
@@ -65,9 +68,11 @@
       <!-- 기본 boothstrap으로 다시 덮어씌울거야~~ -->
         <div class="form-group">
             <div class="col-md-8 col-lg-12 p-b-150">
-              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-50 p-t-20 p-b-50">
+              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-10 p-t-20 p-b-10 border">
+
                 <!--분양할 동물 정보 보여주기-->
-                <div class="border">
+                <div class="">
+                  <h3 style="font-weight: bold;">분양정보</h3>
                   <table class="table" style="margin-bottom: 20px;">
                     <colgroup>
 											<col width="20%">
@@ -82,8 +87,12 @@
                       <td><span th:text="${Article.breed}"></span></td>
                     </tr>
                     <tr>
+                      <th>나이</th>
+                      <td><span th:text="${Article.age}"></span></td>
+                    </tr>
+                    <tr>
                       <th>연락처</th>
-                      <td><span th:text="${Article.phone}"></span></td>
+                      <td><span id="writerPhone" th:text="${Article.phone}"></span></td>
                     </tr>
                     <tr>
                       <th>중성화여부</th>
@@ -94,26 +103,39 @@
                       <td><span th:text="${Article.city}"></span></td>
                     </tr>
                     <tr>
+                      <th>책임비용</th>
+                      <td>
+                        <span th:if="${Article.charge == 0}" th:text="0원" ></span>
+                        <span th:if="${Article.charge != 0}" th:text="${#numbers.formatInteger(Article.charge, 3, 'COMMA') + '원'}" ></span>
+                      </td>
+                    </tr>
+                    <tr>
                       <th>분양상태</th>
-                      <td><span th:text="${Article.status}"></span>6</td>
+                      <td><span th:text="${Article.status}"></span></td>
                     </tr>
                   </table>
                 </div>
+              </div>
                 
-                <div class="border">
-                  <h3 th:text="${Article.title}"></h3>
+              <div class="col-lg-8 col-xl-12 m-lr-auto m-b-10 p-t-20 p-b-90 border">
+                <div class="">
+                  <h3 th:text="${Article.title}" style="font-weight: bold;"></h3>
                   <div style="float: right !important;">
                     <span th:text="${'조회수 : ' + Article.viewCnt}"></span>
                     <span th:text="${'글번호 : ' + Article.boNo}"></span>
                   </div>
                   <div style="clear:both"></div>
                   <div id="infoDiv">
-                    <span th:text="${'작성자 : ' + Article.meId}"></span>
-                    <span th:text="${'작성일 : ' + Article.regDt}"></span>
-                  </div>
-
-                  <div id="Viewer" th:utext="${ Article.subject }"></div>
-                  
+                    <th:block th:if="${Article.outYn == 'Y'}">
+                      <span>작성자 : 탈퇴회원&nbsp;&nbsp;작성자명 : 탈퇴회원</span>&nbsp;&nbsp;
+                    </th:block>
+                    <th:block th:if="${Article.outYn == 'N'}">
+                      <span>작성자&nbsp;:&nbsp;</span><span id="writerId" th:text="${Article.meId}"></span>&nbsp;&nbsp;
+                      <span>작성자명&nbsp;:&nbsp;</span><span id="writerName" th:text="${Article.name}"></span>&nbsp;&nbsp;
+                    </th:block>
+                    <span th:text="${'작성일 : ' + #dates.format(Article.regDt, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                  </div> 
+                  <div id="Viewer" th:utext="${ Article.subject }" style="height: auto;"></div>
                 </div>
                 
                 <hr>
@@ -145,10 +167,44 @@
 
 
     <script th:inline="javascript">
-      console.log(meId.innerText);
+      $(document).ready(function(){
+        //개인정보를 지키자 : 작성자 이름
+        let writerName = document.getElementById('writerName').innerText;
+        let writerName_substr = writerName.substr(0, 1);
+        let writerName_substr_result = writerName_substr.padEnd(writerName.length, '*');
+        document.getElementById('writerName').innerText = writerName_substr_result;
+
+        //개인정보를 지키자 : 작성자 아이디
+        let writerId = document.getElementById('writerId').innerText;
+        let writerId_split = writerId.split('@');  // aaa, aaa.com
+        let writerId_split_dot = writerId_split[1].split('.');  //aaa, com
+
+        let writerId_split_strat = writerId_split[0].substr(0,1);  //aa
+        let writerId_split_result = writerId_split_strat.padEnd(writerId_split[0].length, '*'); // 골뱅이 기준 앞부분 가공 끝
+
+        let writerId_split_end = writerId_split_dot[0].substr(0,2);
+        let writerId_split_result2 = writerId_split_end.padEnd(writerId_split_dot[0].length, '*');  // . 기준 앞부분 가공 끝
+
+        // a*.aa*.com
+        document.getElementById('writerId').innerText = writerId_split_result + '@' +  writerId_split_result2 + '.' + writerId_split_dot[1];
+
+        //개인정보를 지키자 : 작성자 연락처
+        let writerPhone = document.getElementById('writerPhone').innerText;
+        let writerPhone_split = writerPhone.split('-');
+
+        let writerPhone_middle = writerPhone_split[1];
+        let writerPhone_middle_substr = writerPhone_split[1].substr(0, 2);
+        let writerPhone_middle_reuslt = writerPhone_middle_substr.padEnd(writerPhone_middle.length, '*');
+
+        let writerPhone_end = writerPhone_split[2];
+        let writerPhone_end_substr = writerPhone_split[2].substr(0,2);
+        let writerPhone_end_reuslt = writerPhone_end_substr.padEnd(writerPhone_end.length, '*');
+        document.getElementById('writerPhone').innerText = writerPhone_split[0] + '-' + writerPhone_middle_reuslt + '-' + writerPhone_end_reuslt;
+      });
+      //--------------------------------------------------------------------
+
       let user = GetUser();
       let article = /*[[${Article}]]*/
-      console.log(article);
 
       // 작성글 출력
       getReply();
@@ -160,15 +216,16 @@
           dataType: "JSON",
           data: { boNo: boNo.innerText },   //html div id에 해당되는 text를 읽는다.
           success: function (data) {
-            console.log(data);
             replys.innerHTML = '';
             for (i = 0; i < data.length; i++) {
               replys.innerHTML +=
                 `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
-                <h5 style="display:inline-block;">작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5> 
+                <h5 style="display:inline-block;">${data[i].meId}</h5>&nbsp;&nbsp;&nbsp;<span style="font-size: 11px !important; color: gray;">${dateChange(data[i].regDt)}</span>
                 ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
+                ${data[i].meId == user ? `<button type="button" class="btn btnPush btnLightBlue" id="replyUpdate_${data[i].commentId}" onclick="updateReply(${data[i].commentId},'${data[i].meId}', '${data[i].subject}');" style="display:inline-block; float:right; margin-top:0px">수정</button>` : ''}
                 <hr>
-                <div class="Viewer">${data[i].subject}
+                <div class="Viewer" id="Viewer_${data[i].commentId}">
+                  ${data[i].subject}
                 </div>
               </div>`
             }
@@ -178,6 +235,41 @@
             console.log("댓글불러오기에러");
           },
         })
+      }
+      
+      // 댓글 수정 작업
+      function updateReply(commentId, meId, subject) {
+        if (meId == user) {
+          document.getElementById('Viewer_' + commentId).innerHTML = 
+              `<textarea name="" id="subject_${commentId}" cols="90" rows="3" style="resize:none;" class="form-control">${subject}</textarea>`
+          document.getElementById('replyUpdate_' + commentId).setAttribute('onclick', 'RealUpdateReply('+commentId+')');
+        } else {
+          Swal.fire('계정을 확인바랍니다', '', 'info');
+        };
+      };
+
+      // 찐 댓글 수정
+      function RealUpdateReply(commentId){
+        let subject = document.getElementById('subject_' + commentId).value;
+
+        $.ajax({
+          url: "updateReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: { commentId: commentId,
+                  subject : subject},
+          success: function (data) {
+            console.log(data);
+            Swal.fire('수정완료', '', 'success');
+            getReply();
+          },
+          error: function (reject) {
+            console.log(reject);
+            Swal.fire('에러발생', '', 'error');
+            getReply();
+          },
+        });
       }
 
       // 댓글 삭제
@@ -203,7 +295,8 @@
         else {
           Swal.fire('계정을 확인바랍니다', '', 'info');
         }
-      }
+      };
+
 
       // 로그인한 유저만 댓글을 사용할 수 있고, 게시글 삭제와 수정은 게시글 작성자만 가능하도록 진행
       loginOnly();
@@ -211,11 +304,17 @@
         let loginId = GetUser();
         if (loginId != "" && loginId != null) {
           replyLoginOnly.innerHTML =
-            `<h4 style="display: inline-block; width: 100px;">댓글</h4>
+            `<h3 style="display: inline-block; width: 100px; font-weight: bold;">댓글</h3>
                 <button type="button" class="btn btnPush btnBlueGreen" style="float:right;margin: auto;"
                 onclick="InsertReply();">작성</button>
                 <hr>
                 <textarea class="form-control" rows="4" style="resize: none;" id="replySubject"></textarea>`
+                
+            myboard.innerHTML += `<li class="p-b-7">
+                                    <a href="mypost" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        내가 쓴 글보기
+                                    </a>
+                                </li>`
         } else {
           replyLoginOnly.innerHTML = `<h4 style="display: inline-block; width: 100px;">댓글</h4>
                                       <hr>
@@ -250,8 +349,6 @@
       // 댓글 등록
       function InsertReply() {
         let meId = GetUser();
-        console.log(meId);
-        console.log(replySubject.value);
         $.ajax({
           url: "insertAdoptReply",
           method: "POST",
@@ -267,8 +364,9 @@
             Toast.fire({
               icon: 'success',
               title: '댓글이 정상적으로 등록되었습니다.'
+            }).then(() => {
+              getReply();
             });
-            getReply();
           },
           error: function (reject) {
             console.log(reject);
@@ -302,7 +400,7 @@
             (newData.getMonth() < 10
               ? "0" + (newData.getMonth() + 1)
               : newData.getMonth() + 1) +
-            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
           return result;
         }
         else return null;
@@ -318,7 +416,7 @@
           title: '정말로 삭제하시겠습니까?',
           showCancelButton: true,
           confirmButtonText: '삭제',
-          denyButtonText: `취소`,
+          cancelButtonText: '취소',
         }).then((result) => {
           if (result.isConfirmed) {
             $.ajax({
@@ -331,7 +429,6 @@
                 boNo: boNo.innerText
               },
               success: function (data) {
-                console.log(data);
                 if (data == -1) {
                   swal.fire('삭제실패 작성자가 아닙니다', '', 'info')
                 }

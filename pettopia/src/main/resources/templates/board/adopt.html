@@ -111,19 +111,17 @@
           <div class="board_list_wrap">
             <table class="table">
               <colgroup>
+                <col width="12%">
+                <col width="14%">
+                <col width="11%">
+                <col width="28%">
                 <col width="10%">
-                <col width="15%">
                 <col width="10%">
-                <col width="10%">
-                <col width="24%">
-                <col width="8%">
-                <col width="8%">
                 <col width="15%">
               </colgroup>
               <thead>
                 <tr>
                   <th>분양여부</th>
-                  <th>이미지</th>
                   <th>품종</th>
                   <th>종류</th>
                   <th>제목</th>
@@ -222,7 +220,7 @@
           petType : ba,
           breed : bs,
           sex : se,
-          ctiy : ct,
+          city : ct,
           page : page
         };
         
@@ -236,34 +234,45 @@
           async: false,
           data		:  data, 
           success : (data)=>{
-            for(let i = 0; i < data.length ; i++){
-              
-              let status = data[i].status;
-              lists.innerHTML += `
-                  <tr>
-                    <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
-                    <td><img src="images/about-01.jpg"></td>
-                    <td>${data[i].petType}</td>
-                    <td>${data[i].breed}</td>
-                    <td>
-                      <div style="text-align: left;">
-                        <div style="margin-bottom: 10px;"><p style="font-size: 16px;">
-                          <a href="adoptAticle?boNo=${data[i].boNo}">${data[i].title}</a>
+            //이거 넣으니까 페이징 진행할 때 목록이 append가 되지 않는다 0ㅇ0..?
+            lists.innerHTML = '';
+            
+            if(data != ""){
+              for(let i = 0; i < data.length ; i++){
+                let status = data[i].status;
+                lists.innerHTML += `
+                    <tr>
+                      <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
+                      <td>${data[i].petType}</td>
+                      <td>${data[i].breed}</td>
+                      <td>
+                        <div style="text-align: left;">
+                          <div style="margin-bottom: 10px;"><p style="font-size: 16px;">
+                            <a href="adoptAticle?boNo=${data[i].boNo}" onclick='openArticle(${data[i].boNo})'>${data[i].title}</a>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>${data[i].sex}</td>
-                    <td>${data[i].city}</td>
-                    <td>${dateChange(data[i].regDt)}</td>`;
+                      </td>
+                      <td>${data[i].sex}</td>
+                      <td>${data[i].city}</td>
+                      <td>${dateChange(data[i].regDt)}</td>`;
 
-              if(status == "분양완료"){
-                $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
-              } else if(status == "분양중"){
-                $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
-              } else {
-                $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
-              }
+                if(status == "분양완료"){
+                  $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
+                } else if(status == "분양중"){
+                  $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
+                } else {
+                  $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
+                }
+              } 
+            } else {
+                lists.innerHTML = `
+                    <tr>
+                      <td colspan="8">
+                        <div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>
+                      </td>
+                    </tr>`;
             }
+
           },
           error : (err) => {
             console.log(err);
@@ -277,7 +286,7 @@
           data: data,
           success: function (data) {
             //console.log(data);
-            paging(data, 10, 5, page)
+            paging(data, 10, 5, page);
 
           },
           error: function (reject) {
@@ -288,16 +297,37 @@
       }; // end showLists
       showLists();
 
+      //조회수증가
+      function openArticle(boNo) {
+        $.ajax({
+          url: "knowHowAddHit",
+          method: "GET",
+          async: false,
+          data: {
+            boNo: boNo
+          },
+          success: function (data) {
+          },
+          error: function (reject) {
+          },
+        });
+      }
+
       loginOnly()
       function loginOnly() {
         let Uid = GetUser();
         if (Uid != "" && Uid != null) {
           console.log(GetUser())
           bt_warp.innerHTML = `<div style="margin:0 auto; display:inline-block;">
-                                  <button type="button" onclick="location.href='knowHowWriter'" class="btn btnPush btnBlueGreen customBtn">
+                                  <button type="button" onclick="location.href='adoptWriter'" class="btn btnPush btnBlueGreen customBtn">
                                     등록
                                   </button>
                               </div>`
+          myboard.innerHTML += `<li class="p-b-7">
+                                    <a href="mypost" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
+                                        내가 쓴 글보기
+                                    </a>
+                                </li>`
         }
       }
 
@@ -308,11 +338,10 @@
           let result = newData.getFullYear() + "-" +
             (newData.getMonth() < 10
               ? "0" + (newData.getMonth() + 1)
-              : newData.getMonth() + 1) +
-            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+              : newData.getMonth() + 1) +                                                         //참고 : https://gurtn.tistory.com/65
+            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
           return result;
-        }
-        else return null;
+        } else return null;
       };
 
       function GetUser() {
@@ -356,21 +385,21 @@
         let pageHtml = pagenav.innerHTML;
         pagenav.innerHTML = '';
         if (prev > 0) {
-          pagenav.innerHTML += `<a href="#" class="bt prev" onclick="showLists(${prev});">＜</a>`;
+          pagenav.innerHTML += `<a class="bt prev" onclick="showLists(${prev});">＜</a>`;
         }
 
         //페이징 번호 표시 
         for (var i = first; i <= last; i++) {
           if (currentPage == i) {
             pagenav.innerHTML +=
-              `<a href="#" class="num on">${i}</a>`;
+              `<a class="num on">${i}</a>`;
           } else {
-            pagenav.innerHTML += `<a href="#" onclick="showLists(${i});" class="num o">${i}</a>`;
+            pagenav.innerHTML += `<a onclick="showLists(${i});" class="num o">${i}</a>`;
           }
         }
 
         if (last < totalPage) {
-          pagenav.innerHTML += `<a href="#" onclick="showLists(${next});" class="bt next">＞</a>`;
+          pagenav.innerHTML += `<a onclick="showLists(${next});" class="bt next">＞</a>`;
         }
 
         $("#pagingul").html(pagenav.innerHTML);

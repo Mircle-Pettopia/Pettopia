@@ -34,4 +34,10 @@ public class BoardVO {
 	private String phone;
 	private String city;
 	private int charge;
+	
+	
+	//탈퇴여부
+	private String outYn;
+	//이름
+	private String name;
 }

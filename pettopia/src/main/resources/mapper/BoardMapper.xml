@@ -91,8 +91,8 @@
 	<!-- 은애수정 2023/05/18 -->
 	<update id="updateKnowHow" parameterType="BoardVO">
 		UPDATE board
-			SET title = #{title}, subject=#{subject}
-		WHERE BO_NO=#{boNo}
+			SET title = #{title}, subject = #{subject}
+		WHERE bo_no = #{boNo}
 	</update>
 	
 	<delete id="delKnowHowReply" parameterType="int">
@@ -182,32 +182,81 @@
 	<!-- 분양게시판 단건조회 -->
 	<select id="adoptDetail" resultType="BoardVO">
 		SELECT 
-	        bo.bo_no,
-	        adopt_id,
+	        bo.bo_no, adopt_id,
 	        get_common(pet_type) pet_type,
 	        get_common(breed) breed,
 	        get_common(sex) sex,
 	        get_common(city) city,
-	        get_common(status) status,
-	        netuered,
-	        age,
-	        phone,
-	        charge,
-            title,
-	        subject,
-	        reg_dt,
-	        view_cnt,
-	        me_id
+	        get_common(status) status, netuered,
+	        age, ad.phone, charge, title, subject,
+            reg_dt, bo.me_id, out_yn, name
 		FROM board bo 
 		JOIN adopt ad
 		ON bo.bo_no = ad.bo_no
+		JOIN member mem
+		ON bo.me_id = mem.me_id
 		WHERE bo.bo_no = #{boNo}
 		AND bo_type = 'BY2'
 	</select>
 	
+	<!-- 게시글 수정할 때 품종 select value 값 넣어줄려고 만든거임 -->
+	<select id="getadoptInfo" resultType="BoardVO">
+		SELECT * FROM adopt WHERE bo_no = #{boNo}
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertAdoptArticle" parameterType="BoardVO">
+	    INSERT INTO board
+	                (bo_no,
+	                 title,
+	                 subject,
+	                 me_id,
+	                 bo_type)
+	    VALUES(
+	                (SELECT TO_NUMBER(NVL(MAX(bo_no),0))+1 bo_no FROM board)
+	                ,#{title}
+	                ,#{subject}
+	                ,#{meId}
+	                ,'BY2')
+	</insert>
+	
+	<!-- 게시판 등록(분양정보) -->
+	<insert id="insertAdoptInfo" parameterType="BoardVO">
+		<selectKey resultType="int" keyProperty="boNo" order="BEFORE">
+			SELECT NVL(MAX(bo_no),0) as bo_no FROM board
+		</selectKey>
+		INSERT
+			INTO adopt ( adopt_id, pet_type, breed, sex, netuered, age,
+	                     phone, city, charge, bo_no)
+	            VALUES ( (SELECT TO_NUMBER(NVL(MAX(adopt_id),0))+1 bo_no FROM adopt),
+	                      #{petType}, #{breed}, #{sex}, #{netuered}, #{age},
+	                      #{phone}, #{city}, #{charge}, #{boNo} )
+	</insert>
+	
+	<!-- 분양정보 수정 -->
+	<update id="updateAdopt" parameterType="BoardVO">
+		UPDATE adopt
+		    SET 
+		        pet_type = #{petType},
+		        breed = #{breed},
+		        sex = #{sex},
+		        netuered = #{netuered},
+		        age = #{age},
+		        status = #{status},
+		        phone = #{phone},
+		        city = #{city},
+		        charge = #{charge}
+		WHERE bo_no = #{boNo}
+	</update>
+	
 	<!-- 게시글 삭제 -->
 	<delete id="delAdoptBoardAndReply" parameterType="int">
 		DELETE reply WHERE BO_NO = #{boNo} AND DIVISION = 'DR1'
+	</delete>
+	
+	<!-- 분양정보 삭제 -->
+	<delete id="delAdoptInfo" parameterType="int">
+		DELETE adopt WHERE bo_no = #{boNo}
 	</delete>
 	<!-- 본인글을 삭제하는건지 확인 -->
 	<select id="getAdoptWriter" parameterType="int" resultType="String">
@@ -236,5 +285,11 @@
 		DELETE reply WHERE comment_id = #{commentId} AND DIVISION = 'DR1'
 	</delete>
 	
+	<!-- 댓글 수정 -->
+	<update id="updateReply" parameterType="BoardVO">
+		UPDATE reply
+		   SET subject = #{subject}
+		 WHERE comment_id = #{commentId}
+	</update>
 	
 </mapper>
