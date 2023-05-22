@@ -59,7 +59,7 @@
 
 	<!-- 내가 작성한 후기 목록 -->
 	<select id="selectWrittenList" resultType="ReviewVO">
-		SELECT RE_NO, prdt_img, prdt_nm, CONTENTS, CREAT_DT, POINT, r.ME_ID, ORDT_ID,
+		SELECT RE_NO, prdt_img, p.prdt_id, prdt_nm, CONTENTS, CREAT_DT, POINT, r.ME_ID, ORDT_ID,
 		p.prdt_id
 		FROM review r
 		JOIN product p
