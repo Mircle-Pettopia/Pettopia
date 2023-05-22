@@ -155,7 +155,7 @@ public class ProductCategoryController {
 
 	// 카테고리 항목
 	@GetMapping("ProductCategory")
-	public String ProductCategory(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
+	public String ProductCategory(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Product1VO product1VO,
 			Authentication authentication) {
 		String result = "";
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -182,8 +182,7 @@ public class ProductCategoryController {
 			;
 		}
 		;
-		System.out.println("인덱스정보"+ productService.selectPrdAllList2());
-		model.addAttribute("index", productService.selectPrdAllList2());
+		model.addAttribute("index", productService.selectPrdAllList2(product1VO));
 		model.addAttribute("categories", productService.selectCategoryList());
 
 		return "product/productCategory";
