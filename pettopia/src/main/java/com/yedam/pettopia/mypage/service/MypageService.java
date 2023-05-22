@@ -11,6 +11,7 @@ public interface MypageService {
 	public MypageVO getOrdrList(String ordrId);
 	public List<MypageVO> getPrcCount(String meId);
 	public List<MypageVO> getShipCount(String meId);
+	
 	public List<MypageVO> getOrderList(MypageVO vo);
 	public MypageVO ordtIdOptionInfo(String ordtId);
 	
@@ -18,9 +19,11 @@ public interface MypageService {
 	public List<MypageVO> getInterestList(String meId);
 	
 	public int interestCnt(String meId);
+	public int orderCancel(String ordrId);
 	
 	public int countOrderList(String meId);
-	public List<MypageVO> pagingTest(MypageVO vo);
+	public List<MypageVO> pagingTest(String meId, String start, String end, String shipSt, String prcSt, int page);
+	public int orderMaxPage(String meId, String start, String end, String shipSt, String prcSt);
 	
 	public int interestDelete(MypageVO vo);
 	

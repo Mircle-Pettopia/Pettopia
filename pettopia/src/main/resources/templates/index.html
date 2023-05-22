@@ -403,23 +403,23 @@
 	<script th:inline="javascript">
 /*<![CDATA[*/
 		$().ready(() =>{
-				un_info_alert();
+			un_info_alert();
 		})
-		
+			
 		// 간편로그인을 통해 회원가입을 했을 때 확인되지 않는 정보가 있을 때 알림창을 띄워준다.
 		const un_info_alert = () => {
-			const token = /*[[${token}]]*/			// SNS으로 가입했을 때만 받는 ToKEN을 통해 확인한다.
+			let token = /*[[${token}]]*/			// SNS으로 가입했을 때만 받는 ToKEN을 통해 확인한다.
 			if(token){
 				$.ajax({
-					url: '/snsTokenChk',
+					url: 'snsTokenChk',
 					type : 'POST',
 					data: {meSnsToken : token},
 					success: function(data){
 						if(data){
-							Swal.fire({
-								title: '확인',
-								text: "확인되지 않는 정보가 있습니다",
-								icon: 'info',
+								Swal.fire({
+										title: '확인',
+										text: "확인되지 않는 정보가 있습니다",
+										icon: 'info',
 								showCancelButton: true,
 								confirmButtonColor: '#C65FF9',
 								cancelButtonColor: '#E782FF',
@@ -427,10 +427,10 @@
 								cancelButtonText: '확인',
 								reverseButtons: true, // 버튼 순서 거꾸로
 							}).then((result) => {
-								if (result.isConfirmed) {
-									location.href = 'userInfo';
-								}
-							});
+									if (result.isConfirmed) {
+											location.href = 'userInfo';
+										}
+									});
 						};
 					},
 					error : function(error){

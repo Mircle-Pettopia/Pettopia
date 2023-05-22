@@ -62,9 +62,9 @@ td, tr, th{
 								</div>
 							</div>
 							<div class="status-link" style="margin-bottom: 20px;">
-								<a class="fontColor" id="prcCnt-1" onclick="prcSearch('결제대기')">0</a>
-								<a class="fontColor" id="prcCnt-2" onclick="prcSearch('결제완료')">0</a>
-								<a class="fontColor" id="prcCnt-3" onclick="prcSearch('결제취소')">0</a>
+								<a class="fontColor" id="prcCnt-1" onclick="setkeyword_prc('결제대기');">0</a>
+								<a class="fontColor" id="prcCnt-2" onclick="setkeyword_prc('결제완료');">0</a>
+								<a class="fontColor" id="prcCnt-3" onclick="setkeyword_prc('결제취소');">0</a>
 							</div>
 							
 							<!-- 배송 상태 -->
@@ -82,9 +82,9 @@ td, tr, th{
 							</div>
 
 							<div class="status-link">
-								<a class="fontColor" id="a-1" onclick="shipSearch('배송전')">0</a>
-								<a class="fontColor" id="b-1" onclick="shipSearch('배송중')">0</a>
-								<a class="fontColor" id="c-1" onclick="shipSearch('배송완료')">0</a>
+								<a class="fontColor" id="a-1" onclick="setkeyword_ship('배송전');">0</a>
+								<a class="fontColor" id="b-1" onclick="setkeyword_ship('배송중');">0</a>
+								<a class="fontColor" id="c-1" onclick="setkeyword_ship('배송완료');">0</a>
 							</div>
 						</div>
 
@@ -130,7 +130,7 @@ td, tr, th{
 							</div>
 							<div class="col-md-1">
 								<div id="btnCss">
-									<button type="button" class="btn btnPush btnLightBlue" name="searchBtn" id="searchBtn">
+									<button type="button" class="btn btnPush btnLightBlue" name="searchBtn" onclick="setkeyword();">
 										검색
 									</button>
 								</div>
@@ -180,27 +180,28 @@ td, tr, th{
 								</table>
 							</div>
 
+							<div class="board_page" id="pagenav"></div>
 							<!--paging div-->
 							<!--참고 : https://po9357.github.io/spring/2019-05-28-Board_Paging/-->
 							<!--참고2 : https://yju7257.tistory.com/97-->
 							<!--th:classappend="${i eq nowPage} ? active : ''"-->
-							<div class="d-flex justify-content-center m-t-20">
+							<!--<div class="d-flex justify-content-center m-t-20">
 								<div class="board_page" id="pagenav">
-									<!--이전-->
+									이전
 									<th:block th:if="${paging.startPage != 1 }">
 										<a class="bt prev" th:href= "'/mypage?nowPage='+${paging.startPage-1}+'&cntPerPage='+${paging.cntPerPage}">&laquo;</a>
 									</th:block>
-									<!--시작페이지 - 끝페이지-->
+									시작페이지 - 끝페이지
 									<th:block th:each=" i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
 										<a class="num on" th:href="'/mypage?nowPage='+${i}+'&cntPerPage='+${paging.cntPerPage}"
 											th:text="${i}"></a>
 									</th:block>
-									<!--다음-->
+									다음
 									<th:block th:if="${paging.endPage != paging.lastPage}">
 										<a class="bt next" th:href="'/mypage?nowPage='+${paging.startPage + 1}+'&cntPerPage='+${paging.cntPerPage}">&raquo;</a>
 									</th:block>
 								</div>
-							</div>  <!--end paging div-->
+							</div>-->  <!--end paging div-->
 						</div>
 					</div>
 				</div>
@@ -210,7 +211,6 @@ td, tr, th{
 			/*window.onload=function(){}*/
 			let prc = /*[[${getprcSt}]]*/
 			let shipList = /*[[${getShipSt}]]*/
-			let page = /*[[${paging}]]*/
 			let ordrList = /*[[${list}]]*/
 
 			//배송상태에 따른 개수 확인
@@ -242,34 +242,71 @@ td, tr, th{
 					//console.log("결제대기");
 				}
 			});
-			
+
+
 			/*<![CDATA[*/
 			let id = /*[[${id}]]*/
-			let ship = $('#shipSt').val();
-			let prcSt = $('#prcSt').val();
-			let start = $('#start').val();
-			let end = $('#end').val();
+			let ship = "";
+			let prcSt = "";
+			let start = "";
+			let end = "";
 			let date = new Date();
-			let start_date_change;
-			let end_date_change;
-			let stars = page.stars;
-			let ends = page.ends;
+
+			//검색버튼
+			function setkeyword(){
+				ship = $('#shipSt').val();
+				prcSt = $('#prcSt').val();
+				start = $('#start').val();
+				end = $('#end').val();
+
+				$('#getOrderList').empty();  //tbody 초기화
+				orderList();
+			};
+
+			function setkeyword_prc(val){
+				ship = $('#shipSt').val();
+				prcSt = val;
+				start = $('#start').val();
+				end = $('#end').val();
+
+				$('#getOrderList').empty();  //tbody 초기화
+				orderList();
+			};
+
+			function setkeyword_ship(val){
+				ship = val;
+				prcSt = $('#prcSt').val();
+				start = $('#start').val();
+				end = $('#end').val();
+
+				$('#getOrderList').empty();  //tbody 초기화
+				orderList();
+			};
 			
 			//주문내역 ajax
-			const orderList = (start = undefined, end = undefined, shipSt = undefined, prcSt = undefined) => {
+			const orderList = (page) => {
+				if(page == null){
+					page = 1;
+				};
+
+				let data = {
+					meId : id,
+					shipSt : ship,
+					prcSt : prcSt,
+					start : start,
+					end : end,
+					page : page
+				};
+
+				console.log(data);
+
 				$.ajax({
 					url: "getOrder",
 					method: "GET",
-					data : {meId : id,
-							shipSt : ship,
-							prcSt : prcSt,
-							start : start,
-							end : end,
-							stars : stars,
-							ends : ends},
+					data : data,
 					async: false,
 					success: function(data){
-						console.log(data.length ==0);
+						getOrderList.innerHTML = "";
 						if(data.length==0){
 							let tr = document.createElement('tr');
 							let td = document.createElement('td');
@@ -289,7 +326,24 @@ td, tr, th{
 					error : function(rej) {
 						console.log(rej);
 					}
-				})
+				});
+
+				//orderMaxPage
+				$.ajax({
+					url: "orderMaxPage",
+					method: "GET",
+					async: false,
+					data: data,
+					success: function (data) {
+						//console.log(data);
+						paging(data, 10, 5, page);
+
+					},
+					error: function (reject) {
+						console.log(reject);
+						alert("에러");
+					},
+				});
 			};
 			orderList();
 
@@ -313,7 +367,7 @@ td, tr, th{
 										<br/>
 										<div style="margin:0 auto; display:inline-block;">
 											<div id="orderCancel_" + ${data[i].ordrId}>
-												<button type="button" class="btn btnPush btnRed orderCancel" onclick="cancelPay('${data[i].ordrId}', '${data[i].total}')">주문취소</button>
+												<button type="button" class="btn btnPush btnRed orderCancel" id="orderCancelBtn" onclick="cancelPay('${data[i].ordrId}', '${data[i].total}')">주문취소</button>
 											</div>
 										</div>
 									</td>
@@ -328,11 +382,19 @@ td, tr, th{
 									<td>${shipPrc}원</td>
 									<td><span>${total}</span>원</td>
 									<td>
-										${data[i].prcSt}
+										<span>${data[i].prcSt}</span>
 										<br/>
-										${data[i].shipSt}</td>
+										<span class="shipSt">${data[i].shipSt}</span></td>
 								</tr>
 								`;
+
+						if(data[i].prcSt == '결제대기' || data[i].prcSt == '결제취소') {
+							$('.shipSt').css('display', 'none');
+						};
+						
+						if(data[i].prcSt == '결제취소' || data[i].shipSt == '배송중' || data[i].shipSt == '배송완료'){
+							$('.orderCancel').css('visibility', 'hidden');
+						};
 					};
 
 					let ordtId = data[i].ordtId;
@@ -364,6 +426,26 @@ td, tr, th{
 			function cancelPay(id, total_price) {
 				console.log(id);
 				console.log(total_price);
+
+				$.ajax({
+				url: "orderCancel",
+				method: "POST",
+				async: false,
+				dataType: "JSON",
+				data: {ordrId: id},
+				success: function (data) {
+					Swal.fire('취소완료', '주문건 취소가 완료되었습니다.', 'success');
+					orderList();
+				},
+				error: function (reject) {
+					console.log(reject);
+					Swal.fire('에러발생', '', 'error');
+					orderList();
+				},
+			});
+
+
+				//아임포트 결제취소
 				/*$.ajax({
 				// 예: http://www.myservice.com/payments/cancel
 				"url": "{환불정보를 수신할 가맹점 서비스 URL}", 
@@ -409,133 +491,6 @@ td, tr, th{
 				end_date_change = document.getElementById('end').value = dateChange(date);
 			})
 			
-			$('#searchBtn').on('click',()=>{
-				search();
-			});
-
-			//검색 ajax---------------------------
-			function search(){
-				let id = /*[[${id}]]*/
-				let ship = $('#shipSt').val();
-				let prcSt = $('#prcSt').val();
-				let start = $('#start').val();
-				let end = $('#end').val();
-
-				$.ajax({
-					url: "getOrder",
-					method: "GET",
-					data : {meId : id,
-								shipSt : ship,
-								prcSt : prcSt,
-								start : start,
-								end : end,
-								stars : stars,
-								ends : ends},
-					success: function(data){
-						if(data.length > 0){
-							$('#orderList > tbody').empty();	//table 초기화
-							fn_cellMerge('orderList', [0,5,6,7]);
-							drawOrderList(data);
-						} else {
-							$('#orderList > tbody').empty();	//table 초기화
-							let tr = document.createElement('tr');
-							let td = document.createElement('td');
-							$(td).attr('colspan', '8');
-							
-							td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
-							tr.appendChild(td);
-							document.querySelector('#getOrderList').appendChild(tr);
-						}
-					},
-					error : function(rej) {
-						console.log(rej);
-					}
-				})
-			};
-
-			function shipSearch(code){
-				let id = /*[[${id}]]*/
-				let ship = code;
-				let prcSt = $('#prcSt').val();
-				let start = $('#start').val();
-				let end = $('#end').val();
-				
-				//console.log(ship);
-				//console.log(prcSt);
-				$.ajax({
-					url: "getOrder",
-					method: "GET",
-					data : {meId : id,
-							shipSt : ship,
-							prcSt : prcSt,
-							start : start,
-							end : end,
-							stars : stars,
-							ends : ends},
-					success: function(data){
-						if(data.length > 0){
-							$('#orderList > tbody').empty();	//table 초기화
-							fn_cellMerge('orderList', [0,5,6,7]);
-							drawOrderList(data);
-						} else {
-							$('#orderList > tbody').empty();	//table 초기화
-							let tr = document.createElement('tr');
-							let td = document.createElement('td');
-							$(td).attr('colspan', '8');
-							
-							td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
-							tr.appendChild(td);
-							document.querySelector('#getOrderList').appendChild(tr);
-						}
-					},
-					error : function(rej) {
-						console.log(rej);
-					}
-				})
-			}
-
-			function prcSearch(code){
-				let id = /*[[${id}]]*/
-				let ship = $('#shipSt').val();
-				let prcSt = code;
-				let start = $('#start').val();
-				let end = $('#end').val();
-				
-				//console.log(ship);
-				//console.log(prcSt);
-				$.ajax({
-					url: "getOrder",
-					method: "GET",
-					data : {meId : id,
-							shipSt : ship,
-							prcSt : prcSt,
-							start : start,
-							end : end,
-							stars : stars,
-							ends : ends},
-					success: function(data){
-						console.log(data);
-						if(data.length > 0){
-							$('#orderList > tbody').empty();	//table 초기화
-							fn_cellMerge('orderList', [0,5,6,7]);
-							drawOrderList(data);
-						} else {
-							$('#orderList > tbody').empty();	//table 초기화
-							let tr = document.createElement('tr');
-							let td = document.createElement('td');
-							$(td).attr('colspan', '8');
-							
-							td.innerHTML = `<div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>`
-							tr.appendChild(td);
-							document.querySelector('#getOrderList').appendChild(tr);
-						}
-					},
-					error : function(rej) {
-						console.log(rej);
-					}
-				})
-			}
-
 			//---------------------------------------
 			
 			function domId(id) { //id로 태그찾기 압축용
@@ -669,6 +624,62 @@ td, tr, th{
 				}
 			};
 
+			function paging(totalData, dataPerPage, pageCount, currentPage) {
+				console.log("currentPage : " + currentPage);
+
+				totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
+
+				if (totalPage < pageCount) {
+					pageCount = totalPage;
+				}
+
+				let pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
+				let last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
+
+				if (last > totalPage) {
+					last = totalPage;
+				}
+
+				let first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
+				let next = last + 1;
+				let prev = first - 1;
+
+				let pageHtml = pagenav.innerHTML;
+				pagenav.innerHTML = '';
+				if (prev > 0) {
+					pagenav.innerHTML += `<a class="bt prev" onclick="orderList(${prev});">＜</a>`;
+				}
+
+				//페이징 번호 표시 
+				for (var i = first; i <= last; i++) {
+				if (currentPage == i) {
+					pagenav.innerHTML +=
+					`<a class="num on">${i}</a>`;
+				} else {
+					pagenav.innerHTML += `<a onclick="orderList(${i});" class="num o">${i}</a>`;
+				}
+				}
+
+				if (last < totalPage) {
+				pagenav.innerHTML += `<a onclick="orderList(${next});" class="bt next">＞</a>`;
+				}
+
+				$("#pagingul").html(pagenav.innerHTML);
+				let displayCount = "";
+				displayCount = "현재 1 - " + totalPage + " 페이지 / " + totalData + "건";
+				$("#displayCount").text(displayCount);
+			}
+
+
+
+
+
+
+
+
+
+
+
 			let data = [
 				/*[# th:each="order : ${list}"]*/
 					{
@@ -683,6 +694,8 @@ td, tr, th{
 				},
 				/*[/]*/
 			];
+
+
 		</script>
 	</div>
 </body>

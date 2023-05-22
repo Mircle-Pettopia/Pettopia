@@ -34,8 +34,8 @@ public class MypageServiceImpl implements MypageService{
 	}
 	//페이징기능
 	@Override
-	public List<MypageVO> pagingTest(MypageVO vo) {
-		return mapper.pagingTest(vo);
+	public List<MypageVO> pagingTest(String meId, String start, String end, String shipSt, String prcSt, int page) {
+		return mapper.pagingTest(meId, start, end, shipSt, prcSt, page);
 	}
 	
 	@Override
@@ -135,6 +135,16 @@ public class MypageServiceImpl implements MypageService{
 	@Override
 	public int boardAllMaxPage(String keyword, String meId, String boType) {
 		return bmapper.boardAllMaxPage(keyword, meId, boType);
+	}
+
+	@Override
+	public int orderCancel(String ordrId) {
+		return mapper.orderCancel(ordrId);
+	}
+
+	@Override
+	public int orderMaxPage(String meId, String start, String end, String shipSt, String prcSt) {
+		return mapper.orderMaxPage(meId, start, end, shipSt, prcSt);
 	}
 
 
