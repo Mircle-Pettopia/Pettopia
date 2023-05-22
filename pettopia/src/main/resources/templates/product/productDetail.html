@@ -283,7 +283,7 @@
 									<!-- 아이디 값 불러옴 -->
 									<input type="hidden" th:value="${id}" id="meId"/>
 									<button
-										class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" id="addCart" type="submit">
+										class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" name="js-addcart-detail" id="addCart" type="submit">
 										Add to cart</button>
 								</div>
 								<a href="#" id="submitBtn"
@@ -355,6 +355,45 @@
 										class="btn_reviews_write">상품후기 글쓰기</a>
 								</div>
 								<!-- //btn_reviews_box -->
+								
+								<div class="board_list_qa" align="center">
+						<!--  <table class="board_list_table " style="width:100%" "="> -->
+						<form>
+							<table class="board_list_table" style="width: 100%">
+								<colgroup>
+									<col style="width: 16%">
+									<!-- 문의날짜 -->
+									<col style="width: 15%" class="widthDisplayNone">
+									<!-- 카테고리 -->
+									<col>
+									<!-- 제목 -->
+									<col style="width: 15%">
+									<!-- 문의상태 -->
+
+								</colgroup>
+								<thead>
+									<tr>
+										<th style="padding-left: 87px;">문의날짜</th>
+										<th style="padding-left: 84px;" class="widthDisplayNone">글번호</th>
+										<th style="padding-left: 347px;">제목</th>
+										<th style="padding-left: 87px;">작성자</th>
+									</tr>
+								</thead>
+								<tbody>
+								
+									 <tr th:each="qna : ${qnaList}">
+										<td th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></td>
+										<td th:text="${qna.qstNo}" class="widthDisplayNone"></td>
+										<td th:text="${qna.title}"></td>
+										<td th:text="${qna.meId}"></td>
+									</tr>
+								 	<tr th:if="${qnaList.isEmpty()}">
+										<td colspan="5" align="center">게시글이 존재하지 않습니다.</td>
+									</tr>  
+								</tbody>
+							</table>
+						</form>
+					</div>
 							</div>
 							<!-- //reviews_cont -->
 						</div>
@@ -375,14 +414,54 @@
 								</h3>
 								<div id="ajax-goods-goodsqa-list"></div>
 								<div class="btn_qna_box">
-									<a href="../board/list.php?bdId=goodsqa" class="btn_qna_more">상품문의
+									<a href="" class="btn_qna_more">상품문의
 										전체보기</a> <a
-										href="javascript:gd_open_write_popup('goodsqa', '10032')"
+										th:href="|QnaForm?prdtId=${ProductDetail.prdtId}|"
 										class="btn_qna_write">상품문의 글쓰기</a>
 								</div>
 								<!-- //btn_qna_box -->
+								<div class="board_list_qa" align="center">
+						<!--  <table class="board_list_table " style="width:100%" "="> -->
+						<form>
+							<table class="board_list_table" style="width: 100%">
+								<colgroup>
+									<col style="width: 16%">
+									<!-- 문의날짜 -->
+									<col style="width: 15%" class="widthDisplayNone">
+									<!-- 카테고리 -->
+									<col>
+									<!-- 제목 -->
+									<col style="width: 15%">
+									<!-- 문의상태 -->
+
+								</colgroup>
+								<thead>
+									<tr>
+										<th style="padding-left: 87px;">문의날짜</th>
+										<th style="padding-left: 84px;" class="widthDisplayNone">글번호</th>
+										<th style="padding-left: 347px;">제목</th>
+										<th style="padding-left: 87px;">작성자</th>
+									</tr>
+								</thead>
+								<tbody>
+								
+									 <tr th:each="qna : ${qnaList}">
+										<td th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></td>
+										<td th:text="${qna.qstNo}" class="widthDisplayNone"></td>
+										<td th:text="${qna.title}"></td>
+										<td th:text="${qna.meId}"></td>
+									</tr>
+								 	<tr th:if="${qnaList.isEmpty()}">
+										<td colspan="5" align="center">게시글이 존재하지 않습니다.</td>
+									</tr>  
+								</tbody>
+							</table>
+						</form>
+					</div>
 							</div>
 							<!-- //qna_cont -->
+							
+							
 						</div>
 						<!-- //qna -->
 					</div>
@@ -770,7 +849,7 @@
 	<!--===============================================================================================-->
 	<script src="vendor/sweetalert/sweetalert.min.js"></script>
 	<script>
-		$('.js-addwish-b2, .js-addwish-detail').on('click', function(e) {
+		$('.js-addwish-b2, .js-addwish-detail, .').on('click', function(e) {
 			e.preventDefault();
 		});
 
@@ -804,10 +883,10 @@
 
 					  $self.on('click', function() {
 					    if ($self.hasClass('js-addedwish-detail')) {
-					    	swal(nameProduct, "장바구니 삭제 !", "success");
+					    	swal(nameProduct, "관심상품 삭제 !", "success");
 					      $self.removeClass('js-addedwish-detail');
 					    } else {
-					      swal(nameProduct, "장바구니 등록 !", "success");
+					      swal(nameProduct, "관심상품 등록 !", "success");
 					      $self.addClass('js-addedwish-detail');
 					    }
 					  });
@@ -826,6 +905,7 @@
 				$('.js-addcart-detail').each(function() {
 					  var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
 					  var self = $(this);
+					  console.log(nameProduct)
 					  
 					  self.on('click', function() {
 					    if (self.hasClass('js-addedcart-detail')) {
@@ -1021,7 +1101,9 @@
 		  // When the form is submitted
 		  $("#addCart").click(function(event) {
 		    event.preventDefault();
-
+		    var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+		    console.log(nameProduct)
+			var self = $(this);
 		    // Get the form values
 		    var meId = $("#meId").val();
 		    var prdtId = $("#prdtId").val();
@@ -1061,6 +1143,7 @@
 		      success: function(response) {
 		        // Handle the response
 		        console.log(response);
+		        swal(nameProduct, "장바구니 등록 !", "success");
 		        // Display a success message or perform any other actions
 		      },
 		      error: function(xhr, status, error) {

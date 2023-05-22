@@ -44,7 +44,7 @@
 
 
 
-    <style type="text/css">
+    <!-- <style type="text/css">
         body {}
 
         /* body > #wrap > #header_warp : 상단 영역 */
@@ -55,7 +55,7 @@
 
         /* body > #wrap > #footer_wrap : 하단 영역 */
         #footer_wrap {}
-    </style>
+    </style> -->
     <link type="text/css" rel="stylesheet" href="./common(1).css">
     <link type="text/css" rel="stylesheet" href="./layout(1).css">
     <link type="text/css" rel="stylesheet" href="./goods.css">
@@ -145,10 +145,10 @@
         }
 
         /* 상품 장바구니,wish 버튼  미사용  .item_link {display:none;}	  //  사용  공백으로 나두시기 바랍니다. .item_link {} */
-        .item_link {}
+        /* .item_link {} */
     </style>
 
-
+<!-- enctype="multipart/form-data" -->
 
     <div class="content">
         <div class="board_zone_sec">
@@ -156,8 +156,7 @@
                 <h2>1:1문의</h2>
             </div>
             <div class="board_zone_cont">
-                <form name="frmWrite" id="frmWrite" action="./board_ps.php" method="post" enctype="multipart/form-data"
-                    class="frmWrite" novalidate="novalidate">
+                <form name="frmWrite" id="frmWrite" class="frmWrite" novalidate="novalidate">
                     <input type="hidden" name="bdId" value="qa">
                     <input type="hidden" name="sno" value="">
                     <input type="hidden" name="mode" value="write">
@@ -196,14 +195,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">휴대폰</th>
-                                        <td><input style="border-radius:0px; background-color:rgb(255, 255, 255); width:312px;" type="text" id="time" class="write_title" name="writerMobile"
-                                                value="" placeholder="- -없이 입력하세요" autocomplete="off"></td>
+                                        <th scope="row">문의상품</th>
+                                        <td>
+                                            <span id="prdtNm" name="prdtNm" th:text="${ProductDetail.prdtNm}" ></span>
+                                            <input type="hidden" id="prdtId" name="prdtId" th:value="${ProductDetail.prdtId}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">제목
                                         </th>
-                                        <td><input style="border-radius:0px;background-color:rgb(255, 255, 255);" type="text" name="subject" value=""></td>
+                                        <td><input style="border-radius:0px;background-color:rgb(255, 255, 255);" type="text" name="subject" value="" id="title"></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">본문</th>
@@ -214,7 +215,7 @@
                                         </td> -->
                                                <td>     <div id="editor"> </div> </td>
                                     </tr>
-                                    <tr>
+<!--                                     <tr>
                                         <th scope="row">첨부파일</th>
                                         <td id="uploadBox">
 
@@ -235,7 +236,7 @@
                                             </div>
 
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -247,7 +248,7 @@
                     <div class="btn_center_box">
                         <button type="button" class="btn_before"
                             onclick="javascript:history.back()"><strong>이전</strong></button>
-                        <button type="submit" class="btn_write_ok"><strong>저장</strong></button>
+                        <button type="button"  class="btn_write_ok" id="insertBtn"><strong>저장</strong></button>
                     </div>
 
                 </form>
@@ -283,7 +284,7 @@
         </form>
 
         <div id="layerDim" class="dn">&nbsp;</div>
-        <script>
+<!--         <script>
             $(document).ready(function () {
                 $('img.js_image_load').error(function () {
                     $(this).css('background', 'url("/data/skin/front/mplshop/board/skin/qa/img/etc/noimg.png") no-repeat center center');
@@ -293,14 +294,14 @@
                         $(this).attr("src", $(this).attr("src"));
                     })
             });
-        </script>
+        </script> -->
     </div>
     <!-- //content -->
     <!-- 절대! 지우지마세요 : Start -->
     <iframe name="ifrmProcess" src="./blank(1).html" style="display:none" width="900" height="500"></iframe>
     <!-- 절대! 지우지마세요 : End -->
 
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
         var oEditors = [];
 
         nhn.husky.EZCreator.createInIFrame({
@@ -309,11 +310,101 @@
             sSkinURI: "./smarteditor2/SmartEditor2Skin.html",
             fCreator: "createSEditor2"
         });
-    </script>
+    </script> -->
         <!-- ==========================ckeditor========================== -->
     <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
-    <script type="text/javascript" src="CKeditorSuperBuild.js"></script>
+    <script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
     <!-- ==========================ckeditor END======================= -->
+    
+        <script>
+      function showData() {
+        let Data = editor.getData();
+        console.log(Data);
+      }
+
+      $(document).ready(function(){
+          $(document).on("click", "#insertBtn" ,function(){
+              console.log('클릭');
+              let formData = new FormData($('#frmWrite')[0]);
+              let title = $("#title").val();
+              let prdtId = $("#prdtId").val();
+              console.log(formData);
+              console.log(title);
+              console.log(editor.getData());
+              console.log(prdtId)
+             $.ajax({
+              url: "insertQnA",
+              method: "POST",
+              data: {
+                meId: GetUser(),
+                title: title,
+                content: editor.getData(),
+                prdtId:prdtId
+    
+              },
+    
+              success: function (data) {
+                console.log(data);
+                alert("데이터 전송 완료");
+              },
+              error: function (reject) {
+                console.log(reject);
+                alert("에러");
+              },
+            }) 
+          })
+
+
+      })
+
+    //   function insertArticle() {
+    // 	  let formData = new FormData($('#frmWrite')[0]);
+    // 	  let title = $("#title").val();
+    // 	  let prdtId = ${"#prdtId"}.val();
+    // 	  console.log(formData);
+    // 	  console.log(title);
+    // 	  console.log(editor.getData());
+    // 	  console.log(prdtId)
+    //      $.ajax({
+    //       url: "insertQnA",
+    //       method: "POST",
+    //       data: {
+    //         meId: GetUser(),
+    //         title: title,
+    //         content: editor.getData(),
+    //         prdtId:prdtId
+
+    //       },
+
+    //       success: function (data) {
+    //         console.log(data);
+    //         alert("데이터 전송 완료");
+    //       },
+    //       error: function (reject) {
+    //         console.log(reject);
+    //         alert("에러");
+    //       },
+    //     }) 
+    //   }
+
+      function GetUser() {
+        let result = "";
+        $.ajax({
+          url: "getUser1",
+          method: "GET",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            result = data;
+          },
+          error: function (reject) {
+            console.log(reject);
+            alert("유저호출에러");
+          },
+        })
+        return result;
+      }
+    </script>
 </body>
 
 </html>

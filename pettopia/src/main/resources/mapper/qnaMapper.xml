@@ -19,9 +19,33 @@ FROM
   JOIN member m ON q.me_id = m.me_id
   LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
  WHERE M.me_id = #{meId}
-
-  
   </select>
+  
+    <select id="qnaAllList2" resultType="QnaVO">
+SELECT
+  q.qst_no,
+  q.me_id,
+  q.title,
+  q.reg_dt,
+  q.qst_img,
+  q.prdt_id,
+  CASE WHEN q.qst_status = cd.cod_cd THEN cd.cod_title ELSE q.qst_status END AS qst_status,
+  q.qst_yn,
+  q.content
+FROM
+  qna q
+  JOIN member m ON q.me_id = m.me_id
+  LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
+WHERE
+  q.prdt_id = #{prdtId}
+  </select>
+  
+ <insert id="insertQnA" parameterType="QnaVO">
+INSERT INTO QNA (QST_NO, TITLE, ME_ID, CONTENT, QST_STATUS, PRDT_ID)
+VALUES ((SELECT TO_NUMBER(NVL(MAX(QST_NO), 0)) + 1 QST_NO FROM QNA), #{title}, #{meId}, #{content}, 'QS1', #{prdtId})
+
+ 
+ </insert>
   
   
   </mapper>
