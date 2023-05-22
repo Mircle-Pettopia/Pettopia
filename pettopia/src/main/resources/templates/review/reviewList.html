@@ -97,13 +97,14 @@ td, tr, th {
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
 .ck.ck-editor {
-    max-width: 500px;
-}
-.ck-editor__editable {
-    min-height: 300px;
+	max-width: 500px;
 }
 
+.ck-editor__editable {
+	min-height: 300px;
+}
 </style>
 </head>
 <body>
@@ -125,8 +126,8 @@ td, tr, th {
 						<div th:each="review : ${reviewList}" class="parentDiv"
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
 							<div class="title">
-							<a th:href="@{ProductDetail(prdtId=${review.prdtId})}">
-								<img th:src="${review.prdtImg}"
+								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}"> <img
+									th:src="${review.prdtImg}"
 									style="width: 120px; height: 120px; float: left; margin-right: 20px;" /></a>
 								<!--  <img
                       src="images/item-cart-01.jpg"
@@ -140,13 +141,13 @@ td, tr, th {
                     />-->
 							</div>
 							<div
-								style="width: 165px; float: left; margin-right: 20px; height: 120px; line-height: 100px;"
-								>구매 확정일 : [[ ${#dates.format(review.ordrDate,
-								'yyyy-MM-dd')}]]</div>
+								style="width: 165px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">구매
+								확정일 : [[ ${#dates.format(review.ordrDate, 'yyyy-MM-dd')}]]</div>
 
 							<div
 								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px; text-align: center;">
-								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a></div>
+								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a>
+							</div>
 							<div style="height: 120px; float: left; line-height: 100px">
 								여기 옵션 이름 들어가기</div>
 							<div class="btnn" style="padding: 20px 0 0 0">
@@ -154,22 +155,24 @@ td, tr, th {
 									th:data-prdtid="${review.prdtId}"
 									class="btn btnPush btnBlueGreen write-review-btn"
 									id="reviewBtn"
-									style="float: right; font-size: 13px; width: 63px">리뷰 쓰기</button>
+									style="float: right; font-size: 13px; width: 63px">리뷰
+									쓰기</button>
 
 							</div>
 						</div>
-						
-						
-						
+
+
+
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- 후기 등록 모달창 -->
-<div class="modal fade" id="writemodal" tabindex="-1" role="dialog"
-     aria-labelledby="write-review-modal-label" aria-hidden="true"
-     data-backdrop="static" style="width: 700px; height: 610px; overflow: hidden;">
+		<div class="modal fade" id="writemodal" tabindex="-1" role="dialog"
+			aria-labelledby="write-review-modal-label" aria-hidden="true"
+			data-backdrop="static"
+			style="width: 700px; height: 610px; overflow: hidden;">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -197,11 +200,12 @@ td, tr, th {
 										style="display: inline-block" for="rate5">★</label>
 								</div>
 							</fieldset>
-							<br/><br/>
-							<span class="text-bold">후기 등록</span>
-							<br/><br/>
+							<br />
+							<br /> <span class="text-bold">후기 등록</span> <br />
+							<br />
 							<div>
-						<textarea name="content" id="editor"></textarea></div>
+								<textarea name="content" id="editor"></textarea>
+							</div>
 							<div class="modal-footer" style="padding: 0px">
 								<button type="button" class="btn btn-secondary"
 									data-dismiss="modal" onclick="resetForm()">취소</button>
@@ -218,27 +222,23 @@ td, tr, th {
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
 		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
-		
-		
+
+
 		<!-- ==========================ckeditor END======================= -->
 
 		<script>
-		var oid;
-		var did;
-		let parentDiv;
-		
+			var oid;
+			var did;
+			let parentDiv;
+
 			$(".write-review-btn").click(function(event) {
 				oid = $(this).data("orderid");
 				pid = $(this).data("prdtid");
 				$("#writemodal").modal("show");
 				parentDiv = event.target;
-			    console.log(parentDiv); // .parentDiv 요소 출력
+				console.log(parentDiv);
 
 			});
-			
-			
-
-			
 
 			function insertReview() {
 				var contents = document.getElementById("editor").value;
@@ -256,11 +256,11 @@ td, tr, th {
 					},
 					success : function(data) {
 						console.log(data);
-						if(data == 'success'){
+						if (data == 'success') {
 							parentDiv.textContent = '작성 완료';
 							parentDiv.disabled = true;
 							$("#writemodal").modal("hide");
-						alert("후기가 등록되었습니다.");
+							alert("후기가 등록되었습니다.");
 						}
 					},
 					error : function(reject) {
@@ -269,13 +269,12 @@ td, tr, th {
 					},
 				});
 			}
-			
-			
+
 			function resetForm() {
-				  document.getElementById("myform").reset();
-				  var editor = CKEDITOR.instances.editor;
-				  editor.setData(""); // 에디터 내용을 비웁니다.
-				}
+				document.getElementById("myform").reset();
+				var editor = CKEDITOR.instances.editor;
+				editor.setData(""); // 에디터 내용을 비웁니다.
+			}
 		</script>
 	</div>
 </body>
