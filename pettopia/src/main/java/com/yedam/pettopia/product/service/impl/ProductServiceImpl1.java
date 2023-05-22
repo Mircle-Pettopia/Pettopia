@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yedam.pettopia.admin.ProductVO;
 import com.yedam.pettopia.product.Product1VO;
 import com.yedam.pettopia.product.mapper.ProductMapper1;
 import com.yedam.pettopia.product.service.ProductService1;
+import com.yedam.pettopia.review.ReviewVO;
 
 
 
@@ -100,6 +102,18 @@ public class ProductServiceImpl1 implements ProductService1{
 	public List<Product1VO> selectPrdFList() {
 
 		return productMapper.selectPrdFList();
+	}
+
+	@Override
+	public List<ReviewVO> selectWrittenList1(String prdtId) {
+
+		return productMapper.selectWrittenList1(prdtId);
+	}
+
+	@Override
+	public List<ProductVO> searchList1(ProductVO vo) {
+
+		return productMapper.searchList1(vo);
 	}
 
 }

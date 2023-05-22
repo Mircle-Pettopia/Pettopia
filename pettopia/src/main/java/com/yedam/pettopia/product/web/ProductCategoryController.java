@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.pettopia.admin.ProductVO;
 import com.yedam.pettopia.admin.service.ProductService;
 import com.yedam.pettopia.product.Product1VO;
 import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.qna.service.QnaService;
+import com.yedam.pettopia.review.ReviewVO;
+import com.yedam.pettopia.review.service.ReviewService;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 @Controller
@@ -32,6 +35,8 @@ public class ProductCategoryController {
 	ProductService productService1;
 	@Autowired
 	QnaService qnaService;
+	@Autowired
+	ReviewService reviewService;
 
 	// 관심상품등록
 	@PostMapping("InsertProduct")
@@ -186,11 +191,13 @@ public class ProductCategoryController {
 
 	// 제품 상세조회
 	@GetMapping("ProductDetail")
-	public String ProductDetail(Product1VO product1VO, Model model, @RequestParam final String prdtId,
+	public String ProductDetail(Product1VO product1VO,  Model model, @RequestParam final String prdtId,
 			@AuthenticationPrincipal PrincipalDetails principalDetails, Authentication authentication) {
 		String result = "";
 		String meId= principalDetails.getUser().getMeId();
 		model.addAttribute("qnaList", qnaService.qnaAllList2(prdtId));
+		model.addAttribute("selectWritten1", productService.selectWrittenList1(prdtId));
+		
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
@@ -238,6 +245,12 @@ public class ProductCategoryController {
 	 * @ResponseBody public List<Product1VO> productList(){ return
 	 * productService.selectPrdAllList(); }
 	 */
+	
+	@GetMapping("searchPrd1")
+	@ResponseBody
+	public List<ProductVO> searchPrd(ProductVO vo){
+		return productService.searchList1(vo);
+	}
 	@GetMapping("/")
 	public String productList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
 			Authentication authentication) {

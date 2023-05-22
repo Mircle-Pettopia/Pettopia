@@ -176,12 +176,10 @@
 					<img src="/images/icons/icon-close2.png" alt="CLOSE">
 				</button>
 
-				<form class="wrap-search-header flex-w p-l-15">
-					<button class="flex-c-m trans-04">
+					<button class="flex-c-m trans-04"  id="searchBtn">
 						<i class="zmdi zmdi-search"></i>
 					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
-				</form>
+					<input  type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
 			</div>
 		</div>
 	</header>
@@ -679,7 +677,29 @@
 					`
 		}
 	</script>
-
+	<script>
+	 // 검색기능
+	 $(document).ready(function() {
+	    $(document).on("click", "#searchBtn", function () {
+	      let prdtNm = $("#searchNm").val();
+			console.log(prdtNm)
+	      $.ajax({
+	        url: "searchPrd1",
+	        data: {
+	          prdtNm: prdtNm
+	
+	        },
+	        success: function (result) {
+	          prdList.resetData(result);
+	        },
+	        error: function (reject) {
+	          console.log(reject);
+	        },
+	      });
+    });
+		 
+	 })
+	</script>
 
 
 	<!--=================== 여기까지 =================-->

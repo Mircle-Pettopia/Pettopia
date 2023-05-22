@@ -26,6 +26,28 @@
   )   WHERE ROWNUM &lt;= 4
 </select>
 
+<!-- 상품별 리뷰 목록  -->
+	<select id="selectWrittenList1" resultType="ReviewVO">
+		SELECT
+  r.RE_NO,
+  img.prdt_img,
+  p.prdt_id,
+  p.prdt_nm,
+  r.CONTENTS,
+  r.CREAT_DT,
+  r.POINT,
+  r.ME_ID,
+  r.ORDT_ID
+FROM
+  review r
+  JOIN product p ON r.prdt_id = p.prdt_id
+  JOIN product_img img ON p.prdt_id = img.prdt_id
+WHERE
+  img.is_main = 'Y'
+  AND p.prdt_id = #{prdtId}
+ORDER BY
+  r.RE_NO DESC
+	</select>
 
 
 
@@ -142,6 +164,38 @@ WHERE P.PRDT_ID = #{prdtId}
     ) }
   ]]>
 </insert> 
+
+
+	<!-- 검색 조회 -->
+	<select id="searchList1" resultType="ProductVO">
+	<!-- 	SELECT  prdt_id,
+				prdt_nm,
+				prdt_desct,
+				prdt_prc,
+				reg_dt,
+				mod_dt,
+		FROM	product
+		<where>
+			<if test="prdtNm != null and !prdtNm.equals('')">
+				AND prdt_nm LIKE '%' || #{prdtNm} || '%'
+			</if>
+		</where>
+		ORDER BY prdt_id -->
+		
+		SELECT
+		  prdt_id,
+		  prdt_nm,
+		  prdt_desct,
+		  prdt_prc,
+		  reg_dt,
+		  mod_dt
+		FROM
+		  product
+		WHERE
+		  prdt_nm LIKE '%' || #{prdtNm} || '%'
+		ORDER BY
+		  prdt_id
+	</select>
 
     
     

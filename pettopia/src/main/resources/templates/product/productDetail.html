@@ -115,6 +115,153 @@
 <!-- Add script : end -->
 <!--===============================================================================================-->
 
+<style>
+#backColor {
+	margin-top: 30px;
+	background: rgb(248, 245, 250);
+	padding: 10px 0px 10px 0px !important;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+th, td {
+	text-align: center;
+}
+
+#btnCss {
+	/*float: right;*/
+	position: relative;
+	bottom: 10px;
+	margin-top: 25px;
+}
+
+.filter {
+	margin-top: 25px;
+}
+
+.filter li {
+	display: inline-block;
+	padding-top: 10px;
+	border: 1px solid rgb(235, 235, 235);
+	border-radius: 10px;
+	background-color: white;
+	padding: 8px 22px 5px 22px;
+}
+
+tbody img {
+	width: 100px;
+}
+
+td, tr, th {
+	vertical-align: middle !important;
+}
+
+fieldset {
+	display: inline-block;
+	direction: rtl;
+	text-align: left;
+	border: 0;
+}
+
+fieldset legend {
+	text-align: right;
+}
+
+.starR {
+	background:
+		url("http://miuu227.godohosting.com/images/icon/ico_review.png")
+		no-repeat right 0;
+	background-size: auto 100%;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+
+.starR.on {
+	background-position: 0 0;
+}
+
+#reviewContents {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: solid 1.5px #d3d3d3;
+	border-radius: 5px;
+	font-size: 16px;
+	resize: none;
+}
+
+.modal {
+	z-index: 2000;
+	position: fixed;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.ck.ck-editor {
+	max-width: 500px;
+}
+
+.ck-editor__editable {
+	min-height: 300px;
+}
+
+#myform fieldset {
+	display: inline-block;
+	direction: rtl;
+	text-align: left;
+	border: 0;
+}
+
+#myform fieldset legend {
+	text-align: right;
+}
+
+.star input[type="radio"] {
+	display: none;
+}
+
+.star label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+.star label:hover {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star label:hover ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star input[type="radio"]:checked ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.edi img {
+	width: 80px;
+	height: 80px;
+	vertical-align: text-top;
+}
+
+.edi .image {
+	display: inline-block;
+}
+
+.edi p {
+	display: inline-block;
+	line-height: 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100px;
+}
+</style>
 	<!-- breadcrumb -->
 	<div class="container">
 		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
@@ -359,39 +506,71 @@
 								<div class="board_list_qa" align="center">
 						<!--  <table class="board_list_table " style="width:100%" "="> -->
 						<form>
-							<table class="board_list_table" style="width: 100%">
+							<!-- <table class="board_list_table" style="width: 100%">
 								<colgroup>
 									<col style="width: 16%">
-									<!-- 문의날짜 -->
+									문의날짜
 									<col style="width: 15%" class="widthDisplayNone">
-									<!-- 카테고리 -->
+									카테고리
 									<col>
-									<!-- 제목 -->
+									제목
 									<col style="width: 15%">
-									<!-- 문의상태 -->
+									문의상태
 
 								</colgroup>
 								<thead>
 									<tr>
-										<th style="padding-left: 87px;">문의날짜</th>
+										<th style="padding-left: 87px;">후기날짜</th>
 										<th style="padding-left: 84px;" class="widthDisplayNone">글번호</th>
-										<th style="padding-left: 347px;">제목</th>
-										<th style="padding-left: 87px;">작성자</th>
+										<th style="padding-left: 347px;">상품아이디</th>
+										<th style="padding-left: 87px;">내용</th>
+										<th style="padding-left: 87px;">점수</th>
 									</tr>
 								</thead>
 								<tbody>
 								
-									 <tr th:each="qna : ${qnaList}">
-										<td th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></td>
-										<td th:text="${qna.qstNo}" class="widthDisplayNone"></td>
-										<td th:text="${qna.title}"></td>
-										<td th:text="${qna.meId}"></td>
+									 <tr th:each="reviw : ${selectWritten1}">
+										<td th:text="${#dates.format(reviw.creatDt, 'yyyy-MM-dd HH:mm')}"></td>
+										<td th:text="${reviw.reNo}" class="widthDisplayNone"></td>
+										<td th:text="${reviw.prdtId}"></td>
+										<td th:text="${reviw.contents}"></td>
+										<td th:text="${reviw.point}"></td>
 									</tr>
 								 	<tr th:if="${qnaList.isEmpty()}">
 										<td colspan="5" align="center">게시글이 존재하지 않습니다.</td>
 									</tr>  
 								</tbody>
-							</table>
+							</table> -->
+							<div th:each="written : ${selectWritten1}"
+							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
+<!-- 							<div class="title">
+								<a th:href="@{ProductDetail(prdtId=${written.prdtId})}"> <img
+									th:src="${written.prdtImg}"
+									style="width: 40px; height: 40px; float: left; margin-right: 20px;" /></a>
+							</div> -->
+							<div class="star"
+								style="width: 150px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">
+								<fieldset style="border: none">
+									<input type="hidden" name="point" th:value="${written.point}" />
+									<span class="starR" th:classappend="${written.point}>=5?on"><input
+										type="hidden" value="5" /></span> <span
+										class="starR" th:classappend="${written.point}>=4?on"><input
+										type="hidden" value="4" /></span> <span
+										class="starR" th:classappend="${written.point}>=3?on"><input
+										type="hidden" value="3" /></span> <span
+										class="starR" th:classappend="${written.point}>=2?on"><input
+										type="hidden" value="2" /></span> <span
+										class="starR" th:classappend="${written.point}>=1?on"><input
+										type="hidden" value="1" /></span>
+								</fieldset>
+								<span id="starRating" style="font-weight: bold">[[${written.point}]]</span>
+							</div>
+							
+			<div class="edi"
+								style="height: auto; float: left; line-height: 69px"
+								th:utext="${written.contents }"></div>
+								</div>
+							
 						</form>
 					</div>
 							</div>
@@ -1325,6 +1504,9 @@
 		});
 	</script>
 	<!--===============================================================================================-->
+			<script
+			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
 </div>
 </body>
 

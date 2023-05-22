@@ -10,6 +10,7 @@ import com.yedam.pettopia.admin.OptionDetailVO;
 import com.yedam.pettopia.admin.ProductVO;
 
 import com.yedam.pettopia.product.Product1VO;
+import com.yedam.pettopia.review.ReviewVO;
 
 
 
@@ -49,6 +50,12 @@ public interface ProductMapper1 {
 	//장바구니등록
 	
 	 int addCart(Map<String, Object> requestMap);
+	 
+	// 상품 후기 리스트
+	public List<ReviewVO> selectWrittenList1(String prdtId);
+
+	// 검색 조회
+	public List<ProductVO> searchList1(ProductVO vo);
 
   
   
