@@ -93,10 +93,10 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		UserVO vo = new UserVO();
 		
 		if(result == null) {
-			vo.setPhone("null");
-			vo.setPost("null");
-			vo.setAddr("null");
-			vo.setAddrDetail("null");
+			vo.setPhone(null);
+			vo.setPost(null);
+			vo.setAddr(null);
+			vo.setAddrDetail(null);
 		}
 		return vo;
 	}
@@ -105,17 +105,15 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	@Override
 	public int userInfoUpdate(UserVO vo) {
 		int result = 0;
-		String pw = "";
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
-		if(vo.getSignPath() != "SC1") {
+		
+		if(vo.getSignPath() == "SC1") {
+			vo.setPw(passwordEncoder.encode(vo.getPw()));
 			result = mapper.userInfoUpdate(vo);
-		}
+		};
 		
-		vo.setPw(pw);
 		result = mapper.userInfoUpdate(vo);
-		
-		System.out.println(vo);
 		
 		if(result < 1) {
 			result = -1;

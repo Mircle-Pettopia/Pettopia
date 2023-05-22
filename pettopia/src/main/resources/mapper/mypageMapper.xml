@@ -125,7 +125,25 @@
 	                         </if>
 	                         ORDER BY 2 DESC) a
 	                    )
-		WHERE RN  BETWEEN #{stars} AND #{ends}
+		WHERE RN BETWEEN (#{page}-1)*10 and #{page}*10
+	</select>
+	
+	<!-- 주문개수 -->
+	<select id="orderMaxPage" resultType="int">
+		SELECT COUNT(*)
+		FROM order_header ordr
+		    JOIN order_detail ordt
+		        ON ordr.ordr_id = ordt.ordr_id
+		WHERE me_id = #{meId}
+		<if test="start != null and !start.equals('') and end!= null and !end.equals('')">
+        AND TO_DATE(ordr_date, 'rrrr-MM-dd') BETWEEN #{start} AND #{end}
+        </if>
+        <if test="shipSt != null and !shipSt.equals('')">
+        AND get_common(SHIP_ST) = #{shipSt}
+        </if>
+        <if test="prcSt != null and !prcSt.equals('')">
+        AND get_common(PRC_ST) = #{prcSt}
+        </if>
 	</select>
 
 	<!-- 결제여부 개수 -->
@@ -190,7 +208,12 @@
 		AND prdt_id = #{prdtId}
     </delete>
   
-  
+  	<!-- 주문취소 -->
+  	<update id="orderCancel" parameterType="MypageVO">
+	  	UPDATE order_header
+		SET prc_st = 'PS3'
+		WHERE ordr_id = #{ordrId}
+  	</update>
   
   
   

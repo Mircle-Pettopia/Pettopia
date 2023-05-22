@@ -287,50 +287,48 @@
         });
 
         //중복검사 이벤트
-        $('#meId').on('keyup', function (e) {
+        $('#meId').on('change', function (e) {
             let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
             let id = $('#meId').val();
-            if (e.keyCode == 13) {     //엔터키를 눌렀을 때 결과가 나온다.
-                $.ajax({
-                    url: "/idChk",
-                    type: "POST",
-                    data: { meId: id },
-                    success: function (data) {
-                        if (!regex.test(id)) {
-                            $("#id_feedback").html('형식이 올바르지 않습니다.');
+            $.ajax({
+                url: "/idChk",
+                type: "POST",
+                data: { meId: id },
+                success: function (data) {
+                    if (!regex.test(id)) {
+                        $("#id_feedback").html('형식이 올바르지 않습니다.');
+                        $("#id_feedback").attr('color', '#dc3545');
+                        //이메일 형식이 아니라면 버튼 비활성화, css 활성화, button 내용 변경
+                        $('#signBtn').attr('disabled', true);
+                        $('#signBtn').css("background-color", 'gray');
+                        $('#signBtn').css("color", 'black');
+                        $('#signBtn').html('가입불가');
+                        return;
+                    } else {
+                        if (data !== 1) {
+                            $("#id_feedback").html('사용할 수 있는 아이디입니다.');
+                            $("#id_feedback").attr('color', '#2fb380');
+                            //가입이 가능하면 버튼 활성화, css 제거, button 내용 변경
+                            $('#signBtn').attr('disabled', false);
+                            $('#signBtn').css("background-color", '');
+                            $('#signBtn').css("color", '');
+                            $('#signBtn').html('가입완료');
+                            return;
+                        } else {
+                            $("#id_feedback").html('이미 사용중인 아이디입니다.');
+                            //가입이 불가하면 버튼 비활성화, css 활성화, button 내용 변경
                             $("#id_feedback").attr('color', '#dc3545');
-                            //이메일 형식이 아니라면 버튼 비활성화, css 활성화, button 내용 변경
                             $('#signBtn').attr('disabled', true);
                             $('#signBtn').css("background-color", 'gray');
                             $('#signBtn').css("color", 'black');
                             $('#signBtn').html('가입불가');
-                            return;
-                        } else {
-                            if (data !== 1) {
-                                $("#id_feedback").html('사용할 수 있는 아이디입니다.');
-                                $("#id_feedback").attr('color', '#2fb380');
-                                //가입이 가능하면 버튼 활성화, css 제거, button 내용 변경
-                                $('#signBtn').attr('disabled', false);
-                                $('#signBtn').css("background-color", '');
-                                $('#signBtn').css("color", '');
-                                $('#signBtn').html('가입완료');
-                                return;
-                            } else {
-                                $("#id_feedback").html('이미 사용중인 아이디입니다.');
-                                //가입이 불가하면 버튼 비활성화, css 활성화, button 내용 변경
-                                $("#id_feedback").attr('color', '#dc3545');
-                                $('#signBtn').attr('disabled', true);
-                                $('#signBtn').css("background-color", 'gray');
-                                $('#signBtn').css("color", 'black');
-                                $('#signBtn').html('가입불가');
-                            }
-                        };
-                    },
-                    error: function (rej) {
-                        console.log(rej);
-                    }
-                });
-            }
+                        }
+                    };
+                },
+                error: function (rej) {
+                    console.log(rej);
+                }
+            });
         });
 
 

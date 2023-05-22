@@ -32,8 +32,7 @@ public class MypageController {
 	@GetMapping("mypage")
 	public String orderList(Model model,
 							@AuthenticationPrincipal PrincipalDetails principal,
-							MypageVO vo, 
-							String nowPage, String cntPerPage) {
+							MypageVO vo) {
         String id = principal.getUser().getMeId();
     	model.addAttribute("id", principal.getUser().getMeId());
         model.addAttribute("name", principal.getUser().getName());
@@ -42,8 +41,7 @@ public class MypageController {
         model.addAttribute("list",service.getOrder(id));
         model.addAttribute("getprcSt", service.getPrcCount(id));
         model.addAttribute("getShipSt", service.getShipCount(id));
-        System.out.println(vo);
-        int total = service.countOrderList(id);
+        /*int total = service.countOrderList(id);
         //한 페이지 당 1~9개의 제품을 보이게 하는 곳
   		//cntPerPage = 제품별로 최대 나올 수 있는 값
         if (nowPage == null && cntPerPage == null) {
@@ -56,10 +54,22 @@ public class MypageController {
     	}
         
         vo = new MypageVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-        model.addAttribute("paging", vo);
+        model.addAttribute("paging", vo);*/
         
 		return "mypage/mypage";
 	};
+	
+	@GetMapping("orderMaxPage")
+	@ResponseBody
+	public int orderMaxPage(String meId, String start, String end, String shipSt, String prcSt) {
+		return service.orderMaxPage(meId, start, end, shipSt, prcSt);
+	}
+	
+	@PostMapping("orderCancel")
+	@ResponseBody
+	public int orderCancel(String ordrId) {
+		return service.orderCancel(ordrId);
+	}
 	
 	@GetMapping("option")
 	@ResponseBody
@@ -70,9 +80,10 @@ public class MypageController {
 	//주문내역 검색기능
 	@GetMapping("getOrder")
 	@ResponseBody
-	public List<MypageVO> getOrder(MypageVO vo){
-		System.out.println("getOrder=======" + vo);
-		return service.pagingTest(vo);
+	public List<MypageVO> getOrder(String meId, String start, String end, String shipSt, String prcSt,
+								   @RequestParam(defaultValue = "1", required = false) int page){
+		System.out.println("getOrder=======" + page);
+		return service.pagingTest(meId, start, end, shipSt, prcSt, page);
 	}
 	
 	//마이페이지-주문내역상세

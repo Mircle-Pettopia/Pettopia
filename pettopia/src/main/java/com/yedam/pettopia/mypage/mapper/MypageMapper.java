@@ -12,6 +12,7 @@ public interface MypageMapper {
 	public List<MypageVO> getPrcCount(String meId);
 	public List<MypageVO> getShipCount(String meId);
 	public MypageVO ordtIdOptionInfo(String ordtId);
+	public int orderCancel(String ordrId);
 	
 	//주문내역디테일조회
 	public List<MypageVO> ordrDetailList(String ordrId);
@@ -22,7 +23,8 @@ public interface MypageMapper {
 	
 	//페이징
 	public int countOrderList(String meId);
-	public List<MypageVO> pagingTest(MypageVO vo);
+	public List<MypageVO> pagingTest(String meId, String start, String end, String shipSt, String prcSt, int page);
+	public int orderMaxPage(String meId, String start, String end, String shipSt, String prcSt);
 	
 	//관심상품 삭제
 	public int interestDelete(MypageVO vo);

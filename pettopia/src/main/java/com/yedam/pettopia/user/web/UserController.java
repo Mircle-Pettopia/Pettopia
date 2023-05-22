@@ -90,11 +90,12 @@ public class UserController {
     	String a = info.getAddr();
     	String b = info.getPost();
     	String c = info.getPhone();
-    	System.out.println(a);
-    	System.out.println(a == "null");
-    	System.out.println(a.equals("null"));
+    	
+    	System.out.println(a == null);
+    	System.out.println(b == null);
+    	System.out.println(c == null);
     	//주소 상세는 없을 수 있기 때문에 뺐다.
-    	if(a == "null" || b == "null" || c == "null") {
+    	if(a == null || b == null || c == null) {
     		//정보가 없을 때 트루를 반환한다.
     		result = true;
     	};
