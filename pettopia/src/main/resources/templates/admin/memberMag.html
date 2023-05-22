@@ -169,7 +169,9 @@
 
 			const memberList = new Grid({
 				el : document.getElementById("memberList"),
-				rowHeaders : [ "checkbox", "rowNum" ],
+				rowHeaders : [ "rowNum" ],
+				scrollX: false,
+				scrollY: false,
 				bodyHeight : 430,
 				pageOptions : {
 					useClient : true,

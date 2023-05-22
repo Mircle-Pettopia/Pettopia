@@ -47,7 +47,7 @@
 			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
 				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
 					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-				</a> <span class="stext-109 cl4"> 공지사항 </span>
+				</a> <span class="stext-109 cl4"><a th:href="@{noticeList}"> 공지사항</a> </span>
 			</div>
 		</div>
 
@@ -64,7 +64,7 @@
 							<dl>
 								<dt>제목</dt>
 								<dd>
-									<input type="hidden" name="meId" th:value="*{meId}">
+									<input type="hidden" name="meId" th:value="*{meId}" id="meId">
 									<input type="text" placeholder="제목 입력" id="title"
 										th:field="*{title}" required>
 								</dd>
@@ -116,6 +116,25 @@
 					dropdownParent : $(this).next(".dropDownSelect2"),
 				});
 			});
+			
+			$("#meId").val(GetUser());
+			function GetUser() { //사용자ID가져오는 함수 컨트롤러는 Cart에있음
+				$.ajax({
+					url: "getUser",
+					method: "GET",
+					async: false,
+					success: function (data) {
+						//console.log(data);
+						result = data;
+					},
+					error: function (reject) {
+						console.log(reject);
+						console.log("카트불러오기실패");
+						result = null;
+					},
+				})
+				return result;
+			}
 		</script>
 		<!--===============================================================================================-->
 		<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>

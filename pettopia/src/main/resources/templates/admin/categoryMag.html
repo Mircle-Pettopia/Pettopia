@@ -15,7 +15,13 @@
 
 			<div class="card">
 				<div class="card-body">
-					<h5 class="card-title">카테고리관리</h5>
+					<div>
+						<h5 class="card-title" style="display: inline-block;">카테고리관리</h5>
+						<div style="margin-bottom: 20px; float: right; margin-top: 10px;">
+							<span style="color: red;">*</span><span>추가, 수정, 삭제 시 더블클릭</span>
+						</div>
+					</div>
+					<div style="clear:both"></div>
 					<div class="row ">
 						<div class="col-lg-6">
 							대분류
@@ -57,6 +63,8 @@
 			const LargeCat = new Grid({
 				el: document.getElementById("LargeCatGrid"),
 				rowHeaders: ["checkbox", "rowNum"],
+				scrollX: false,
+				scrollY: false,
 				bodyHeight: 430,
 				pageOptions: {
 					useClient: true,
@@ -103,6 +111,8 @@
 			const SmallCat = new Grid({
 				el: document.getElementById("SmallCatGrid"),
 				rowHeaders: ["checkbox", "rowNum"],
+				scrollX: false,
+				scrollY: false,
 				bodyHeight: 430,
 				pageOptions: {
 					useClient: true,
