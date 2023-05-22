@@ -680,22 +680,11 @@
 	<script>
 	 // 검색기능
 	 $(document).ready(function() {
-	    $(document).on("click", "#searchBtn", function () {
+	    $( "#searchBtn").on("click", function () {
 	      let prdtNm = $("#searchNm").val();
 			console.log(prdtNm)
-	      $.ajax({
-	        url: "searchPrd1",
-	        data: {
-	          prdtNm: prdtNm
-	
-	        },
-	        success: function (result) {
-	          prdList.resetData(result);
-	        },
-	        error: function (reject) {
-	          console.log(reject);
-	        },
-	      });
+			location.href="ProductCategory?prdtNm="+prdtNm
+	   
     });
 		 
 	 })

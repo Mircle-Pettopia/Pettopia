@@ -35,9 +35,9 @@ public class ProductServiceImpl1 implements ProductService1{
 	}
 
 	@Override
-	public List<Product1VO> selectPrdAllList2() {
+	public List<Product1VO> selectPrdAllList2(Product1VO product1VO) {
 
-		return productMapper.selectPrdAllList2();
+		return productMapper.selectPrdAllList2(product1VO);
 	}
 
 	@Override

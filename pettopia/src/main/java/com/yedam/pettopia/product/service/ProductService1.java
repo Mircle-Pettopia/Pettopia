@@ -19,7 +19,7 @@ public interface ProductService1 {
 	public List<Product1VO> selectPrdFList();
 	
 	// 상품 전체 조회
-	public List<Product1VO> selectPrdAllList2();
+	public List<Product1VO> selectPrdAllList2(Product1VO product1VO);
 	
 	// 전체등록 상품 조회
 	public int insertPrdCount();
