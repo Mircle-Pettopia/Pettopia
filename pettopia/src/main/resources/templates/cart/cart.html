@@ -277,7 +277,7 @@
                       <th class="column-1"></th>
                       <th class="column-2">상품명</th>
                       <th class="column-3">가격</th>
-                      <th class="column-4">수량</th>
+                      <th class="column-4" style="text-align: center;">수량</th>
                       <th class="column-5">총가격</th>
                       <th class="column-6">제거</th>
                     </tr>
@@ -301,11 +301,11 @@
               <td class="column-3"><span id = "${data[i].crtId}Price">${data[i].prdtPrc}</span><span>원</span></td>
               <td class="column-4">
                 <div class="px-1 py-1 flex-w mx-auto">
-                  <div class="border cl8 hov-btn3 trans-04 flex-c-m px-4" onclick="counter('-','${data[i].crtId}','CNT')">
+                  <div class="border cl8 hov-btn3 trans-04 flex-c-m px-3" onclick="counter('-','${data[i].crtId}','CNT')">
                     -
                   </div>
-                  <div class="border px-4  py-3" id=${data[i].crtId}CNT>${data[i].cnt}</div>
-                  <div class="border cl8 hov-btn3 trans-04 flex-c-m px-4" onclick="counter('+','${data[i].crtId}','CNT')">
+                  <div class="border px-3  py-3" id=${data[i].crtId}CNT>${data[i].cnt}</div>
+                  <div class="border cl8 hov-btn3 trans-04 flex-c-m px-3" onclick="counter('+','${data[i].crtId}','CNT')">
                     +
                   </div>
                 </div>
