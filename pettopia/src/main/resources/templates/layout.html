@@ -134,8 +134,8 @@
 							</li>
 							<!-- =================================영주추가함======================= -->
 							<li class="menu">
-								<button class="noonnu_font"
-									onclick="document.getElementById('id01').style.display='block'">재미난것들(예정?)</button>
+								<button class="noonnu_font" onclick="document.getElementById('id01').style.display='block'">펫토피아
+									툴즈</button>
 							</li>
 							<!--<li>
 								<a href="about.html" class="menu">About</a>
@@ -384,59 +384,78 @@
 
 	<!-- 여기서부턴 영주작업중 -->
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<!-- 뷰넣음 -->
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!-- Vue.js -->
+	<script type="text/javascript" src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<!-- 날짜계산용 라이브러리 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
 
 	<!-- =================모달임========-->
 	<!-- The Modal -->
 	<style>
-		#ageCal input {
+		#id01 input {
 			width: auto;
 			display: inline-block;
 			height: auto;
 		}
 	</style>
 	<div id="id01" class="w3-modal">
-		<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="margin-top:100px;">
+		<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="margin-top:100px;width: 400px;">
 			<header class="w3-container w3-blue">
 				<span onclick="document.getElementById('id01').style.display='none'"
 					class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
-				<h2>Header</h2>
+				<h2>펫토피아 툴즈</h2>
 			</header>
 
 			<div class="w3-bar w3-border-bottom">
-				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'ageCal')">나이계산기</button>
-				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Paris')">Paris</button>
-				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Tokyo')">Tokyo</button>
+				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'ageCal')">나이 계산기</button>
+				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'calCal')">칼로리 계산기</button>
+				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Tokyo')">WIP</button>
 			</div>
 			<div id="Vapp">
 				<div id="ageCal" class="w3-container w3tabs">
-					<h1>나이계산기</h1>
+					<h1>나이 계산기</h1>
+					<hr>
 					<label></label><input type="radio" v-model="race" value="cat">고냥이</label>
 					<label></label><input type="radio" v-model="race" value="dog">댕댕이</label>
-					<template v-if="race=='cat'">
-						<p>고냥이 양식</p>
-					</template>
-					<template v-if="race=='dog'">
-						<p>댕댕이 양식</p>
-					</template>
-					<template>
-						<input type="date" v-model="born">
-						<span v-text="humanAge"></span>
-					</template>
+					<hr>
+					<div v-if="race=='cat'">
+						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+					</div>
+					<div v-if="race=='dog'">
+						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+					</div>
+
+					<hr>
+					우리 아이 생일: <input type="date" v-model="born">
+					<hr>
+					<img v-bind:src="ageImg" alt="">
+					<h4>우리아이의 나이는:<span v-text="humanAge"></span>살 이에요!</h4>
+
 				</div>
 
-				<div id="Paris" class="w3-container w3tabs">
-					<h1>Paris</h1>
-					<p>Paris is the capital of France.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				<div id="calCal" class="w3-container w3tabs">
+					<h1>칼로리 계산기</h1>
+					<hr>
+					<label></label><input type="radio" v-model="race" value="cat">고냥이</label>
+					<label></label><input type="radio" v-model="race" value="dog">댕댕이</label>
+					<hr>
+					<div v-if="race=='cat'">
+						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+					</div>
+					<div v-if="race=='dog'">
+						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+					</div>
+
+					<hr>
+					우리아이 몸무게:<input type="number" v-model="weight">KG
+					<hr>
+					<h4>우리아이 일일권장 칼로리는<br><span style="color: red; font-size: xx-large;" v-text="kcal"></span>kcal 입니다</h4>
+
 				</div>
 
 				<div id="Tokyo" class="w3-container w3tabs">
-					<h1>Tokyo</h1>
-					<p>Tokyo is the capital of Japan.</p><br>
+					<h1>WIP</h1>
+					<p>Work in progress comming soon!</p><br>
 				</div>
 
 				<div class="w3-container w3-light-grey w3-padding">
@@ -447,9 +466,7 @@
 		</div>
 	</div>
 	<script>
-
-		var app = new Vue({
-			el: '#Vapp',
+		const app = Vue.createApp({
 			data() {
 				return {
 					race: "cat",
@@ -458,10 +475,13 @@
 					realAge: 0,
 					humanAge: 0,
 					born: LayoutDateChange(Date.now()),
+					ageImg: '',
+					weight: 0,
+					kcal: 0,
 				}
 			},
 			computed: {
-				computeAge() {
+				computeAge: function () {
 					months = moment().diff(this.born, 'months');
 					years = months / 12
 					if (this.race == "cat") {
@@ -469,7 +489,7 @@
 							humanAge = (years / 0.1667) + 0.5;
 						}
 						else {
-							humanAge = (years - 1) * 7 + 1;
+							humanAge = (years) * 7;
 						}
 					}
 					else if (this.race == "dog") {
@@ -477,14 +497,44 @@
 							humanAge = years / 0.125 + 0.5;
 						}
 						else {
-							humanAge = (years - 1) * 7 + 1;
+							humanAge = (years) * 7;
 						}
 					}
 					this.humanAge = Math.round(humanAge);
 					return this.humanAge
+				},
+				agePic: function () {
+					if (this.humanAge > 50) {
+						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/1439/1439681.png'
+					}
+					else if (this.humanAge > 30) {
+						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/4598/4598871.png'
+					}
+					else if (this.humanAge > 20) {
+						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/7223/7223731.png'
+					}
+					else if (this.humanAge > 10) {
+						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/2793/2793541.png'
+					}
+					else if (this.humanAge > 4) {
+						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/1702/1702342.png'
+					}
+					else {
+						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/822/822123.png'
+					}
+					return this.ageImg;
+				},
+				computeCal: function () {
+					if (this.race == "cat") {
+						this.kcal = this.weight * 20;
+					}
+					else {
+						this.kcal = this.weight * 25;
+					}
+					return this.kcal;
 				}
 			}
-		})
+		}).mount("#Vapp");
 
 
 
