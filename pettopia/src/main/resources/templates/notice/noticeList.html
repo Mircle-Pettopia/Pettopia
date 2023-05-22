@@ -49,7 +49,7 @@
 			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
 				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
 					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-				</a> <span class="stext-109 cl4"> 공지사항 </span>
+				</a> <span class="stext-109 cl4">공지사항</span>
 			</div>
 		</div>
 
@@ -88,7 +88,6 @@
 							<div th:each=" notice : ${noticeList}">
 								<div class="num" th:text="${notice.noNo }"></div>
 								<div class="title">
-								<input type="hidden" name="meId" th:value="${notice.meId}">
 									<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title
 										}]]</a>
 								</div>
@@ -108,21 +107,21 @@
 
 						<!--  [[${pageMaker.startPage}]], end=[[${pageMaker.endPage}]] -->
 						<div class="board_page">
-							<a th:href="@{/noticeList?pageNo=1}" class="bt first">&lt;&lt;</a>
+							<a th:href="1" class="bt first">&lt;&lt;</a>
 							<a th:if="${pageMaker.prev}"
-								th:href="@{/noticeList?pageNo={page}(page=${pageMaker.startPage-1})}"
+								th:href="${pageMaker.startPage-1}"
 								class="bt prev">&lt;</a>
 							<th:block
 								th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}"
 								th:each="pageButton : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-								<a th:href="@{/noticeList?pageNo={page} (page = ${pageButton})}"
+								<a th:href="${pageButton}"
 									th:text="${pageButton}" th:classappend="${cri.pageNo == pageButton} ? 'num on' : 'num'"></a>
 									
 							</th:block>
 							<a th:if="${pageMaker.next}"
-								th:href="@{/noticeList?pageNo={page}(page=${pageMaker.endPage +1})}"
+								th:href="${pageMaker.endPage +1}"
 								class="bt next">&gt;</a> <a
-								th:href="@{/noticeList?pageNo={page} (page = ${pageMaker.realEnd})}"
+								th:href="${pageMaker.realEnd}"
 								class="bt last">&gt;&gt;</a>
 						</div>
 
@@ -185,10 +184,21 @@
 				$(".search_area button").on("click", function(e) {
 					e.preventDefault();
 					let val = $("input[name='keyword']").val();
+					$("#moveForm").find("input[name='pageNo']").val(1);
 					$("#moveForm").find("input[name='keyword']").val(val);
 					moveForm.submit();
 				});
 				
+				
+				$(".board_page a").on("click", function(e) {
+				    e.preventDefault();
+				    let pageNo = $(this).attr("href");
+				    let keyword = $("input[name='keyword']").val();
+				    $("#moveForm").find("input[name='keyword']").val(keyword);
+				    $("#moveForm").find("input[name='pageNo']").val(pageNo);
+				    $("#moveForm").submit();
+				});
+
 				
 			</script>
 			<!--===============================================================================================-->
