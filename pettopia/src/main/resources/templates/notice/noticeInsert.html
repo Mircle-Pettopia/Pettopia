@@ -118,14 +118,14 @@
 			});
 			
 			$("#meId").val(GetUser());
-			function GetUser() { //사용자ID가져오는 함수 컨트롤러는 Cart에있음
+			function GetUser() { 
 				$.ajax({
 					url: "getUser",
 					method: "GET",
 					async: false,
 					success: function (data) {
-						//console.log(data);
 						result = data;
+						
 					},
 					error: function (reject) {
 						console.log(reject);
