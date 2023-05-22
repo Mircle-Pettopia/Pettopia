@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.pettopia.admin.service.ProductService;
 import com.yedam.pettopia.product.Product1VO;
 import com.yedam.pettopia.product.service.ProductService1;
+import com.yedam.pettopia.qna.service.QnaService;
 import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 @Controller
@@ -29,6 +30,8 @@ public class ProductCategoryController {
 	ProductService1 productService;
 	@Autowired
 	ProductService productService1;
+	@Autowired
+	QnaService qnaService;
 
 	// 관심상품등록
 	@PostMapping("InsertProduct")
@@ -186,6 +189,8 @@ public class ProductCategoryController {
 	public String ProductDetail(Product1VO product1VO, Model model, @RequestParam final String prdtId,
 			@AuthenticationPrincipal PrincipalDetails principalDetails, Authentication authentication) {
 		String result = "";
+		String meId= principalDetails.getUser().getMeId();
+		model.addAttribute("qnaList", qnaService.qnaAllList2(prdtId));
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
