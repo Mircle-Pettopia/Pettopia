@@ -2,7 +2,6 @@ package com.yedam.pettopia.review.service;
 
 import java.util.List;
 
-import com.yedam.pettopia.notice.Criteria;
 import com.yedam.pettopia.review.ReviewVO;
 
 public interface ReviewService {
@@ -25,6 +24,9 @@ public interface ReviewService {
 	
 	//작성 후기 디테일
 	public ReviewVO writtenDetail(ReviewVO reviewVO);
+	
+	public ReviewVO optionDetail(String ordtId);
+	
 }
 
 

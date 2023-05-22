@@ -105,6 +105,10 @@
 								<button type="button" class="btn btn-secondary" id="resetBtn">
 									초기화</button>
 							</div>
+								<div class="text-end p-2">
+								<button type="button" class="btn btn-success" id="excelBtn">
+									Excel</button>
+							</div>
 							<div id="memberList"></div>
 						</div>
 					</div>
@@ -356,6 +360,15 @@
 		               $("#selectAll").prop("checked", true);
 		             }
 		           });
+		         
+		         //엑셀
+		           $("#excelBtn").click((ev) => {
+	                    const options = {
+	                        includeHiddenColumns: false,
+	                        fileName: "member_list",
+	                    };
+	                    memberList.export("xlsx", options);
+	                });
 		</script>
 	</div>
 </body>
