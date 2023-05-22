@@ -162,7 +162,7 @@ background-color: rgb(233, 233, 233);
 	border-radius: 20px !important;
 	border-left: 0 !important;
 	line-height: 100% !important;
-	cursor: pointer;
+	cursor: pointer !important;
 }
 
 .board_page a.num {
@@ -175,19 +175,19 @@ background-color: rgb(233, 233, 233);
 	border-color: rgb(250, 246, 252) !important;
 	background: rgb(250, 246, 252) !important;
 	color: #818181 !important;
-	cursor: pointer;
+	cursor: pointer !important;
 }
 
 .board_page a:first-child {
 	border-left: 1px solid #ddd !important;
-	cursor: pointer;
+	cursor: pointer !important;
 }
 
 .board_page a.bt {
 	padding-top: 5px !important;
 	font-size: 1.2rem !important;
 	letter-spacing: -1px !important;
-	cursor: pointer;
+	cursor: pointer !important;
 }
 
 /*-----------------------------------------------------------*/

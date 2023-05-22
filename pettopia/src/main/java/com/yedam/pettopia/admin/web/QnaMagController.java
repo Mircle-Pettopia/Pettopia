@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.admin.QnaMagVO;
@@ -16,6 +17,7 @@ import com.yedam.pettopia.admin.service.QnaMagService;
 import com.yedam.pettopia.common.service.CodeService;
 
 @Controller
+@RequestMapping("/admin")
 public class QnaMagController {
 	@Autowired
 	QnaMagService qnaMagService;

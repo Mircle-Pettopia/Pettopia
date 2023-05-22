@@ -349,29 +349,37 @@
       // 댓글 등록
       function InsertReply() {
         let meId = GetUser();
-        $.ajax({
-          url: "insertAdoptReply",
-          method: "POST",
-          async: false,
-          dataType: "JSON",
-          data: {
-            boNo: boNo.innerText,
-            subject: replySubject.value,
-            meId: meId
-          },
-          success: function (data) {
-            replySubject.value = "";
-            Toast.fire({
-              icon: 'success',
-              title: '댓글이 정상적으로 등록되었습니다.'
-            }).then(() => {
+        if(replySubject.value == ""){
+          Swal.fire({
+            icon: 'warning',
+            title: '알림',
+            text: '내용이 입력되지 않았습니다.',
+          });
+          return;
+        } else {
+          $.ajax({
+            url: "insertAdoptReply",
+            method: "POST",
+            //async: false,
+            dataType: "JSON",
+            data: {
+              boNo: boNo.innerText,
+              subject: replySubject.value,
+              meId: meId
+            },
+            success: function (data) {
+              replySubject.value = "";
               getReply();
-            });
-          },
-          error: function (reject) {
-            console.log(reject);
-          },
-        })
+              Toast.fire({
+                icon: 'success',
+                title: '댓글이 정상적으로 등록되었습니다.'
+              });
+            },
+            error: function (reject) {
+              console.log(reject);
+            },
+          });
+        }
       }
 
       // 유저정보 가져오기
