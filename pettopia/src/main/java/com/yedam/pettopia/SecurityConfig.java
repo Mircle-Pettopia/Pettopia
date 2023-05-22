@@ -34,9 +34,9 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 	 		.authorizeRequests()
-				.antMatchers("/", "/**").permitAll()					//누구나 접근가능
+				.antMatchers("/*").permitAll()					//누구나 접근가능
 				.antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")	//admin만 접근가능
-				.antMatchers("/notice/**").hasAuthority("ROLE_ADMIN")
+				//.antMatchers("/notice/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()							//나머지 요청들은 권한의 종류에 상관없이 권한이 있어야 접근가능
 		.and()
 			.formLogin()
@@ -85,7 +85,9 @@ public class SecurityConfig {
                 "/img/**",
                 "/vendor/**",
                 "/images/**",
-                "/fonts/**"
+                "/fonts/**",
+                "/admin/assets/**"
+                
                 
         );
     }
