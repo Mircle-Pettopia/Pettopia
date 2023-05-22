@@ -51,12 +51,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
         	res.sendRedirect("/login?error=true&exception=" + message);
         // 그게 아니라면 정상 로그인 시키기
         } else {
+        	System.out.println("authdata.getAuthorities().toString()>>>>>>>>>>>>>>>>>" + authdata.getAuthorities().toString());
 	    	//참고 URL : https://okky.kr/questions/1132748
 	    	switch (authdata.getAuthorities().toString()) {
 	    		// 권한이 ADMIN이면 어드민 페이지로 이동
 				case "[ROLE_ADMIN]":
 					//uri += "http://localhost:81/productMag";
-					res.sendRedirect("/dashboard");
+					res.sendRedirect("/admin/dashboard");
 					break;
 				// 권한이 USER면 메인 페이지로 이동
 				case "[ROLE_USER]":
