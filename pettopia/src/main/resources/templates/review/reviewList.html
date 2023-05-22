@@ -149,7 +149,7 @@ td, tr, th {
 								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a>
 							</div>
 							<div style="height: 120px; float: left; line-height: 100px">
-								여기 옵션 이름 들어가기</div>
+								<!--  옵션 이름 들어가기-->[[${review.prdtId}]]</div>
 							<div class="btnn" style="padding: 20px 0 0 0">
 								<button type="button" th:data-orderid="${review.ordtId}"
 									th:data-prdtid="${review.prdtId}"
@@ -275,6 +275,26 @@ td, tr, th {
 				var editor = CKEDITOR.instances.editor;
 				editor.setData(""); // 에디터 내용을 비웁니다.
 			}
+			
+			/* $.ajax({
+				url: "optionDetail",
+				method: "GET",
+				data : {ordtId : ordtId},
+				success: function(data){
+					if(data){
+						// ',' 기준으로 자르기
+						var beforeStr = data.optDetaNm;
+						var afterStr = beforeStr.split(',');
+						domId(ordtId + "_option").innerHTML = '(옵션)';
+						for(let i=0;i<afterStr.length;i++){
+							domId(ordtId + "_option").innerHTML += ` ${afterStr[i]} / `;
+						}
+					}
+				},
+				error : function(rej) {
+					console.log(rej);
+				}
+			}); */
 		</script>
 	</div>
 </body>

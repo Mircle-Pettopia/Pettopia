@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.yedam.pettopia.admin.mapper.ReviewMagMapper">
+	<!-- 전체 상품 조회 -->
+
+	<select id="reviewAllList" resultType="ReviewMagVO">
+		SELECT r.RE_NO,
+		r.CREAT_DT,
+		r.ME_ID,
+		d.ORDT_ID,
+		p.PRDT_ID,
+		h.ORDR_DATE,
+		p.PRDT_NM
+		FROM review r
+		JOIN ORDER_DETAIL d
+		ON r.ORDT_ID = d.ORDT_ID
+		JOIN ORDER_HEADER h
+		ON d.ORDR_ID = h.ORDR_ID
+		JOIN PRODUCT p
+		ON p.PRDT_ID = r.PRDT_ID
+		ORDER BY re_no
+	</select>
+
+
+	<select id="searchList" resultType="ReviewMagVO">
+		SELECT r.RE_NO,
+		r.CREAT_DT,
+		r.ME_ID,
+		d.ORDT_ID,
+		p.PRDT_ID,
+		h.ORDR_DATE,
+		p.PRDT_NM
+		FROM review r
+		JOIN ORDER_DETAIL d ON r.ORDT_ID = d.ORDT_ID
+		JOIN ORDER_HEADER h ON d.ORDR_ID = h.ORDR_ID
+		JOIN PRODUCT p ON p.PRDT_ID = r.PRDT_ID
+		<where>
+			<if test="meId != null and !meId.equals('')">
+				AND r.me_id LIKE '%' || #{meId} || '%'
+			</if>
+			<if test="prdtNm != null and !prdtNm.equals('')">
+				AND p.prdt_nm LIKE '%' || #{prdtNm} || '%'
+			</if>
+			<if test="prdtId != null and !prdtId.equals('')">
+				AND p.prdt_id LIKE '%' || #{prdtId} || '%'
+			</if>
+			<if test="ordtId != null and !ordtId.equals('')">
+				AND d.ordt_id LIKE '%' || #{ordtId} || '%'
+			</if>
+			<if test="start != null and !start.equals('')">
+				AND <![CDATA[r.creat_dt >= #{start}]]>
+			</if>
+			<if test="end != null and !end.equals('')">
+				AND <![CDATA[r.creat_dt <= #{end}]]>
+			</if>
+		</where>
+		ORDER BY r.re_no
+	</select>
+
+
+	<!-- 작성한 후기 상세 -->
+	<select id="reviewDetail" resultType="ReviewMagVO">
+		SELECT contents, point
+		FROM review
+		WHERE re_no = #{reNo}
+	</select>
+	
+	<delete id="deleteReviewMag" parameterType="ReviewMagVO">
+		DELETE FROM review
+		WHERE re_no = #{reNo}
+	</delete>
+</mapper>

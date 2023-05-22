@@ -34,8 +34,10 @@
 
 
 
-	<select id="totalCount" resultType="int">
-		<!--  SELECT COUNT(*)
+
+
+	<!-- <select id="totalCount" resultType="int">
+	  	SELECT COUNT(*)
 		FROM (
 		select me_id, ordt.ordt_id, ordt.prdt_id,
 		TO_DATE(ordr_date, 'rrrr-MM-dd')
@@ -54,8 +56,8 @@
 		AND ship_st = 'SS3'
 		AND not exists ( SELECT re_no from review r where r.ordt_id =
 		ordt.ordt_id)
-		)-->
-	</select>
+		)
+	</select> -->
 
 	<!-- 내가 작성한 후기 목록 -->
 	<select id="selectWrittenList" resultType="ReviewVO">
@@ -115,6 +117,20 @@
 		SELECT contents, point
 		FROM review
 		WHERE re_no = #{reNo}
+	</select>
+	
+		<select id="optionDetail" resultType="ReviewVO">
+		SELECT
+	        DISTINCT odo.ordt_id,
+		    LISTAGG(pod.opt_deta_nm, ',')
+		    WITHIN GROUP (ORDER BY opt_deta_nm)
+		    OVER(PARTITION BY odo.ordt_id) opt_deta_nm
+		FROM
+		    ORDER_DETAIL_OPTION odo JOIN PRODUCT_OPTION_DETAIL pod
+		ON
+		    odo.OPT_DETA_ID = pod.OPT_DETA_ID
+		WHERE
+		    ORDT_ID = #{ordtId}
 	</select>
 	
 
