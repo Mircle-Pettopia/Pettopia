@@ -41,10 +41,10 @@
                       <td>답변완료</td>
                     </tr>
                     <tr class="text-center" id="currentSt">
-                      <td class="text-primary text-decoration-underline fs-3">
+                      <td class="text-primary fs-3">
                         <span th:text="${cnt.qstStCnt1}">0</span>개
                       </td>
-                      <td class="text-success text-decoration-underline fs-3">
+                      <td class="text-success fs-3">
                         <span th:text="${cnt.qstStCnt2}">0</span>개
                       </td>
                     </tr>
@@ -217,15 +217,19 @@
                     <td id="detailTitle"></td>
                   </tr>
                   <tr class="thColor">
-                    <th>사진</th>
+                    <th>대표 이미지</th>
                     <td><img id="detailImg" /></td>
                   </tr>
                   <tr class="thColor">
                     <th>내용</th>
                     <td>
+                      <form>
+                        <textarea id="summernote" name="editordata"></textarea>
+                      </form>
                       <textarea
                         class="form-control"
                         id="detailContent"
+                        style="display: none"
                         cols="60"
                         rows="10"
                         readonly
@@ -286,6 +290,9 @@
           </div>
         </div>
       </div>
+      <!-- ==========================ckeditor========================== -->
+      <!-- <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+      <script type="text/javascript" src="CKeditorSuperBuild2.js"></script> -->
       <script>
         // Vue
         const app = Vue.createApp({
@@ -399,6 +406,8 @@
               .attr("src", "download/" + rowData.qstImg)
               .css("width", "400px");
             $("#detailContent").val(rowData.content);
+            // editor.setData(rowData.content);
+            $("#summernote").summernote("code", rowData.content);
 
             // 내가 쓴 답글 조회
             $.ajax({
@@ -560,12 +569,6 @@
             $("#qstStTable input:checkbox[name=chk]:checked").map(function () {
               qstSt.push($(this).val());
             });
-
-            console.log(name);
-            console.log(prdtNm);
-            console.log(startDate);
-            console.log(endDate);
-            console.log(qstSt);
 
             $.ajax({
               url: "searchQna",
