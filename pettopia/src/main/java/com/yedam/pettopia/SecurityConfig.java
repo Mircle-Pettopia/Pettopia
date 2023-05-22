@@ -34,7 +34,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 	 		.authorizeRequests()
-				.antMatchers("/*").permitAll()					//누구나 접근가능
+				.antMatchers("/*","/download/*").permitAll()			//누구나 접근가능
 				.antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")	//admin만 접근가능
 				//.antMatchers("/notice/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()							//나머지 요청들은 권한의 종류에 상관없이 권한이 있어야 접근가능
@@ -46,7 +46,7 @@ public class SecurityConfig {
 					.failureHandler(CustomAuthFailureHandler) 	// 로그인 실패 핸들러
 					.usernameParameter("meId")					// html input name을 따로 설정해준다.
 					.passwordParameter("password")				// html input name을 따로 설정해준다.
-					//.defaultSuccessUrl("/")						// 성공하면 쇼핑몰 메인페이지로 이동한다.
+					//.defaultSuccessUrl("/")					// 성공하면 쇼핑몰 메인페이지로 이동한다.
 			.and()
 				.logout()
 				.logoutUrl("/logout")							// 로그아웃 페이지

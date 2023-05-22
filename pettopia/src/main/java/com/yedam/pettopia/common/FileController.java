@@ -51,7 +51,7 @@ public class FileController {
 	    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	        try {
 	            String path = request.getParameter("filepath");
-	            File file = new File("C:\\upload", path);
+	            File file = new File(uploadPath, path);
 	            
 	            String fileName = new String(file.getName().getBytes("UTF-8"), "iso-8859-1");
 
