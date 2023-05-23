@@ -86,14 +86,14 @@
 
 
 							<div th:each=" notice : ${noticeList}">
-								<div class="num" th:text="${notice.noNo }"></div>
-								<div class="title">
+								<div class="num" th:text="${notice.noNo }" style="font-size: 15px;"></div>
+								<div class="title" style="font-size: 15px;">
 									<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title
 										}]]</a>
 								</div>
-								<div class="date">[[ ${#dates.format(notice.rDate,
+								<div class="date" style="font-size: 15px;">[[ ${#dates.format(notice.rDate,
 									'yyyy-MM-dd HH-mm')}]]</div>
-								<div class="count">[[${notice.viewCnt }]]</div>
+								<div class="count" style="font-size: 15px;">[[${notice.viewCnt }]]</div>
 
 							</div>
 							<div sec:authorize="hasAuthority('ROLE_ADMIN')">

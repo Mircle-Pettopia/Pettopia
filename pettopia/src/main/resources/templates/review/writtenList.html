@@ -204,7 +204,7 @@ fieldset legend {
 
 							<div class="btnn"
 								style="padding: 25px 0 0 0; border-bottom: solid 1px #eee">
-								<a th:href="@{reviewDelete/{reNo}(reNo=${written.reNo})}"><button
+								<a class="delA" th:href="@{reviewDelete/{reNo}(reNo=${written.reNo})}"><button
 										type="button" class="btn btnPush btnRed"
 										style="float: right; font-size: 13px; width: 63px">
 										삭제</button></a>
@@ -333,6 +333,26 @@ fieldset legend {
             },
           });
         }
+        
+        
+        
+		 $(".delA").on("click", function(e) {
+			    e.preventDefault();
+			    let del = $(this).attr("href");
+				
+			    Swal.fire({
+			      title: "삭제 경고",
+			      text: "정말로 삭제하시겠습니까?",
+			      icon: "warning",
+			      showCancelButton: true,
+			      confirmButtonText: "삭제",
+			      cancelButtonText: "취소"
+			    }).then((result) => {
+			      if (result.isConfirmed) {
+			        window.location.href = del; // 현재 링크로 이동
+			      }
+			    });
+			  });
 
         /* let starRating = parseInt($('input[name=point]').val());
 					let stars = document.getElementsByClassName('starR');

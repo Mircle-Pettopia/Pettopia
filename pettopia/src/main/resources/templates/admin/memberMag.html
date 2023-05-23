@@ -16,61 +16,49 @@
 							<h5 class="card-title">회원 관리</h5>
 							<table class="table table-borderless mt-5">
 								<tbody>
-									<tr>
-										<th class="text-center" scope="row">아이디</th>
-										<td><input style="width: 60%;" type="text"
+					
+													<tr>
+										<th class="text-center col-sm-1" scope="row">아이디</th>
+										<td class="col-sm-4"><input type="text"
 											class="form-control" id="searchId" /></td>
-
-										<th class="text-center" scope="row">이름</th>
-										<td><input type="text" class="form-control" id="searchNm"
-											style="width: 60%;" /></td>
+										<th class="text-center col-sm-1" scope="row">이름</th>
+										<td class="col-sm-4"><input type="text"
+											class="form-control" id="searchNm" /></td>
+								
+											
+											
 									</tr>
 									<tr>
 										<th class="text-center" scope="row">가입일자</th>
-										<td>
-											<div class="d-flex align-items-center" style="width: 60%;">
-												<input type="date" class="form-control mr-2" id="start"
-													name="start" /> <span class="mx-2">~</span> <input
-													type="date" class="form-control ml-2" id="end" name="end" />
+										
+												<td>
+											<div class="d-flex align-items-center">
+												<input type="date" class="form-control mr-2" id="start" name="start" />
+												<span class="mx-2">~</span> <input type="date"
+													class="form-control ml-2" id="end" name="end" />
+											</div>
+										</td>
+										
+					
+										<th class="text-center" scope="row">가입경로</th>
+										<td id="PathTable">
+											<div class="d-flex" >
+												<div class="form-check me-3" style="margin-right: 2rem!important;">
+													<input class="form-check-input" type="checkbox"
+														id="selectAll" name="selectAll" />
+													<label class="form-check-label" for="selectAll">전체</label>
+												</div>
+												<div class="form-check me-3" style="margin-right: 2rem!important;" th:each="Path : ${code.SC}">
+													<input class="form-check-input" type="checkbox"
+														th:value="${Path.codCd}" th:id="${Path.codCd} + 'ck'"
+														name="chk" /> <label
+														class="form-check-label" th:for="${Path.codCd} + 'ck'"
+														th:text="${Path.codTitle}"></label>
+												</div>
 											</div>
 										</td>
 
-							 <th class="text-center" scope="row">가입경로</th>
-                      <td id="PathTable">
-                        <div class="d-flex">
-                          <div class="form-check me-3">
-                            <input
-                              class="form-check-input"
-                              type="checkbox"
-                              id="selectAll"
-                              name="selectAll"
-                            />
-                            <label class="form-check-label" for="selectAll"
-                              >전체</label
-                            >
-                          </div>
-                          <div
-                            class="form-check me-3"
-                            th:each="Path : ${code.SC}"
-                          >
-                            <input
-                              class="form-check-input"
-                              type="checkbox"
-                              th:value="${Path.codCd}"
-                              th:id="${Path.codCd} + 'ck'"
-                              name="chk"
-                            />
-                            <label
-                              class="form-check-label"
-                              th:for="${Path.codCd} + 'ck'"
-                              th:text="${Path.codTitle}"
-                              ></label
-                            >
-                          </div>
-                        </div>
-                      </td>
-                      
-                      
+
 									</tr>
 									<!-- <tr>
 										<th class="text-center" scope="row">탈퇴여부</th>
@@ -105,7 +93,7 @@
 								<button type="button" class="btn btn-secondary" id="resetBtn">
 									초기화</button>
 							</div>
-								<div class="text-end p-2">
+							<div class="text-end p-2">
 								<button type="button" class="btn btn-success" id="excelBtn">
 									Excel</button>
 							</div>
@@ -119,7 +107,8 @@
 
 
 		<div class="modal fade" id="detailModal" tabindex="-1"
-			aria-labelledby="detailModalLabel" aria-hidden="true">
+			aria-labelledby="detailModalLabel" aria-hidden="true"
+			data-bs-backdrop="static" data-bs-keyboard="false">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
