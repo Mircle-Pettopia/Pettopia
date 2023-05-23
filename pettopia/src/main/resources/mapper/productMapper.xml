@@ -108,8 +108,16 @@ SELECT P.prdt_id,
  LEFT JOIN PRODUCT_IMG PI 
    ON P.PRDT_ID = PI.PRDT_ID
 WHERE P.PRDT_ID = #{prdtId}
-  AND pi.is_main = 'Y'
+  AND pi.is_main = 'Y' 
+  
 
+  
+
+  </select>
+  <select id="selectImg" resultType="Product1VO">
+  SELECT IMG_ID, PRDT_ID, PRDT_IMG, IS_MAIN
+FROM PRODUCT_IMG
+WHERE PRDT_ID = #{prdtId}
   </select>
   
   	 <!-- 옵션 조회 -->

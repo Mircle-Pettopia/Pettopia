@@ -228,6 +228,7 @@ public class ProductCategoryController {
 		model.addAttribute("OptionList", productService.selectOption(prdtId));
 		System.out.println("옵션디테일" + productService.selectOptionDetail(prdtId));
 		model.addAttribute("optionDetailList", productService.selectOptionDetail(prdtId));
+		model.addAttribute("productImg", productService.selectImg(product1VO));
 		return "product/productDetail";
 	}
 
