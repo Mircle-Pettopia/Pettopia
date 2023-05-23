@@ -627,7 +627,7 @@ fieldset legend {
 									 <tr th:each="qna : ${qnaList}">
 										<td th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></td>
 										<td th:text="${qna.qstNo}" class="widthDisplayNone"></td>
-										<td th:text="${qna.title}"></td>
+										<td><a th:href="@{/QnaDetail(qstNo=${qna.qstNo})}" th:text="${qna.title}"></a></td>
 										<td th:text="${qna.meId}"></td>
 									</tr>
 								 	<tr th:if="${qnaList.isEmpty()}">
