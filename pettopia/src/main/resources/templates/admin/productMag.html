@@ -6,8 +6,8 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <meta name="_csrf" content="${_csrf.token}">
-    <meta name="_csrf_header" content="${_csrf.headerName}">
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
     <title>Pettopia</title>
     <style>
       #imgDetail {
@@ -233,10 +233,10 @@
                 >
                 <div class="col-sm-4">
                   <input
-                    type="number"
-                    min="0"
+                    type="text"
                     class="form-control"
                     id="prdtPrc"
+                    oninput="autoMoney(this)"
                   />
                 </div>
               </div>
@@ -451,10 +451,10 @@
                 >
                 <div class="col-sm-4">
                   <input
-                    type="number"
-                    min="0"
+                    type="text"
                     class="form-control"
                     id="prdtPrcDetail"
+                    oninput="autoMoney(this)"
                   />
                 </div>
               </div>
@@ -684,6 +684,7 @@
 
           //엑셀버튼을 누르면 해당되는 발주상세목록을 엑셀로 만들어준다
           $("#excelBtn").on("click", function () {
+            // console.log(prdList.readData());
             Swal.fire({
               title: "엑셀파일로 받아보시겠습니까?",
               text: "원하지 않는다면 취소를 눌러주세요",
@@ -712,7 +713,9 @@
               success: function (result) {
                 $("#prdtIdDetail").val(prdtId);
                 $("#prdtNmDetail").val(result.product.prdtNm);
-                $("#prdtPrcDetail").val(result.product.prdtPrc);
+                $("#prdtPrcDetail").val(
+                  formattedMoney1(result.product.prdtPrc)
+                );
                 $("#summernoteDetail").summernote(
                   "code",
                   result.product.prdtDesct
@@ -856,6 +859,8 @@
             let lCatId = $("input[name=lCatIdDet]:checked").val();
             let saleSt = $("input[name=saleSt]:checked").val();
             let prdtId = $("#prdtIdDetail").val();
+
+            prdtPrc = prdtPrc.replace(/,/g, "");
 
             // 빈 값 체크
             if (prdtNm === "") {
@@ -1209,7 +1214,7 @@
             $("#selectAll:checked").prop("checked", false);
 
             $.ajax({
-              url: "/productList",
+              url: "productList",
               success: function (data) {
                 prdList.resetData(data);
               },
@@ -1537,6 +1542,8 @@
           let upimg = $("#img").get(0).files;
           let mainImg = $("#imgMain").get(0).files;
 
+          prdtPrc = prdtPrc.replace(/,/g, "");
+
           if (prdtNm === "") {
             $("#prdtNm").focus();
             Swal.fire({
@@ -1723,6 +1730,10 @@
           return value.toLocaleString() + "원";
         }
 
+        function formattedMoney1(value) {
+          return value.toLocaleString();
+        }
+
         //일주일전
         function lastWeek() {
           var d = new Date();
@@ -1744,6 +1755,19 @@
           d.setMonth(monthOfYear - 3);
           return formattedDate(d);
         }
+
+        // 돈 변환
+        const autoMoney = (target) => {
+          let val = target.value.replace(/,/g, "");
+          val = val.trim();
+
+          if (val === "" || isNaN(val)) {
+            target.value = "";
+          } else {
+            let num = parseInt(val, 10);
+            target.value = num.toLocaleString();
+          }
+        };
       </script>
     </div>
   </body>
