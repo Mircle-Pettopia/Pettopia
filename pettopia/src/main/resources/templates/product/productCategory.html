@@ -142,12 +142,12 @@
 				<!-- Search product -->
 				<div class="dis-none panel-search w-full p-t-10 p-b-15">
 					<div class="bor8 dis-flex p-l-15">
-						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04" id="searchBtn">
 							<i class="zmdi zmdi-search"></i>
 						</button>
 
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" style="height: 60px;"
-							placeholder="Search" >
+						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" id="searchNm" name="searchProduct" style="height: 60px;"
+							placeholder="상품명을 입력하세요." >
 					</div>
 				</div>
 
@@ -867,6 +867,20 @@ $(document).ready(function () {
 		    });
 		  });
 </script>
+	<script>
+	 // 검색기능
+	 console.log("ㅎㅇ")
+	 $(document).ready(function() {
+		 $("#searchBtn").click(function() {
+	      let prdtNm = $("#searchNm").val();
+			console.log(prdtNm)
+			location.href="ProductCategory?prdtNm="+prdtNm
+	   
+    });
+		 
+	 })
+	</script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </div>
 
 </body>
