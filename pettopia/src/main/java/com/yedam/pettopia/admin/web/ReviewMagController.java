@@ -19,6 +19,7 @@ public class ReviewMagController {
 	@Autowired
 	ReviewMagService reviewMagService;
 	
+	
 	@GetMapping("reviewMag")
 	public String reviewMag(Model model) {
 		return "admin/reviewMag";
