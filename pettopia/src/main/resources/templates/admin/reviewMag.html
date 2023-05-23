@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/layout}">
+<head>
+<meta charset="UTF-8" />
+<style>
+.starR {
+	background:
+		url("http://miuu227.godohosting.com/images/icon/ico_review.png")
+		no-repeat right 0;
+	background-size: auto 100%;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+
+.starR.on {
+	background-position: 0 0;
+}
+</style>
+<title>Pettopia</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<section class="section">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">후기 관리</h5>
+							<table class="table table-borderless mt-5">
+								<tbody>
+									<tr>
+										<th class="text-center col-sm-1" scope="row">작성자</th>
+										<td class="col-sm-4"><input type="text"
+											class="form-control" id="searchId" /></td>
+										<th class="text-center col-sm-1" scope="row">상품명</th>
+										<td class="col-sm-4"><input type="text"
+											class="form-control" id="searchNm" /></td>
+									</tr>
+									<tr>
+										<th class="text-center col-sm-1" scope="row">상품번호</th>
+										<td class="col-sm-4"><input type="text"
+											class="form-control" id="prdtId" /></td>
+										<th class="text-center col-sm-1" scope="row">주문번호</th>
+										<td class="col-sm-4"><input type="text"
+											class="form-control" id="ordtId" /></td>
+									</tr>
+
+									<tr>
+										<th class="text-center" scope="row" style="font-size: 14.7px;">후기등록일</th>
+										<td>
+											<div class="d-flex align-items-center">
+												<input type="date" class="form-control mr-2" id="start" />
+												<span class="mx-2">~</span> <input type="date"
+													class="form-control ml-2" id="end" />
+											</div>
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+
+							<div class="text-center pb-5">
+								<button type="button" class="btn btn-primary" id="searchBtn">
+									검색</button>
+								<button type="button" class="btn btn-secondary" id="resetBtn">
+									초기화</button>
+							</div>
+							<div class="text-end p-2">
+								<button type="button" class="btn btn-success" id="excelBtn">
+									Excel</button>
+							</div>
+							<div id="reviewList"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- 상세 모달 -->
+		<div class="modal fade" id="detailModal" data-bs-backdrop="static"
+			data-bs-keyboard="false" tabindex="-1">
+			<div class="modal-dialog modal-dialog-scrollable modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">후기상세조회</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="my-4">
+							<table class="table">
+								<colgroup>
+									<col width="20%" />
+									<col width="80%" />
+								</colgroup>
+
+								<tr class="thColor">
+									<th>작성자</th>
+									<td id="detailMeId"></td>
+								</tr>
+								<tr class="thColor">
+									<th>상품명</th>
+									<td id="detailPrdtNm"></td>
+								<tr class="thColor">
+									<th>별점</th>
+									<td id="detailPoint">
+										<div class="star">
+											<fieldset style="border: none;">
+
+												<span class="starR"><input type="hidden" value="1" /></span>
+												<span class="starR"><input type="hidden" value="2" /></span>
+												<span class="starR"><input type="hidden" value="3" /></span>
+												<span class="starR"><input type="hidden" value="4" /></span>
+												<span class="starR"><input type="hidden" value="5" /></span>
+											</fieldset>
+										</div>
+									</td>
+								</tr>
+								<tr class="thColor">
+									<th>내용</th>
+									<td><textarea class="form-control" name="content"
+											id="editor" cols="60" rows="10" readonly></textarea></td>
+								</tr>
+							</table>
+				
+							<!-- 	<div class="my-4">
+								<div id="app">
+									<h4>
+										<span @click="answer = true" :class="{ 'highlight': answer }"
+											style="cursor: pointer">답변 쓰기</span>
+											 / <span
+											@click="answer = false" :class="{ 'highlight': !answer }"
+											style="cursor: pointer">내 답변</span>
+									</h4>
+									<div v-show="answer">
+										<button type="button" class="btn btn-success float-end my-2"
+											id="insertBtn">작성</button>
+										<textarea class="form-control" id="detailAns" cols="60"
+											rows="5" placeholder="입력해주세요"></textarea>
+									</div>
+									<div v-show="!answer">
+										<div id="replys"></div>
+									</div>
+								</div>
+							</div> -->
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" id="delBtn">
+							삭제</button>
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ==========================ckeditor========================== -->
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
+		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
+
+		<script>
+			const Grid = tui.Grid;
+
+			const reviewList = new Grid({
+				el : document.getElementById("reviewList"),
+				rowHeaders : [ "rowNum" ],
+				bodyHeight : 430,
+				pageOptions : {
+					useClient : true,
+					perPage : 10,
+				},
+				columns : [ {
+					header : "작성자",
+					name : "meId",
+					align : "center",
+					sortingType : "asc",
+					sortable : true,
+				}, {
+					header : "상품번호",
+					name : "prdtId",
+					align : "center",
+					sortingType : "asc",
+					sortable : true,
+				}, {
+					header : "상품명",
+					name : "prdtNm",
+					align : "center",
+					sortingType : "asc",
+					sortable : true,
+				},
+				{
+					header : "주문번호",
+					name : "ordtId",
+					align : "center",
+					sortingType : "asc",
+					sortable : true,
+				},
+				{
+					header : "주문일자",
+					name : "ordrDate",
+					align : "center",
+					sortingType : "asc",
+					sortable : true,
+					formatter : function(e) {
+						return formattedDate(e.value);
+					},
+				}, 
+				{
+					header : "후기등록일자",
+					name : "creatDt",
+					align : "center",
+					sortingType : "asc",
+					sortable : true,
+					formatter : function(e) {
+						return formattedDate(e.value);
+					},
+				}, ],
+			});
+
+			// 날짜 변환
+			function formattedDate(timestamp) {
+				let date = new Date(timestamp);
+				let year = date.getFullYear();
+				let month = String(date.getMonth() + 1).padStart(2, "0");
+				let day = String(date.getDate()).padStart(2, "0");
+				let formattedDate = year + "-" + month + "-" + day;
+				return formattedDate;
+			}
+
+			//회원리스트
+			$.ajax({
+				url : "reviewMagList",
+				dataType : "JSON",
+				success : function(data) {
+					reviewList.resetData(data);
+				},
+				error : function(reject) {
+					console.log(reject);
+				},
+			});
+				
+		     reviewList.on("dblclick", (e) => {
+		            let rowData = reviewList.getRow(e.rowKey);
+		            reNo = rowData.reNo;
+		            rowKey = rowData.rowKey;
+		            $("#detailMeId").text(rowData.meId);
+		            $("#detailPrdtNm").text(rowData.prdtNm);
+		            $("#detailTitle").text(rowData.point);
+		            $("#detailContent").val(rowData.content);
+
+	            
+		       $.ajax({
+            url: "reviewDetail",
+            method: "GET",
+            data: {
+              reNo: reNo,
+            },
+            success: function (data) {
+              console.log(data);
+              editor.setData(data.contents);
+              
+              var point = data.point; // 받아온 별점 값
+              $(".starR").removeClass("on"); // 모든 별점에서 'on' 클래스 제거
+              
+              // 별점 값에 따라 'on' 클래스 추가
+              $(".starR").each(function (index) {
+            	  var starValue = $(this).find("input").val();
+            	  if (starValue <= point) {
+            	    $(this).addClass("on");
+            	  } else {
+            	    $(this).removeClass("on");
+            	  }
+            	});
+
+            },
+             
+            error: function (reject) {
+              console.log(reject);
+            },
+          });
+ 
+		  $("#detailModal").modal("show");
+		          });
+	
+
+			//검색
+			$(document).on("click", "#searchBtn", function() {
+				let meId = $("#searchId").val();
+				let name = $("#searchNm").val();
+				let prdtId = $("#prdtId").val();
+				let ordtId = $("#ordtId").val();
+				let start = $("#start").val();
+				let end = $("#end").val();
+				
+				
+				$.ajax({
+					url : "searchrev",
+					data : {
+						meId : meId,
+						prdtNm : name,
+						prdtId : prdtId,
+						ordtId : ordtId,
+						start : start,
+						end : end,
+					},
+					success : function(result) {
+						reviewList.resetData(result);
+					},
+					error : function(reject) {
+						console.log(reject);
+					},
+				});
+			});
+			
+			
+			//초기화
+			$(document).on("click", "#resetBtn", function() {
+				let meId = $("#searchId").val("");
+				let name = $("#searchNm").val("");
+				let prdtId = $("#prdtId").val("");
+				let ordtId = $("#ordtId").val("");
+				let start = $("#start").val("");
+				let end = $("#end").val("");
+				
+				$.ajax({
+					url : "reviewMagList",
+					success : function(data) {
+						reviewList.resetData(data);
+					},
+					error : function(reject) {
+						console.log(reject);
+					},
+				});
+			});
+			
+	         //엑셀
+	           $("#excelBtn").click((ev) => {
+                 const options = {
+                     includeHiddenColumns: false,
+                     fileName: "review_list",
+                 };
+                 reviewList.export("xlsx", options);
+             });
+	         
+	         
+	           //삭제버튼
+	        $(document).on("click", "#delBtn", function(e) {
+    $.ajax({
+        url: "reviewMagDelete",
+        method: "post",
+        data: { reNo: reNo },
+        success: function(result) {
+            if (result === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "삭제 되었습니다.",
+                });
+
+                reviewList.removeRow(rowKey);
+                
+                // 모달 창 닫기
+                closeModal();
+            }
+        },
+        error: function(reject) {
+            console.log(reject);
+        },
+    });
+});
+	           
+	        function closeModal() {
+	            $('#detailModal').modal('hide'); // 모달 숨기기
+	        }
+		</script>
+	</div>
+</body>
+</html>

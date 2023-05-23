@@ -28,7 +28,7 @@ public class QnaController {
 	
 	@GetMapping("QnaList")
 	public String QnaList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
-			Authentication authentication) {
+			Authentication authentication ) {
 		
 		String result = "";
 		String meId= principalDetails.getUser().getMeId();
@@ -112,7 +112,8 @@ public class QnaController {
 	}
 	
 	@GetMapping("QnaDetail")
-	public String QnaDetail(Model model) {
+	public String QnaDetail(Model model,@RequestParam("qstNo") int qstNo) {
+		 model.addAttribute("QnaDetail", qnaService.QnaCheck(qstNo));
 		return "qna/qnaDetail";
 	}
 	

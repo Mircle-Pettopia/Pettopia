@@ -46,6 +46,15 @@ VALUES ((SELECT TO_NUMBER(NVL(MAX(QST_NO), 0)) + 1 QST_NO FROM QNA), #{title}, #
 
  
  </insert>
+ 
+ <select id="QnaCheck" resultType="QnaVO">
+ SELECT Q."QST_NO", Q."ME_ID", Q."TITLE", Q."REG_DT", Q."QST_IMG", Q."PRDT_ID", Q."QST_STATUS", Q."QST_YN", Q."CONTENT",
+       R."COMMENT_ID", R."ME_ID" AS adId, R."SUBJECT", R."REG_DT", R."DIVISION", R."BO_NO", R."RE" , M."NAME"
+FROM "QNA" Q
+LEFT JOIN "REPLY" R ON Q."QST_NO" = R."BO_NO"
+LEFT JOIN "MEMBER" M ON R."ME_ID" = M."ME_ID" 
+WHERE Q."QST_NO" = #{qstNo}
+ </select>
   
   
   </mapper>
