@@ -207,36 +207,6 @@ input {
 			</div>
 			<div class="board_zone_cont">
 				<div class="board_zone_list">
-					<div class="date_check_box">
-						<form name="frmSearch" method="get" action="">
-							<input type="hidden" name="bdId" value="qa"> <input
-								type="hidden" name="memNo" value="51481"> <input
-								type="hidden" name="noheader" value="y">
-
-							<h3>조회기간</h3>
-							<div class="date_check_list" data-target-name="rangDate[]">
-								<button type="button" data-value="0">오늘</button>
-								<button type="button" data-value="7">7일</button>
-								<button type="button" data-value="15">15일</button>
-								<button type="button" data-value="30">1개월</button>
-								<button type="button" data-value="90">3개월</button>
-								<button type="button" data-value="365">1년</button>
-							</div>
-							<!-- //date_check_list -->
-							<div class="date_check_calendar">
-								<input type="text" id="picker2" name="rangDate[]"
-									class="anniversary js_datepicker" value="2023-04-26"
-									style="display: inline; border-radius: 0;"> ~ <input
-									type="text" name="rangDate[]" class="anniversary js_datepicker"
-									value="2023-05-02" style="display: inline; border-radius: 0;">
-							</div>
-							<!-- //date_check_calendar -->
-
-							<button type="submit" class="btn_date_check">
-								<em>조회</em>
-							</button>
-						</form>
-					</div>
 					<!-- //date_check_box -->
 
 
@@ -265,10 +235,11 @@ input {
 								</thead>
 								<tbody>
 								
-									<tr th:each="qna : ${qnaList}">
+									<tr th:each="qna : ${qnaList}" th:href="@{/QnaDetail(qstNo=${qna.qstNo})}">
 										<td th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></td>
 										<td th:text="${qna.qstNo}" class="widthDisplayNone"></td>
-										<td th:text="${qna.title}"></td>
+										<td th:text="${qna.title}" ></td>
+
 										<td th:text="${qna.qstStatus}"></td>
 									</tr>
 								 	<tr th:if="${qnaList.isEmpty()}">
