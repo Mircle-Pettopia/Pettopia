@@ -286,6 +286,7 @@
             $('#list input[type=checkbox]:checked').each(function (index, item) {
                 let tr = $(item).parent().parent().parent()[0];
                 check_prdtId += $(tr).attr("id") + ',';
+                console.log($(tr).attr("id"));
 
                 //삭제할건지 한 번 더 물어보고 진행하기
                 Swal.fire({
@@ -302,7 +303,7 @@
                         $.ajax({
                             url : 'interestDelete',
                             method : 'POST',
-                            data : {meId : id, prdtId : check_prdtId},
+                            data : {meId : id, prdtId : $(tr).attr("id")},
                             success : (data) => {
                                 productInterestCount();
                                 interestList();
