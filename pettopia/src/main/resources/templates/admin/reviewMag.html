@@ -128,7 +128,7 @@
 											id="editor" cols="60" rows="10" readonly></textarea></td>
 								</tr>
 							</table>
-							<hr />
+				
 							<!-- 	<div class="my-4">
 								<div id="app">
 									<h4>
@@ -246,10 +246,7 @@
 					console.log(reject);
 				},
 			});
-			
-			
-			
-			
+				
 		     reviewList.on("dblclick", (e) => {
 		            let rowData = reviewList.getRow(e.rowKey);
 		            reNo = rowData.reNo;
@@ -259,7 +256,7 @@
 		            $("#detailTitle").text(rowData.point);
 		            $("#detailContent").val(rowData.content);
 
-	            // 내가 쓴 답글 조회
+	            
 		       $.ajax({
             url: "reviewDetail",
             method: "GET",
@@ -269,8 +266,6 @@
             success: function (data) {
               console.log(data);
               editor.setData(data.contents);
-  
-       
               
               var point = data.point; // 받아온 별점 값
               $(".starR").removeClass("on"); // 모든 별점에서 'on' 클래스 제거
@@ -285,7 +280,6 @@
             	  }
             	});
 
-              
             },
              
             error: function (reject) {

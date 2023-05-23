@@ -15,4 +15,7 @@ public interface ReviewMagService {
 	
 	public int deleteReviewMag(ReviewMagVO reviewMagVO);
 	
+	
+
+	
 }

@@ -36,6 +36,14 @@ public class ReviewMagVO {
 	private Date revDt;
 	
 	
+	// 댓글
+	private int commentId;
+	private String subject;
+	private String division; 
+	private int boNo;
+	private int re;
+	
+	
 	private String start;
 	private String end;
 	
