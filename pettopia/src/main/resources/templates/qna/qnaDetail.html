@@ -322,7 +322,8 @@
 
                         <div class="board_view_qa">
                             <div class="view_question_box">
-                                <strong class="view_question_tit">Q.[[${QnaDetail.content}]]</strong>
+                                <strong class="view_question_tit" >Q.</strong>
+                                <span class="Viewer" th:utext="${QnaDetail.content}"/>
                                 <div class="seem_cont">
                                     <div style="margin:10px 0 10px 0">
                                         <p></p>
@@ -362,8 +363,9 @@
 <!--                     <button type="button" class="btn_board_del"
                         onclick="gd_btn_delete('qa',18060,'y')"><strong>삭제</strong></button><button type="button"
                         class="btn_board_edit"
-                        onclick="gd_btn_modify_write('qa',18060,'y')"><strong>수정</strong></button> --><button type="button"
-                        class="btn_board_list" onclick="gd_btn_list('qa')"><strong>목록</strong></button>
+                        onclick="gd_btn_modify_write('qa',18060,'y')"><strong>수정</strong></button> -->
+                        <a href="QnaList" class="btn_board_list">
+                        <button type="button"><strong>목록</strong></button></a>
                 </div>
 
             </div>
