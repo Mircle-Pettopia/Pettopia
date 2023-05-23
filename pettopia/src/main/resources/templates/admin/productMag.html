@@ -820,7 +820,7 @@
                 $("#imgMainDetail").attr("src", "");
 
                 result.imgList.forEach(function (item, idx) {
-                  let imgSrc = "download/" + item.prdtImg;
+                  let imgSrc = "/download/" + item.prdtImg;
                   if (item.isMain === "Y") {
                     $("#imgMainDetail")
                       .attr("src", imgSrc)
