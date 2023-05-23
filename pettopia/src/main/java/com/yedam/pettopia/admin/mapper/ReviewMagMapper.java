@@ -14,6 +14,10 @@ public interface ReviewMagMapper {
 
 	public int deleteReviewMag(ReviewMagVO reviewMagVO);
 
-
+	public int insertReviewReply(ReviewMagVO reviewMagVO);
+	
+	public int deleteReviewReply(ReviewMagVO reviewMagVO);
+	
+	public int updateReviewReply(ReviewMagVO reviewMagVO);
 
 }

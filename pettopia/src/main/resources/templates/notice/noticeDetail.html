@@ -87,9 +87,9 @@
 				<a th:href="@{noticeList}"><button
 							type="button" class="btn btnPush btnBlueGreen">목록</button></a> </div>
 				<div class="bt_wrap" sec:authorize="hasAuthority('ROLE_ADMIN')">
-					> <a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
+					<a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
 							type="button" class="btn btnPush btnBlueGreen">수정</button></a> 
-							<a th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
+							<a class="delA" th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
 							type="button" class="btn btnPush btnRed">삭제</button></a>
 				</div>
 			</div>
@@ -140,6 +140,26 @@
 						ps.update();
 					});
 				});
+				
+				
+				
+				 $(".delA").on("click", function(e) {
+					    e.preventDefault();
+					    let del = $(this).attr("href");
+						
+					    Swal.fire({
+					      title: "삭제 경고",
+					      text: "정말로 삭제하시겠습니까?",
+					      icon: "warning",
+					      showCancelButton: true,
+					      confirmButtonText: "삭제",
+					      cancelButtonText: "취소"
+					    }).then((result) => {
+					      if (result.isConfirmed) {
+					        window.location.href = del; // 현재 링크로 이동
+					      }
+					    });
+					  });
 			</script>
 			<!--===============================================================================================-->
 

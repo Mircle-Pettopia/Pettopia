@@ -64,14 +64,14 @@
 								<dd>
 									<input type="hidden" name="noNo" th:value="*{noNo}">
 									<input type="text" name="title" placeholder="제목 입력"
-										th:value="*{title}">
+										th:value="*{title}" required>
 								</dd>
 							</dl>
 						</div>
 						<div class="info"></div>
 						<div class="cont">
 							<textarea placeholder="내용 입력" name="contents"
-								th:text="*{contents}"></textarea>
+								th:text="*{contents}" required></textarea>
 						</div>
 					<!-- 	<div >
 							<dl>
