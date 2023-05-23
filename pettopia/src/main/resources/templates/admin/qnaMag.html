@@ -197,12 +197,18 @@
                 <table class="table">
                   <colgroup>
                     <col width="20%" />
-                    <col width="80%" />
+                    <col width="50%" />
+                    <!-- 변경된 열 너비 -->
+                    <col width="30%" />
+                    <!-- 새로운 열 -->
                   </colgroup>
 
                   <tr class="thColor">
                     <th>상품ID</th>
                     <td id="detailPrdtId"></td>
+                    <td rowspan="4">
+                      <img id="detailImage" style="width: 200px" />
+                    </td>
                   </tr>
                   <tr class="thColor">
                     <th>상품명</th>
@@ -217,26 +223,11 @@
                     <td id="detailTitle"></td>
                   </tr>
                   <tr class="thColor">
-                    <th>대표 이미지</th>
-                    <td><img id="detailImg" /></td>
-                  </tr>
-                  <tr class="thColor">
                     <th>내용</th>
-                    <td>
-                      <form>
-                        <textarea id="summernote" name="editordata"></textarea>
-                      </form>
-                      <textarea
-                        class="form-control"
-                        id="detailContent"
-                        style="display: none"
-                        cols="60"
-                        rows="10"
-                        readonly
-                      ></textarea>
-                    </td>
+                    <td id="detailContent" colspan="1"></td>
                   </tr>
                 </table>
+
                 <hr />
                 <div class="my-4">
                   <div id="app">
@@ -290,9 +281,6 @@
           </div>
         </div>
       </div>
-      <!-- ==========================ckeditor========================== -->
-      <!-- <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
-      <script type="text/javascript" src="CKeditorSuperBuild2.js"></script> -->
       <script>
         // Vue
         const app = Vue.createApp({
@@ -404,12 +392,19 @@
             $("#detailPrdtNm").text(rowData.prdtNm);
             $("#detailName").text(rowData.name);
             $("#detailTitle").text(rowData.title);
-            $("#detailImg")
-              .attr("src", "download/" + rowData.qstImg)
-              .css("width", "400px");
-            $("#detailContent").val(rowData.content);
-            // editor.setData(rowData.content);
-            $("#summernote").summernote("code", rowData.content);
+            $("#detailContent").html(rowData.content);
+
+            // 상품 상세 이미지 조회
+            $.ajax({
+              url: "detailImg",
+              data: { qstNo: qstNo },
+              success: function (result) {
+                $("#detailImage").attr("src", "/download/" + result.prdtImg);
+              },
+              error: function (reject) {
+                console.log(reject);
+              },
+            });
 
             // 내가 쓴 답글 조회
             $.ajax({
@@ -669,7 +664,6 @@
           });
 
           $("#7").on("click", () => {
-            //console.log(lastWeek());
             start_date_change = document.getElementById("startDate").value =
               lastWeek();
             end_date_change = document.getElementById("endDate").value =
@@ -677,7 +671,6 @@
           });
 
           $("#30").on("click", () => {
-            //console.log(lastMonth());
             start_date_change = document.getElementById("startDate").value =
               lastMonth();
             end_date_change = document.getElementById("endDate").value =
@@ -685,7 +678,6 @@
           });
 
           $("#90").on("click", () => {
-            //console.log(threeMonth());
             start_date_change = document.getElementById("startDate").value =
               threeMonth();
             end_date_change = document.getElementById("endDate").value =

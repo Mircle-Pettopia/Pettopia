@@ -74,6 +74,7 @@ public class OrderController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("orderList", orderService.orderAllList());
 		map.put("orderPrdList", orderService.orderPrdList());
+		map.put("shipSt", orderService.shipStCnt());
 		
 		return map;
 	}

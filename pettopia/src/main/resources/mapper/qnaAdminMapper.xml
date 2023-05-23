@@ -156,4 +156,14 @@
 		</where>
 		ORDER BY q.qst_no
 	</select>
+	
+	<!-- 상세 상품 이미지 조회 -->
+	<select id="detailImg" resultType="QnaMagVO">
+		SELECT 	p.prdt_img
+		FROM 	qna q 
+		JOIN 	product_img p
+		ON 		q.prdt_id = p.prdt_id
+		WHERE 	is_main = 'Y'
+		AND 	qst_no = #{qstNo}
+	</select>
 </mapper>

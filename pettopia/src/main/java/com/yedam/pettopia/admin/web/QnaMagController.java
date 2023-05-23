@@ -81,4 +81,11 @@ public class QnaMagController {
 	public List<QnaMagVO> searchQna(QnaMagVO vo){
 		return qnaMagService.searchQnaList(vo);
 	}
+	
+	// 상세 상품 이미지 조회
+	@GetMapping("detailImg")
+	@ResponseBody
+	public QnaMagVO detailImg(QnaMagVO vo) {
+		return qnaMagService.detailImg(vo);
+	}
 }

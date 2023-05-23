@@ -34,4 +34,6 @@ public class QnaMagVO {
 	private String[] searchQstSt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDt;
+	
+	private String prdtImg; // 상세 이미지
 }

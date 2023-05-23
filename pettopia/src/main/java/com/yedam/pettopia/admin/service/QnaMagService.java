@@ -29,4 +29,7 @@ public interface QnaMagService {
 
 	// 검색
 	public List<QnaMagVO> searchQnaList(QnaMagVO vo);
+	
+	// 상세 상품 이미지 조회
+	public QnaMagVO detailImg(QnaMagVO vo);
 }
