@@ -260,7 +260,9 @@ fieldset legend {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-width: 100px;
+
 }
+
 </style>
 	<!-- breadcrumb -->
 	<div class="container">
@@ -281,13 +283,13 @@ fieldset legend {
 				<div class="col-md-6 col-lg-7 p-b-30">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
 						<div class="wrap-slick3 flex-sb flex-w">
-								<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+								<div class="wrap-slick3-arrows flex-sb-m flex-w" style="margin-right:61px;"></div>
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" th:each="Img : ${productImg}"
 									data-thumb="'download/' + ${Img.prdtImg}">
 									<div class="wrap-pic-w pos-relative">
-										<img th:src="'download/'+${Img.prdtImg}" style="width:597px; height:739px;">
+										<img th:src="'download/'+${Img.prdtImg}" style="width:597px; height:738.781px;">
 
 										<!-- <a
 											class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
@@ -435,7 +437,7 @@ fieldset legend {
 										Add to cart</button>
 								</div>
 								<a href="#" id="submitBtn"
-									class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ "
+									class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ "
 									data-tooltip="Add to Wishlist"> <i
 									class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
 								</a>
@@ -680,7 +682,7 @@ fieldset legend {
 						<div class="p-l-25 p-r-30 p-lr-0-lg">
 							<div class="wrap-slick3 flex-sb flex-w">
 								<div class="wrap-slick3-dots"></div>
-								<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+								<div class="wrap-slick3-arrows flex-sb-m flex-w" style="margin-right: 57px;"></div>
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" data-thumb="images/product-detail-01.jpg">
@@ -883,44 +885,50 @@ fieldset legend {
 					});
 				});
 
-		/* $('.js-addwish-detail').each(
-				function() {
-					var nameProduct = $(this).parent().parent().parent().find(
-							'.js-name-detail').html();
 
-					$(this).on('click', function() {
-						swal(nameProduct, "is added to wishlist !", "success");
-
-						$(this).addClass('js-addedwish-detail');
-						$(this).off('click');
-					});
-				}); */
-				$('.js-addwish-detail').each(function() {
+	/* 			$('.js-addwish-detail').each(function() {
 					  var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
 					  var $self = $(this);
 
 					  $self.on('click', function() {
 					    if ($self.hasClass('js-addedwish-detail')) {
-					    	swal(nameProduct, "관심상품 삭제 !", "success");
+					    	swal(nameProduct, "장바구니 삭제 !", "success");
 					      $self.removeClass('js-addedwish-detail');
 					    } else {
-					      swal(nameProduct, "관심상품 등록 !", "success");
+					      swal(nameProduct, "장바구니 등록 !", "success");
 					      $self.addClass('js-addedwish-detail');
 					    }
 					  });
-					});
+					}); */
+					$(document).ready(function() {
+						  $('.js-addwish-detail').each(function() {
+						    var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+						    var $self = $(this);
+
+						    $self.on('click', function() {
+						      if ($self.hasClass('js-addedwish-detail')) {
+						        swal(nameProduct, "장바구니 삭제!", "success");
+						        $self.removeClass('js-addedwish-detail');
+						      } else {
+						        swal(nameProduct, "장바구니 등록!", "success");
+						        $self.addClass('js-addedwish-detail');
+						      }
+						    });
+						  });
+						});
+
 
 		/*---------------------------------------------*/
 
-		/* $('.js-addcart-detail').each(
+		$('.js-addcart-detail').each(
 				function() {
 					var nameProduct = $(this).parent().parent().parent()
 							.parent().find('.js-name-detail').html();
 					$(this).on('click', function() {
 						swal(nameProduct, "is added to cart !", "success");
 					});
-				}); */
-				$('.js-addcart-detail').each(function() {
+				}); 
+				/* $('.js-addcart-detail').each(function() {
 					  var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
 					  var self = $(this);
 					  console.log(nameProduct)
@@ -934,7 +942,7 @@ fieldset legend {
 					      
 					    }
 					  });
-					});
+					}); */
 	</script>
 	<!--===============================================================================================-->
 	<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -955,7 +963,7 @@ fieldset legend {
 		
 
 			  //관심상품등록
-			  $(document).ready(function() {
+			 /*  $(document).ready(function() {
 				  $("#submitBtn").click(function(e) {
 				    e.preventDefault();
 				    var prdtId = $("#prdtId").val();
@@ -965,23 +973,8 @@ fieldset legend {
 
 				    if ($("#submitBtn").hasClass("js-addedwish-detail")) {
 				      // Send an AJAX request to delete the product				      
+				     
 				      $.ajax({
-					        url: "InsertProduct",
-					        type: "POST",
-					        data: {
-					          prdtId: prdtId,
-					          meId: meId
-					        },
-					        success: function(response) {
-					      
-					        },
-					        error: function(xhr) {
-					        
-					        }
-					      });
-				    } else {
-				      // Send an AJAX request to add to wishlist
-				    	$.ajax({
 					        url: "deleteProduct",
 					        type: "GET",
 					        data: {
@@ -989,15 +982,79 @@ fieldset legend {
 					          meId: meId
 					        },
 					        success: function(response) {
-					
+					        	swal("관심상품 삭제 !", "success");
+							      self.removeClass('js-addedwish-detail');
 					        },
 					        error: function(xhr) {
 					 
 					        }
 					      });
+				    } else {
+				      // Send an AJAX request to add to wishlist
+				    	 $.ajax({
+						        url: "InsertProduct",
+						        type: "POST",
+						        data: {
+						          prdtId: prdtId,
+						          meId: meId
+						        },
+						        success: function(response) {
+						        	swal ("관심상품 등록 !", "success");
+								      self.addClass('js-addedwish-detail');
+						        },
+						        error: function(xhr) {
+						        
+						        }
+						      });
 				    }
 				  });
-				});
+				}); */
+				$(document).ready(function() {
+					  $("#submitBtn").click(function(e) {
+					    e.preventDefault();
+					    var prdtId = $("#prdtId").val();
+					    var meId = $("#meId").val();
+					    var self = $(this); // Store a reference to the clicked element
+					    console.log(prdtId);
+					    console.log(meId);
+
+					    if (self.hasClass("js-addedwish-detail")) {
+					      // Send an AJAX request to delete the product
+					      $.ajax({
+					        url: "deleteProduct",
+					        type: "GET",
+					        data: {
+					          prdtId: prdtId,
+					          meId: meId
+					        },
+					        success: function(response) {
+					          swal("관심상품 삭제 !", "success");
+					          self.removeClass('js-addedwish-detail');
+					        },
+					        error: function(xhr) {
+					          // Handle error
+					        }
+					      });
+					    } else {
+					      // Send an AJAX request to add to the wishlist
+					      $.ajax({
+					        url: "InsertProduct",
+					        type: "POST",
+					        data: {
+					          prdtId: prdtId,
+					          meId: meId
+					        },
+					        success: function(response) {
+					          swal("관심상품 등록 !", "success");
+					          self.addClass('js-addedwish-detail');
+					        },
+					        error: function(xhr) {
+					          // Handle error
+					        }
+					      });
+					    }
+					  });
+					});
 			  //장바구니 등록
 /* 			  $(document).ready(function() {
   // When the form is submitted
