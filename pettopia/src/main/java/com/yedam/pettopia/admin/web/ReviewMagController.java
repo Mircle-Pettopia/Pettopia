@@ -7,13 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 import com.yedam.pettopia.admin.ReviewMagVO;
 import com.yedam.pettopia.admin.service.ReviewMagService;
 
 @Controller
+@RequestMapping("/admin")
 public class ReviewMagController {
 	@Autowired
 	ReviewMagService reviewMagService;
