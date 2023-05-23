@@ -116,4 +116,10 @@ public class ProductServiceImpl1 implements ProductService1{
 		return productMapper.searchList1(vo);
 	}
 
+	@Override
+	public List<Product1VO> selectImg(Product1VO product1vo) {
+
+		return productMapper.selectImg(product1vo);
+	}
+
 }
