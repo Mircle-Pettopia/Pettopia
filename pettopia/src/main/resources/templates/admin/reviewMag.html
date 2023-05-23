@@ -124,8 +124,8 @@
 								</tr>
 								<tr class="thColor">
 									<th>내용</th>
-									<td><textarea class="form-control" name="content"
-											id="editor" cols="60" rows="10" readonly></textarea></td>
+									<td><textarea class="form-control" name="contents"
+											id="editor" cols="60" rows="10"></textarea></td>
 								</tr>
 							</table>
 				
@@ -164,7 +164,7 @@
 		<!-- ==========================ckeditor========================== -->
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
-		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
+		<script type="text/javascript" src="/CKeditorSuperBuild2.js"></script>
 
 		<script>
 			const Grid = tui.Grid;
@@ -267,8 +267,9 @@
               console.log(data);
               editor.setData(data.contents);
               
-              var point = data.point; // 받아온 별점 값
-              $(".starR").removeClass("on"); // 모든 별점에서 'on' 클래스 제거
+              
+              var point = data.point; 
+              $(".starR").removeClass("on"); 
               
               // 별점 값에 따라 'on' 클래스 추가
               $(".starR").each(function (index) {
