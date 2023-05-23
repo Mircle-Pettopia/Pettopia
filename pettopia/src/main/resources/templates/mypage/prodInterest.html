@@ -96,7 +96,7 @@
                     method: 'GET',
                     data: { meId: id },
                     success: (data) => {
-                        if(data == 0){
+                        if(data.length == 0){
                             $('#interestDeleteBtn').css('display','none');
                             let tr = document.createElement('tr');
                             let td = document.createElement('td');
@@ -226,7 +226,7 @@
             }// end for
             list.innerHTML = opt;
             for(let i=0;i<data.length;i++){
-            addOptionPrc(data[i].prdtId);
+                addOptionPrc(data[i].prdtId);
             }
         }; // end drawList
         
@@ -287,6 +287,7 @@
                 let tr = $(item).parent().parent().parent()[0];
                 check_prdtId += $(tr).attr("id") + ',';
                 console.log($(tr).attr("id"));
+                //   aaa,bbb,ccc
 
                 //삭제할건지 한 번 더 물어보고 진행하기
                 Swal.fire({
@@ -303,10 +304,14 @@
                         $.ajax({
                             url : 'interestDelete',
                             method : 'POST',
-                            data : {meId : id, prdtId : $(tr).attr("id")},
+                            data : {meId : id, prdtId : check_prdtId},
                             success : (data) => {
+                                //헤더에 개수 확인 가능한 함수
                                 productInterestCount();
+
+                                //조회 함수
                                 interestList();
+
                                 Swal.fire(
                                     '삭제완료',
                                     '관심상품 리스트에서 삭제되었습니다.',

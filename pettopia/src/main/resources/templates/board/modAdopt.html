@@ -85,30 +85,6 @@
 </head>
 <body>
   <div layout:fragment="content">
-    <!--<div id="container">
-      <div class="row">
-        <div class="bg0 p-t-100 p-b-85 m-lr-auto ">
-          <div class="col-lg-8 col-xl-8 m-lr-auto m-b-50 p-t-20 p-b-50 border">
-            <h2>분양게시판</h2>
-            <hr>
-            <div class="input-group">
-              <span class="" id="">제목
-                <input type="text" class="customInput" placeholder="제목을 입력해주세요" id="title" th:value="${Article.title}">
-              </span>
-            </div>
-            <hr>
-            <div id="editor">
-            </div>
-            <div>
-              <hr>
-              <button onclick="showData()">담긴 데이터 보기(debug)</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>-->
-
       <div id="container">
         <div class="row">
             <div class="bg0 p-t-100 p-b-85 m-lr-auto ">
@@ -205,11 +181,13 @@
     <!-- ==========================ckeditor END======================= -->
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
 
-  <script th:inline="javascript">
+    <script th:inline="javascript">
 
-
-      var articleObject = [[${ Article }]];
       var originalInfo = [[${originalInfo}]];
+
+      //aditor 내용 가져오기
+      var articleObject = [[${ Article }]];
+      editor.setData(articleObject.subject);
       //품종선택에 게시글에 해당되는 품종 넣어주기
       step2.innerHTML = `
         <option value=${originalInfo.breed}>${articleObject.breed}</option>

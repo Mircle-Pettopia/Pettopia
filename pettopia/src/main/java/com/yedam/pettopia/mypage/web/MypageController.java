@@ -41,21 +41,6 @@ public class MypageController {
         model.addAttribute("list",service.getOrder(id));
         model.addAttribute("getprcSt", service.getPrcCount(id));
         model.addAttribute("getShipSt", service.getShipCount(id));
-        /*int total = service.countOrderList(id);
-        //한 페이지 당 1~9개의 제품을 보이게 하는 곳
-  		//cntPerPage = 제품별로 최대 나올 수 있는 값
-        if (nowPage == null && cntPerPage == null) {
-    		nowPage = "1";
-    		cntPerPage = "8";
-    	} else if (nowPage == null) {
-    		nowPage = "1";
-    	} else if (cntPerPage == null) { 
-    		cntPerPage = "8";
-    	}
-        
-        vo = new MypageVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-        model.addAttribute("paging", vo);*/
-        
 		return "mypage/mypage";
 	};
 	
@@ -134,7 +119,13 @@ public class MypageController {
 	@PostMapping("interestDelete")
 	@ResponseBody
 	public int interestDelete(MypageVO vo) {
-		return service.interestDelete(vo);
+		System.out.println("vo>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + vo);
+		
+		String[] prdtId = vo.getPrdtId().split(",");
+		
+		System.out.println(prdtId[0] + "<<<<<<<<<<<<<<<<<<<<<<<<<");
+		
+		return service.interestDelete(vo, prdtId);
 	}
 	
 	//cart + cart_detail INSERT ajax

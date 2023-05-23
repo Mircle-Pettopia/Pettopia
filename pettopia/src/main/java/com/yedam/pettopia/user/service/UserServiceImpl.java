@@ -107,13 +107,13 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		int result = 0;
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
-		
-		if(vo.getSignPath() == "SC1") {
+		if(vo.getSignPath().equals("SC1")) {
 			vo.setPw(passwordEncoder.encode(vo.getPw()));
+			result = mapper.userInfoUpdate(vo);
+		} else {
 			result = mapper.userInfoUpdate(vo);
 		};
 		
-		result = mapper.userInfoUpdate(vo);
 		
 		if(result < 1) {
 			result = -1;

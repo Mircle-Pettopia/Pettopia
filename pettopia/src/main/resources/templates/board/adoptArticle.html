@@ -216,6 +216,7 @@
           dataType: "JSON",
           data: { boNo: boNo.innerText },   //html div id에 해당되는 text를 읽는다.
           success: function (data) {
+            console.log(data);
             replys.innerHTML = '';
             for (i = 0; i < data.length; i++) {
               replys.innerHTML +=
