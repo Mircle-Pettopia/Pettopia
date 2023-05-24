@@ -139,6 +139,9 @@
 		WHERE 1=1
 		AND title LIKE '%'||#{keyword}||'%'
 		AND me_id = #{meId}
+		<if test="boType != null and !boType.equals('')">
+		AND bo_type = #{boType}
+		</if>
 	</select>
 	
 	<!-- 이것은 분양게시판입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -276,7 +279,11 @@
 	
 	<!-- 댓글 조회 -->
 	<select id="getAdoptReply" resultType="BoardVO">
-		SELECT * FROM reply 
+		SELECT comment_id, re.me_id, name,
+		       subject, reg_dt, division, bo_no
+		 FROM reply re
+		 JOIN member mem
+		   ON re.me_id = mem.me_id
 		WHERE DIVISION = 'DR1'
 		  AND BO_NO= #{boNo}
 		  AND RE IS NULL

@@ -35,6 +35,9 @@
         .price_hidden{
             display: none !important;
         }
+        .btnSet button{
+            width: 90px;
+        }
     </style>
 
     <div class="container">
@@ -43,9 +46,9 @@
             <!-- 마이페이지 관심상품 -->
             <div class="col-md-8 col-lg-10 p-b-150 fontSize">
                 <div class="p-r-45 p-r-0-lg m-t-50">
-                    <h2>
+                    <h1>
                         <span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>관심상품
-                    </h2>
+                    </h1>
                     <h3 class="noonnu_font">
                         <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${name}" ></sapn>
                         님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;"></h3>
@@ -166,14 +169,16 @@
                                     <h3 class="noonnu_font">< < 옵션선택 > ></h3>
                                     <div class="row">
                                         <div class="col-6">
-                                            <div class="optionTitle" style="width:180px !important; margin-bottom:10px; margin-top:-30px;"><h4 class="noonnu_font">상품명 : ${data[i].prdtNm}</h4></div>
+                                            <div class="optionTitle" style="width:180px !important; margin-bottom:10px; margin-top:-30px;">
+                                                <h4 class="noonnu_font">${data[i].prdtNm}</h4>
+                                            </div>
                                             <br/>
                                             <img src="download/${data[i].prdtImg}" alt="prod_img" style="width:300px; height:300px;">
                                         </div> <!-- class="col-6" -->
 
                                         <div class="col-6">
                                             <div class="w3-container" style="height: 400px !important;">
-                                                <div id="div2">`;
+                                                <div id="div2" style="margin-top:35px;">`;
 
                 tempOptId  = "";
                 let priceOption = "";
@@ -208,7 +213,7 @@
                                                 <div class="optionTitle">구매금액 : </div><div class="optPriceDiv" id="totalPrice_${data[i].prdtId}"></div>원
                                             </div> 
                                         </div> <!-- end div2 -->
-                                        <div style="margin:0 auto; display:inline-block;">
+                                        <div style="margin:0 auto; margin-top:20px; display:inline-block;">
                                             <button type="button" class="btn btnPush btnBlueGreen cartInsert" style="width:150px">장바구니 담기</button>
                                             <button type="button"  class="btn btnPush btnRed" style="width:150px"
                                                     onclick="document.getElementById('modal_${data[i].prdtId}').style.display='none'">취소</button>

@@ -179,6 +179,7 @@ public class MypageController {
 	@GetMapping("boardAllMaxPage")
 	@ResponseBody
 	public int myKnowHowMaxPage(String keyword, String meId, String boType) {
+		System.out.println("test: " + boType);
 		return service.boardAllMaxPage(keyword, meId, boType);
 	}
 	

@@ -129,9 +129,8 @@
             
             function setkeyword() {
                 NewKeyword = keyword.value;
-                boType : radio.value;
                 showList();
-            }
+            };
 
             $('input[name="myboard"]').change(function(){
                 boType = $(this).val();
@@ -144,6 +143,8 @@
                 if (page == null) {
                     page = 1;
                 }
+                console.log(page);
+                console.log("boType : " + boType);
 
                 $.ajax({
                     url: "mypostList",
@@ -160,16 +161,25 @@
                         list.innerHTML = '';
                         if(data.length > 0) {
                             for (i = 0; i < data.length; i++) {
+                                let boType = data[i].boType;
+
                                 list.innerHTML += `
                                 <tr>
                                     <td><div class="num">${data[i].rn}</div></td>
                                     <td><div class="num">${data[i].boType}</div></td>
                                     <td><div class="title">
-                                        <a  class="boadr_title" href="showKnowHow?boNo=${data[i].boNo}">${data[i].title}</a>
+                                        <a  class="boadr_title" id="boardList_${data[i].boNo}">${data[i].title}</a>
                                     </div></td>
                                     <td><div class="date">${dateChange(data[i].regDt)}</div></td>
                                     <td><div class="count">${data[i].viewCnt}</div></td>
                                 </tr>`;
+
+                                //board type에 맞게 href 속성 붙혀주기
+                                if(boType == '지식공유게시판'){
+                                    document.getElementById('boardList_' + data[i].boNo).setAttribute('href', 'showKnowHow?boNo='+data[i].boNo);
+                                } else if(boType=='분양게시판'){
+                                    document.getElementById('boardList_' + data[i].boNo).setAttribute('href', 'adoptAticle?boNo='+data[i].boNo);
+                                }
 
                                 //모달로 띄우고 싶었으나 실패
                                 //onclick="document.getElementById('boardDetail').style.display='block'" id="${data[i].boNo}_board"
@@ -205,7 +215,7 @@
                     error: function (reject) {
                         console.log(reject);
                     },
-                })
+                });
 
                 $.ajax({
                     url: "boardAllMaxPage",
@@ -222,7 +232,7 @@
                     error: function (reject) {
                         console.log(reject);
                     },
-                })
+                });
         };
 
         function paging(totalData, dataPerPage, pageCount, currentPage) {
@@ -278,7 +288,7 @@
                 (newData.getMonth() < 10
                 ? "0" + (newData.getMonth() + 1)
                 : newData.getMonth() + 1) +
-                "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + newData.getHours() + ":" + newData.getMinutes();
+                "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
             return result;
             }
             else return null;

@@ -15,7 +15,6 @@
       margin-bottom: 20px; 
       padding-top: 10px; 
       padding-bottom: 10px;
-      background-color: ;
     }
 
     #boNo{
@@ -127,10 +126,10 @@
                   <div style="clear:both"></div>
                   <div id="infoDiv">
                     <th:block th:if="${Article.outYn == 'Y'}">
-                      <span>작성자 : 탈퇴회원&nbsp;&nbsp;작성자명 : 탈퇴회원</span>&nbsp;&nbsp;
+                      <span>작성자명 : 탈퇴회원</span>&nbsp;&nbsp;
                     </th:block>
                     <th:block th:if="${Article.outYn == 'N'}">
-                      <span>작성자&nbsp;:&nbsp;</span><span id="writerId" th:text="${Article.meId}"></span>&nbsp;&nbsp;
+                      <!--<span>작성자&nbsp;:&nbsp;</span><span id="writerId" th:text="${Article.meId}"></span>&nbsp;&nbsp;-->
                       <span>작성자명&nbsp;:&nbsp;</span><span id="writerName" th:text="${Article.name}"></span>&nbsp;&nbsp;
                     </th:block>
                     <span th:text="${'작성일 : ' + #dates.format(Article.regDt, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
@@ -175,18 +174,18 @@
         document.getElementById('writerName').innerText = writerName_substr_result;
 
         //개인정보를 지키자 : 작성자 아이디
-        let writerId = document.getElementById('writerId').innerText;
-        let writerId_split = writerId.split('@');  // aaa, aaa.com
-        let writerId_split_dot = writerId_split[1].split('.');  //aaa, com
+        // let writerId = document.getElementById('writerId').innerText;
+        // let writerId_split = writerId.split('@');  // aaa, aaa.com
+        // let writerId_split_dot = writerId_split[1].split('.');  //aaa, com
 
-        let writerId_split_strat = writerId_split[0].substr(0,1);  //aa
-        let writerId_split_result = writerId_split_strat.padEnd(writerId_split[0].length, '*'); // 골뱅이 기준 앞부분 가공 끝
+        // let writerId_split_strat = writerId_split[0].substr(0,1);  //aa
+        // let writerId_split_result = writerId_split_strat.padEnd(writerId_split[0].length, '*'); // 골뱅이 기준 앞부분 가공 끝
 
-        let writerId_split_end = writerId_split_dot[0].substr(0,2);
-        let writerId_split_result2 = writerId_split_end.padEnd(writerId_split_dot[0].length, '*');  // . 기준 앞부분 가공 끝
+        // let writerId_split_end = writerId_split_dot[0].substr(0,2);
+        // let writerId_split_result2 = writerId_split_end.padEnd(writerId_split_dot[0].length, '*');  // . 기준 앞부분 가공 끝
 
         // a*.aa*.com
-        document.getElementById('writerId').innerText = writerId_split_result + '@' +  writerId_split_result2 + '.' + writerId_split_dot[1];
+        // document.getElementById('writerId').innerText = writerId_split_result + '@' +  writerId_split_result2 + '.' + writerId_split_dot[1];
 
         //개인정보를 지키자 : 작성자 연락처
         let writerPhone = document.getElementById('writerPhone').innerText;
@@ -221,7 +220,8 @@
             for (i = 0; i < data.length; i++) {
               replys.innerHTML +=
                 `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
-                <h5 style="display:inline-block;">${data[i].meId}</h5>&nbsp;&nbsp;&nbsp;<span style="font-size: 11px !important; color: gray;">${dateChange(data[i].regDt)}</span>
+                <h5 style="display:inline-block;" id="replyName_${data[i].commentId}">${data[i].name}</h5>&nbsp;&nbsp;&nbsp;
+                <span style="font-size: 11px !important; color: gray;">${dateChange(data[i].regDt)}</span>
                 ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
                 ${data[i].meId == user ? `<button type="button" class="btn btnPush btnLightBlue" id="replyUpdate_${data[i].commentId}" onclick="updateReply(${data[i].commentId},'${data[i].meId}', '${data[i].subject}');" style="display:inline-block; float:right; margin-top:0px">수정</button>` : ''}
                 <hr>
@@ -229,6 +229,12 @@
                   ${data[i].subject}
                 </div>
               </div>`
+
+              //개인정보는 중요하니까!
+              let replyName = data[i].name;
+              let replyName_substr = replyName.substr(0, 1);
+              let replyName_substr_result = replyName_substr.padEnd(replyName.length, '*');
+              document.getElementById('replyName_' + data[i].commentId).innerText = replyName_substr_result;
             }
           },
           error: function (reject) {

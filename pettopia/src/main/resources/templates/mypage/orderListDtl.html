@@ -103,10 +103,10 @@ td, th {
                 <th>배송비</th>
                 <td><span data-th-text="${#numbers.formatInteger(list.shipPrc, 3, 'COMMA') + '원'}"></span></td>
               </tr>
-              <tr>
+              <!--<tr> 포인트 사용안함으로 인한 출력 삭제
                 <th>할인금액</th>
                 <td><span data-th-text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span></td>
-              </tr>
+              </tr>-->
               <tr class="trColor">
                 <th>총 결제금액</th>
                 <td><span style="color: red; font-weight: bold;" data-th-text="${#numbers.formatInteger(list.ttPrc, 3, 'COMMA') + '원'}"></span></td>
@@ -150,9 +150,9 @@ td, th {
                   <td colspan="5" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
                     상품구매금액 <span th:text="${#numbers.formatInteger(list.ttPrc - list.shipPrc - list.point, 3, 'COMMA') + '원'}"></span>
                     + 배송비 <span th:text="${#numbers.formatInteger(list.shipPrc, 3, 'COMMA') + '원'}"></span>
-                    - 적립금
+                    <!--- 적립금
 											<span th:if="${list.point == 0}" th:text="0원"></span>
-											<span th:if="${list.point > 0}" th:text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span>
+											<span th:if="${list.point > 0}" th:text="${#numbers.formatInteger(list.point, 3, 'COMMA') + '원'}"></span>-->
                     = 합계 : <span style="color: red; font-weight: bold; font-size: 14px;"
                                   th:text="${#numbers.formatInteger(list.ttPrc, 3, 'COMMA') + '원'}"></span>
                   </td>

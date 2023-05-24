@@ -14,7 +14,7 @@
         color: rgb(233, 90, 168);
         font-size: large;
     }
-    a, span, label{
+    a, label{
         font-size: 15px;
     }
     .customInput{
@@ -32,6 +32,10 @@
     }
     .formBtn{
         width: 80px !important;
+    }
+
+    .button_div button{
+        width: 90px !important;
     }
 </style>
 
@@ -92,7 +96,7 @@
                             <input id="addrDtl" type="text" class="form-control customInput" name="addrDtl" placeholder="상세주소" th:value="${user.addrDetail}">
                         </div>
                     </div>
-                        <div class="form-group" style="position: absolute; left: 38%;">
+                        <div class="form-group button_div" style="position: absolute; left: 38%;">
                             <button type="button" class="btn btnPush btnBlueGreen formBtn" id="modifyBtn">수정</button>
                             <button type="button" class="btn btnPush btnLightBlue formBtn" onclick="location.href='/'">메인으로</button>
                             <button type="button" class="btn btnPush btnOrange formBtn" id="deleteBtn">회원탈퇴</button>
