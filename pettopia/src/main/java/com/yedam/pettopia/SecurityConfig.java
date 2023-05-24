@@ -86,9 +86,8 @@ public class SecurityConfig {
                 "/vendor/**",
                 "/images/**",
                 "/fonts/**",
-                "/admin/assets/**"
-                
-                
+                "/admin/assets/**",
+                "/data/**"
         );
     }
 	
