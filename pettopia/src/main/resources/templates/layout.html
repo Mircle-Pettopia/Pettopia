@@ -121,7 +121,7 @@
 							</li>-->
 
 							<li class="menu">
-								<a href="#eee" class="noonnu_font">게시판</a>
+								<a href="adopt" class="noonnu_font">게시판</a>
 								<ul class="sub-menu">
 									<li><a href="adopt" class="noonnu_font"> 분양게시판</a></li>
 									<li><a href="knowhow" class="noonnu_font">지식공유게시판</a></li>
@@ -161,7 +161,7 @@
 
 						<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0"
 							id="interestCounter">
-							<i class="zmdi zmdi-favorite-outline" onclick="location.replace('prodInterest')"></i>
+							<i class="zmdi zmdi-favorite-outline" id="intrestIcon"></i>
 						</div>
 					</div>
 				</nav>
@@ -567,7 +567,7 @@
 	</script>
 	<!--  ===========   -->
 
-	<script>
+	<script th:inline="javascript">
 
 
 		function GetUser() { //사용자ID가져오는 함수 컨트롤러는 Cart에있음
@@ -616,7 +616,31 @@
 				async: false,
 				data: { meId: GetUser() },
 				success: function (data) {
-					interestCounter.setAttribute('data-notify', data);
+					if(GetUser() != null){
+						//회원일 시 마이페이지 관심상품으로 이동
+						interestCounter.setAttribute('data-notify', data);
+						$('#intrestIcon').on('click', ()=>{
+							location.href = 'prodInterest';
+						});
+					} else {
+						//비회원일 시 로그인 요청 안내 후 로그인 버튼 누르면 로그인 창으로 이동
+						$('#intrestIcon').on('click', ()=>{
+							Swal.fire({
+								title: '알림',
+								text: "로그인 후 사용이 가능합니다.",
+								icon: 'warning',
+								showCancelButton: true,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								confirmButtonText: '로그인',
+								cancelButtonText: '취소',
+							}).then((result) => {
+								if (result.isConfirmed) {
+									location.href = 'login';
+								}
+							});
+						});
+					}
 				},
 				error: function (reject) {
 					console.log(reject);

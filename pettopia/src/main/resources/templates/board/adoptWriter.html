@@ -173,7 +173,31 @@ layout:decorate="~{../templates/layout}">
     <script th:inline="javascript">
         //뒤로가기
         function goBack(){
-            window.history.back();
+            /*title =  title.value        //제목
+            subject =  editor.getData() //내용
+            petType =  step1.value      //동물
+            breed = step2.value        //품종
+            sex = se.value             //성별
+            netuered = st.value        //중성화여부
+            age = age.value            //나이
+            phone = phone.value        //연락처
+            city = ct.value            //지역
+            charge = charge.value      //책임비*/
+
+            Swal.fire({
+                title: '목록으로 이동하시겠습니까?',
+                text: "기재한 정보는 저장되지 않습니다",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.history.back();
+                };
+            });
         };
 
         function showData() {
@@ -197,7 +221,7 @@ layout:decorate="~{../templates/layout}">
                         phone : phone.value,        //연락처
                         city : ct.value,            //지역
                         charge : replaced_str,      //책임비
-                        };
+                    };
 
             console.log(data);
 

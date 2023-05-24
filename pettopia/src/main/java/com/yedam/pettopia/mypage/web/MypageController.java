@@ -33,15 +33,19 @@ public class MypageController {
 	public String orderList(Model model,
 							@AuthenticationPrincipal PrincipalDetails principal,
 							MypageVO vo) {
-        String id = principal.getUser().getMeId();
-    	model.addAttribute("id", principal.getUser().getMeId());
-        model.addAttribute("name", principal.getUser().getName());
-        model.addAttribute("role", principal.getUser().getRole());
-        model.addAttribute("code", codeService.getCodes("SS", "PS"));
-        model.addAttribute("list",service.getOrder(id));
-        model.addAttribute("getprcSt", service.getPrcCount(id));
-        model.addAttribute("getShipSt", service.getShipCount(id));
-		return "mypage/mypage";
+		if(principal == null) {
+			return "redirect:login";
+		} else {
+			String id = principal.getUser().getMeId();
+			model.addAttribute("id", principal.getUser().getMeId());
+			model.addAttribute("name", principal.getUser().getName());
+			model.addAttribute("role", principal.getUser().getRole());
+			model.addAttribute("code", codeService.getCodes("SS", "PS"));
+			model.addAttribute("list",service.getOrder(id));
+			model.addAttribute("getprcSt", service.getPrcCount(id));
+			model.addAttribute("getShipSt", service.getShipCount(id));
+			return "mypage/mypage";
+		}
 	};
 	
 	@GetMapping("orderMaxPage")
@@ -75,13 +79,16 @@ public class MypageController {
 	@GetMapping("orderListDtl")
 	public String orderListDtl(Model model,
 							   @AuthenticationPrincipal PrincipalDetails principal,
-							   @RequestParam String ordrId) {
-		
-    	model.addAttribute("id", principal.getUser().getMeId());
-        model.addAttribute("name", principal.getUser().getName());
-        model.addAttribute("role", principal.getUser().getRole());
-        model.addAttribute("orderlist", service.getOrdrList(ordrId));
-		return "mypage/orderListDtl";
+							   @RequestParam(required=false) String ordrId) {
+		if(principal == null) {
+			return "redirect:login";
+		} else {
+	    	model.addAttribute("id", principal.getUser().getMeId());
+	        model.addAttribute("name", principal.getUser().getName());
+	        model.addAttribute("role", principal.getUser().getRole());
+	        model.addAttribute("orderlist", service.getOrdrList(ordrId));
+			return "mypage/orderListDtl";
+		}
 	}
 	
 	@GetMapping("ordrDetailList")
@@ -92,13 +99,16 @@ public class MypageController {
 	
 	//마이페이지-관심상품조회
 	@GetMapping("prodInterest")
-	public String prodInterest(Model model,
-							   @AuthenticationPrincipal PrincipalDetails principal,
-							   String prdtId) {
-		model.addAttribute("id", principal.getUser().getMeId());
-        model.addAttribute("name", principal.getUser().getName());
-        model.addAttribute("role", principal.getUser().getRole());
-		return "mypage/prodInterest";
+	public String prodInterest(Model model, @RequestParam(required=false) String prdtId,
+							   @AuthenticationPrincipal PrincipalDetails principal) {
+		if(principal != null) {
+			model.addAttribute("id", principal.getUser().getMeId());
+	        model.addAttribute("name", principal.getUser().getName());
+	        model.addAttribute("role", principal.getUser().getRole());
+	        return "mypage/prodInterest";
+		} else {
+			return "redirect:login";
+		}
 	}
 	
 	//마이페이지-관심상품리스트
@@ -140,11 +150,15 @@ public class MypageController {
 	//myboard page
 	@GetMapping("mypost")
 	public String mypost(Model model,
-			   @AuthenticationPrincipal PrincipalDetails principal) {
-		model.addAttribute("id", principal.getUser().getMeId());
-		model.addAttribute("name", principal.getUser().getName());
-		model.addAttribute("code", codeService.getCodes("BY"));
-		return "mypage/mypost";
+			             @AuthenticationPrincipal PrincipalDetails principal) {
+		if(principal == null) {
+			return "redirect:login";
+		} else {
+			model.addAttribute("id", principal.getUser().getMeId());
+			model.addAttribute("name", principal.getUser().getName());
+			model.addAttribute("code", codeService.getCodes("BY"));
+			return "mypage/mypost";
+		}
 	}
 	
 	@GetMapping("mypostList")
