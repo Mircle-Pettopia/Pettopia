@@ -1,0 +1,187 @@
+<!-- 여기서부턴 영주작업중 -->
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<!-- Vue.js -->
+	<script type="text/javascript" src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<!-- 날짜계산용 라이브러리 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
+
+	<!-- =================펫토피아 툴즈 모달====================================-->
+	<!-- The Modal -->
+
+	<style>
+		#id01 input {
+			width: auto;
+			display: inline-block;
+			height: auto;
+		}
+	</style>
+	<div id="id01" class="w3-modal">
+		<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="margin-top:100px;width: 400px;">
+			<header class="w3-container w3-blue">
+				<span onclick="document.getElementById('id01').style.display='none'"
+					class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
+				<h2>펫토피아 툴즈</h2>
+			</header>
+
+			<div class="w3-bar w3-border-bottom">
+				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'ageCal')">나이 계산기</button>
+				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'calCal')">칼로리 계산기</button>
+				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Tokyo')">WIP</button>
+			</div>
+			<div id="Vapp">
+				<div id="ageCal" class="w3-container w3tabs">
+					<h1>나이 계산기</h1>
+					<hr>
+					<label></label><input type="radio" v-model="race" value="cat">고양이</label>
+					<label></label><input type="radio" v-model="race" value="dog">강아지</label>
+					<hr>
+					<div v-if="race=='cat'">
+						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+					</div>
+					<div v-if="race=='dog'">
+						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+					</div>
+
+					<hr>
+					우리 아이 생일: <input type="date" v-model="born">
+					<hr>
+					<img :src="agePic" alt="">
+					<h4>우리아이의 나이는:<span>{{computeAge}}</span>살 이에요!</h4>
+
+				</div>
+
+				<div id="calCal" class="w3-container w3tabs">
+					<h1>칼로리 계산기</h1>
+					<hr>
+					<label></label><input type="radio" v-model="race" value="cat">고양이</label>
+					<label></label><input type="radio" v-model="race" value="dog">강아지</label>
+					<hr>
+					<div v-if="race=='cat'">
+						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+					</div>
+					<div v-if="race=='dog'">
+						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+					</div>
+
+					<hr>
+					우리아이 몸무게:<input type="number" v-model="weight">KG
+					<hr>
+					<h4>우리아이 일일권장 칼로리는<br><span style="color: red; font-size: xx-large;">{{computeCal}}</span>kcal 입니다</h4>
+
+				</div>
+
+				<div id="Tokyo" class="w3-container w3tabs">
+					<h1>WIP</h1>
+					<p>Work in progress comming soon!</p><br>
+				</div>
+
+				<div class="w3-container w3-light-grey w3-padding">
+					<button class="w3-button w3-right w3-white w3-border"
+						onclick="document.getElementById('id01').style.display='none'">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const app = Vue.createApp({
+			data() {
+				return {
+					race: "cat",
+					petage: 0,
+					calage: 0,
+					realAge: 0,
+					born: LayoutDateChange(Date.now()),
+					weight: 0,
+					humanAge: 0,
+					computeAgeResult: 0,
+				}
+			},
+			computed: {
+				computeAge: function () {
+					months = moment().diff(this.born, 'months');
+					years = months / 12
+					if (this.race == "cat") {
+						if (years < 1) {
+							humanAge = (years / 0.1667) + 0.5;
+						}
+						else {
+							humanAge = (years) * 7;
+						}
+					}
+					else if (this.race == "dog") {
+						if (years < 1) {
+							humanAge = years / 0.125 + 0.5;
+						}
+						else {
+							humanAge = (years) * 7;
+						}
+					}
+					humanAge = Math.round(humanAge);
+					return humanAge;
+				},
+				agePic: function () {
+					if (this.computeAge >= 50) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/1439/1439681.png'
+					}
+					else if (this.computeAge > 29) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/4598/4598871.png'
+					}
+					else if (this.computeAge > 18) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/7223/7223731.png'
+					}
+					else if (this.computeAge > 9) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/2793/2793541.png'
+					}
+					else if (this.computeAge > 3) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/1702/1702342.png'
+					}
+					else {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/822/822123.png'
+					}
+					return ageImg;
+				},
+				computeCal: function () {
+					if (this.race == "cat") {
+						kcal = this.weight * 20;
+					}
+					else {
+						kcal = this.weight * 25;
+					}
+					return kcal;
+				}
+			}
+		}).mount("#Vapp");
+
+
+
+		document.getElementsByClassName("tablink")[0].click();
+
+		function openTab(evt, tabName) {
+			var i, x, tablinks;
+			x = document.getElementsByClassName("w3tabs");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablink");
+			for (i = 0; i < x.length; i++) {
+				tablinks[i].classList.remove("w3-light-grey");
+			}
+			document.getElementById(tabName).style.display = "block";
+			evt.currentTarget.classList.add("w3-light-grey");
+		}
+
+		function LayoutDateChange(data) {
+			if (data != null && data != 0) {
+				let newData = new Date(data);
+				let result = newData.getFullYear() + "-" +
+					(newData.getMonth() < 10
+						? "0" + (newData.getMonth() + 1)
+						: newData.getMonth() + 1) +
+					"-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate());
+				return result;
+			}
+			else return null;
+		};
+	</script>
+
+	<!--  ================================툴즈끝======================================   -->

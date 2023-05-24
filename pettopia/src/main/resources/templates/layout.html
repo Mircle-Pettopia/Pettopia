@@ -102,6 +102,7 @@
 
 					<!-- Logo desktop -->
 					<a href="/" class="logo">
+						<canvas id="canvas" width="144" height="80"></canvas>
 						<img src="/images/icons/logoTest1.png" alt="IMG-LOGO">
 					</a>
 
@@ -137,14 +138,8 @@
 								<button class="noonnu_font" onclick="document.getElementById('id01').style.display='block'">펫토피아
 									툴즈</button>
 							</li>
-							<!--<li>
-								<a href="about.html" class="menu">About</a>
-								<ul class="sub-menu">
-									<li><a href="index.html"> 반려동물나이계산</a></li>
-									<li><a href="home-02.html">권장칼로리계산</a></li>
-									<li><a href="home-03.html">반려동물추천테스트</a></li>
-								</ul>
-							</li>-->
+
+							<!-- ================여기까지============ -->
 						</ul>
 					</div>
 
@@ -387,7 +382,73 @@
 	<!-- 날짜계산용 라이브러리 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
 
-	<!-- =================모달임========-->
+
+	<!--three.js-->
+	<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.138.3/build/three.module.js",
+					"GLTFLoader":
+					"https://unpkg.com/three@0.141.0/examples/jsm/loaders/GLTFLoader.js"
+				}
+			}
+		</script>
+
+	<script type="module">
+		//<!--THREE.js 불러오기-->
+		import { GLTFLoader } from 'GLTFLoader';
+		import * as THREE from 'three';
+
+		//< !--렌더러 생성하기-- >
+		var renderer = new THREE.WebGLRenderer({
+			canvas: document.querySelector('#canvas'), antialias: true
+		});
+		renderer.outputEncoding = THREE.sRGBEncoding;
+
+		//< !--씬 만들기-- >
+		let scene = new THREE.Scene();
+		scene.background = new THREE.Color('white');
+
+		//< !--카메라 세팅하기-- >
+		var camera = new THREE.PerspectiveCamera(15, 1);
+		camera.position.set(0.5, -0.5, 7);
+
+		//< !--라이트 세팅하기-- >
+		var light = new THREE.DirectionalLight(0xffff00, 10);
+		scene.add(light);
+
+		//< !--로드하기-->
+		let loader = new GLTFLoader();
+		loadCatDog('dog');
+		function loadCatDog(CD) {
+			if (CD == 'cat') {
+				camera = new THREE.PerspectiveCamera(60, 1);
+				camera.position.set(0, 200, 500);
+				load3D('img/toon_cat_free/scene.gltf');
+			}
+			else {
+				camera = new THREE.PerspectiveCamera(15, 1.8);
+				camera.position.set(0, -0.5, 7);
+				load3D('img/shiba/scene.gltf')
+			}
+		}
+		function load3D(src) {
+			loader.load(src, function (gltf) {
+				scene.add(gltf.scene);
+
+				//< !--시바견을 움직여보자-- >
+				function animate() {
+					requestAnimationFrame(animate)
+					gltf.scene.rotation.y -= 0.01;
+					// gltf.scene.rotation.x -= 0.1;
+					renderer.render(scene, camera);
+				}
+				animate();
+			});
+		}
+	</script>
+
+	<!-- =================펫토피아 툴즈 모달====================================-->
 	<!-- The Modal -->
 	<style>
 		#id01 input {
@@ -403,39 +464,41 @@
 					class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
 				<h2>펫토피아 툴즈</h2>
 			</header>
-
 			<div class="w3-bar w3-border-bottom">
 				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'ageCal')">나이 계산기</button>
 				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'calCal')">칼로리 계산기</button>
-				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Tokyo')">WIP</button>
+				<!--<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Tokyo')">WIP</button>-->
 			</div>
 			<div id="Vapp">
 				<div id="ageCal" class="w3-container w3tabs">
+
 					<h1>나이 계산기</h1>
 					<hr>
-					<label></label><input type="radio" v-model="race" value="cat">고냥이</label>
-					<label></label><input type="radio" v-model="race" value="dog">댕댕이</label>
+
+					<label></label><input type="radio" v-model="race" value="cat">고양이</label>
+					<label></label><input type="radio" v-model="race" value="dog">강아지</label>
 					<hr>
+
 					<div v-if="race=='cat'">
 						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
 					</div>
 					<div v-if="race=='dog'">
+
 						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
 					</div>
 
 					<hr>
 					우리 아이 생일: <input type="date" v-model="born">
 					<hr>
-					<img v-bind:src="ageImg" alt="">
-					<h4>우리아이의 나이는:<span v-text="humanAge"></span>살 이에요!</h4>
-
+					<img :src="agePic" alt="">
+					<h4>우리아이의 나이는:<span>{{computeAge}}</span>살 이에요!</h4>
 				</div>
 
 				<div id="calCal" class="w3-container w3tabs">
 					<h1>칼로리 계산기</h1>
 					<hr>
-					<label></label><input type="radio" v-model="race" value="cat">고냥이</label>
-					<label></label><input type="radio" v-model="race" value="dog">댕댕이</label>
+					<label></label><input type="radio" v-model="race" value="cat">고양이</label>
+					<label></label><input type="radio" v-model="race" value="dog">강아지</label>
 					<hr>
 					<div v-if="race=='cat'">
 						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
@@ -447,14 +510,14 @@
 					<hr>
 					우리아이 몸무게:<input type="number" v-model="weight">KG
 					<hr>
-					<h4>우리아이 일일권장 칼로리는<br><span style="color: red; font-size: xx-large;" v-text="kcal"></span>kcal 입니다</h4>
+					<h4>우리아이 일일권장 칼로리는<br><span style="color: red; font-size: xx-large;">{{computeCal}}</span>kcal 입니다</h4>
 
 				</div>
 
-				<div id="Tokyo" class="w3-container w3tabs">
+				<!--<div id="Tokyo" class="w3-container w3tabs">
 					<h1>WIP</h1>
 					<p>Work in progress comming soon!</p><br>
-				</div>
+				</div>-->
 
 				<div class="w3-container w3-light-grey w3-padding">
 					<button class="w3-button w3-right w3-white w3-border"
@@ -471,11 +534,10 @@
 					petage: 0,
 					calage: 0,
 					realAge: 0,
-					humanAge: 0,
 					born: LayoutDateChange(Date.now()),
-					ageImg: '',
 					weight: 0,
-					kcal: 0,
+					humanAge: 0,
+					computeAgeResult: 0,
 				}
 			},
 			computed: {
@@ -498,38 +560,38 @@
 							humanAge = (years) * 7;
 						}
 					}
-					this.humanAge = Math.round(humanAge);
-					return this.humanAge
+					humanAge = Math.round(humanAge);
+					return humanAge;
 				},
 				agePic: function () {
-					if (this.humanAge > 50) {
-						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/1439/1439681.png'
+					if (this.computeAge >= 50) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/1439/1439681.png'
 					}
-					else if (this.humanAge > 30) {
-						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/4598/4598871.png'
+					else if (this.computeAge > 29) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/4598/4598871.png'
 					}
-					else if (this.humanAge > 20) {
-						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/7223/7223731.png'
+					else if (this.computeAge > 18) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/7223/7223731.png'
 					}
-					else if (this.humanAge > 10) {
-						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/2793/2793541.png'
+					else if (this.computeAge > 9) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/2793/2793541.png'
 					}
-					else if (this.humanAge > 4) {
-						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/1702/1702342.png'
+					else if (this.computeAge > 3) {
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/1702/1702342.png'
 					}
 					else {
-						this.ageImg = 'https://cdn-icons-png.flaticon.com/128/822/822123.png'
+						ageImg = 'https://cdn-icons-png.flaticon.com/128/822/822123.png'
 					}
-					return this.ageImg;
+					return ageImg;
 				},
 				computeCal: function () {
 					if (this.race == "cat") {
-						this.kcal = this.weight * 20;
+						kcal = this.weight * 20;
 					}
 					else {
-						this.kcal = this.weight * 25;
+						kcal = this.weight * 25;
 					}
-					return this.kcal;
+					return kcal;
 				}
 			}
 		}).mount("#Vapp");
@@ -565,7 +627,8 @@
 			else return null;
 		};
 	</script>
-	<!--  ===========   -->
+
+	<!--  ================================툴즈끝======================================   -->
 
 	<script th:inline="javascript">
 
@@ -616,15 +679,15 @@
 				async: false,
 				data: { meId: GetUser() },
 				success: function (data) {
-					if(GetUser() != null){
+					if (GetUser() != null) {
 						//회원일 시 마이페이지 관심상품으로 이동
 						interestCounter.setAttribute('data-notify', data);
-						$('#intrestIcon').on('click', ()=>{
+						$('#intrestIcon').on('click', () => {
 							location.href = 'prodInterest';
 						});
 					} else {
 						//비회원일 시 로그인 요청 안내 후 로그인 버튼 누르면 로그인 창으로 이동
-						$('#intrestIcon').on('click', ()=>{
+						$('#intrestIcon').on('click', () => {
 							Swal.fire({
 								title: '알림',
 								text: "로그인 후 사용이 가능합니다.",
@@ -680,13 +743,13 @@
 			//console.log('로그인헤더 작성');
 			LoginHeader.innerHTML =
 				`
-				<a id = "wellcomeMag">
+				<a id="wellcomeMag">
 					<span>${data.name}</span>님 어서오세요!
-					
-						</a>
+
+				</a>
 				<a href="logout" class="flex-c-m trans-04 p-lr-25"
 					style="border-left: 1px solid rgba(255,255,255,0.3);">로그아웃</a>
-			`
+				`
 			if (data.role == 'ADMIN') {
 				LoginHeader.innerHTML +=
 					`<a class="flex-c-m trans-04 p-lr-25" href="admin/productMag">관리페이지</a>`
@@ -699,8 +762,8 @@
 		function drawNonLoginHeader() {
 			console.log('비로그인헤더 작성');
 			LoginHeader.innerHTML = `
-						<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
-						<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
+				<a href="login" class="flex-c-m trans-04 p-lr-25">로그인</a>
+				<a href="signUp" class="flex-c-m trans-04 p-lr-25">회원가입</a>
 					`
 		}
 	</script>
