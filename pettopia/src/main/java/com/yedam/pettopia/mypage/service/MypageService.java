@@ -25,7 +25,7 @@ public interface MypageService {
 	public List<MypageVO> pagingTest(String meId, String start, String end, String shipSt, String prcSt, int page);
 	public int orderMaxPage(String meId, String start, String end, String shipSt, String prcSt);
 	
-	public int interestDelete(MypageVO vo);
+	public int interestDelete(MypageVO vo, String[] arr);
 	
 	//prodInterest -> cart insert
 	public int interstInCart(CartListVO vo);

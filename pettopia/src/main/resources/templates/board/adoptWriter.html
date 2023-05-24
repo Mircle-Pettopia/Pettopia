@@ -183,8 +183,7 @@ layout:decorate="~{../templates/layout}">
 
         function insertArticle() {
             let charges = charge.value;
-            let replaced_str = charges.replace(',', '');
-
+            let replaced_str = charges.replace(/,/g, "");
             // DB로 보낼 정보들
             let data= {
                         meId: GetUser(),            //유저정보
@@ -199,6 +198,8 @@ layout:decorate="~{../templates/layout}">
                         city : ct.value,            //지역
                         charge : replaced_str,      //책임비
                         };
+
+            console.log(data);
 
             if(title.value == ""){
                 Swal.fire({

@@ -69,7 +69,7 @@
 		 AND me_id = #{meId}
 		 AND is_main = 'Y'
 		 <if test="start != null and !start.equals('') and end!= null and !end.equals('')">
-		 AND TO_DATE(ordr_date, 'rrrr-MM-dd') BETWEEN #{start} AND #{end}
+		 AND ordr_date BETWEEN #{start} AND #{end}
 		 </if>
 		 <if test="shipSt != null and !shipSt.equals('')">
 		 AND get_common(SHIP_ST) = #{shipSt}
@@ -115,7 +115,7 @@
 	                         AND me_id = #{meId}
 	                         AND is_main = 'Y'
 	                         <if test="start != null and !start.equals('') and end!= null and !end.equals('')">
-	                         AND TO_DATE(ordr_date, 'rrrr-MM-dd') BETWEEN #{start} AND #{end}
+	                         AND ordr_date BETWEEN #{start} AND #{end}
 	                         </if>
 	                         <if test="shipSt != null and !shipSt.equals('')">
 	                         AND get_common(SHIP_ST) = #{shipSt}
@@ -136,7 +136,7 @@
 		        ON ordr.ordr_id = ordt.ordr_id
 		WHERE me_id = #{meId}
 		<if test="start != null and !start.equals('') and end!= null and !end.equals('')">
-        AND TO_DATE(ordr_date, 'rrrr-MM-dd') BETWEEN #{start} AND #{end}
+        AND ordr_date BETWEEN #{start} AND #{end}
         </if>
         <if test="shipSt != null and !shipSt.equals('')">
         AND get_common(SHIP_ST) = #{shipSt}

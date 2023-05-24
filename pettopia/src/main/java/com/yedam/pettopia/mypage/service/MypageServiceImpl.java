@@ -91,19 +91,18 @@ public class MypageServiceImpl implements MypageService{
 	}
 
 	@Override
-	public int interestDelete(MypageVO vo) {
+	public int interestDelete(MypageVO vo, String[] arr) {
+		int result = 0;
 		String id = vo.getMeId();
-		String check_prdtId = vo.getPrdtId();
-		String[] check_prdtId_arr = check_prdtId.split(",");
 		
 		MypageVO mvo = new MypageVO();
 		
-		for(int i = 0 ; i < check_prdtId_arr.length ; i++) {
+		for(int i = 0 ; i < arr.length ; i++) {
+			mvo.setPrdtId(arr[i]);
 			mvo.setMeId(id);
-			mvo.setPrdtId(check_prdtId_arr[i]);
+			result += mapper.interestDelete(mvo);
 		}
-		//System.out.println("mvo>>>>>>>>>>>>>>>>>>>" + mvo);
-		return mapper.interestDelete(mvo);
+		return result; 
 	}
 
 	//cart + cart_detail INSERT
