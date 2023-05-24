@@ -4,8 +4,8 @@
         // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
         toolbar: {
           items: [
-            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-            'alignment', '|', 'insertImage'
+           
+          '|', 'insertImage' ,  '|'
           ],
           shouldNotGroupWhenFull: true
         },

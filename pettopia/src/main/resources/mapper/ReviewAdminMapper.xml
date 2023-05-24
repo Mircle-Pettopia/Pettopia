@@ -21,7 +21,7 @@
 		ON d.ORDR_ID = h.ORDR_ID
 		JOIN PRODUCT p
 		ON p.PRDT_ID = r.PRDT_ID
-		ORDER BY re_no
+		ORDER BY 2 DESC
 	</select>
 
 
@@ -54,10 +54,10 @@
 				AND <![CDATA[r.creat_dt >= #{start}]]>
 			</if>
 			<if test="end != null and !end.equals('')">
-				AND <![CDATA[r.creat_dt <= #{end}]]>
+				AND <![CDATA[TRUNC(r.creat_dt) <= #{end}]]>
 			</if>
 		</where>
-		ORDER BY r.re_no
+		ORDER BY 2 DESC
 	</select>
 
 

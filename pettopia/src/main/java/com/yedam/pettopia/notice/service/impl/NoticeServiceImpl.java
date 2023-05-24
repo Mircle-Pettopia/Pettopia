@@ -58,7 +58,6 @@ public class NoticeServiceImpl implements NoticeService {
 	//삭제
 	public void deleteNotice(int noNo) {
 		noticeMapper.deleteNotice(noNo);
-		
 	}
 
 	@Override
@@ -67,5 +66,14 @@ public class NoticeServiceImpl implements NoticeService {
 		noticeMapper.viewCntUpdate(noNo);
 		
 	}
+
+	@Override
+	//파일 삭제
+	public void fileDelete(NoticeVO noticeVO) {
+		noticeMapper.fileDelete(noticeVO);
+	}
+
+
+
 
 }

@@ -28,4 +28,8 @@ public interface NoticeMapper {
 	//조회수
 	public void viewCntUpdate(int noNo);
 	
+	//파일 삭제
+	public void fileDelete(NoticeVO noticeVO);
+
+	
 }
