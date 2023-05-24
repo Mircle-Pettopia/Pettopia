@@ -23,7 +23,7 @@
 				m.name
 		FROM	order_header o JOIN member m
 		ON		o.me_id = m.me_id
-		ORDER BY o.ordr_id
+		ORDER BY o.ordr_id DESC
 	</select>
 	
 	<!-- 결제상태 변경 -->
@@ -124,7 +124,7 @@
     			</foreach>
 			</if>
 		</where>
-		ORDER BY o.ordr_id
+		ORDER BY o.ordr_id DESC
 	</select>
 	
 	<!-- 검색 상품 -->

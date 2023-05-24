@@ -839,7 +839,7 @@
                         .text("추가 가격");
                       let input3 = $("<input>")
                         .addClass("form-control text-end")
-                        .val(item.addPrc)
+                        .val(formattedMoney(item.addPrc))
                         .prop("readonly", true);
                       let div3 = $("<div>").addClass("col-sm-4").append(input3);
 
@@ -871,8 +871,9 @@
                       .css("width", "300px");
                   } else {
                     let imgElem = $("<img>").attr("src", imgSrc).css({
-                      width: "300px",
+                      width: "100px",
                       "margin-right": "10px",
+                      height: "100px",
                     });
                     $("#imgDetail").append(imgElem);
                     $("#imgDetail").append("<p>");

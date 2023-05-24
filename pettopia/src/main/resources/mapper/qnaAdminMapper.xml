@@ -23,7 +23,7 @@
 		ON 		q.me_id = m.me_id
 		JOIN    product p
 		ON      q.prdt_id = p.prdt_id
-		ORDER BY q.qst_no
+		ORDER BY q.qst_no DESC
 	</select>
 	
 	<!-- qna 답변 대기 카운트 -->
@@ -154,7 +154,7 @@
     			</foreach>
 			</if>
 		</where>
-		ORDER BY q.qst_no
+		ORDER BY q.qst_no DESC
 	</select>
 	
 	<!-- 상세 상품 이미지 조회 -->

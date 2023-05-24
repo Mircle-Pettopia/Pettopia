@@ -21,6 +21,9 @@
       .date-input {
         width: 250px;
       }
+      #detailContent img {
+        width: 300px;
+      }
     </style>
   </head>
   <body>
@@ -198,9 +201,7 @@
                   <colgroup>
                     <col width="20%" />
                     <col width="50%" />
-                    <!-- 변경된 열 너비 -->
                     <col width="30%" />
-                    <!-- 새로운 열 -->
                   </colgroup>
 
                   <tr class="thColor">
@@ -224,7 +225,8 @@
                   </tr>
                   <tr class="thColor">
                     <th>내용</th>
-                    <td id="detailContent" colspan="1"></td>
+                    <td id="detailContent"></td>
+                    <td></td>
                   </tr>
                 </table>
 
@@ -620,6 +622,14 @@
 
           //엑셀버튼을 누르면 해당되는 발주상세목록을 엑셀로 만들어준다
           $("#excelBtn").on("click", function () {
+            let listCnt = qnaList.getData();
+            if (listCnt.length < 1) {
+              Swal.fire({
+                icon: "error",
+                title: "리스트가 없습니다.",
+              });
+              return;
+            }
             Swal.fire({
               title: "엑셀파일로 받아보시겠습니까?",
               text: "원하지 않는다면 취소를 눌러주세요",
