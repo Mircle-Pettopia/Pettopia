@@ -1001,13 +1001,13 @@
                 return;
               }
 
-              if (upimg.length < 1) {
-                Swal.fire({
-                  icon: "warning",
-                  title: "이미지를 입력해주세요.",
-                });
-                return;
-              }
+              // if (upimg.length < 1) {
+              //   Swal.fire({
+              //     icon: "warning",
+              //     title: "이미지를 입력해주세요.",
+              //   });
+              //   return;
+              // }
               // 대표 이미지 담기
               formData.append("imgMain", mainImg[0]);
 
@@ -1649,13 +1649,13 @@
             return;
           }
 
-          if (upimg.length < 1) {
-            Swal.fire({
-              icon: "warning",
-              title: "이미지를 입력해주세요.",
-            });
-            return;
-          }
+          // if (upimg.length < 1) {
+          //   Swal.fire({
+          //     icon: "warning",
+          //     title: "이미지를 입력해주세요.",
+          //   });
+          //   return;
+          // }
 
           if (typeof saleSt === "undefined") {
             Swal.fire({
