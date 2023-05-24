@@ -175,24 +175,6 @@
                                     <col style="width:85%">
                                 </colgroup>
                                 <tbody>
-<!--                                     <tr>
-                                        <th scope="row">말머리</th>
-                                        <td>
-                                            <div class="category_select">
-                                                <select class=" tune" id="category" name="category"
-                                                    style="width:127px;">
-                                                    <option value="">문의내용</option>
-                                                    <option value="회원/정보관리">회원/정보관리</option>
-                                                    <option value="주문/결제">주문/결제</option>
-                                                    <option value="배송">배송</option>
-                                                    <option value="반품/환불/교환/AS">반품/환불/교환/AS</option>
-                                                    <option value="영수증/증빙서류">영수증/증빙서류</option>
-                                                    <option value="상품/이벤트">상품/이벤트</option>
-                                                    <option value="기타">기타</option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </tr> -->
                                     <tr>
                                         <th scope="row">작성자</th>
                                         <td>
@@ -220,28 +202,6 @@
                                         </td> -->
                                                <td>     <div id="editor"> </div> </td>
                                     </tr>
-<!--                                     <tr>
-                                        <th scope="row">첨부파일</th>
-                                        <td id="uploadBox">
-
-
-                                            <div class="file_upload_sec">
-                                                <label for="attach1">
-                                                    <input style="border-radius:0px; background-color:rgb(255, 255, 255);" type="text" class="file_text" title="파일 첨부하기"
-                                                        readonly="readonly">
-                                                </label>
-                                                <div class="btn_upload_box">
-                                                    <button type="button" class="btn_upload"
-                                                        title="찾아보기"><em>찾아보기</em></button>
-                                                    <input type="file" id="attach1" name="upfiles[]" class="file"
-                                                        title="찾아보기">
-                                                    <span class="btn_gray_list"><button type="button" id="addUploadBtn"
-                                                            class="btn_gray_big"><span>+ 추가</span></button></span>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -318,7 +278,7 @@
     </script> -->
         <!-- ==========================ckeditor========================== -->
     <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
-    <script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
+    <script type="text/javascript" src="CKeditorSuperBuild.js"></script>
     <!-- ==========================ckeditor END======================= -->
     
         <script>
@@ -327,7 +287,7 @@
         console.log(Data);
       }
 
-      $(document).ready(function(){
+    /*   $(document).ready(function(){
           $(document).on("click", "#insertBtn" ,function(){
               console.log('클릭');
               let formData = new FormData($('#frmWrite')[0]);
@@ -350,7 +310,18 @@
     
               success: function (data) {
                 console.log(data);
-                alert("데이터 전송 완료");
+                Swal.fire({
+  		    	  title: '문의등록 완료',
+  		    	  text: "목록으로 이동합니다.",
+  		    	  icon: 'success',
+  		    	  confirmButtonColor: '#3085d6',
+  		    	  confirmButtonText: '확인',
+  		    	}).then((result) => {
+  		    	  if (result.isConfirmed) {
+  		    		  console.log("장바구니 이동")
+  		    		  location.href="CartMain"
+  		    	  }
+  		    	})
               },
               error: function (reject) {
                 console.log(reject);
@@ -360,7 +331,77 @@
           })
 
 
-      })
+      }) */
+      $(document).ready(function(){
+    	    $(document).on("click", "#insertBtn", function(){
+    	        console.log('클릭');
+    	        let formData = new FormData($('#frmWrite')[0]);
+    	        let title = $("#title").val();
+    	        let prdtId = $("#prdtId").val();
+    	        
+    	        if (formData === null || prdtId === null || title === null || title.trim() === "" || editor.getData() === null || editor.getData().trim() === "") {
+    	            /* swal("빈 칸을 모두 입력해주세요!"); */
+    	            Swal.fire({
+    	                    title: '경고',
+    	                    text: "빈칸을 모두 입력해주세요.",
+    	                    icon: 'error',
+    	                    confirmButtonColor: '#3085d6',
+    	                    confirmButtonText: '확인',
+    	                })
+    	            return; // Halt the processing
+    	        }
+    	        
+    	        console.log(formData);
+    	        console.log(title);
+    	        console.log(editor.getData());
+    	        console.log(prdtId);
+    	        
+    	        let ajaxData = {
+    	            meId: GetUser(),
+    	            title: title,
+    	            content: editor.getData(),
+    	            prdtId: prdtId
+    	        };
+    	        
+    	        if (ajaxData.meId === null || ajaxData.title === null || ajaxData.title.trim() === "" || ajaxData.content === null || ajaxData.content.trim() === "" || ajaxData.prdtId === null) {
+    	            console.log("One or more AJAX values are null or empty");
+    	            alert("One or more AJAX values are null or empty");
+    	            return; // Halt the processing
+    	        }
+    	        
+    	        $.ajax({
+    	            url: "insertQnA",
+    	            method: "POST",
+    	            data: ajaxData,
+    	            success: function (data) {
+    	                if (data === null) {
+    	                    console.log("AJAX response data is null");
+    	                    alert("AJAX response data is null");
+    	                    return; // Halt the processing
+    	                }
+    	                
+    	                console.log(data);
+    	                Swal.fire({
+    	                    title: '문의등록 완료',
+    	                    text: "목록으로 이동합니다.",
+    	                    icon: 'success',
+    	                    confirmButtonColor: '#3085d6',
+    	                    confirmButtonText: '확인',
+    	                }).then((result) => {
+    	                    if (result.isConfirmed) {
+    	                        console.log("장바구니 이동");
+    	                        location.href="CartMain";
+    	                    }
+    	                });
+    	            },
+    	            error: function (reject) {
+    	                console.log(reject);
+    	                alert("에러");
+    	            },
+    	        });
+    	    });
+    	});
+
 
     //   function insertArticle() {
     // 	  let formData = new FormData($('#frmWrite')[0]);
