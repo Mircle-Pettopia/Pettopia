@@ -113,7 +113,7 @@ td, tr, th {
 	
 		<div class="container">
 			<div class="row">
-				<th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+				<th:block th:replace="layout/navbar :: navbarFragment"></th:block>
 
 				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
@@ -128,8 +128,8 @@ td, tr, th {
 						<div th:each="review : ${reviewList}" class="parentDiv"
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
 							<div class="title">
-								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}"> <img
-									th:src="${review.prdtImg}"
+								<a th:href="@{/ProductDetail(prdtId=${review.prdtId})}"> <img
+									th:src="${/review.prdtImg}"
 									style="width: 120px; height: 120px; float: left; margin-right: 20px;" /></a>
 								<!--  <img
                       src="images/item-cart-01.jpg"
@@ -148,7 +148,7 @@ td, tr, th {
 
 							<div
 								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px; text-align: center;">
-								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a>
+								<a th:href="@{/ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a>
 							</div>
 							<div style="height: 120px; float: left; line-height: 100px">
 								<!--  옵션 이름 들어가기-->[[${review.prdtId}]]</div>

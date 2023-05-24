@@ -175,11 +175,14 @@
 				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
 					<img src="/images/icons/icon-close2.png" alt="CLOSE">
 				</button>
-
-				<button class="flex-c-m trans-04" id="searchBtn">
+				<div class="wrap-search-header flex-w p-l-15">
+					
+				
+				<button class="flex-c-m trans-04" id="searchBtn" type="button">
 					<i class="zmdi zmdi-search"></i>
 				</button>
-				<input type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
+				<input class="plh3" type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
+			</div>
 			</div>
 		</div>
 	</header>
@@ -715,6 +718,17 @@
 			});
 
 		})
+
+		// 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
+		$("#searchNm").on(
+            "keypress",
+            function (event) {
+              if (event.which === 13) {
+                event.preventDefault();
+                $("#searchBtn").click();
+              }
+            }
+          );
 	</script>
 
 
