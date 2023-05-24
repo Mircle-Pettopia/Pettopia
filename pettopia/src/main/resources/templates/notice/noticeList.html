@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout}">
+	layout:decorate="~{layout}"
+	xmlns:sec="http://www.springframework.org/security/tags">
 <head>
 
 <meta charset="UTF-8" />
@@ -86,24 +87,23 @@
 
 
 							<div th:each=" notice : ${noticeList}">
-								<div class="num" th:text="${notice.noNo }" style="font-size: 15px;"></div>
+								<div class="num" th:text="${notice.noNo }"
+									style="font-size: 15px;"></div>
 								<div class="title" style="font-size: 15px;">
 									<a th:href="@{noticeDetail(noNo=${notice.noNo})}">[[${notice.title
 										}]]</a>
 								</div>
-								<div class="date" style="font-size: 15px;">[[ ${#dates.format(notice.rDate,
-									'yyyy-MM-dd HH-mm')}]]</div>
-								<div class="count" style="font-size: 15px;">[[${notice.viewCnt }]]</div>
+								<div class="date" style="font-size: 15px;">[[
+									${#dates.format(notice.rDate, 'yyyy-MM-dd HH-mm')}]]</div>
+								<div class="count" style="font-size: 15px;">[[${notice.viewCnt
+									}]]</div>
 
 							</div>
+
 							<div sec:authorize="hasAuthority('ROLE_ADMIN')">
-								<a href="noticeInsertForm">
-									<button type="button" class="btn btnPush btnBlueGreen"
-										style="float: right; font-size: 13px;">등록</button>
-								</a>
+								<a href="noticeInsertForm" class="btn btnPush btnBlueGreen"
+									style="float: right; font-size: 13px;">등록</a>
 							</div>
-
-
 
 						</div>
 
@@ -189,18 +189,15 @@
 					$("#moveForm").find("input[name='keyword']").val(val);
 					moveForm.submit();
 				});
-				
-				
-				$(".board_page a").on("click", function(e) {
-				    e.preventDefault();
-				    let pageNo = $(this).attr("href");
-				    let keyword = $("input[name='keyword']").val();
-				    $("#moveForm").find("input[name='keyword']").val(keyword);
-				    $("#moveForm").find("input[name='pageNo']").val(pageNo);
-				    $("#moveForm").submit();
-				});
 
-				
+				$(".board_page a").on("click", function(e) {
+					e.preventDefault();
+					let pageNo = $(this).attr("href");
+					let keyword = $("input[name='keyword']").val();
+					$("#moveForm").find("input[name='keyword']").val(keyword);
+					$("#moveForm").find("input[name='pageNo']").val(pageNo);
+					$("#moveForm").submit();
+				});
 			</script>
 			<!--===============================================================================================-->
 			<script src="js/main.js"></script>

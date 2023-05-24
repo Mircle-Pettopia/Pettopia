@@ -68,7 +68,6 @@
 				contents = #{contents}
 				files = #{files}
 			WHERE no_no = #{noNo}
-	
 	</update>
 	
 	<!-- 조회수 -->

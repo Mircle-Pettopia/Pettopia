@@ -158,7 +158,7 @@ fieldset legend {
 
 		<div class="container">
 			<div class="row">
-				<th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+				<th:block th:replace="layout/navbar :: navbarFragment"></th:block>
 
 				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
@@ -166,8 +166,13 @@ fieldset legend {
 						<h1>
 							<span style="font-weight: bold; color: rgb(201, 159, 240)">|
 							</span>내가 작성한 리뷰
+							<span style="font-size: 25px; color: darkorange;" th:text="${#lists.size(writtenList)}"></span>
 						</h1>
 						<br /> <br />
+												<div th:if="${writtenList.empty}"
+							style="text-align: center; font-size: 15px; font-weight: bold; margin-top: 25px;">
+							조회할 정보가 없습니다.</div>
+						
 						<div th:each="written : ${writtenList}"
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
 							<div class="title">

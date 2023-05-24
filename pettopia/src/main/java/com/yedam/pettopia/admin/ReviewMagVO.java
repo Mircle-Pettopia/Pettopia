@@ -43,8 +43,9 @@ public class ReviewMagVO {
 	private int boNo;
 	private int re;
 	
-	
-	private String start;
-	private String end;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date start;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date end;
 	
 }

@@ -7,8 +7,8 @@
 <meta charset="UTF-8" />
 </head>
 <body>
-<div layout:fragment="content">
-<style>
+	<div layout:fragment="content">
+		<style>
 #backColor {
 	margin-top: 30px;
 	background: rgb(248, 245, 250);
@@ -110,10 +110,10 @@ td, tr, th {
 }
 </style>
 
-	
+
 		<div class="container">
 			<div class="row">
-				<th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
+				<th:block th:replace="layout/navbar :: navbarFragment"></th:block>
 
 				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
@@ -121,9 +121,14 @@ td, tr, th {
 						<h1>
 							<span style="font-weight: bold; color: rgb(201, 159, 240)">|
 							</span>작성 가능한 리뷰
+							<span style="font-size: 25px; color: darkorange;" th:text="${#lists.size(reviewList)}"></span>
 						</h1>
 						<br /> <br />
 
+
+						<div th:if="${reviewList.empty}"
+							style="text-align: center; font-size: 15px; font-weight: bold; margin-top: 25px;">
+							조회할 정보가 없습니다.</div>
 
 						<div th:each="review : ${reviewList}" class="parentDiv"
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
@@ -151,7 +156,9 @@ td, tr, th {
 								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a>
 							</div>
 							<div style="height: 120px; float: left; line-height: 100px">
-								<!--  옵션 이름 들어가기-->[[${review.prdtId}]]</div>
+								<!--  옵션 이름 들어가기-->
+								[[${review.prdtId}]]
+							</div>
 							<div class="btnn" style="padding: 20px 0 0 0">
 								<button type="button" th:data-orderid="${review.ordtId}"
 									th:data-prdtid="${review.prdtId}"
@@ -202,8 +209,7 @@ td, tr, th {
 										style="display: inline-block" for="rate5">★</label>
 								</div>
 							</fieldset>
-							<br />
-							<br />
+							<br /> <br />
 							<div>
 								<textarea name="content" id="editor"></textarea>
 							</div>
@@ -271,12 +277,12 @@ td, tr, th {
 				});
 			}
 
-/* 			function resetForm() {
-				document.getElementById("myform").reset();
-				var editor = CKEDITOR.instances.editor;
-				editor.setData(""); // 에디터 내용을 비웁니다.
-			} */
-			
+			/* 			function resetForm() {
+			 document.getElementById("myform").reset();
+			 var editor = CKEDITOR.instances.editor;
+			 editor.setData(""); // 에디터 내용을 비웁니다.
+			 } */
+
 			/* $.ajax({
 				url: "optionDetail",
 				method: "GET",
