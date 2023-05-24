@@ -17,4 +17,7 @@ public interface QnaService {
 	
 	//단건조회
 	public QnaVO QnaCheck(int qstNo);
+	
+	//문의댓글조회
+	public List<QnaVO> QnaReply(int qstNo);
 }

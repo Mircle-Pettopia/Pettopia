@@ -41,4 +41,11 @@ public class QnaServiceImpl implements QnaService{
 		return qnaMapper.qnaAllList2(prdtId);
 	}
 
+
+	@Override
+	public List<QnaVO> QnaReply(int qstNo) {
+
+		return qnaMapper.QnaReply(qstNo);
+	}
+
 }

@@ -260,6 +260,12 @@ fieldset legend {
 
 }
 
+.custom-position {
+        position: absolute;
+        
+        left: 0px;
+    }
+
 </style>
 	<!-- breadcrumb -->
 	<div class="container">
@@ -280,7 +286,8 @@ fieldset legend {
 				<div class="col-md-6 col-lg-7 p-b-30">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
 						<div class="wrap-slick3 flex-sb flex-w">
-								<div class="wrap-slick3-arrows flex-sb-m flex-w" style="margin-right:61px;"></div>
+								<div style="margin-right: 61px;" class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" th:each="Img : ${productImg}"
@@ -372,8 +379,9 @@ fieldset legend {
 					<div class="p-r-50 p-t-5 p-lr-0-lg">
 						<h4 class="mtext-105 cl2 js-name-detail p-b-14" id="prdtNm">
 							[[${ProductDetail.prdtNm}]]</h4>
-						<span class="mtext-106 cl2" id="prdtPrc">
-							[[${ProductDetail.prdtPrc}]]원 </span>
+						
+							 <span class="mtext-106 cl2" id="">
+							 [[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>
 						<input type="hidden" id="prdtId" th:value="${ProductDetail.prdtId}"/>
 						<p class="stext-102 cl3 p-t-23" id="prdtDesct">
 <!-- 						<p th:utext="${ProductDetail.prdtDesct}" >
@@ -394,7 +402,7 @@ fieldset legend {
 										<div class="rs1-select2 bor8 bg0">
 											<select class="js-select2" name="time"
 												onchange="updatePrice()">
-												<option>Choose an option</option>
+												<option>-옵션을 선택해주세요.-</option>
 
 													<option th:each="optionDetail: ${optionDetailList}"
 														th:if="${optionDetail.optId == option.optId}"
@@ -406,10 +414,11 @@ fieldset legend {
 											</select>
 											<div class="dropDownSelect2"></div>
 										</div>
+										
 									</div>
 								</div>
 							</th:block>
-	
+								
 							
 							
 							
@@ -439,6 +448,10 @@ fieldset legend {
 									class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
 								</a>
 							</div>
+							<div style="float:right;">
+							<span class="mtext-106 cl2" id="prdtPrc">
+							 [[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>
+							 </div>
 						</div>
 					</div>
 				</div>
@@ -496,9 +509,9 @@ fieldset legend {
 								</h3>
 								<div id="ajax-goods-goodsreview-list"></div>
 								<div class="btn_reviews_box">
-									<a href="../board/list.php?bdId=goodsreview"
-										class="btn_reviews_more">상품후기 전체보기</a> <a
-										href="javascript:gd_open_write_popup('goodsreview', '10032')"
+									<!-- <a href="../board/list.php?bdId=goodsreview"
+										class="btn_reviews_more">상품후기 전체보기</a> --> <a
+										href="reviewList"
 										class="btn_reviews_write">상품후기 글쓰기</a>
 								</div>
 								<!-- //btn_reviews_box -->
@@ -563,7 +576,7 @@ fieldset legend {
 										class="starR" th:classappend="${written.point}>=1?on"><input
 										type="hidden" value="1" /></span>
 								</fieldset>
-								<span id="starRating" style="font-weight: bold">[[${written.point}]]</span>
+								<span id="starRating" style="font-weight: bold"><!-- [[${written.point}]] --></span>
 							</div>
 							
 			<div class="edi"
@@ -593,8 +606,8 @@ fieldset legend {
 								</h3>
 								<div id="ajax-goods-goodsqa-list"></div>
 								<div class="btn_qna_box">
-									<a href="" class="btn_qna_more">상품문의
-										전체보기</a> <a
+									<a href="QnaList" class="btn_qna_more">내가 작성한
+										문의보기</a> <a
 										th:href="|QnaForm?prdtId=${ProductDetail.prdtId}|"
 										class="btn_qna_write">상품문의 글쓰기</a>
 								</div>
@@ -679,7 +692,7 @@ fieldset legend {
 						<div class="p-l-25 p-r-30 p-lr-0-lg">
 							<div class="wrap-slick3 flex-sb flex-w">
 								<div class="wrap-slick3-dots"></div>
-								<div class="wrap-slick3-arrows flex-sb-m flex-w" style="margin-right: 57px;"></div>
+								<div class="wrap-slick3-arrows flex-sb-m flex-w custom-position" style="margin-right: 57px;  left: 0px;"></div>
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" data-thumb="images/product-detail-01.jpg">
@@ -1169,6 +1182,9 @@ fieldset legend {
 	    });
 	  });
 	}); */
+	
+	
+//옵션 없을땐 안들어가야함 	
 	$(document).ready(function() {
 		  // When the form is submitted
 		  $("#addCart").click(function(event) {
@@ -1205,25 +1221,43 @@ fieldset legend {
 		      cnt: cnt,
 		      optDetaIds: optDetaIds.join(",")
 		    };
+			
+		    $.ajax({
+  		      url: "addCart", // Replace with the actual server-side script URL
+  		      method: "POST",
+  		      data: JSON.stringify(data), // Convert data to JSON string
+  		      contentType: "application/json", // Set the request content type to JSON
+  		      success: function(response) {
+  		        // Handle the response
+  		        console.log(response);
+  		      Swal.fire({
+		    	  title: '장바구니에 추가!',
+		    	  text: "장바구니 목록으로 이동하시겠습니까?",
+		    	  icon: 'warning',
+		    	  showCancelButton: true,
+		    	  confirmButtonColor: '#3085d6',
+		    	  cancelButtonColor: '#d33',
+		    	  confirmButtonText: '네 이동합니다.',
+		    	  cancelButtonText: '취소'
+		    	}).then((result) => {
+		    	  if (result.isConfirmed) {
+		    		  console.log("장바구니 이동")
+		    		  location.href="CartMain"
+		    	  }
+		    	})
+//  		        
+  		        // Display a success message or perform any other actions
+  		      },
+  		      error: function(xhr, status, error) {
+  		        // Handle the error
+  		        console.log(error);
+  		        // Display an error message or perform any other actions
+  		      swal(nameProduct, "옵션을 선택해주세요!", "error");
+  		      }
+  		    });
 
 		    // Make the AJAX call
-		    $.ajax({
-		      url: "addCart", // Replace with the actual server-side script URL
-		      method: "POST",
-		      data: JSON.stringify(data), // Convert data to JSON string
-		      contentType: "application/json", // Set the request content type to JSON
-		      success: function(response) {
-		        // Handle the response
-		        console.log(response);
-		        swal(nameProduct, "장바구니 등록 !", "success");
-		        // Display a success message or perform any other actions
-		      },
-		      error: function(xhr, status, error) {
-		        // Handle the error
-		        console.log(error);
-		        // Display an error message or perform any other actions
-		      }
-		    });
+		    
 		  });
 		});	
 	</script>
