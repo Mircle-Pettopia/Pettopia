@@ -283,4 +283,26 @@
 				l_cat_id = #{lCatId}
 		WHERE	prdt_id = #{prdtId}
 	</update>
+	
+	<!-- 장바구니 카운트 -->
+	<select id="cartCnt" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM cart
+		WHERE prdt_id = #{prdtId}
+	</select>
+	
+	<!-- 찜 카운트 -->
+	<select id="zzimCnt" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM interest_product
+		WHERE prdt_id = #{prdtId}
+	</select>
+	
+	<!-- 주문서 카운트 -->
+	<select id="orderCnt" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM order_detail
+		WHERE prdt_id = #{prdtId}
+	</select>
+	
 </mapper>

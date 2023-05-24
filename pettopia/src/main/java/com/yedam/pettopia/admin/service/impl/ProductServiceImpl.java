@@ -214,4 +214,13 @@ public class ProductServiceImpl implements ProductService {
 		return result;
 	}
 
+	@Override
+	public Map<String, Integer> prdCnt(ProductVO vo) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("cartCnt", productMapper.cartCnt(vo));
+		map.put("zzimCnt", productMapper.zzimCnt(vo));
+		map.put("orderCnt", productMapper.orderCnt(vo));
+		return map;
+	}
+
 }

@@ -251,7 +251,7 @@
                     <div v-show="answer">
                       <button
                         type="button"
-                        class="btn btn-success float-end my-2"
+                        class="btn btn-primary float-end my-2"
                         id="insertBtn"
                       >
                         작성
@@ -485,7 +485,8 @@
           $(document).on("click", ".changeBtn", function (e) {
             let btn = $(e.target);
             btn.removeClass("changeBtn").addClass("updBtn");
-            btn.text("수정 완료");
+
+            btn.text("수정");
 
             let parentDiv = btn.closest("div");
             let text = parentDiv.find(".Viewer").text();
@@ -697,8 +698,11 @@
 
         // 내 답변 출력
         function comment(value) {
+          console.log(value);
           // HTML 요소를 동적으로 생성
-          let div = $("<div>").addClass("mb-4 px-4 py-3 border");
+          let div = $("<div>").addClass(
+            "mb-4 px-4 py-3 border position-relative"
+          );
           let h6 = $("<h6>");
           let input = $("<input>")
             .val(value.commentId)
@@ -707,7 +711,7 @@
           div.append(input);
 
           // 작성자 정보 추가
-          let spanAuthor = $("<span>").text("작성자: " + value.meId);
+          let spanAuthor = $("<span>").text("작성자: " + value.name);
           h6.append(spanAuthor);
 
           // 작성일 정보 추가
@@ -720,16 +724,26 @@
           let spanDelete = $("<span>")
             .addClass("float-end")
             .addClass("delBtn")
-            .text("/ 삭제")
-            .css("cursor", "pointer");
+            .addClass("btn btn-danger")
+            .addClass("position-absolute top-5 end-600")
+            .text("삭제")
+            .css("cursor", "pointer")
+            .css("margin-right", "5px")
+            .css("top", "5px")
+            .css("left", "665px");
           h6.append(spanDelete);
 
           // 수정 버튼 추가
           let spanEdit = $("<span>")
             .addClass("float-end")
             .addClass("changeBtn")
-            .text("수정 ")
-            .css("cursor", "pointer");
+            .addClass("btn btn-success")
+            .addClass("position-absolute top-5 end-600")
+            .text("수정")
+            .css("cursor", "pointer")
+            .css("margin-right", "5px")
+            .css("top", "5px")
+            .css("left", "600px");
           h6.append(spanEdit);
           div.append(h6);
 

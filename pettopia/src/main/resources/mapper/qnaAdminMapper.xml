@@ -65,13 +65,16 @@
 	
 	<!-- 내가 쓴 답변 조회 -->
 	<select id="selectAnswerList" resultType="QnaMagVO">
-		SELECT	comment_id,
-				me_id,
-				subject,
-				reg_dt,
-				division,
-				bo_no
-		FROM	reply
+		SELECT	r.comment_id,
+				r.me_id,
+				r.subject,
+				r.reg_dt,
+				r.division,
+				r.bo_no,
+				m.name
+		FROM	reply r
+		JOIN	member m
+		ON		r.me_id = m.me_id
 		WHERE	division = 'DR3'
 		AND		bo_no = #{boNo}
 		ORDER BY comment_id
