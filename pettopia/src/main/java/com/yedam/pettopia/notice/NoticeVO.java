@@ -20,5 +20,6 @@ public class NoticeVO {
 	private String meId;
 	
 	private MultipartFile partFile;
+	
 	private String searchKeyword;
 }

@@ -1,5 +1,9 @@
 package com.yedam.pettopia.admin;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -17,9 +21,10 @@ public class MemberVO {
 	private String addr;
 	private String addrDetail;
 
-
-	private String start;
-	private String end;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date start;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date end;
 	
 	private String[] searchPath;
 	

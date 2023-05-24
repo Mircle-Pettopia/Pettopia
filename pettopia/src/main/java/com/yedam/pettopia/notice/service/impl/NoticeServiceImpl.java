@@ -51,6 +51,12 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	//수정
 	public void updateNotice(NoticeVO noticeVO) {
+		
+		if (noticeVO.getPartFile() != null) {
+			String filename = FileUtil.fileupload(noticeVO.getPartFile());
+			noticeVO.setFiles(filename);
+		}
+		
 		noticeMapper.updateNotice(noticeVO);
 	}
 

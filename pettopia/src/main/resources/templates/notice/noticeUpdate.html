@@ -61,7 +61,7 @@
 							<dl>
 								<dt>제목</dt>
 								<dd>
-									<input type="hidden" name="noNo" th:value="*{noNo}">
+									<input type="hidden" id="noNo" name="noNo" th:value="*{noNo}">
 									<input type="text" name="title" placeholder="제목 입력"
 										th:value="*{title}" required>
 								</dd>
@@ -81,7 +81,7 @@
 										th:text="${noticeDetail.files}"></a> -->
 										
 										  <span>[[${noticeDetail.files }]]</span>
-               			 <a href='#this' name='file-delete'>삭제</a>
+               			 <a href="#this" name="file-delete" style="display: ${noticeDetail.files != null ? 'inline' : 'none'}">삭제</a>
                			 </dd>
                			<dd><input type="file" id="files" th:field="*{partFile}" style="display: none;"></dd>
 								
@@ -143,11 +143,11 @@
 			});
 			
 			
-			  $(document).ready(function() {
+				/* $(document).ready(function() {
 			        if ($("span").text().trim() === "") {
 			            $("a[name='file-delete']").hide();
 			        }
-			    });
+			    }); */
 			
 			
 			$(document).ready(function() {
@@ -164,6 +164,8 @@
 			 
 				
 				
+				
+				
 				$('a[name="file-delete"]').on('click', function(event) {
 					  event.preventDefault();
 					  var files = $(this).attr('href');
@@ -178,7 +180,7 @@
 					    success: function(data) {
 					      console.log(data);
 					      if (data === "success") {
-					        alert("삭제되었습니다.");
+					       
 					      }
 					    },
 					    error: function(reject) {
