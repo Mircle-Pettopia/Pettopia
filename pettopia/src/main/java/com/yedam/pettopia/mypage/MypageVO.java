@@ -52,8 +52,10 @@ public class MypageVO {
 	
 	//------------------------
 	private int price;			//상품금액 + 옵션추가금액
-	private String start;
-	private String end;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date start;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date end;
 	private int total;
 	private int prcCount;
 	private int shipCount;
