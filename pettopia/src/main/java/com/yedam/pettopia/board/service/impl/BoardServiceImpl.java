@@ -29,7 +29,8 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int insertKnowhowArticle(BoardVO vo) {
-		return boardMapper.insertKnowhowArticle(vo);
+		boardMapper.insertKnowhowArticle(vo);
+		return vo.getBoNo();
 	}
 
 	@Override

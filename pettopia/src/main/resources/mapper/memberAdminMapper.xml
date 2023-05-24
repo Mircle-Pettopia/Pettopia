@@ -18,7 +18,7 @@
 		OUT_YN,
 		ROLE
 		FROM member
-		ORDER BY me_id
+		ORDER BY SIGN_DT DESC
 	</select>
 
 
@@ -57,7 +57,7 @@
 				AND <![CDATA[sign_dt >= #{start}]]>
 			</if>
 			<if test="end != null and !end.equals('')">
-				AND <![CDATA[sign_dt <= #{end}]]>
+				AND <![CDATA[TRUNC(sign_dt) <= #{end}]]>
 			</if>
 		<if test="searchPath != null and searchPath.length > 0">
 				AND SIGN_PATH IN
@@ -67,6 +67,6 @@
 				</foreach>
 			</if>
 		</where>
-		ORDER BY ME_ID
+		ORDER BY SIGN_DT DESC
 	</select>
 </mapper>

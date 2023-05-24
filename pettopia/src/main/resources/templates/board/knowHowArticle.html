@@ -73,7 +73,7 @@
               </div>
               <div style="clear:both"></div>
               <div id="infoDiv">
-                <span th:text="${'작성자 : ' + Article.meId}"></span>
+                <span th:text="${'작성자 : ' + Article.name}"></span>
                 <span id="regDt" th:text="${'작성일 : ' +#dates.format(Article.regDt, 'yyyy-MM-dd HH:mm:ss')}"></span>
               </div>
               <div id="Viewer" th:utext="${ Article.subject }">
@@ -126,7 +126,7 @@
           for (i = 0; i < data.length; i++) {
             replys.innerHTML +=
               `<div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
-                <h5 style="display:inline-block;">작성자: ${data[i].meId} / 작성일:${dateChange(data[i].regDt)}</h5> 
+                <h5 style="display:inline-block;">작성자: ${data[i].name} / 작성일:${dateChange(data[i].regDt)}</h5> 
                 ${data[i].meId == user ? `<button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''}
                 <hr>
                 <div class="Viewer">${data[i].subject}
@@ -143,7 +143,6 @@
     }
     function deleteReply(commentId, meId) {
       if (meId == user) {
-        console.log("여기까진됨")
         $.ajax({
           url: "delKnowHowReply",
           method: "delete",
@@ -209,26 +208,31 @@
       let meId = GetUser();
       console.log(meId);
       console.log(replySubject.value);
-      $.ajax({
-        url: "insertKnowHowReply",
-        method: "POST",
-        async: false,
-        dataType: "JSON",
-        data: {
-          boNo: boNo.innerText,
-          subject: replySubject.value,
-          meId: meId
-        },
-        success: function (data) {
-          replySubject.value = "";
-          getReply();
-          alert("작성완료");
-        },
-        error: function (reject) {
-          console.log(reject);
-          alert("작성에러");
-        },
-      })
+      if (replySubject.value.trim() != "") { //빈칸 확인
+        $.ajax({
+          url: "insertKnowHowReply",
+          method: "POST",
+          async: false,
+          dataType: "JSON",
+          data: {
+            boNo: boNo.innerText,
+            subject: replySubject.value,
+            meId: meId
+          },
+          success: function (data) {
+            replySubject.value = "";
+            getReply();
+            Swal.fire('댓글 작성완료', '', 'success');
+          },
+          error: function (reject) {
+            console.log(reject);
+            Swal.fire('에러발생', '잠시후 다시 시도해주시기 바랍니다', 'error');
+          },
+        })
+      }
+      else {
+        Swal.fire('알림', '내용이 비어있습니다', 'info');
+      }
     }
 
     function GetUser() {

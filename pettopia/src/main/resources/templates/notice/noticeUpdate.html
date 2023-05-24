@@ -3,7 +3,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
 <head>
-<title>공지사항</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!--===============================================================================================-->
@@ -73,15 +72,21 @@
 							<textarea placeholder="내용 입력" name="contents"
 								th:text="*{contents}" required></textarea>
 						</div>
-					<!-- 	<div >
+						<br/>
+					<div >
 							<dl>
 								<dt id="files"></dt>
 								<dd>
-									<a th:href="@{/downloadFile(filepath=${noticeDetail.files})}"
-										th:text="${noticeDetail.files}"></a>
-								</dd>
+									<!-- <a th:href="@{/downloadFile(filepath=${noticeDetail.files})}"
+										th:text="${noticeDetail.files}"></a> -->
+										
+										  <span>[[${noticeDetail.files }]]</span>
+               			 <a href='#this' name='file-delete'>삭제</a>
+               			 </dd>
+               			<dd><input type="file" id="files" th:field="*{partFile}" style="display: none;"></dd>
+								
 							</dl>
-						</div> -->
+						</div>
 					</div>
 					<div class="bt_wrap">
 						<a><button type="submit" class="btn btnPush btnBlueGreen">수정</button></a>
@@ -136,6 +141,53 @@
 					ps.update();
 				});
 			});
+			
+			
+			  $(document).ready(function() {
+			        if ($("span").text().trim() === "") {
+			            $("a[name='file-delete']").hide();
+			        }
+			    });
+			
+			
+			$(document).ready(function() {
+				  $("a[name='file-delete']").on("click", function(e) {
+				    e.preventDefault();
+				    deleteFile($(this));
+				  });
+				});
+
+				function deleteFile(obj) {
+				  obj.parent().siblings().find("#files").removeAttr("style");
+				  obj.parent().remove();
+				}
+			 
+				
+				
+				$('a[name="file-delete"]').on('click', function(event) {
+					  event.preventDefault();
+					  var files = $(this).attr('href');
+					  var noNo = $('#noNo').val();
+					  $.ajax({
+					    url: "filesDelete",
+					    method: "POST",
+					    data: {
+					      noNo: noNo,
+					      files: files,
+					    },
+					    success: function(data) {
+					      console.log(data);
+					      if (data === "success") {
+					        alert("삭제되었습니다.");
+					      }
+					    },
+					    error: function(reject) {
+					      console.log(reject);
+					      alert("실패하였습니다.");
+					    },
+					  });
+					});
+				
 		</script>
 		<!--===============================================================================================-->
 		<script src="js/main.js"></script>

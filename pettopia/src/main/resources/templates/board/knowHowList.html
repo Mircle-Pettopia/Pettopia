@@ -143,7 +143,7 @@
               <div class="title">
                 <a href="#" onclick="openArticle(${data[i].boNo})">${data[i].title}</a>
               </div>
-              <div class="writer">${data[i].meId}</div>
+              <div class="writer">${data[i].name}</div>
               <div class="date" >${dateChange(data[i].regDt)}</div>
               <div class="count">${data[i].viewCnt}</div>
               `
@@ -188,7 +188,8 @@
       error: function (reject) {
       },
     })
-    return window.open('showKnowHow?boNo=' + boNo, "board");
+    location.href = 'showKnowHow?boNo=' + boNo
+    // return window.open('showKnowHow?boNo=' + boNo, "board");
   }
 
 

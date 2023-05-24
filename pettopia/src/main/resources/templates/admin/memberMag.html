@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8" />
 <title>Pettopia</title>
+<style>
+.mr-2, .ml-2 {
+	width: 250px;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -16,49 +21,66 @@
 							<h5 class="card-title">회원 관리</h5>
 							<table class="table table-borderless mt-5">
 								<tbody>
-					
-													<tr>
+
+									<tr>
 										<th class="text-center col-sm-1" scope="row">아이디</th>
 										<td class="col-sm-4"><input type="text"
 											class="form-control" id="searchId" /></td>
 										<th class="text-center col-sm-1" scope="row">이름</th>
 										<td class="col-sm-4"><input type="text"
 											class="form-control" id="searchNm" /></td>
-								
-											
-											
+
+
+
 									</tr>
 									<tr>
-										<th class="text-center" scope="row">가입일자</th>
-										
-												<td>
+										<th class="text-center col-sm-1" scope="row">등록일</th>
+										<td class="col-sm-10" colspan="3">
 											<div class="d-flex align-items-center">
-												<input type="date" class="form-control mr-2" id="start" name="start" />
-												<span class="mx-2">~</span> <input type="date"
-													class="form-control ml-2" id="end" name="end" />
+												<div class="btn-group me-4">
+													<button type="button"
+														class="btn btn-outline-primary square-button" id="1">
+														오늘</button>
+													<button type="button"
+														class="btn btn-outline-primary square-button" id="7">
+														1주일</button>
+													<button type="button"
+														class="btn btn-outline-primary square-button" id="30">
+														1개월</button>
+													<button type="button"
+														class="btn btn-outline-primary square-button" id="90">
+														3개월</button>
+												</div>
+												<div class="d-flex align-items-center">
+													<input type="date" class="form-control mr-2" id="start"
+														name="start" /> <span class="mx-2">~</span> <input
+														type="date" class="form-control ml-2" id="end" name="end" />
+												</div>
 											</div>
 										</td>
-										
-					
+									</tr>
+
+
+									<tr>
 										<th class="text-center" scope="row">가입경로</th>
 										<td id="PathTable">
-											<div class="d-flex" >
-												<div class="form-check me-3" style="margin-right: 2rem!important;">
+											<div class="d-flex">
+												<div class="form-check me-3"
+													style="margin-right: 2rem !important;">
 													<input class="form-check-input" type="checkbox"
-														id="selectAll" name="selectAll" />
-													<label class="form-check-label" for="selectAll">전체</label>
+														id="selectAll" name="selectAll" /> <label
+														class="form-check-label" for="selectAll">전체</label>
 												</div>
-												<div class="form-check me-3" style="margin-right: 2rem!important;" th:each="Path : ${code.SC}">
+												<div class="form-check me-3"
+													style="margin-right: 2rem !important;"
+													th:each="Path : ${code.SC}">
 													<input class="form-check-input" type="checkbox"
 														th:value="${Path.codCd}" th:id="${Path.codCd} + 'ck'"
-														name="chk" /> <label
-														class="form-check-label" th:for="${Path.codCd} + 'ck'"
-														th:text="${Path.codTitle}"></label>
+														name="chk" /> <label class="form-check-label"
+														th:for="${Path.codCd} + 'ck'" th:text="${Path.codTitle}"></label>
 												</div>
 											</div>
 										</td>
-
-
 									</tr>
 									<!-- <tr>
 										<th class="text-center" scope="row">탈퇴여부</th>
@@ -352,12 +374,94 @@
 		         
 		         //엑셀
 		           $("#excelBtn").click((ev) => {
+		        	   let listCnt = memberList.getData();
+		        	   if (listCnt.length < 1) {
+			                 Swal.fire({
+			                   icon: "error",
+			                   title: "리스트가 없습니다.",
+			                 });
+			                 return;
+			               }
 	                    const options = {
 	                        includeHiddenColumns: false,
 	                        fileName: "member_list",
 	                    };
+	                    Swal.fire({
+			                 title: "엑셀파일로 받아보시겠습니까?",
+			                 text: "원하지 않는다면 취소를 눌러주세요",
+			                 icon: "question",
+			                 showCancelButton: true,
+			                 confirmButtonColor: "#3085d6",
+			                 cancelButtonColor: "#d33",
+			                 confirmButtonText: "확인",
+			                 cancelButtonText: "취소",
+			               }).then((result) => {
+			                 if (result.isConfirmed) {
 	                    memberList.export("xlsx", options);
-	                });
+			                 }
+			                 });
+		           });
+		         
+		         
+	
+		         
+		         
+		         
+		         
+		           let date = new Date();
+		           //--기간버튼--
+		           $("#1").on("click", () => {
+		             start_date_change = document.getElementById("start").value =
+		               formattedDate(date);
+		             end_date_change = document.getElementById("end").value =
+		               formattedDate(date);
+		           });
+
+		           $("#7").on("click", () => {
+		             start_date_change = document.getElementById("start").value =
+		               lastWeek();
+		             end_date_change = document.getElementById("end").value =
+		               formattedDate(date);
+		           });
+
+		           $("#30").on("click", () => {
+		             start_date_change = document.getElementById("start").value =
+		               lastMonth();
+		             end_date_change = document.getElementById("end").value =
+		               formattedDate(date);
+		           });
+
+		           $("#90").on("click", () => {
+		             start_date_change = document.getElementById("start").value =
+		               threeMonth();
+		             end_date_change = document.getElementById("end").value =
+		               formattedDate(date);
+		           });
+
+		         
+		         
+		           //일주일전
+		           function lastWeek() {
+		               var d = new Date();
+		               var dayOfMonth = d.getDate();
+		               d.setDate(dayOfMonth - 7);
+		               return formattedDate(d);
+		             }
+		             //한달전
+		             function lastMonth() {
+		               var d = new Date();
+		               var monthOfYear = d.getMonth();
+		               d.setMonth(monthOfYear - 1);
+		               return formattedDate(d);
+		             }
+		             //세달전
+		             function threeMonth() {
+		               var d = new Date();
+		               var monthOfYear = d.getMonth();
+		               d.setMonth(monthOfYear - 3);
+		               return formattedDate(d);
+		             }
+
 		</script>
 	</div>
 </body>

@@ -94,7 +94,7 @@
     <!-- breadcrumb -->
     <div class="container">
       <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
           Home
           <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
@@ -115,22 +115,8 @@
 
                   </tbody>
                 </table>
+                <div class="" id="emptyAlert">비어있음</div>
               </div>
-
-              <!-- <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-                <div class="flex-w flex-m m-r-20 m-tb-5">
-                  <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon"
-                    placeholder="적립금" />
-
-                  <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-                    적립금
-                  </div>
-                </div>
-
-                <div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                  Update Cart
-                </div>
-              </div> -->
             </div>
           </div>
 
@@ -194,7 +180,27 @@
 
 
       function toOrder() {
-        location.href = "OrderMain";
+        let count = CartCount()
+        if (count == 0) {
+          Swal.fire({
+            title: '장바구니가 비어있어요!',
+            icon: 'info',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText:
+              '상품페이지로 가기',
+            cancelButtonText:
+              '취소',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              location.href = "ProductCategory"
+            }
+          })
+        }
+        else if (count >= 1) {
+          location.href = "OrderMain";
+        }
       }
 
       function GetUser() {
@@ -284,7 +290,9 @@
         `;
         let prodOverlapKey = '';
         //라인넣기
+        emptyAlert.innerHTML = '';
         for (let i = 0; i < data.length; i++) {
+
           if (prodOverlapKey != data[i].crtId) {
             console.log("drawing overlap")
             prodOverlapKey = data[i].crtId;
@@ -298,7 +306,7 @@
               </td>
 
               <td class="column-2">${data[i].prdtNm}<hr><span id="${data[i].crtId}Options"></span></td>
-              <td class="column-3"><span id = "${data[i].crtId}Price">${data[i].prdtPrc}</span><span>원</span></td>
+              <td class="column-3"><span id = "${data[i].crtId}Price">${AddComma(data[i].prdtPrc)}</span><span>원</span></td>
               <td class="column-4">
                 <div class="px-1 py-1 flex-w mx-auto">
                   <div class="border cl8 hov-btn3 trans-04 flex-c-m px-3" onclick="counter('-','${data[i].crtId}','CNT')">
@@ -316,11 +324,14 @@
           `
           }
           DomId(data[i].crtId + "Options").innerHTML += (data[i].optDetaNm == null ? "" : ("[" + data[i].optDetaNm + "] "));
-          DomId(data[i].crtId + "Price").innerText = DomId(data[i].crtId + "Price").innerText * 1 + data[i].addPrc * 1;
+          DomId(data[i].crtId + "Price").innerText = AddComma(RemoveComma(DomId(data[i].crtId + "Price").innerText) * 1 + data[i].addPrc * 1);
           comPrdtTotal(data[i].crtId);
         }
         if (data.length == 0) {
-          cartList.innerHTML = `<h2>장바구니에 상품이 없습니다</h2>`
+          emptyAlert.innerHTML = `<h2>장바구니에 상품이 없습니다</h2>`
+          sumPrice.innerText = '0'
+          FinalPrice.innerText = '0'
+          shipPrice.innerText = '0'
         }
       }
 
@@ -330,7 +341,7 @@
       }
 
 
-      function counter(UD, target, suf) {
+      function counter(UD, target, suf) {//up down(+,-) , 대상crtId, 접미어
         if (UD == '+') {
           DomId(target + suf).innerText = (DomId(target + suf).innerText) * 1 + 1
         }
@@ -341,15 +352,24 @@
         setAmount(target, DomId(target + suf).innerText);
       }
 
+      function AddComma(num) { //가격양식 맞추기
+        var regexp = /\B(?=(\d{3})+(?!\d))/g;
+        return num.toString().replace(regexp, ',');
+      };
+
+      function RemoveComma(str) {
+        return str.replace(/,/g, "");
+      }
 
       function comPrdtTotal(target) {
-        DomId(target + 'Total').innerText = DomId(target + 'Price').innerText * DomId(target + 'CNT').innerText;
+        shipPrice.innerText = '2,500'
+        DomId(target + 'Total').innerText = AddComma(RemoveComma(DomId(target + 'Price').innerText) * DomId(target + 'CNT').innerText);
         let prdtTotalElements = document.getElementsByClassName('prdtTotal');
         sumPrice.innerText = '0'
         for (let i = 0; i < prdtTotalElements.length; i++) {
-          sumPrice.innerText = (sumPrice.innerText * 1) + (prdtTotalElements[i].innerText * 1);
+          sumPrice.innerText = AddComma((RemoveComma(sumPrice.innerText) * 1) + (RemoveComma(prdtTotalElements[i].innerText) * 1));
         }
-        FinalPrice.innerText = sumPrice.innerText * 1 + shipPrice.innerText * 1;
+        FinalPrice.innerText = AddComma(RemoveComma(sumPrice.innerText) * 1 + RemoveComma(shipPrice.innerText) * 1);
       }
     </script>
     <!--test============================= -->
