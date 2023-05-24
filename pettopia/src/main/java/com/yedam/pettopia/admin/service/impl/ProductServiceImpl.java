@@ -157,10 +157,11 @@ public class ProductServiceImpl implements ProductService {
 		// 상품 update
 		int result = productMapper.updatePrd(vo);
 		if (result == 1) {
+			// 기존 이미지 삭제
+			productMapper.deletePrdImg(vo);
+			
 			// 이미지 업로드
 			if (vo.getImg() != null) {
-				// 기존 이미지 삭제
-				productMapper.deletePrdImg(vo);
 				
 				for (int i = 0; i < vo.getImg().length; i++) {
 					String filename = FileUtil.fileupload(vo.getImg()[i]);
