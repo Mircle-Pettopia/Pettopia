@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.pettopia.notice.Criteria;
 import com.yedam.pettopia.notice.NoticeVO;
@@ -71,5 +72,13 @@ public class NoticeController {
 	    int noticeNo = Integer.parseInt(noNo);
 	    noticeService.deleteNotice(noticeNo);
 	    return "redirect:/noticeList";
+	}
+	
+	//수정페이지 파일 삭제
+	@PostMapping("filesDelete")
+	@ResponseBody
+	public String fileDelete(NoticeVO noticeVO) {
+		  noticeService.fileDelete(noticeVO);
+		  return "success";
 	}
 }

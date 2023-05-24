@@ -20,6 +20,10 @@
 .starR.on {
 	background-position: 0 0;
 }
+
+.mr-2, .ml-2 {
+	width: 250px;
+}
 </style>
 <title>Pettopia</title>
 </head>
@@ -50,16 +54,55 @@
 											class="form-control" id="ordtId" /></td>
 									</tr>
 
-									<tr>
-										<th class="text-center" scope="row" style="font-size: 14.7px;">후기등록일</th>
-										<td>
-											<div class="d-flex align-items-center">
+
+
+
+            <tr>
+                      <th class="text-center col-sm-1" scope="row">후기등록일</th>
+                      <td class="col-sm-10" colspan="3">
+                        <div class="d-flex align-items-center">
+                          <div class="btn-group me-4">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="1"
+                            >
+                              오늘
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="7"
+                            >
+                              1주일
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="30"
+                            >
+                              1개월
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary square-button"
+                              id="90"
+                            >
+                              3개월
+                            </button>
+                          </div>
+                          <div class="d-flex align-items-center">
+                           
 												<input type="date" class="form-control mr-2" id="start" />
 												<span class="mx-2">~</span> <input type="date"
 													class="form-control ml-2" id="end" />
-											</div>
-										</td>
-									</tr>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+
+
+
 
 								</tbody>
 							</table>
@@ -128,6 +171,8 @@
 											id="editor" cols="60" rows="10"></textarea></td>
 											
 								</tr>
+								
+								
 							</table>
 				
 							<!-- 	<div class="my-4">
@@ -225,6 +270,38 @@
 					},
 				}, ],
 			});
+			
+			
+			
+			   //엑셀
+	           $("#excelBtn").click((ev) => {
+	        	   let listCnt = reviewList.getData();
+	        	   if (listCnt.length < 1) {
+		                 Swal.fire({
+		                   icon: "error",
+		                   title: "리스트가 없습니다.",
+		                 });
+		                 return;
+		               }
+              const options = {
+                  includeHiddenColumns: false,
+                  fileName: "reviewList_list",
+              };
+              Swal.fire({
+		                 title: "엑셀파일로 받아보시겠습니까?",
+		                 text: "원하지 않는다면 취소를 눌러주세요",
+		                 icon: "question",
+		                 showCancelButton: true,
+		                 confirmButtonColor: "#3085d6",
+		                 cancelButtonColor: "#d33",
+		                 confirmButtonText: "확인",
+		                 cancelButtonText: "취소",
+		               }).then((result) => {
+		                 if (result.isConfirmed) {
+              reviewList.export("xlsx", options);
+		                 }
+		                 });
+	           });
 
 			// 날짜 변환
 			function formattedDate(timestamp) {
@@ -323,6 +400,62 @@
 			});
 			
 			
+	           let date = new Date();
+	           //--기간버튼--
+	           $("#1").on("click", () => {
+	             start_date_change = document.getElementById("start").value =
+	               formattedDate(date);
+	             end_date_change = document.getElementById("end").value =
+	               formattedDate(date);
+	           });
+
+	           $("#7").on("click", () => {
+	             start_date_change = document.getElementById("start").value =
+	               lastWeek();
+	             end_date_change = document.getElementById("end").value =
+	               formattedDate(date);
+	           });
+
+	           $("#30").on("click", () => {
+	             start_date_change = document.getElementById("start").value =
+	               lastMonth();
+	             end_date_change = document.getElementById("end").value =
+	               formattedDate(date);
+	           });
+
+	           $("#90").on("click", () => {
+	             start_date_change = document.getElementById("start").value =
+	               threeMonth();
+	             end_date_change = document.getElementById("end").value =
+	               formattedDate(date);
+	           });
+
+	         
+	         
+	           //일주일전
+	           function lastWeek() {
+	               var d = new Date();
+	               var dayOfMonth = d.getDate();
+	               d.setDate(dayOfMonth - 7);
+	               return formattedDate(d);
+	             }
+	             //한달전
+	             function lastMonth() {
+	               var d = new Date();
+	               var monthOfYear = d.getMonth();
+	               d.setMonth(monthOfYear - 1);
+	               return formattedDate(d);
+	             }
+	             //세달전
+	             function threeMonth() {
+	               var d = new Date();
+	               var monthOfYear = d.getMonth();
+	               d.setMonth(monthOfYear - 3);
+	               return formattedDate(d);
+	             }
+
+			
+			
 			//초기화
 			$(document).on("click", "#resetBtn", function() {
 				let meId = $("#searchId").val("");
@@ -343,15 +476,6 @@
 				});
 			});
 			
-	         //엑셀
-	           $("#excelBtn").click((ev) => {
-                 const options = {
-                     includeHiddenColumns: false,
-                     fileName: "review_list",
-                 };
-                 reviewList.export("xlsx", options);
-             });
-	         
 	         
 	           //삭제버튼
 	        $(document).on("click", "#delBtn", function(e) {
@@ -381,6 +505,16 @@
 	        function closeModal() {
 	            $('#detailModal').modal('hide'); // 모달 숨기기
 	        }
+	        
+	        
+	     
+	        
+	        CKeditor.disableAutoInline = true;
+
+	     // CKEditorSuperBuild2.js 파일 로드
+	     CKeditor.replace('editor', {
+	       readOnly: true
+	     });
 		</script>
 	</div>
 </body>

@@ -66,6 +66,7 @@
 		UPDATE notice
 			SET title = #{title},
 				contents = #{contents}
+				files = #{files}
 			WHERE no_no = #{noNo}
 	
 	</update>
@@ -81,4 +82,12 @@
 	<delete id="deleteNotice" parameterType="int">
 		DELETE FROM notice WHERE no_no=#{noNo}
 	</delete>
+	
+	<!-- 파일 삭제 -->
+	 <update id="fileDelete" parameterType="NoticeVO">
+        UPDATE notice
+        SET files = null
+        WHERE no_no = #{noNo}
+    </update>
+	
 </mapper>
