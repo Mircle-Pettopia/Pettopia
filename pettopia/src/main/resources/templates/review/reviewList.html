@@ -5,6 +5,9 @@
 <head>
 <title>Pettopia</title>
 <meta charset="UTF-8" />
+</head>
+<body>
+<div layout:fragment="content">
 <style>
 #backColor {
 	margin-top: 30px;
@@ -106,9 +109,8 @@ td, tr, th {
 	min-height: 300px;
 }
 </style>
-</head>
-<body>
-	<div layout:fragment="content">
+
+	
 		<div class="container">
 			<div class="row">
 				<th:block th:replace="/layout/navbar :: navbarFragment"></th:block>
@@ -299,4 +301,3 @@ td, tr, th {
 	</div>
 </body>
 </html>
-
