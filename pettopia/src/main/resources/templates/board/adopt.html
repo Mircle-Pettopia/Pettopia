@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout}">
 <html lang="ko" itemscope itemtype="http://schema.org/WebPage">
+
 <head>
   <title>Pettopia</title>
   <meta charset="UTF-8" />
@@ -15,26 +16,33 @@
         width: 50%;
       }
 
-      .customBtn{
+      .customBtn {
         width: 100px !important;
         font-size: 13px !important;
         height: 50px !important;
       }
+
       td img {
-          width: 100px;
+        width: 100px;
       }
-      th, td {
+
+      th,
+      td {
         text-align: center;
       }
-      td, tr, th{
+
+      td,
+      tr,
+      th {
         vertical-align: middle !important;
       }
-      label{
+
+      label {
         display: inline-block !important;
         margin-right: 10px;
       }
 
-      select{
+      select {
         width: 120px !important;
         padding: 5px !important;
         font-size: 11px !important;
@@ -43,118 +51,114 @@
 </head>
 
 <!--<class="animsition">-->
-    <div class="container">
-      
-      <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
-          Home
-          <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-        </a>
-        <span class="stext-109 cl4"> 분양게시판 </span>
+<div class="container">
+
+  <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+    <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+      Home
+      <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+    </a>
+    <span class="stext-109 cl4"> 분양게시판 </span>
+  </div>
+
+  <div class="row">
+    <th:block th:replace="layout/boardNavbar :: boardNavFragment"></th:block>
+
+    <div class="col-md-8 col-lg-10 p-b-150 m-t-50">
+
+      <div class="board_title">
+        <h1><span style="font-weight: bold; color: rgb(159, 204, 240);">| </span>분양게시판</h1>
       </div>
-      
-      <div class="row">
-      <th:block th:replace="layout/boardNavbar :: boardNavFragment"></th:block>
+      <!--search-->
+      <div style="width: 100%; margin-bottom: 20px !important;">
+        <!--<div style="display: inline-block; width: 40%;">-->
+        <label>
+          동물선택 :
+          <select onchange="category_Change(value)" id="step1">
+            <option value="">동물선택</option>
+            <option th:each="balist : ${code.BA}" th:value="${balist?.codCd}" th:utext="${balist?.codTitle}"></option>
+          </select>
+        </label>
 
-      <div class="col-md-8 col-lg-10 p-b-150 m-t-50">
+        <label>
+          품종선택 :
+          <select id="step2">
+            <option value="">품종선택</option>
+          </select>
+        </label>
 
-        <div class="board_title">
-          <h1><span style="font-weight: bold; color: rgb(159, 204, 240);">| </span>분양게시판</h1>
+        <label>
+          지역선택 :
+          <select id="ct">
+            <option value="">지역선택</option>
+            <option th:each="aalist : ${code.AA}" th:value="${aalist?.codCd}" th:utext="${aalist?.codTitle}"
+              name="city"></option>
+          </select>
+        </label>
+
+        <label>
+          성별선택 :
+          <select id="se">
+            <option value="">성별선택</option>
+            <option value="">암컷&수컷</option>
+            <option th:each="sxlist : ${code.SX}" th:value="${sxlist?.codCd}" th:utext="${sxlist?.codTitle}" name="sex">
+            </option>
+          </select>
+        </label>
+
+        <div id="rightSearch">
+          <button type="button" class="btn btnPush btnLightBlue" style="margin: auto; width: 60px !important;"
+            onclick="setkeyword();">검색</button>
         </div>
-        <!--search-->
-        <div style="width: 100%; margin-bottom: 20px !important;">
-          <!--<div style="display: inline-block; width: 40%;">-->
-            <label>
-              동물선택 : 
-              <select onchange="category_Change(value)" id="step1">
-                <option value="">동물선택</option>
-                <option th:each="balist : ${code.BA}"
-                        th:value="${balist?.codCd}"
-                        th:utext="${balist?.codTitle}" ></option>
-              </select>
-            </label>
+      </div>
 
-            <label>
-              품종선택 : 
-              <select id="step2">
-                <option value="">품종선택</option>
-              </select>
-            </label>
-
-            <label>
-              지역선택 : 
-              <select id="ct">
-                <option value="">지역선택</option>
-                <option th:each="aalist : ${code.AA}"
-                        th:value="${aalist?.codCd}" 
-                        th:utext="${aalist?.codTitle}" name="city"></option>
-              </select>
-            </label>
-
-            <label>
-              성별선택 : 
-              <select id="se">
-                <option value="">성별선택</option>
-                <option value="">암컷&수컷</option>
-                <option th:each="sxlist : ${code.SX}"
-                        th:value="${sxlist?.codCd}" 
-                        th:utext="${sxlist?.codTitle}" name="sex"></option>
-              </select>
-            </label>
-
-            <div id="rightSearch">
-              <button type="button" class="btn btnPush btnLightBlue"
-                      style="margin: auto; width: 60px !important;" onclick="setkeyword();">검색</button>
-            </div>
-        </div>
-
-        <div style="margin-bottom: 10px; text-align: end">
-          <div class="board_list_wrap">
-            <table class="table">
-              <colgroup>
-                <col width="12%">
-                <col width="14%">
-                <col width="11%">
-                <col width="28%">
-                <col width="10%">
-                <col width="10%">
-                <col width="15%">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>분양여부</th>
-                  <th>품종</th>
-                  <th>종류</th>
-                  <th>제목</th>
-                  <th>구분</th>
-                  <th>분양지역</th>
-                  <th>작성일시</th>
-                </tr>
-              </thead>
-              <!--DB data 받는 곳!!!-->
-              <tbody id="lists"></tbody>
-            </table>
+      <div style="margin-bottom: 10px; text-align: end">
+        <div class="board_list_wrap">
+          <table class="table">
+            <colgroup>
+              <col width="12%">
+              <col width="14%">
+              <col width="11%">
+              <col width="28%">
+              <col width="10%">
+              <col width="10%">
+              <col width="15%">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>분양여부</th>
+                <th>품종</th>
+                <th>종류</th>
+                <th>제목</th>
+                <th>구분</th>
+                <th>분양지역</th>
+                <th>작성일시</th>
+              </tr>
+            </thead>
+            <!--DB data 받는 곳!!!-->
+            <tbody id="lists"></tbody>
+          </table>
           <!--paging-->
           <div class="board_page" id="pagenav"></div>
           <div class="bt_wrap" id="bt_warp"></div>
         </div>
       </div> <!-- end div class="board_wrap"-->
 
-        <!-- Back to top -->
-        <div class="btn-back-to-top" id="myBtn">
-          <span class="symbol-btn-back-to-top">
-            <i class="zmdi zmdi-chevron-up"></i>
-          </span>
-        </div>
-        
+      <!-- Back to top -->
+      <div class="btn-back-to-top" id="myBtn">
+        <span class="symbol-btn-back-to-top">
+          <i class="zmdi zmdi-chevron-up"></i>
+        </span>
       </div>
+
     </div>
-    
-    <script th:inline="javascript">
-      let code = /*[[${code}]]*/
-      
+  </div>
+
+  <script th:inline="javascript">
+    let code = /*[[${code}]]*/
+
       // select 하위 select
-      function category_Change(val){
+      function category_Change(val) {
         //2차 카테고리
         // 강아지
         var dg = ["품종선택"];
@@ -174,74 +178,74 @@
         var val = "";
         var select_item = $('#step1').val();
 
-        if(select_item == "DG"){    //강아지
+        if (select_item == "DG") {    //강아지
           val = [""];
           change_item = dg;
           /*[# th:each="article, st : ${code.DG}"]*/
           idx = /*[[${st.index}]]*/;
           val.push(/*[[${article.codCd}]]*/);
           /*[/]*/
-        } else if(select_item == "CT") {  //고양이
+        } else if (select_item == "CT") {  //고양이
           val = [""];
           change_item = ct;
           /*[# th:each="article, st : ${code.CT}"]*/
           idx = /*[[${st.index}]]*/;
           val.push(/*[[${article.codCd}]]*/);
           /*[/]*/
-        } else if(select_item == "") {
+        } else if (select_item == "") {
           change_item = basic;
           val = [""];
         };
 
         $('#step2').empty();  //선택된 엘리먼트의 내부 요소를 지운다.
-        for(var i = 0; i < change_item.length ; i++){
+        for (var i = 0; i < change_item.length; i++) {
           var option = $("<option value=" + val[i] + ">" + change_item[i] + "</option>");
           $('#step2').append(option);
         };
       }; // end category_Change
 
-      let ba = '';
-      let bs = '';
-      let se = '';
-      let ct = '';
+    let ba = '';
+    let bs = '';
+    let se = '';
+    let ct = '';
 
-      //검색버튼
-      function setkeyword(){
-        ba = $('#step1').val();
-        bs = $('#step2').val();
-        se = $('#se').val();
-        ct = $('#ct').val();
-        $('#lists').empty();  //tbody 초기화
-        showLists();
-      }
+    //검색버튼
+    function setkeyword() {
+      ba = $('#step1').val();
+      bs = $('#step2').val();
+      se = $('#se').val();
+      ct = $('#ct').val();
+      $('#lists').empty();  //tbody 초기화
+      showLists();
+    }
 
-      //목록조회 ajax
-      const showLists = (page) => {
-        let data = {
-          petType : ba,
-          breed : bs,
-          sex : se,
-          city : ct,
-          page : page
-        };
-        
-        if(page == null){
-          page = 1;
-        };
+    //목록조회 ajax
+    const showLists = (page) => {
+      let data = {
+        petType: ba,
+        breed: bs,
+        sex: se,
+        city: ct,
+        page: page
+      };
 
-        $.ajax({
-          url : 'adoptList',
-          method : 'post',
-          async: false,
-          data		:  data, 
-          success : (data)=>{
-            //이거 넣으니까 페이징 진행할 때 목록이 append가 되지 않는다 0ㅇ0..?
-            lists.innerHTML = '';
-            
-            if(data != ""){
-              for(let i = 0; i < data.length ; i++){
-                let status = data[i].status;
-                lists.innerHTML += `
+      if (page == null) {
+        page = 1;
+      };
+
+      $.ajax({
+        url: 'adoptList',
+        method: 'post',
+        async: false,
+        data: data,
+        success: (data) => {
+          //이거 넣으니까 페이징 진행할 때 목록이 append가 되지 않는다 0ㅇ0..?
+          lists.innerHTML = '';
+
+          if (data != "") {
+            for (let i = 0; i < data.length; i++) {
+              let status = data[i].status;
+              lists.innerHTML += `
                     <tr>
                       <td><span id="ColorChg_${data[i].boNo}">${status}</span></td>
                       <td>${data[i].petType}</td>
@@ -257,159 +261,161 @@
                       <td>${data[i].city}</td>
                       <td>${dateChange(data[i].regDt)}</td>`;
 
-                if(status == "분양완료"){
-                  $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
-                } else if(status == "분양중"){
-                  $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
-                } else {
-                  $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
-                }
-              } 
-            } else {
-                lists.innerHTML = `
+              if (status == "분양완료") {
+                $(`#ColorChg_${data[i].boNo}`).css('color', 'green');
+              } else if (status == "분양중") {
+                $(`#ColorChg_${data[i].boNo}`).css('color', 'blue');
+              } else {
+                $(`#ColorChg_${data[i].boNo}`).css('color', 'red');
+              }
+            }
+          } else {
+            lists.innerHTML = `
                     <tr>
                       <td colspan="8">
                         <div style="height: 600px;"><p style="color:gray; font-size:20px;"><strong>조회할 정보가 없습니다.</strong></p><div>
                       </td>
                     </tr>`;
-            }
-
-          },
-          error : (err) => {
-            console.log(err);
           }
-        })
 
-        $.ajax({
-          url: "adoptMaxPage",
-          method: "GET",
-          async: false,
-          data: data,
-          success: function (data) {
-            //console.log(data);
-            paging(data, 10, 5, page);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
 
-          },
-          error: function (reject) {
-            console.log(reject);
-            alert("에러");
-          },
-        })
-      }; // end showLists
-      showLists();
+      $.ajax({
+        url: "adoptMaxPage",
+        method: "GET",
+        async: false,
+        data: data,
+        success: function (data) {
+          //console.log(data);
+          paging(data, 10, 5, page);
 
-      //조회수증가
-      function openArticle(boNo) {
-        $.ajax({
-          url: "knowHowAddHit",
-          method: "GET",
-          async: false,
-          data: {
-            boNo: boNo
-          },
-          success: function (data) {
-          },
-          error: function (reject) {
-          },
-        });
-      }
+        },
+        error: function (reject) {
+          console.log(reject);
+          alert("에러");
+        },
+      })
+    }; // end showLists
+    showLists();
 
-      loginOnly()
-      function loginOnly() {
-        let Uid = GetUser();
-        if (Uid != "" && Uid != null) {
-          console.log(GetUser())
-          bt_warp.innerHTML = `<div style="margin:0 auto; display:inline-block;">
+    //조회수증가
+    function openArticle(boNo) {
+      $.ajax({
+        url: "knowHowAddHit",
+        method: "GET",
+        async: false,
+        data: {
+          boNo: boNo
+        },
+        success: function (data) {
+        },
+        error: function (reject) {
+        },
+      });
+    }
+
+    loginOnly()
+    function loginOnly() {
+      let Uid = GetUser();
+      if (Uid != "" && Uid != null) {
+        console.log(GetUser())
+        bt_warp.innerHTML = `<div style="margin:0 auto; display:inline-block;">
                                   <button type="button" onclick="location.href='adoptWriter'" class="btn btnPush btnBlueGreen customBtn">
                                     등록
                                   </button>
                               </div>`
-          myboard.innerHTML += `<li class="p-b-7">
+        myboard.innerHTML += `<li class="p-b-7">
                                     <a href="mypost" class="flex-w flex-sb-m stext-115 cl6 hov-cl1 trans-04 p-tb-2">
                                         내가 쓴 글보기
                                     </a>
                                 </li>`
-        }
       }
+    }
 
-      //날짜 변환함수
-      function dateChange(data) {
-        if (data != null && data != 0) {
-          let newData = new Date(data);
-          let result = newData.getFullYear() + "-" +
-            (newData.getMonth() < 10
-              ? "0" + (newData.getMonth() + 1)
-              : newData.getMonth() + 1) +                                                         //참고 : https://gurtn.tistory.com/65
-            "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
-          return result;
-        } else return null;
-      };
-
-      function GetUser() {
-        let result = null;
-        $.ajax({
-          url: "getUser",
-          method: "GET",
-          async: false,
-          success: function (data) {
-            console.log(data);
-            result = data;
-          },
-          error: function (reject) {
-            console.log(reject);
-            console.log("로그인되어있지않음");
-          },
-        })
+    //날짜 변환함수
+    function dateChange(data) {
+      if (data != null && data != 0) {
+        let newData = new Date(data);
+        let result = newData.getFullYear() + "-" +
+          (newData.getMonth() < 10
+            ? "0" + (newData.getMonth() + 1)
+            : newData.getMonth() + 1) +                                                         //참고 : https://gurtn.tistory.com/65
+          "-" + (newData.getDate() < 10 ? "0" + newData.getDate() : newData.getDate()) + " " + ('0' + newData.getHours()).slice(-2) + ":" + ('0' + newData.getMinutes()).slice(-2);
         return result;
+      } else return null;
+    };
+
+    function GetUser() {
+      let result = null;
+      $.ajax({
+        url: "getUser",
+        method: "GET",
+        async: false,
+        success: function (data) {
+          console.log(data);
+          result = data;
+        },
+        error: function (reject) {
+          console.log(reject);
+          console.log("로그인되어있지않음");
+        },
+      })
+      return result;
+    }
+
+    function paging(totalData, dataPerPage, pageCount, currentPage) {
+      console.log("currentPage : " + currentPage);
+
+      totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
+
+      if (totalPage < pageCount) {
+        pageCount = totalPage;
       }
 
-      function paging(totalData, dataPerPage, pageCount, currentPage) {
-        console.log("currentPage : " + currentPage);
+      let pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
+      let last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
 
-        totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
-
-        if (totalPage < pageCount) {
-          pageCount = totalPage;
-        }
-
-        let pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
-        let last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
-
-        if (last > totalPage) {
-          last = totalPage;
-        }
-
-        let first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
-        let next = last + 1;
-        let prev = first - 1;
-
-        let pageHtml = pagenav.innerHTML;
-        pagenav.innerHTML = '';
-        if (prev > 0) {
-          pagenav.innerHTML += `<a class="bt prev" onclick="showLists(${prev});">＜</a>`;
-        }
-
-        //페이징 번호 표시 
-        for (var i = first; i <= last; i++) {
-          if (currentPage == i) {
-            pagenav.innerHTML +=
-              `<a class="num on">${i}</a>`;
-          } else {
-            pagenav.innerHTML += `<a onclick="showLists(${i});" class="num o">${i}</a>`;
-          }
-        }
-
-        if (last < totalPage) {
-          pagenav.innerHTML += `<a onclick="showLists(${next});" class="bt next">＞</a>`;
-        }
-
-        $("#pagingul").html(pagenav.innerHTML);
-        let displayCount = "";
-        displayCount = "현재 1 - " + totalPage + " 페이지 / " + totalData + "건";
-        $("#displayCount").text(displayCount);
+      if (last > totalPage) {
+        last = totalPage;
       }
-    </script>
-  </div>
-  </body>
+
+      let first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
+      let next = last + 1;
+      let prev = first - 1;
+
+      let pageHtml = pagenav.innerHTML;
+      pagenav.innerHTML = '';
+      if (prev > 0) {
+        pagenav.innerHTML += `<a class="bt prev" onclick="showLists(${prev});">＜</a>`;
+      }
+
+      //페이징 번호 표시 
+      for (var i = first; i <= last; i++) {
+        if (currentPage == i) {
+          pagenav.innerHTML +=
+            `<a class="num on">${i}</a>`;
+        } else {
+          pagenav.innerHTML += `<a onclick="showLists(${i});" class="num o">${i}</a>`;
+        }
+      }
+
+      if (last < totalPage) {
+        pagenav.innerHTML += `<a onclick="showLists(${next});" class="bt next">＞</a>`;
+      }
+
+      $("#pagingul").html(pagenav.innerHTML);
+      let displayCount = "";
+      displayCount = "현재 1 - " + totalPage + " 페이지 / " + totalData + "건";
+      $("#displayCount").text(displayCount);
+    }
+  </script>
+</div>
+</body>
+
 </html>
+
 </html>

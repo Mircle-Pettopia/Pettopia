@@ -76,14 +76,15 @@
             <h1><span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>주문하기</h1>
             <!-- 주문정보 -->
             <div style="margin-top: 20px;">
-              <h5 style="margin-bottom: 15px;"><strong>수령자 정보</strong></h5>
+              <h5 style="margin-bottom: 15px;"><strong>수령자 정보</strong></h5><span style="font-size: 15px;"><span
+                  style="color: red;">*</span>가 붙은건 필수입력정보입니다</span>
               <table class="table">
                 <colgroup>
                   <col width="40%">
                   <col width="60%">
                 </colgroup>
                 <tr>
-                  <th>수령자주소</th>
+                  <th>수령자주소 <span style="color: red;">*</span></th>
                   <td>
 
                     <span>우편번호:</span><input type="text" id="post" onclick="sample6_execDaumPostcode()" readonly>
@@ -95,12 +96,13 @@
                   </td>
                 </tr>
                 <tr>
-                  <th>받으시는분</th>
-                  <td><input type="text" id="reciever"></td>
+                  <th>받으시는분 <span style="color: red;">*</span></th>
+                  <td><input type="text" id="reciever" placeholder="홍길동"></td>
                 </tr>
                 <tr>
-                  <th>연락처</th>
-                  <td><input type="text" id="tel"></td>
+                  <th>연락처 <span style="color: red;">*</span></th>
+                  <td><input type="text" id="tel" name="phone" maxlength='13' autocomplete="off"
+                      placeholder="010-1234-5678" oninput="autoHyphen2(this)"></td>
                 </tr>
                 <tr>
                   <th>배송요청사항</th>
@@ -149,10 +151,10 @@
                 </tbody>
                 <tfoot>
                   <tr class="trColor">
-                    <td colspan="2"></td>
-                    <td colspan="4" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
-                      상품구매금액 <span id="sumPrice"></span>+ 배송비 <span id="shipPrice">2500</span><span>원</span> = 합계 :
-                      <span class="accent" id="FinalPrice"></span><span class="accent">원</span>
+                    <td colspan="12" style="text-align: right; padding-top: 10px; padding-bottom: 10px;">
+                      상품구매금액 <span class="Pnumber" id="sumPrice"></span><span>원</span>+ 배송비 <span id="shipPrice"
+                        class="Pnumber">2500</span><span>원</span> = 합계 :
+                      <span class="accent Pnumber" id="FinalPrice"></span><span class="accent">원</span>
                     </td>
                   </tr>
                 </tfoot>
@@ -161,7 +163,7 @@
 
 
 
-            
+
 
           </div>
         </div>
@@ -176,14 +178,14 @@
                 <h3 style="text-align: right;">
 
                   <span style="text-align: left;display: inline-block; float: left;">상품합계:</span>
-                  <span id="NavSumPrice"></span><span>원</span>
+                  <span class="Pnumber" id="NavSumPrice"></span><span>원</span>
                   <br>
                   <span style="text-align: left;display: inline-block; float: left;">배송비:</span>
-                  <span id="NavShipPrice"></span><span>원</span>
+                  <span class="Pnumber" id="NavShipPrice"></span><span>원</span>
                   <br>
                   <hr>
                   <span style="text-align: left;display: inline-block; float: left;">결재금액:</span>
-                  <span id="NavFinalPrice"></span><span>원</span>
+                  <span class="Pnumber" id="NavFinalPrice"></span><span>원</span>
               </div>
               </h3>
               <hr>
@@ -203,7 +205,7 @@
                 </label>
               </div>
               <hr>
-              <button class="btn-success btn-lg btn-block" onclick="requestPay();">결재하기!</button>
+              <button class="btn-success btn-lg btn-block" onclick="requestPayCheckExc();">결재하기!</button>
             </div>
           </div>
 
@@ -235,6 +237,22 @@
           CartObject[i].prc = DomId(itemId).innerText;
         }
       }
+      function AddComma(num) { //가격양식 맞추기
+        var regexp = /\B(?=(\d{3})+(?!\d))/g;
+        return num.toString().replace(regexp, ',');
+      };
+
+      function AllAddComma() {
+        let allPriceNumbers = document.getElementsByClassName("Pnumber");
+        for (let i = 0; i < allPriceNumbers.length; i++) {
+          console.log(AddComma(allPriceNumbers[i].innerText));
+          allPriceNumbers[i].innerText = AddComma(allPriceNumbers[i].innerText);
+        }
+      }
+
+      function RemoveComma(str) {
+        return str.replace(/,/g, "");
+      }
 
       getCart(); // 해당사용자의 장바구니 목록가져오기
       function getCart() {
@@ -253,6 +271,7 @@
             console.log('그리기완료');
             sumCartOption()
             console.log('제품옵션가격 업데이트완료')
+            AllAddComma();
           },
           error: function (reject) {
             console.log(reject);
@@ -278,10 +297,10 @@
                   <strong><a href="#" class="fontColor">${data[i].prdtNm}</a></strong>
                   <div id="${data[i].crtId}Options">옵션</div>
                 </td>
-                <td style="text-align: center;" class="price" id="${data[i].crtId}Price">${data[i].prdtPrc}</td>
+                <td style="text-align: center;" ><span class="price Pnumber" id="${data[i].crtId}Price">${data[i].prdtPrc}</span><span>원</span></td>
                 <td style="text-align: center;" id="${data[i].crtId}CNT">${data[i].cnt}</td>
-                <td style="text-align: center;"  >
-                  <span id="${data[i].crtId}Total" class="prdtTotal">총가격</span><span>원</span>
+                <td style="text-align: center;" >
+                  <span id="${data[i].crtId}Total" class="prdtTotal Pnumber">총가격</span><span>원</span>
                 </td>
               </tr>`
           }
@@ -397,6 +416,16 @@
         }).open();
       }; // END 다음 카카오 API 
     </script>
+    <script>
+      //연락처 자동하이픈 입력기
+      const autoHyphen2 = (target) => {
+        target.value = target.value
+          .replace(/[^0-9]/g, '')
+          .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+      };
+
+
+    </script>
 
     <!--결재============================ -->
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -404,16 +433,35 @@
       src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
     <script>//결재 API
+
+      function requestPayCheckExc() {
+        if (post.value.trim() == "" || addr.value.trim() == "" || addrDtl.value.trim() == "") {
+          Swal.fire('필수입력 항목이 비어있습니다', '수령지 주소를 입력해주세요', 'info');
+        }
+        else if (reciever.value.trim() == "") {
+          Swal.fire('필수입력 항목이 비어있습니다', '받으시는분을 입력해주세요', 'info');
+        }
+        else if (tel.value.trim() == "") {
+          Swal.fire('필수입력 항목이 비어있습니다', '연락처를 입력해주세요', 'info');
+        }
+        else {
+          requestPay()
+        }
+      }
+
+
+
       var IMP = window.IMP; // 생략가능
       IMP.init("imp58116322");
       function requestPay() {
+
         IMP.request_pay({
           pg: pay_method,//카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
           pay_method: "card",
           merchant_uid: "pettopia" + Date(),
           name: OrderNm,
           buyer_name: reciever.value,
-          amount: FinalPrice.innerText,
+          amount: RemoveComma(FinalPrice.innerText),
           currency: "KRW",
           buyer_tel: tel.value,
           buyer_addr: addr.value + addrref.value + addrDtl,
@@ -429,7 +477,7 @@
             })
           }
           else {
-            alert("결재에 실패하였습니다 다시시도해주십시오")
+            Swal.fire('', '결제에 실패하였습니다 다시 시도해주십시오', 'error');
           }
         });
       };

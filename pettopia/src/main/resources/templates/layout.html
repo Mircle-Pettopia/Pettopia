@@ -176,10 +176,10 @@
 					<img src="/images/icons/icon-close2.png" alt="CLOSE">
 				</button>
 
-					<button class="flex-c-m trans-04"  id="searchBtn">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-					<input  type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
+				<button class="flex-c-m trans-04" id="searchBtn">
+					<i class="zmdi zmdi-search"></i>
+				</button>
+				<input type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
 			</div>
 		</div>
 	</header>
@@ -589,12 +589,14 @@
 		}
 		CartCount();
 		function CartCount() { //레이아웃에 장바구니 들어있는 갯수 갱신하는 함수 컨트롤러는 Cart에있음
+			let count = 0;
 			$.ajax({
 				url: "cartCount",
 				method: "GET",
 				async: false,
 				data: { meId: GetUser() },
 				success: function (data) {
+					count = data;
 					cartCounter.setAttribute('data-notify', data);
 				},
 				error: function (reject) {
@@ -602,6 +604,7 @@
 					cartCounter.setAttribute('data-notify', 0);
 				},
 			})
+			return count;
 		};
 
 		//은애 :D ---- 관심상품 개수도 표기해줬지롱!!
@@ -624,7 +627,7 @@
 
 
 
-		// ==============AJAX로 로그인정보받아와서 layout 자체적으로 로그인 여부에따른 헤더 변화 코드작성중 InnerHTML 안먹히는 이슈로 잠시보류 내일와서확인함
+		// ==============AJAX로 로그인정보받아와서 layout 자체적으로 로그인 여부에따른 헤더 변화 코드작성중
 		UpdateHeader();
 		function UpdateHeader() { //레이아웃에 로그인여부, 관리자 여부에따라 레이아웃 헤더 바꾸는함수 컨트롤러는 User에있음
 
@@ -678,16 +681,16 @@
 		}
 	</script>
 	<script>
-	 // 검색기능
-	 $(document).ready(function() {
-	    $( "#searchBtn").on("click", function () {
-	      let prdtNm = $("#searchNm").val();
-			console.log(prdtNm)
-			location.href="ProductCategory?prdtNm="+prdtNm
-	   
-    });
-		 
-	 })
+		// 검색기능
+		$(document).ready(function () {
+			$("#searchBtn").on("click", function () {
+				let prdtNm = $("#searchNm").val();
+				console.log(prdtNm)
+				location.href = "ProductCategory?prdtNm=" + prdtNm
+
+			});
+
+		})
 	</script>
 
 

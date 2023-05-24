@@ -97,36 +97,49 @@
       }
 
       function updateArticle() {
-        if (articleObject.meId == GetUser()) {
-          $.ajax({
-            url: "updateKnowHow",
-            method: "POST",
-            async: false,
-            dataType: "JSON",
-            data: {
-              boNo: articleObject.boNo,
-              title: title.value,
-              subject: editor.getData(),
-            },
-
-            success: function (data) {
-              console.log(data);
-              Swal.fire('정상적으로 수정 되었습니다', '', 'success')
-                .then(() => {
-                  location.replace("showKnowHow?boNo=" + articleObject.boNo);
-                })
-            },
-            error: function (reject) {
-              console.log(reject);
-              alert("에러");
-            },
-          })
+        if (title.value.trim() == "") {
+          Swal.fire('글 수정 실패', '제목이 비어있습니다!', 'info');
+        }
+        else if (editor.getData().trim() == "") {
+          Swal.fire('글 수정 실패', '내용이 비어있습니다!', 'info');
         }
         else {
-          Swal.fire('이글의 작성자가 아닙니다', '', 'error')
-            .then(() => {
-              location.replace("showKnowHow?boNo=" + articleObject.boNo);
+          if (articleObject.meId == GetUser()) {
+            $.ajax({
+              url: "updateKnowHow",
+              method: "POST",
+              async: false,
+              dataType: "JSON",
+              data: {
+                boNo: articleObject.boNo,
+                title: title.value,
+                subject: editor.getData(),
+              },
+
+              success: function (data) {
+                console.log(data);
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: '수정완료!',
+                  showConfirmButton: false,
+                  timer: 1000
+                }).then(() => {
+                  location.href = 'showKnowHow?boNo=' + articleObject.boNo;
+                })
+              },
+              error: function (reject) {
+                console.log(reject);
+                Swal.fire('error', '에러발생 잠시수 다시 시도해주세요', 'error');
+              },
             })
+          }
+          else {
+            Swal.fire('이글의 작성자가 아닙니다', '', 'error')
+              .then(() => {
+                location.replace("showKnowHow?boNo=" + articleObject.boNo);
+              })
+          }
         }
       }
 
@@ -147,6 +160,8 @@
         })
         return result;
       }
+
+
     </script>
   </div>
 
