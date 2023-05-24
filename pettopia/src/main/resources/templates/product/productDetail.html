@@ -263,6 +263,12 @@ fieldset legend {
 
 }
 
+.custom-position {
+        position: absolute;
+        
+        left: 0px;
+    }
+
 </style>
 	<!-- breadcrumb -->
 	<div class="container">
@@ -283,7 +289,8 @@ fieldset legend {
 				<div class="col-md-6 col-lg-7 p-b-30">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
 						<div class="wrap-slick3 flex-sb flex-w">
-								<div class="wrap-slick3-arrows flex-sb-m flex-w" style="margin-right:61px;"></div>
+								<div style="margin-right: 61px;" class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" th:each="Img : ${productImg}"
@@ -444,7 +451,7 @@ fieldset legend {
 									class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
 								</a>
 							</div>
-							<div style="float:right; border-top-color: rgb(0, 0, 0)">
+							<div style="float:right;">
 							<span class="mtext-106 cl2" id="prdtPrc">
 							 [[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>
 							 </div>
@@ -688,7 +695,7 @@ fieldset legend {
 						<div class="p-l-25 p-r-30 p-lr-0-lg">
 							<div class="wrap-slick3 flex-sb flex-w">
 								<div class="wrap-slick3-dots"></div>
-								<div class="wrap-slick3-arrows flex-sb-m flex-w" style="margin-right: 57px;"></div>
+								<div class="wrap-slick3-arrows flex-sb-m flex-w custom-position" style="margin-right: 57px;  left: 0px;"></div>
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" data-thumb="images/product-detail-01.jpg">
