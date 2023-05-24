@@ -340,10 +340,6 @@
                     <th>배송비</th>
                     <td id="shipPrc"></td>
                   </tr>
-                  <tr>
-                    <th>할인금액</th>
-                    <td id="point"></td>
-                  </tr>
                   <tr class="trColor">
                     <th>총 결제금액</th>
                     <td id="resultPrc" style="color: red"></td>
@@ -845,10 +841,9 @@
               if (e.columnName === "shipSt" || e.columnName === "prcSt") {
                 return;
               }
-              let point = rowData.point;
               let shipPrc = rowData.shipPrc;
               let ttPrc = rowData.ttPrc;
-              let prdPrice = ttPrc - shipPrc - point;
+              let prdPrice = ttPrc - shipPrc;
 
               $("#detailNo").text(rowData.ordrId);
               $("#detailNm").text(rowData.name);
@@ -857,7 +852,6 @@
               $("#rcvPhone").text(rowData.rcvPhone);
               $("#rcvAddr").text(rowData.rcvAddr);
               $("#note").text(rowData.note);
-              $("#point").text(point.toLocaleString() + "원");
               $("#shipPrc").text(shipPrc.toLocaleString() + "원");
               $("#ttPrc").text(prdPrice.toLocaleString() + "원");
               $("#resultPrc").text(ttPrc.toLocaleString() + "원");
