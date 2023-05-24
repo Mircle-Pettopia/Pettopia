@@ -6,8 +6,8 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <meta name="_csrf" content="${_csrf.token}">
-    <meta name="_csrf_header" content="${_csrf.headerName}">
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
     <title>Pettopia</title>
     <style>
       #imgDetail {
@@ -233,10 +233,10 @@
                 >
                 <div class="col-sm-4">
                   <input
-                    type="number"
-                    min="0"
+                    type="text"
                     class="form-control"
                     id="prdtPrc"
+                    oninput="autoMoney(this)"
                   />
                 </div>
               </div>
@@ -451,10 +451,10 @@
                 >
                 <div class="col-sm-4">
                   <input
-                    type="number"
-                    min="0"
+                    type="text"
                     class="form-control"
                     id="prdtPrcDetail"
+                    oninput="autoMoney(this)"
                   />
                 </div>
               </div>
@@ -643,6 +643,37 @@
       </div>
       <script>
         $(document).ready(function () {
+          $("#detailModal").on("hidden.bs.modal", function () {
+            // 옵션 수정 돌려놓기
+            optionUpdateChk = false;
+            $("#optionDetail").css("display", "");
+            $("#optionUpdateBtn").css("display", "");
+            $("#optionDetailUpdate").css("display", "none");
+
+            // 이미지 수정 돌려놓기
+            imgUpdateChk = false;
+            $("#imgDetailUpdateDiv").css("display", "");
+            $("#imgUpdateBtn").css("display", "");
+            $("#imgDetailUpdateChange").css("display", "none");
+
+            let optionNmDetail = $(".optionNmDetail");
+            for (let i = 0; i < optionNmDetail.length; i++) {
+              $(optionNmDetail[i]).val("");
+            }
+
+            let optionValDetail = $(".optionValDetail");
+            for (let i = 0; i < optionNmDetail.length; i++) {
+              $(optionValDetail[i]).val("");
+            }
+
+            let optionPrcDetail = $(".optionPrcDetail");
+            for (let i = 0; i < optionNmDetail.length; i++) {
+              $(optionPrcDetail[i]).val("");
+            }
+
+            $("#imgMainDetailUpdate").val("");
+            $("#imgDetailUpdate").val("");
+          });
           let date = new Date();
           //기간버튼-------------------------------
           $("#1").on("click", () => {
@@ -684,6 +715,14 @@
 
           //엑셀버튼을 누르면 해당되는 발주상세목록을 엑셀로 만들어준다
           $("#excelBtn").on("click", function () {
+            let listCnt = prdList.getData();
+            if (listCnt.length < 1) {
+              Swal.fire({
+                icon: "error",
+                title: "리스트가 없습니다.",
+              });
+              return;
+            }
             Swal.fire({
               title: "엑셀파일로 받아보시겠습니까?",
               text: "원하지 않는다면 취소를 눌러주세요",
@@ -712,7 +751,9 @@
               success: function (result) {
                 $("#prdtIdDetail").val(prdtId);
                 $("#prdtNmDetail").val(result.product.prdtNm);
-                $("#prdtPrcDetail").val(result.product.prdtPrc);
+                $("#prdtPrcDetail").val(
+                  formattedMoney1(result.product.prdtPrc)
+                );
                 $("#summernoteDetail").summernote(
                   "code",
                   result.product.prdtDesct
@@ -767,7 +808,8 @@
                     .text("옵션 이름");
                   let input1 = $("<input>")
                     .addClass("form-control")
-                    .val(value.optNm);
+                    .val(value.optNm)
+                    .prop("readonly", true);
                   let div1 = $("<div>").addClass("col-sm-4").append(input1);
                   //옵션이름 div
                   let newRow1 = $("<div>")
@@ -785,7 +827,8 @@
                         .text("옵션 값");
                       let input2 = $("<input>")
                         .addClass("form-control")
-                        .val(item.optDetaNm);
+                        .val(item.optDetaNm)
+                        .prop("readonly", true);
                       let div2 = $("<div>").addClass("col-sm-4").append(input2);
 
                       // 추가 가격 입력 폼 생성
@@ -796,7 +839,8 @@
                         .text("추가 가격");
                       let input3 = $("<input>")
                         .addClass("form-control text-end")
-                        .val(item.addPrc);
+                        .val(item.addPrc)
+                        .prop("readonly", true);
                       let div3 = $("<div>").addClass("col-sm-4").append(input3);
 
                       let newRow2 = $("<div>")
@@ -857,6 +901,8 @@
             let saleSt = $("input[name=saleSt]:checked").val();
             let prdtId = $("#prdtIdDetail").val();
 
+            prdtPrc = prdtPrc.replace(/,/g, "");
+
             // 빈 값 체크
             if (prdtNm === "") {
               $("#prdtNmDetail").focus();
@@ -902,7 +948,6 @@
 
             // 옵션 수정
             if (optionUpdateChk == true) {
-              console.log("옵션 수정 한다");
               let option = [];
 
               let optionInput = $(".optionInputDetail");
@@ -940,7 +985,6 @@
                 }
               }
               formData.append("option", JSON.stringify(option));
-              console.log(option);
             }
 
             // 이미지 수정
@@ -948,6 +992,21 @@
               let mainImg = $("#imgMainDetailUpdate").get(0).files;
               let upimg = $("#imgDetailUpdate").get(0).files;
 
+              if (mainImg.length < 1) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "메인 이미지를 입력해주세요",
+                });
+                return;
+              }
+
+              if (upimg.length < 1) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "이미지를 입력해주세요.",
+                });
+                return;
+              }
               // 대표 이미지 담기
               formData.append("imgMain", mainImg[0]);
 
@@ -1209,7 +1268,7 @@
             $("#selectAll:checked").prop("checked", false);
 
             $.ajax({
-              url: "/productList",
+              url: "productList",
               success: function (data) {
                 prdList.resetData(data);
               },
@@ -1537,6 +1596,8 @@
           let upimg = $("#img").get(0).files;
           let mainImg = $("#imgMain").get(0).files;
 
+          prdtPrc = prdtPrc.replace(/,/g, "");
+
           if (prdtNm === "") {
             $("#prdtNm").focus();
             Swal.fire({
@@ -1723,6 +1784,10 @@
           return value.toLocaleString() + "원";
         }
 
+        function formattedMoney1(value) {
+          return value.toLocaleString();
+        }
+
         //일주일전
         function lastWeek() {
           var d = new Date();
@@ -1744,6 +1809,19 @@
           d.setMonth(monthOfYear - 3);
           return formattedDate(d);
         }
+
+        // 돈 변환
+        const autoMoney = (target) => {
+          let val = target.value.replace(/,/g, "");
+          val = val.trim();
+
+          if (val === "" || isNaN(val)) {
+            target.value = "";
+          } else {
+            let num = parseInt(val, 10);
+            target.value = num.toLocaleString();
+          }
+        };
       </script>
     </div>
   </body>

@@ -68,4 +68,9 @@ public class QnaMagServiceImpl implements QnaMagService {
 	public List<QnaMagVO> searchQnaList(QnaMagVO vo) {
 		return qnaMagMapper.searchQnaList(vo);
 	}
+
+	@Override
+	public QnaMagVO detailImg(QnaMagVO vo) {
+		return qnaMagMapper.detailImg(vo);
+	}
 }

@@ -595,6 +595,17 @@
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(dataArr),
                     success: function (result) {
+                      // 배송 현황 업데이트
+                      $("#currentSt td:nth-child(4) span").text(
+                        result.shipSt.shipSt1
+                      );
+                      $("#currentSt td:nth-child(5) span").text(
+                        result.shipSt.shipSt2
+                      );
+                      $("#currentSt td:nth-child(6) span").text(
+                        result.shipSt.shipSt3
+                      );
+
                       // 상품 이름 넣기
                       for (let i = 0; i < result.orderList.length; i++) {
                         let prdtCnt = 0; // 해당 주문에 속한 상품의 개수
@@ -861,15 +872,21 @@
                     for (let i = 0; i < data.length; i++) {
                       getOrderList.innerHTML += `
                       <tr>
-                        <td><img src="download/${data[i].prdtImg}" alt="img"></td>
+                        <td><img src="/download/${
+                          data[i].prdtImg
+                        }" alt="img"></td>
                         <td id=option>
                           <strong>${data[i].prdtNm}</strong>
                           <br/>
                           <sapn id="${data[i].ordtId}_option"></sapn>
                         </td>
                         <td>${data[i].cnt}</td>
-                        <td><span>${data[i].prc}</span><span>원</span></td>
-                        <td><span>${data[i].price}<span>원</span></span></td>
+                        <td><span>${data[
+                          i
+                        ].prc.toLocaleString()}</span><span>원</span></td>
+                        <td><span>${data[
+                          i
+                        ].price.toLocaleString()}<span>원</span></span></td>
                       </tr>
                     `;
 
@@ -919,6 +936,14 @@
 
             //엑셀버튼을 누르면 해당되는 발주상세목록을 엑셀로 만들어준다
             $("#excelBtn").on("click", function () {
+              let listCnt = orderList.getData();
+              if (listCnt.length < 1) {
+                Swal.fire({
+                  icon: "error",
+                  title: "리스트가 없습니다.",
+                });
+                return;
+              }
               Swal.fire({
                 title: "엑셀파일로 받아보시겠습니까?",
                 text: "원하지 않는다면 취소를 눌러주세요",
