@@ -3,12 +3,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
 <head>
-<title>Pettopia</title>
 <meta charset="UTF-8" />
-</head>
-<body>
-	<div layout:fragment="content">
-		<style>
+<style>
 #backColor {
 	margin-top: 30px;
 	background: rgb(248, 245, 250);
@@ -109,8 +105,9 @@ td, tr, th {
 	min-height: 300px;
 }
 </style>
-
-
+</head>
+<body>
+	<div layout:fragment="content">
 		<div class="container">
 			<div class="row">
 				<th:block th:replace="layout/navbar :: navbarFragment"></th:block>
@@ -133,19 +130,9 @@ td, tr, th {
 						<div th:each="review : ${reviewList}" class="parentDiv"
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
 							<div class="title">
-								<a th:href="@{/ProductDetail(prdtId=${review.prdtId})}"> <img
-									th:src="${/review.prdtImg}"
+								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}"> <img
+									th:src="${review.prdtImg}"
 									style="width: 120px; height: 120px; float: left; margin-right: 20px;" /></a>
-								<!--  <img
-                      src="images/item-cart-01.jpg"
-                      alt="IMG"
-                      style="
-                        width: 120px;
-                        height: 120px;
-                        float: left;
-                        margin-right: 20px;
-                      "
-                    />-->
 							</div>
 							<div
 								style="width: 165px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">구매
@@ -230,15 +217,15 @@ td, tr, th {
 			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
 		<script type="text/javascript" src="CKeditorSuperBuild2.js"></script>
 
-
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script> <!-- j쿼리 -->
 		<!-- ==========================ckeditor END======================= -->
 
 		<script>
-			var oid;
-			var did;
+			let oid;
+			let did;
 			let parentDiv;
 
-			$(".write-review-btn").click(function(event) {
+			$("#reviewBtn").click(function(event) {
 				oid = $(this).data("orderid");
 				pid = $(this).data("prdtid");
 				$("#writemodal").modal("show");
@@ -277,31 +264,6 @@ td, tr, th {
 				});
 			}
 
-			/* 			function resetForm() {
-			 document.getElementById("myform").reset();
-			 var editor = CKEDITOR.instances.editor;
-			 editor.setData(""); // 에디터 내용을 비웁니다.
-			 } */
-
-			/* $.ajax({
-				url: "optionDetail",
-				method: "GET",
-				data : {ordtId : ordtId},
-				success: function(data){
-					if(data){
-						// ',' 기준으로 자르기
-						var beforeStr = data.optDetaNm;
-						var afterStr = beforeStr.split(',');
-						domId(ordtId + "_option").innerHTML = '(옵션)';
-						for(let i=0;i<afterStr.length;i++){
-							domId(ordtId + "_option").innerHTML += ` ${afterStr[i]} / `;
-						}
-					}
-				},
-				error : function(rej) {
-					console.log(rej);
-				}
-			}); */
 		</script>
 	</div>
 </body>

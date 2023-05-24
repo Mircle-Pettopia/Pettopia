@@ -49,15 +49,15 @@
 			</div>
 		</div>
 
-		<div class="board_wrap">
+		<div class="board_wrap" style="margin: 60px auto;">
 			<div class="board_title">
-				<strong>공지사항</strong>
+				<strong style="font-size: 2rem; letter-spacing: -1px; color: #161616;">공지사항</strong>
 			</div>
 			<form th:action="@{noticeUpdate}" method="post"
 				th:object="${noticeDetail}">
 				<div class="board_write_wrap">
 					<div class="board_write">
-						<div class="title">
+						<div class="title" style="border-bottom: 1px solid #000;">
 							<dl>
 								<dt>제목</dt>
 								<dd>
@@ -67,7 +67,7 @@
 								</dd>
 							</dl>
 						</div>
-						<div class="info"></div>
+					
 						<div class="cont">
 							<textarea placeholder="내용 입력" name="contents"
 								th:text="*{contents}" required></textarea>

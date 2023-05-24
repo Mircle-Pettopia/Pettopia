@@ -13,7 +13,6 @@ public class ReviewVO {
 	private String contents;	//내용
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date creatDt;		//작성날짜
-	private int reImg;			//이미지번호
 	private String point;		//별점
 	
 	private String meId;		//아이디
