@@ -287,7 +287,7 @@
     </style>
 
 
-	<div class="container">
+
     <div class="content">
 
         <!-- //board_zone_sec -->
@@ -300,12 +300,12 @@
 
                     <div class="board_view_tit">
                         <h3>
-                            제목:[[${QnaDetail.title}]]
+                            [[${QnaDetail.title}]]
                         </h3>
                     </div>
                     <div class="board_view_info">
                         <span class="view_info_idip">
-                            <strong>작성자:[[${QnaDetail.meId}]]</strong>
+                            <strong>[[${QnaDetail.meId}]]</strong>
                         <span class="view_info_hits widthDisplayNone">
                     </div>
                     <!-- //board_view_info -->
@@ -330,7 +330,7 @@
                                     </div>
                                 </div>
                                 <!-- //seem_cont -->
-                            </div>
+                            </div>w
 
                         </div>
                         <!-- //board_view_qa -->
@@ -350,11 +350,11 @@
                 </div>
                 <!-- //board_zone_view -->
                 <div>
-                <div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border" th:each="qna: ${qnaReply}">
-                <h5 style="display:inline-block;">작성자: [[${qna.name}]] /작성일: <span th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></span></h5> 
+                <div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
+                <h5 style="display:inline-block;">작성자: [[${QnaDetail.name}]] /작성일: <span th:text="${#dates.format(QnaDetail.regDt, 'yyyy-MM-dd HH:mm')}"></span></h5> 
              <!--  <button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''} -->
                 <hr>
-                <div class="Viewer">[[${qna.subject}]]
+                <div class="Viewer">[[${QnaDetail.subject}]]
                 </div>
               </div>
                 </div>
@@ -430,7 +430,6 @@
         </form>
 
         <div id="layerDim" class="dn">&nbsp;</div>
-        </div>
         <script>
             $(document).ready(function () {
                 $('img.js_image_load').error(function () {

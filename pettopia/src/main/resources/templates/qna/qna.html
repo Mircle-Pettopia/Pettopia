@@ -200,8 +200,15 @@ input {
 
 
 
-	<div class="content">
-		<div class="board_zone_sec">
+		 <div class="container">
+		 <div class="row">
+		<th:block th:replace="layout/navbar :: navbarFragment"></th:block>
+	<div class="content" >
+	
+		<div class="board_zone_sec" style="
+    padding-left: 0px;
+    margin-left: 0px;
+    margin-top: 30px;">
 			<div class="board_zone_tit">
 				<h2>1:1문의</h2>
 			</div>
@@ -228,8 +235,8 @@ input {
 								<thead>
 									<tr>
 										<th style="padding-left: 87px;">문의날짜</th>
-										<th style="padding-left: 84px;" class="widthDisplayNone">글번호</th>
-										<th style="padding-left: 347px;">제목</th>
+										<th style="padding-left: 90px;" class="widthDisplayNone">글번호</th>
+										<th style="padding-left: 340px;">제목</th>
 										<th style="padding-left: 87px;">상태</th>
 									</tr>
 								</thead>
@@ -379,8 +386,8 @@ input {
 	<iframe name="ifrmProcess" src="./blank(1).html" style="display: none"
 		width="900" height="500"></iframe>
 	<!-- 절대! 지우지마세요 : End -->
-
-
+</div>
+</div>
 </body>
 
 </html>
