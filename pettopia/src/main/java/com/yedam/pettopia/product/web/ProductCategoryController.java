@@ -192,11 +192,12 @@ public class ProductCategoryController {
 	@GetMapping("ProductDetail")
 	public String ProductDetail(Product1VO product1VO,  Model model, @RequestParam final String prdtId,
 			@AuthenticationPrincipal PrincipalDetails principalDetails, Authentication authentication) {
+		System.out.println("상세조회 " + principalDetails);
 		String result = "";
-		String meId= principalDetails.getUser().getMeId();
+//		String meId= principalDetails.getUser().getMeId();
 		model.addAttribute("qnaList", qnaService.qnaAllList2(prdtId));
 		model.addAttribute("selectWritten1", productService.selectWrittenList1(prdtId));
-		
+//		System.out.println("아이디 " + meId);
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());

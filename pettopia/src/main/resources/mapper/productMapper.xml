@@ -99,7 +99,7 @@ AND pi.is_main = 'Y' -->
 SELECT P.prdt_id, 
        P.prdt_nm, P.prdt_prc, P.sale_st, P.reg_dt, P.mod_dt, P.prdt_desct,
        pi.prdt_img,
-       <if test="meId !=null">(select prdt_Id FROM interest_product
+       <if test="meId !=null and !meId.equals('')">(select prdt_Id FROM interest_product
        										WHERE me_id=#{meId}
        										AND prdt_id=P.prdt_id) interestY,</if> 
        pi.is_main
