@@ -14,6 +14,9 @@
 	
 	<!-- 은애수정 2023/05/18 , 지식공유게시판 글작성 -->
 	<insert id="insertKnowhowArticle" parameterType="BoardVO">
+	<selectKey keyProperty="boNo" resultType="int" order="BEFORE">
+		SELECT TO_NUMBER(NVL(MAX(bo_no),0))+1 bo_no FROM board
+	</selectKey>
 		INSERT INTO board
 					(BO_NO,
 					 TITLE,
@@ -21,7 +24,7 @@
 					 ME_ID,
 					 bo_type)
 		VALUES(
-					(SELECT TO_NUMBER(NVL(MAX(bo_no),0))+1 bo_no FROM board)
+					#{boNo}
 					,#{title}
 					,#{subject}
 					,#{meId}
@@ -32,17 +35,23 @@
 	<select id="knowHowList" resultType="BoardVO">
 		SELECT *  FROM ( SELECT ROWNUM AS rn,a.*
 		                 FROM (
-		                       SELECT bo_no,title,reg_dt,view_cnt,me_id 
-		                       FROM board 
-		                       WHERE title LIKE '%'||''||'%'
+		                       SELECT bo_no,title,reg_dt,view_cnt,b.me_id,name
+		                       FROM board b
+                               left join member m
+                               on m.me_id=b.me_id
+		                       WHERE title LIKE '%'||#{keyword}||'%'
 		                       AND bo_type = 'BY1'
 		                       ORDER BY bo_no DESC
-		) a	) WHERE RN BETWEEN (#{page}-1)*10 and #{page}*10
+		) a	) WHERE RN BETWEEN 0*10 and 1*10
 	</select>
 	
 	<!-- 은애수정 2023/05/18 -->
 	<select id="showKnowHow" resultType="BoardVO">
-		SELECT * FROM board WHERE bo_no=#{boNo}
+		SELECT bo_no,title,subject,reg_dt,b.me_id,view_cnt,b.me_id,bo_type,name 
+        FROM board b
+        left join member m
+        on m.me_id= b.me_id
+        WHERE bo_no=#{boNo}
 	</select>
 	
 	<!-- 은애수정 2023/05/18, 지식공유게시판 글 개수 -->
@@ -54,7 +63,9 @@
 	</select>
 	
 	<select id="getknowHowReply" resultType="BoardVO">
-		SELECT * from reply 
+		SELECT comment_id,r.me_id,subject,reg_dt,division,bo_no,name from reply r
+        left join member m
+        on r.me_id = m.me_id
 		WHERE DIVISION = 'DR2' 
 		  AND BO_NO=#{boNo} 
 		  AND RE IS NULL
