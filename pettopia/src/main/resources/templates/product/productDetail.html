@@ -270,11 +270,9 @@ fieldset legend {
 	<!-- breadcrumb -->
 	<div class="container">
 		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-			<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04"> shop
+<!-- 			<a href="ProductCategory" class="stext-109 cl8 hov-cl1 trans-04"> 상품
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-			</a> <a href="product.html" class="stext-109 cl8 hov-cl1 trans-04">
-				강아지 <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-			</a> <span class="stext-109 cl4"> 사료 </span>
+			</a> <span class="stext-109 cl4" th:text="${categories.sCatNm}"> </span> -->
 		</div>
 	</div>
 
@@ -518,11 +516,10 @@ fieldset legend {
 									&nbsp;
 								</h3>
 								<div id="ajax-goods-goodsreview-list"></div>
-								<div class="btn_reviews_box">
-									<!-- <a href="../board/list.php?bdId=goodsreview"
-										class="btn_reviews_more">상품후기 전체보기</a> --> <a
-										href="reviewList"
-										class="btn_reviews_write">상품후기 글쓰기</a>
+								<div class="btn_reviews_box"> 
+								<a href="#"
+								    class="btn_reviews_write" onclick="navigateToReviewList()">상품후기 글쓰기
+								 </a>
 								</div>
 								<!-- //btn_reviews_box -->
 								
@@ -579,10 +576,11 @@ fieldset legend {
 								</h3>
 								<div id="ajax-goods-goodsqa-list"></div>
 								<div class="btn_qna_box">
-									<a href="QnaList" class="btn_qna_more">내가 작성한
+									<a href="#" class="btn_qna_more" onclick="navigateToReviewList1()">내가 작성한
 										문의보기</a> <a
-										th:href="|QnaForm?prdtId=${ProductDetail.prdtId}|"
-										class="btn_qna_write">상품문의 글쓰기</a>
+										href="#"
+										class="btn_qna_write" onclick="navigateToReviewList2()">상품문의 글쓰기</a>
+										<!-- |QnaForm?prdtId=${ProductDetail.prdtId}| -->
 								</div>
 								<!-- //btn_qna_box -->
 								<div class="board_list_qa" align="center">
@@ -1377,7 +1375,47 @@ fieldset legend {
 		selectBlocks.forEach(function(select) {
 			select.addEventListener('change', updatePrice);
 		}); 
-
+		
+		
+		//상품후기 글쓰기 회원체크 후 회원가입 사이트 이동
+			function navigateToReviewList() {
+			  var meId = $("#meId").val();
+			
+			  if (meId) {
+			    window.location.href = "reviewList"; // Replace "reviewList" with the actual URL of the review list page
+			  } else {
+			    // Display an alert and redirect to SignUp page
+			    swal("회원가입 후 이용해주세요.").then(function() {
+			      window.location.href = "/signUp"; // Replace "/SignUp" with the actual SignUp page URL
+			    });
+			  }
+			}
+		// 회원체크 후 이동 상품문의 리스트
+			function navigateToReviewList1() {
+			  var meId = $("#meId").val();
+			
+			  if (meId) {
+			    window.location.href = "QnaList"; // Replace "reviewList" with the actual URL of the review list page
+			  } else {
+			    // Display an alert and redirect to SignUp page
+			    swal("회원가입 후 이용해주세요.").then(function() {
+			      window.location.href = "/signUp"; // Replace "/SignUp" with the actual SignUp page URL
+			    });
+			  }
+			}
+		// 회원체크 후 이동 상품문의 리스트
+function navigateToReviewList2() {
+  var meId = $("#meId").val();
+  var prdtId = $("#prdtId").val();
+  if (meId) {
+	    window.location.href = "QnaForm?prdtId=" + prdtId; // Construct the URL with the prdtId value
+  } else {
+    // Display an alert and redirect to SignUp page
+    swal("회원가입 후 이용해주세요.").then(function() {
+      window.location.href = "/signUp"; // Replace "/signUp" with the actual SignUp page URL
+    });
+  }
+}
 
 	</script>
 	<!--===============================================================================================-->

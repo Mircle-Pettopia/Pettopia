@@ -220,6 +220,7 @@ public class ProductCategoryController {
 				model.addAttribute("name", principal.getUser().getName());
 				model.addAttribute("token", principal.getUser().getMeSnsToken());
 				product1VO.setMeId(principal.getUser().getMeId());
+				
 			}
 			;
 		}
@@ -231,6 +232,8 @@ public class ProductCategoryController {
 		System.out.println("옵션디테일" + productService.selectOptionDetail(prdtId));
 		model.addAttribute("optionDetailList", productService.selectOptionDetail(prdtId));
 		model.addAttribute("productImg", productService.selectImg(product1VO));
+		model.addAttribute("categories", productService.selectCategoryList());
+		System.out.println("강아지"+ productService.selectCategoryList());
 		return "product/productDetail";
 	}
 

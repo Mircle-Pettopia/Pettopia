@@ -22,7 +22,7 @@
     SELECT p.prdt_id, p.prdt_nm, p.prdt_prc, p.sale_st, p.reg_dt, p.mod_dt, p.s_cat_id, p.l_cat_id, pi.prdt_img AS prdt_Img
     FROM product p
     INNER JOIN product_img pi ON p.prdt_id = pi.prdt_id AND pi.is_main = 'Y'
-    ORDER BY p.mod_dt desc
+    ORDER BY p.mod_dt asc
   )   WHERE ROWNUM &lt;= 4
 </select>
 
