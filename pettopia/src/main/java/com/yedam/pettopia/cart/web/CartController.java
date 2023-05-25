@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yedam.pettopia.cart.service.CartService;
 import com.yedam.pettopia.cart.service.vo.CartVO;
+import com.yedam.pettopia.user.UserVO;
+import com.yedam.pettopia.user.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
 
@@ -81,4 +84,14 @@ public class CartController {
 	public int cartCount(String meId) {
 		return cartService.cartCount(meId);
 	}
+	
+    @GetMapping("userShip")
+    @ResponseBody
+    public UserVO userShip(Model model,
+							@AuthenticationPrincipal PrincipalDetails principal) {
+        principal.getUser().setPw(null);
+
+        
+    	return principal.getUser();
+    }
 }
