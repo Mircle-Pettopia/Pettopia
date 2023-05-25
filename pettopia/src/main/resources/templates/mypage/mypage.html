@@ -207,6 +207,9 @@ td, tr, th{
 				</div>
 			</div>
 		</div>
+			<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+			<link rel="stylesheet" href="/resources/demos/style.css">
+			<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 		<script th:inline="javascript">
 			/*window.onload=function(){}*/
 			let prc = /*[[${getprcSt}]]*/
@@ -252,6 +255,9 @@ td, tr, th{
 			let end = "";
 			let date = new Date();
 
+			console.log($('#start').val());
+			console.log(start);
+
 			//검색버튼
 			function setkeyword(){
 				ship = $('#shipSt').val();
@@ -264,10 +270,16 @@ td, tr, th{
 			};
 
 			function setkeyword_prc(val){
-				ship = $('#shipSt').val();
+				ship = "";
 				prcSt = val;
-				start = $('#start').val();
-				end = $('#end').val();
+				start = "";
+				end = "";
+
+				//date 초기화
+				$('#shipSt').val("");
+				$('#prcSt').val("");
+				$('#start').val("");
+				$('#end').val("");
 
 				$('#getOrderList').empty();  //tbody 초기화
 				orderList();
@@ -275,9 +287,14 @@ td, tr, th{
 
 			function setkeyword_ship(val){
 				ship = val;
-				prcSt = $('#prcSt').val();
-				start = $('#start').val();
-				end = $('#end').val();
+				prcSt = "";
+				start = "";
+				end = "";
+
+				$('#shipSt').val("");
+				$('#prcSt').val("");
+				$('#start').val("");
+				$('#end').val("");
 
 				$('#getOrderList').empty();  //tbody 초기화
 				orderList();
