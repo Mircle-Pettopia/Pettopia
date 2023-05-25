@@ -251,10 +251,16 @@ td, tr, th {
 					success : function(data) {
 						console.log(data);
 						if (data == 'success') {
-							parentDiv.textContent = '작성 완료';
-							parentDiv.disabled = true;
 							$("#writemodal").modal("hide");
-							alert("후기가 등록되었습니다.");
+							 Swal.fire({
+					                position: 'center',
+					                icon: 'success',
+					                title: '작성완료!',
+					                showConfirmButton: false,
+					                timer: 1000
+					              }).then(() => {
+					            	  location.reload();
+					              })
 						}
 					},
 					error : function(reject) {

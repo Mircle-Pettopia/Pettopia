@@ -45,7 +45,7 @@
 	<div layout:fragment="content">
 		<div class="container">
 			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+				<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
 					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 				</a> <span class="stext-109 cl4"><a th:href="@{noticeList}"> 공지사항</a> </span>
 			</div>
@@ -84,7 +84,7 @@
 						</div>
 					</div>
 					<div class="bt_wrap">
-						<a><button type="submit" class="btn btnPush btnBlueGreen">등록</button></a>
+						<a><button type="submit" class="btn btnPush btnBlueGreen" id="insertBtn">등록</button></a>
 						<a href="javascript:window.history.back();"><button
 								type="button" class="btn btnPush btnRed">취소</button></a>
 					</div>
@@ -135,6 +135,8 @@
 				})
 				return result;
 			}
+			
+
 		</script>
 		<!--===============================================================================================-->
 		<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>

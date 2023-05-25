@@ -48,7 +48,7 @@
 	<div layout:fragment="content">
 		<div class="container">
 			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+				<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
 					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 				</a> <span class="stext-109 cl4">공지사항</span>
 			</div>
@@ -63,12 +63,12 @@
 			<div class="search_wrap">
 				<div class="search_area">
 					<div style="height: 50px;">
-						<button class="btn btnPush btnLightBlue" id="SearchBtn"
+						<button class="btn btnPush btnLightBlue" id="SearchBtn2"
 							style="float: right; margin-left: 5px;" onclick="setkeyword();">
 							검색
 						</button>
 						<input class="form-control" type="text" name="keyword"
-							id="keyword" th:value="${pageMaker.cri.keyword}"
+							id="keyword2" th:value="${pageMaker.cri.keyword}"
 							style="width: 200px; float: right; margin-top: 9px;">
 					</div>
 				</div>
@@ -182,6 +182,7 @@
 					});
 				});
 
+				//페이징
 				$(".search_area button").on("click", function(e) {
 					e.preventDefault();
 					let val = $("input[name='keyword']").val();
@@ -198,6 +199,21 @@
 					$("#moveForm").find("input[name='pageNo']").val(pageNo);
 					$("#moveForm").submit();
 				});
+				
+		          // 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
+		          $("#keyword2").on(
+		            "keypress",
+		            function (event) {
+		              if (event.which === 13) {
+		                event.preventDefault();
+		                $("#searchBtn2").click();
+		              }
+		            }
+		          );
+		          
+		          
+		          
+				
 			</script>
 			<!--===============================================================================================-->
 			<script src="js/main.js"></script>
