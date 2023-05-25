@@ -519,48 +519,8 @@ fieldset legend {
 								<div class="board_list_qa" align="center">
 						<!--  <table class="board_list_table " style="width:100%" "="> -->
 						<form>
-							<!-- <table class="board_list_table" style="width: 100%">
-								<colgroup>
-									<col style="width: 16%">
-									문의날짜
-									<col style="width: 15%" class="widthDisplayNone">
-									카테고리
-									<col>
-									제목
-									<col style="width: 15%">
-									문의상태
-
-								</colgroup>
-								<thead>
-									<tr>
-										<th style="padding-left: 87px;">후기날짜</th>
-										<th style="padding-left: 84px;" class="widthDisplayNone">글번호</th>
-										<th style="padding-left: 347px;">상품아이디</th>
-										<th style="padding-left: 87px;">내용</th>
-										<th style="padding-left: 87px;">점수</th>
-									</tr>
-								</thead>
-								<tbody>
-								
-									 <tr th:each="reviw : ${selectWritten1}">
-										<td th:text="${#dates.format(reviw.creatDt, 'yyyy-MM-dd HH:mm')}"></td>
-										<td th:text="${reviw.reNo}" class="widthDisplayNone"></td>
-										<td th:text="${reviw.prdtId}"></td>
-										<td th:text="${reviw.contents}"></td>
-										<td th:text="${reviw.point}"></td>
-									</tr>
-								 	<tr th:if="${qnaList.isEmpty()}">
-										<td colspan="5" align="center">게시글이 존재하지 않습니다.</td>
-									</tr>  
-								</tbody>
-							</table> -->
 							<div th:each="written : ${selectWritten1}"
-							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
-<!-- 							<div class="title">
-								<a th:href="@{ProductDetail(prdtId=${written.prdtId})}"> <img
-									th:src="${written.prdtImg}"
-									style="width: 40px; height: 40px; float: left; margin-right: 20px;" /></a>
-							</div> -->
+							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">					
 							<div class="star"
 								style="width: 150px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">
 								<fieldset style="border: none">
@@ -579,11 +539,14 @@ fieldset legend {
 								<span id="starRating" style="font-weight: bold"><!-- [[${written.point}]] --></span>
 							</div>
 							
-			<div class="edi"
+								<div class="edi"
 								style="height: auto; float: left; line-height: 69px"
 								th:utext="${written.contents }"></div>
 								</div>
-							
+						            <tr th:if="${selectWritten1.isEmpty()}">
+						                <td colspan="4" class="no_data">등록된 상품후기가 없습니다.</td>
+						            </tr>
+
 						</form>
 					</div>
 							</div>
@@ -629,10 +592,10 @@ fieldset legend {
 								</colgroup>
 								<thead>
 									<tr>
-										<th style="padding-left: 87px;">문의날짜</th>
-										<th style="padding-left: 84px;" class="widthDisplayNone">글번호</th>
-										<th style="padding-left: 347px;">제목</th>
-										<th style="padding-left: 87px;">작성자</th>
+										<th style="padding-left: 0px;">문의날짜</th>
+										<th style="padding-left: 0px;" class="widthDisplayNone">글번호</th>
+										<th style="padding-left: 0px;">제목</th>
+										<th style="padding-left: 0px;">작성자</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -1040,6 +1003,8 @@ fieldset legend {
 					        success: function(response) {
 					          swal("관심상품 삭제 !", "success");
 					          self.removeClass('js-addedwish-detail');
+					  		CartCount();
+							productInterestCount();
 					        },
 					        error: function(xhr) {
 					          // Handle error
@@ -1057,6 +1022,8 @@ fieldset legend {
 					        success: function(response) {
 					          swal("관심상품 등록 !", "success");
 					          self.addClass('js-addedwish-detail');
+					  		CartCount();
+							productInterestCount();
 					        },
 					        error: function(xhr) {
 					          // Handle error
@@ -1245,6 +1212,8 @@ fieldset legend {
 		    		  location.href="CartMain"
 		    	  }
 		    	})
+		CartCount();
+		productInterestCount();
 //  		        
   		        // Display a success message or perform any other actions
   		      },
@@ -1263,104 +1232,7 @@ fieldset legend {
 	</script>
 
 	<script>
-		//옵션 선택 시 가격 추가 및 수량변동 시 가격 변동
-		/* var priceElement = document.getElementById('prdtPrc');
-		var quantityInput = document.querySelector('input[name="num-product"]');
-		var initialPrice = parseFloat(priceElement.innerText.replace(/[^0-9]+/g, ''));
 
-		function updatePrice() {
-		  // Get the current quantity value after a slight delay
-		  setTimeout(function() {
-		    var quantity = parseInt(quantityInput.value);
-
-		    // Check if the quantity value is valid
-		    if (isNaN(quantity) || quantity <= 0) {
-		      // Set the new price to 0 원
-		      priceElement.innerText = '0 원';
-		    } else {
-		      // Get the selected option value
-		      var selectedOption = document.querySelector('select.js-select2 option:checked');
-		      console.log(selectedOption);
-
-		      // Calculate the additional price based on the selected option
-		      var additionalPrice = 0;
-		      if (selectedOption) {
-		        additionalPrice = parseFloat(selectedOption.dataset.addPrc);
-		        if (isNaN(additionalPrice)) {
-		          additionalPrice = 0; // Set default additional price to 0 if NaN
-		        }
-		      }
-
-		      // Calculate the new price
-		      var newPrice = (initialPrice + additionalPrice) * quantity;
-
-		      // Update the price element with the new price
-		      priceElement.innerText = newPrice + ' 원';
-		    }
-		  }, 10); // Delay of 10 milliseconds (adjust as needed)
-		}
-
-		// Add event listener to the quantity input
-		quantityInput.addEventListener('input', updatePrice);
-
-		// Add event listener to the option select
-		document.querySelector('.js-select2').addEventListener('change', updatePrice);
-
-		// Increase quantity button click
-		document.querySelector('.btn-num-product-up').addEventListener('click', updatePrice);
-
-		// Decrease quantity button click
-		document.querySelector('.btn-num-product-down').addEventListener('click', updatePrice); */
-		/*  var priceElement = document.getElementById('prdtPrc');
-		var quantityInput = document.querySelector('input[name="num-product"]');
-		var initialPrice = parseFloat(priceElement.innerText.replace(/[^0-9]+/g, ''));
-
-		// Function to update the price based on quantity and selected options
-		function updatePrice() {
-		  // Get the current quantity value
-		  var quantity = parseInt(quantityInput.value);
-		  console.log(quantity);
-
-		  // Get all select blocks
-		  var selectBlocks = document.querySelectorAll('select.js-select2');
-		  
-		  // Initialize total additional price
-		  var totalAdditionalPrice = 0;
-
-		  // Iterate over each select block
-		  selectBlocks.forEach(function(select) {
-		    // Get the selected option within the current select block
-		    var selectedOption = select.querySelector('option:checked');
-		    console.log(selectedOption);
-
-		    // Calculate the additional price based on the selected option
-		    var additionalPrice = 0;
-		    if (selectedOption) {
-		      additionalPrice = parseFloat(selectedOption.dataset.addPrc);
-		      if (isNaN(additionalPrice)) {
-		        additionalPrice = 0; // Set default additional price to 0 if NaN
-		      }
-		    }
-
-		    // Add the additional price to the total additional price
-		    totalAdditionalPrice += additionalPrice;
-		  });
-
-		  // Calculate the new price
-		  var newPrice = (initialPrice + totalAdditionalPrice) * quantity;
-
-		  // Update the price element with the new price
-		  priceElement.innerText = newPrice + ' 원';
-		}
-
-		// Add event listener to the quantity input
-		quantityInput.addEventListener('input', updatePrice);
-
-		// Add event listener to each select block
-		var selectBlocks = document.querySelectorAll('select.js-select2');
-		selectBlocks.forEach(function(select) {
-		  select.addEventListener('change', updatePrice);
-		});  */
 		var priceElement = document.getElementById('prdtPrc');
 		var quantityInput = document.querySelector('input[name="num-product"]');
 		var initialPrice = parseFloat(priceElement.innerText.replace(
@@ -1405,7 +1277,7 @@ fieldset legend {
 								* quantity;
 
 						// Update the price element with the new price
-						priceElement.innerText = newPrice + ' 원';
+						priceElement.innerText = newPrice.toLocaleString() + ' 원';  
 					}, 10);
 		}
 
@@ -1428,7 +1300,9 @@ fieldset legend {
 		var selectBlocks = document.querySelectorAll('select.js-select2');
 		selectBlocks.forEach(function(select) {
 			select.addEventListener('change', updatePrice);
-		});
+		}); 
+
+
 	</script>
 	<!--===============================================================================================-->
 			<script
