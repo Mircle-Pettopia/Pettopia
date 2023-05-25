@@ -183,6 +183,7 @@ public class ProductCategoryController {
 		}
 		;
 		model.addAttribute("index", productService.selectPrdAllList2(product1VO));
+		System.out.println("상태정보" + productService.selectPrdAllList2(product1VO));
 		model.addAttribute("categories", productService.selectCategoryList());
 
 		return "product/productCategory";

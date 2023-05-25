@@ -236,8 +236,8 @@
 									Quick View
 								</a>
 							</div> -->
-							<div class="block2-pic hov-img0">
-								<img th:src="'download/'+${product.prdtImg}">
+							<div class="block2-pic hov-img0" >
+								<img th:src="'download/'+${product.prdtImg}" style="height:330px; width:300px;">
 
 								<a  th:href="@{/ProductDetail(prdtId=${product.prdtId})}"
 								   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
@@ -252,7 +252,7 @@
 										<span th:text="${product.prdtNm}"></span>
 									</a>
 
-									<span class="stext-105 cl3" th:text="${product.prdtPrc} + '원'"></span>
+									<span class="stext-105 cl3" th:text="${#numbers.formatInteger(product.prdtPrc, 3, 'COMMA') + '원'}"></span>
 								</div>
 
 								<div class="block2-txt-child2 flex-r p-t-3">

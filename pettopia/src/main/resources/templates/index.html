@@ -162,7 +162,7 @@
 								</a>
 							</div> -->
 							<div class="block2-pic hov-img0">
-								<img th:src="'download/'+${product.prdtImg}">
+								<img th:src="'download/'+${product.prdtImg}" style="height:330px; width:300px;">
 
 								<a  th:href="@{/ProductDetail(prdtId=${product.prdtId})}"
 								   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
@@ -177,7 +177,7 @@
 										<span th:text="${product.prdtNm}"></span>
 									</a>
 
-									<span class="stext-105 cl3" th:text="${product.prdtPrc} + '원'"></span>
+									<span class="stext-105 cl3" th:text="${#numbers.formatInteger(product.prdtPrc, 3, 'COMMA') + '원'}"></span>
 								</div>
 
 								<div class="block2-txt-child2 flex-r p-t-3">
@@ -252,18 +252,10 @@
 										class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 										<span th:text="${product.prdtNm}"></span>
 									</a>
+									
+									<span class="stext-105 cl3" th:text="${#numbers.formatInteger(product.prdtPrc, 3, 'COMMA') + '원'}"></span>
 
-									<span class="stext-105 cl3" th:text="${product.prdtPrc} + '원'"></span>
 								</div>
-
-<!-- 								<div class="block2-txt-child2 flex-r p-t-3">
-									<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-										<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
-											alt="ICON">
-										<img class="icon-heart2 dis-block trans-04 ab-t-l"
-											src="images/icons/icon-heart-02.png" alt="ICON">
-									</a>
-								</div> -->
 							</div>
 						</div>
 					</div>
