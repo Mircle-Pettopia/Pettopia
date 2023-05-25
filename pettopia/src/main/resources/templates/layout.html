@@ -135,8 +135,9 @@
 							</li>
 							<!-- =================================영주추가함======================= -->
 							<li class="menu">
-								<button class="noonnu_font" onclick="document.getElementById('id01').style.display='block'">펫토피아
-									툴즈</button>
+								<a class="noonnu_font" onclick="document.getElementById('id01').style.display='block'"
+										style="cursor: pointer;">
+									툴즈</a>
 							</li>
 
 							<!-- ================여기까지============ -->
@@ -462,58 +463,83 @@
 	</style>
 	<div id="id01" class="w3-modal">
 		<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="margin-top:100px;width: 400px;">
-			<header class="w3-container w3-blue">
+			<header class="w3-container w3-Olive" style="background-color: #e6e6e6;">
 				<span onclick="document.getElementById('id01').style.display='none'"
-					class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
-				<h2>펫토피아 툴즈</h2>
+					class="w3-button w3-Olive w3-xlarge w3-display-topright" style="background-color: #e6e6e6;">&times;</span>
+				<h2 class="noonnu_font"><img src="/images/icons/dog_and_cat.png" width="30"> 펫토피아 툴즈</h2>
 			</header>
 			<div class="w3-bar w3-border-bottom">
-				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'ageCal')">나이 계산기</button>
-				<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'calCal')">칼로리 계산기</button>
+				<button class="tablink w3-bar-item w3-button noonnu_font" onclick="openTab(event, 'ageCal')">나이 계산기</button>
+				<button class="tablink w3-bar-item w3-button noonnu_font" onclick="openTab(event, 'calCal')">칼로리 계산기</button>
 				<!--<button class="tablink w3-bar-item w3-button" onclick="openTab(event, 'Tokyo')">WIP</button>-->
 			</div>
+
+			<!--재미부분-->
 			<div id="Vapp">
 				<div id="ageCal" class="w3-container w3tabs">
-
-					<h1>나이 계산기</h1>
-					<hr>
-
-					<label></label><input type="radio" v-model="race" value="cat">고양이</label>
-					<label></label><input type="radio" v-model="race" value="dog">강아지</label>
-					<hr>
-
-					<div v-if="race=='cat'">
-						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+					<!--나이 계산기-->
+					<!--<h2 class="noonnu_font">나이 계산기</h2>-->
+					<div style="margin-top: 10px; text-align: center; margin-bottom: 15px;">
+						<h4 class="noonnu_font"> &gt; &gt; 동물 선택 &lt; &lt; </h4>
 					</div>
-					<div v-if="race=='dog'">
+					
+					<div style="text-align: center; margin-bottom:40px;">
+						<label style="display: inline-block !important; margin-right: 9px;"><input type="radio" v-model="race" value="cat"> 고양이</label>
+						<label style="display: inline-block !important;"><input type="radio" v-model="race" value="dog"> 강아지</label>
 
-						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+						<div v-if="race=='cat'">
+							<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+						</div>
+
+						<div v-if="race=='dog'">
+							<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+						</div>
 					</div>
 
-					<hr>
-					우리 아이 생일: <input type="date" v-model="born">
-					<hr>
-					<img :src="agePic" alt="">
-					<h4>우리아이의 나이는:<span>{{computeAge}}</span>살 이에요!</h4>
+					<div style="text-align: center; margin-bottom: 40px;">
+						<h4 class="noonnu_font"> &gt; &gt; 우리아이 생년월일 선택 &lt; &lt;</h4>
+						<input type="date" v-model="born" style="width: 80%; height: 50px; background-color: whitesmoke;">
+					</div>
+
+					<div style="text-align: center;">
+						<img :src="agePic" alt="">
+					</div>
+
+					<h5 style="text-align: center; margin-bottom:30px;">우리아이의 나이는
+						<span style="color: orangered; font-size: xx-large; font-weight: bold;">{{computeAge}}</span>
+						살 이에요!
+					</h5>
 				</div>
 
+				<!--칼로리 계산기-->
 				<div id="calCal" class="w3-container w3tabs">
-					<h1>칼로리 계산기</h1>
-					<hr>
-					<label></label><input type="radio" v-model="race" value="cat">고양이</label>
-					<label></label><input type="radio" v-model="race" value="dog">강아지</label>
-					<hr>
-					<div v-if="race=='cat'">
-						<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
-					</div>
-					<div v-if="race=='dog'">
-						<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
-					</div>
+					<!--<h2 class="noonnu_font">칼로리 계산기</h2>-->
+					<div>
+						<div style="margin-top: 10px; text-align: center; margin-bottom: 15px;">
+							<h4 class="noonnu_font"> &gt; &gt; 동물 선택 &lt; &lt; </h4>
+						</div>
+						
+						<div style="text-align: center; margin-bottom: 40px;">
+							<label style="display: inline-block !important; margin-right: 9px;"><input type="radio" v-model="race" value="cat"> 고양이</label>
+							<label style="display: inline-block !important;"><input type="radio" v-model="race" value="dog"> 강아지</label>
+							<div v-if="race=='cat'">
+								<img src="https://cdn-icons-png.flaticon.com/128/1864/1864514.png" alt="">
+							</div>
+							<div v-if="race=='dog'">
+								<img src="https://cdn-icons-png.flaticon.com/128/4540/4540789.png" alt="">
+							</div>
+						</div>
 
-					<hr>
-					우리아이 몸무게:<input type="number" v-model="weight">KG
-					<hr>
-					<h4>우리아이 일일권장 칼로리는<br><span style="color: red; font-size: xx-large;">{{computeCal}}</span>kcal 입니다</h4>
+						<div style="text-align: center; margin-bottom: 20px;">
+							<h4 class="noonnu_font"> &gt; &gt; 우리아이 몸무게 입력 &lt; &lt;</h4>
+							<input type="number" v-model="weight" style="width: 75%; height: 50px; text-align: right; background-color: whitesmoke;">KG
+						</div>
+
+						<h5 style="text-align: center; margin-bottom:30px;">우리아이 일일권장 칼로리는
+							<span style="color: orangered; font-size: xx-large; font-weight: bold;">{{computeCal}}</span>
+							kcal 입니다
+						</h5>
+					</div>
 
 				</div>
 
@@ -527,6 +553,7 @@
 						onclick="document.getElementById('id01').style.display='none'">Close</button>
 				</div>
 			</div>
+
 		</div>
 	</div>
 	<script>
