@@ -19,44 +19,46 @@ FROM
   JOIN member m ON q.me_id = m.me_id
   LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
  WHERE M.me_id = #{meId} -->
- SELECT
-  q.qst_no,
-  q.me_id,
-  q.title,
-  q.reg_dt,
-  q.qst_img,
-  q.prdt_id,
-  CASE WHEN q.qst_status = cd.cod_cd THEN cd.cod_title ELSE q.qst_status END AS qst_status,
-  q.qst_yn,
-  q.content
-FROM
-  qna q
-  JOIN member m ON q.me_id = m.me_id
-  LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
-WHERE
-  m.me_id = #{meId}
-ORDER BY
-  q.reg_dt desc
+	 SELECT
+	  q.qst_no,
+	  q.me_id,
+	  q.title,
+	  q.reg_dt,
+	  q.qst_img,
+	  q.prdt_id,
+	  CASE WHEN q.qst_status = cd.cod_cd THEN cd.cod_title ELSE q.qst_status END AS qst_status,
+	  q.qst_yn,
+	  q.content
+	FROM
+	  qna q
+	  JOIN member m ON q.me_id = m.me_id
+	  LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
+	WHERE
+	  m.me_id = #{meId}
+	ORDER BY
+	  q.reg_dt desc
  
   </select>
   
     <select id="qnaAllList2" resultType="QnaVO">
-SELECT
-  q.qst_no,
-  q.me_id,
-  q.title,
-  q.reg_dt,
-  q.qst_img,
-  q.prdt_id,
-  CASE WHEN q.qst_status = cd.cod_cd THEN cd.cod_title ELSE q.qst_status END AS qst_status,
-  q.qst_yn,
-  q.content
-FROM
-  qna q
-  JOIN member m ON q.me_id = m.me_id
-  LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
-WHERE
-  q.prdt_id = #{prdtId}
+		SELECT
+		  q.qst_no,
+		  q.me_id,
+		  q.title,
+		  q.reg_dt,
+		  q.qst_img,
+		  q.prdt_id,
+		  CASE WHEN q.qst_status = cd.cod_cd THEN cd.cod_title ELSE q.qst_status END AS qst_status,
+		  q.qst_yn,
+		  q.content
+		FROM
+		  qna q
+		  JOIN member m ON q.me_id = m.me_id
+		  LEFT JOIN code_detail cd ON q.qst_status = cd.cod_cd
+		WHERE
+		  q.prdt_id = #{prdtId}
+		ORDER BY
+		  q.reg_dt desc
   </select>
   
  <insert id="insertQnA" parameterType="QnaVO">
