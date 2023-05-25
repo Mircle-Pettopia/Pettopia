@@ -42,7 +42,7 @@
 		                       WHERE title LIKE '%'||#{keyword}||'%'
 		                       AND bo_type = 'BY1'
 		                       ORDER BY bo_no DESC
-		) a	) WHERE RN BETWEEN 0*10 and 1*10
+		) a	) WHERE RN BETWEEN (#{page}-1)*10 and #{page}*10
 	</select>
 	
 	<!-- 은애수정 2023/05/18 -->

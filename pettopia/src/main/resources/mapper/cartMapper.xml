@@ -28,7 +28,7 @@
 		LEFT JOIN (select PRDT_IMG,PRDT_ID from PRODUCT_IMG WHERE IS_MAIN='Y') I
 		  ON P.PRDT_ID = I.PRDT_ID
 		
-		where me_id=#{meId}
+		where me_id=#{meId} AND SALE_ST='ST2'
 		ORDER BY CRT_ID
 	</select>
 	
@@ -115,7 +115,10 @@
 	</insert>
 	
 	<select id='cartCount' parameterType='String' resultType="Integer">
-		select count(*) from cart where me_id=#{meId}
+		select count(*) from CART c
+		left join PRODUCT p
+		on c.PRDT_ID = p.PRDT_ID
+		where me_id=#{meId} AND SALE_ST='ST2'
 	</select>
 	
 	<!-- 은애 :D !! prodInterest -> cart insert (cart)-->
