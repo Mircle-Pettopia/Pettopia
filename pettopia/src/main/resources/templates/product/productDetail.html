@@ -286,14 +286,14 @@ fieldset legend {
 				<div class="col-md-6 col-lg-7 p-b-30">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
 						<div class="wrap-slick3 flex-sb flex-w">
-								<div style="margin-right: 61px;" class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+								<div style="margin-right: 110px;" class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" th:each="Img : ${productImg}"
 									data-thumb="'download/' + ${Img.prdtImg}">
 									<div class="wrap-pic-w pos-relative">
-										<img th:src="'download/'+${Img.prdtImg}" style="width:597px; height:738.781px;">
+										<img th:src="'download/'+${Img.prdtImg}" style="width:500px; height:700px;">
 
 										<!-- <a
 											class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
@@ -386,7 +386,7 @@ fieldset legend {
 						<p class="stext-102 cl3 p-t-23" id="prdtDesct">
 <!-- 						<p th:utext="${ProductDetail.prdtDesct}" >
 						</p> -->
-						<div class="p-t-33">
+						<div class="p-t-33" style="position:relative; right:50px;" >
 
 
 						
@@ -419,39 +419,49 @@ fieldset legend {
 								</div>
 							</th:block>
 								
+						
+		<div class="flex-w flex-r-m p-b-10" th:if="${ProductDetail.saleSt} == 'ST3'">
+    <div class="size-204 flex-w flex-m respon6-next">
+        <!-- 아이디 값 불러옴 -->
+        <input type="hidden" th:value="${id}" id="meId"/>
+            <strong style="font-size:40px;"><span>품절</span></strong>
+    </div>
+
+
+
+    <a href="#" id="submitBtn" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ " data-tooltip="Add to Wishlist">
+        <i class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
+    </a>
+    <div style="float:right;">		
+</div>
+</div>
+
+<div class="flex-w flex-r-m p-b-10" th:unless="${ProductDetail.saleSt} == 'ST3'">
+    <div class="size-204 flex-w flex-m respon6-next">
+        <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                <i class="fs-16 zmdi zmdi-minus"></i>
+            </div>
+            <input class="mtext-104 cl3 txt-center num-product" id="cnt" type="number" name="num-product" value="1" onchange="updatePrice()">
+            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                <i class="fs-16 zmdi zmdi-plus"></i>
+            </div>
+        </div>
+        <!-- 아이디 값 불러옴 -->
+        <input type="hidden" th:value="${id}" id="meId"/>
+        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" name="js-addcart-detail" id="addCart" type="submit">Add to cart</button>
+    </div>
+    <a href="#" id="submitBtn" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ " data-tooltip="Add to Wishlist">
+        <i class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
+    </a>
+    <div style="float:right;">
 							
-							
-							
-							<div class="flex-w flex-r-m p-b-10">
-								<div class="size-204 flex-w flex-m respon6-next">
-									<div class="wrap-num-product flex-w m-r-20 m-tb-10">
-										<div
-											class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-											<i class="fs-16 zmdi zmdi-minus"></i>
-										</div>
-										<input class="mtext-104 cl3 txt-center num-product" id="cnt"
-											type="number" name="num-product" value="1"
-											onchange="updatePrice()">
-										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-											<i class="fs-16 zmdi zmdi-plus"></i>
-										</div>
-									</div>
-									<!-- 아이디 값 불러옴 -->
-									<input type="hidden" th:value="${id}" id="meId"/>
-									<button
-										class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" name="js-addcart-detail" id="addCart" type="submit">
-										Add to cart</button>
-								</div>
-								<a href="#" id="submitBtn"
-									class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ "
-									data-tooltip="Add to Wishlist"> <i
-									class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
-								</a>
-							</div>
-							<div style="float:right;">
-							<span class="mtext-106 cl2" id="prdtPrc">
-							 [[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>
 							 </div>
+							 
+</div>
+		<span class="mtext-106 cl2" id="prdtPrc">
+							 [[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>					
+							
 						</div>
 					</div>
 				</div>
