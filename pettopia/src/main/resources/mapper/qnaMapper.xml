@@ -36,7 +36,7 @@ FROM
 WHERE
   m.me_id = #{meId}
 ORDER BY
-  q.reg_dt
+  q.reg_dt desc
  
   </select>
   
@@ -80,9 +80,15 @@ WHERE Q."QST_NO" = #{qstNo}
  </select>
 
 <select id="QnaReply" resultType="QnaVO">
-select *
+<!-- select *
 from reply
-where bo_no = #{qstNo}
+where bo_no = #{qstNo} -->
+
+SELECT R.COMMENT_ID, R.ME_ID, R.SUBJECT, R.REG_DT, R.DIVISION, R.BO_NO, R.RE,
+       M.NAME AS NAME
+FROM REPLY R
+JOIN MEMBER M ON R.ME_ID = M.ME_ID
+WHERE R.BO_NO = #{qstNo}
 </select>  
   
   </mapper>

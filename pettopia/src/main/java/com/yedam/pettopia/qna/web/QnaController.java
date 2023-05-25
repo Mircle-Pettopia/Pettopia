@@ -115,6 +115,7 @@ public class QnaController {
 	public String QnaDetail(Model model,@RequestParam("qstNo") int qstNo) {
 		System.out.println("qna디테일"+qnaService.QnaCheck(qstNo));
 		model.addAttribute("QnaDetail", qnaService.QnaCheck(qstNo));
+		System.out.println("qna댓글"+ qnaService.QnaReply(qstNo));
 		model.addAttribute("qnaReply", qnaService.QnaReply(qstNo));
 		return "qna/qnaDetail";
 	}
