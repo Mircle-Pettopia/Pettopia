@@ -90,6 +90,7 @@ public class ProductController {
 	@PostMapping("updatePrd")
 	@ResponseBody
 	public Map<String, Object> updatePrd(ProductVO vo){
+		System.out.println("옵션" + vo);
 		int result = productService.updatePrd(vo);
 		Map<String, Object> map = new HashMap<>();
 		if(result == 1) {
