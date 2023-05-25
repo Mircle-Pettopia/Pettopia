@@ -25,4 +25,5 @@ public interface ReviewMapper {
 	//작성 후기 디테일
 	public ReviewVO writtenDetail(ReviewVO reviewVO);
 
+	public ReviewVO ordtIdOptionInfo(String ordtId);
 }

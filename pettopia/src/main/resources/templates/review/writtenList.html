@@ -140,20 +140,40 @@ fieldset legend {
 	width: 80px;
 	height: 80px;
 	vertical-align: text-top;
+	float: left;
+	margin-right: 10px;
+	overflow: visual;
 }
-
+/*
 .edi .image {
 	display: inline-block;
 }
+*/
 
 .edi p {
+	display: inline-block;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	max-width: 389px;
+	word-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 4 ;
+        -webkit-box-orient: vertical;
+}
+
+/*
+ .edi p span{
 	display: inline-block;
 	line-height: 12px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-width: 200px;
-}
+	line-height: 21px;
+} 
+*/
 </style>
 
 		<div class="container">
@@ -163,24 +183,26 @@ fieldset legend {
 				<!-- 마이페이지 주문관리 -->
 				<div class="col-md-8 col-lg-10 p-b-80 fontSize">
 					<div class="p-r-45 p-r-0-lg m-t-50">
+						<div style="padding-bottom: 30px; border-bottom: 1px solid #ddd;">
 						<h1>
-							<span style="font-weight: bold; color: rgb(201, 159, 240)">|
+							<span style="font-weight: 400; margin: 10px 0 20px 0; color: rgb(201, 159, 240)">|
 							</span>내가 작성한 리뷰
 							<span style="font-size: 25px; color: darkorange;" th:text="${#lists.size(writtenList)}"></span>
 						</h1>
-						<br /> <br />
+					</div>
+						
 												<div th:if="${writtenList.empty}"
 							style="text-align: center; font-size: 15px; font-weight: bold; margin-top: 25px;">
 							조회할 정보가 없습니다.</div>
 						
 						<div th:each="written : ${writtenList}"
-							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
-							<div class="title">
+							style="width: 925px; height: 125px; font-weight: bold; border-bottom: solid 1px #ddd; padding:20px 0 20px 0;">
+							<div>
 								<a th:href="@{ProductDetail(prdtId=${written.prdtId})}"> <img
 									th:src="'download/'+${written.prdtImg}"
 									style="width: 40px; height: 40px; float: left; margin-right: 20px;" /></a>
 							</div>
-							<div class="title">[[${written.prdtNm}]]</div>
+							<div class="title" style="width: 160px; float: left;">[[${written.prdtNm}]]</div>
 							<div class="star"
 								style="width: 150px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">
 								<fieldset style="border: none">
@@ -200,11 +222,12 @@ fieldset legend {
 							</div>
 
 							<div class="edi"
-								style="height: auto; float: left; line-height: 69px; width: 505px;"
-								th:utext="${written.contents }"></div>
+								style="height: auto; float: left; width: 389px;"
+								th:utext="${written.contents }">
+								</div>
 
 							<div class="btnn"
-								style="padding: 25px 0 0 0; border-bottom: solid 1px #eee">
+								>
 								<a class="delA"
 									th:href="@{reviewDelete/{reNo}(reNo=${written.reNo})}"><button
 										type="button" class="btn btnPush btnRed"
@@ -214,7 +237,7 @@ fieldset legend {
 								<button type="button"
 									class="btn btnPush btnBlueGreen write-review-btn"
 									id="reviewBtn" th:data-prdtid="${written.reNo}"
-									style="float: right; font-size: 13px; width: 63px">수정</button>
+									style="float: right; width: 63px">수정</button>
 							</div>
 						</div>
 					</div>
@@ -368,6 +391,11 @@ fieldset legend {
 						  stars[i].classList.add('on');
 						}
 			 */
+			 
+
+			 
+			 
+
       </script>
 	</div>
 </body>

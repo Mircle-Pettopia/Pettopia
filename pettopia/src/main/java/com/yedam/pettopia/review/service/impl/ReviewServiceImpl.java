@@ -54,6 +54,12 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewMapper.writtenDetail(reviewVO);
 	}
 
+	@Override
+	public ReviewVO ordtIdOptionInfo(String ordtId) {
+		return reviewMapper.ordtIdOptionInfo(ordtId);
+	}
+	}
 
 
-}
+
+
