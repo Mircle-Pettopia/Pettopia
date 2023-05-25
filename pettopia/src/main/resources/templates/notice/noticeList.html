@@ -54,9 +54,9 @@
 			</div>
 		</div>
 
-		<div class="board_wrap">
+		<div class="board_wrap" style="margin: 60px auto;">
 			<div class="board_title">
-				<strong>공지사항</strong>
+				<strong style="font-size: 2rem; letter-spacing: -1px; color: #161616;">공지사항</strong>
 			</div>
 
 
@@ -65,7 +65,7 @@
 					<div style="height: 50px;">
 						<button class="btn btnPush btnLightBlue" id="SearchBtn"
 							style="float: right; margin-left: 5px;" onclick="setkeyword();">
-							<i class="fas fa-search"></i>
+							검색
 						</button>
 						<input class="form-control" type="text" name="keyword"
 							id="keyword" th:value="${pageMaker.cri.keyword}"

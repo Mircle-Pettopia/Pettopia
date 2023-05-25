@@ -54,10 +54,6 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewMapper.writtenDetail(reviewVO);
 	}
 
-	@Override
-	public ReviewVO optionDetail(String ordtId) {
-		return reviewMapper.optionDetail(ordtId);
-	}
 
 
 }

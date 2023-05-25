@@ -46,50 +46,62 @@
 			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
 				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
 					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-				</a> <span class="stext-109 cl4"> <a th:href="@{noticeList}">공지사항</a> </span>
+				</a> <span class="stext-109 cl4"> <a th:href="@{noticeList}">공지사항</a>
+				</span>
 			</div>
 		</div>
 
-		<div class="board_wrap">
+		<div class="board_wrap" style="margin: 60px auto;">
 			<div class="board_title">
-				<strong>공지사항</strong>
+				<strong
+					style="font-size: 2rem; letter-spacing: -1px; color: #161616;">공지사항</strong>
 			</div>
 			<div class="board_view_wrap">
 				<div class="board_view">
-					<div class="title" id="title">[[${noticeDetail.title }]]</div>
-					<div class="info">
+					<div class="title" id="title" style="font-size: 1.5rem;">[[${noticeDetail.title
+						}]]</div>
+					<div class="info"
+						style="text-align: right; line-height: 1; height: 46px; border-bottom: 1px solid #999;">
 						<dl>
-							<dt id="noNo">번호</dt>
-							<dd>[[${noticeDetail.noNo }]]</dd>
+							<dt id="noNo" style="font-size: 15px;">번호</dt>
+							<dd style="font-size: 15px;">[[${noticeDetail.noNo }]]</dd>
 						</dl>
 						<dl>
-							<dt id="rDate">작성일</dt>
-							<dd>[[ ${#dates.format(noticeDetail.rDate, 'yyyy/MM/dd')}]]</dd>
+							<dt id="rDate" style="font-size: 15px;">작성일</dt>
+							<dd style="font-size: 15px;">[[
+								${#dates.format(noticeDetail.rDate, 'yyyy/MM/dd')}]]</dd>
 						</dl>
 						<dl>
-							<dt id="viewCnt">조회수</dt>
-							<dd>[[${noticeDetail.viewCnt }]]</dd>
+							<dt id="viewCnt" style="font-size: 15px;">조회수</dt>
+							<dd style="font-size: 15px;">[[${noticeDetail.viewCnt }]]</dd>
 						</dl>
 
+					</div>
+					<div class="cont" id="contents"
+						style="font-size: 1.4rem; border-bottom: 1px solid #999;">
+						<pre>[[${noticeDetail.contents }]]</pre>
+					</div>
+					<div class="info"
+						style="line-height: 2; border-bottom: 2px solid #000; height: 62px;">
 						<dl>
-							<dt id="files">첨부파일</dt>
-							<dd>
+							<dt id="files" style="font-size: 15px;">첨부파일</dt>
+							<dd style="font-size: 15px;">
 								<a th:href="@{/downloadFile(filepath=${noticeDetail.files})}"
 									th:text="${noticeDetail.files}"></a>
 							</dd>
 						</dl>
 					</div>
-					<div class="cont" id="contents">
-						<pre>[[${noticeDetail.contents }]]</pre>
-					</div>
 				</div>
 				<div style="float: right;">
-				<a th:href="@{noticeList}"><button
-							type="button" class="btn btnPush btnBlueGreen">목록</button></a> </div>
-				<div class="bt_wrap" sec:authorize="hasAuthority('ROLE_ADMIN')">
+					<a th:href="@{noticeList}"><button type="button"
+							class="btn btnPush btnBlueGreen">목록</button></a>
+				</div>
+				<div style="margin-top: 70px;" class="bt_wrap"
+					sec:authorize="hasAuthority('ROLE_ADMIN')">
 					<a th:href="@{noticeUpdateForm(noNo=${noticeDetail.noNo})}"><button
-							type="button" class="btn btnPush btnBlueGreen">수정</button></a> 
-							<a class="delA" th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
+							type="button" class="btn btnPush btnBlueGreen">수정</button></a> <a
+						class="delA"
+						th:href="@{noticeDelete/{noNo}(noNo=${noticeDetail.noNo})}"><button
 							type="button" class="btn btnPush btnRed">삭제</button></a>
 				</div>
 			</div>
