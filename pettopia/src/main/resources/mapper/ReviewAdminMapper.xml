@@ -10,6 +10,7 @@
 		SELECT r.RE_NO,
 		r.CREAT_DT,
 		r.ME_ID,
+		r.CONTENTS,
 		d.ORDT_ID,
 		p.PRDT_ID,
 		h.ORDR_DATE,

@@ -65,7 +65,7 @@
 	<update id="updateNotice" parameterType="NoticeVO">
 		UPDATE notice
 			SET title = #{title},
-				contents = #{contents}
+				contents = #{contents},
 				files = #{files}
 			WHERE no_no = #{noNo}
 	</update>

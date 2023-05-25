@@ -24,6 +24,7 @@
 .mr-2, .ml-2 {
 	width: 250px;
 }
+
 </style>
 <title>Pettopia</title>
 </head>
@@ -165,12 +166,11 @@
 										</div>
 									</td>
 								</tr>
-								<tr class="thColor">
-									<th>내용</th>
-									<td><textarea class="form-control" name="contents"
-											id="editor" cols="60" rows="10"></textarea></td>
-											
-								</tr>
+							   <tr class="thColor">
+                    <th>내용</th>
+                    <td id="detailContents"></td>
+                    <td></td>
+                  </tr>
 								
 								
 							</table>
@@ -207,10 +207,7 @@
 			</div>
 		</div>
 
-		<!-- ==========================ckeditor========================== -->
-		<script
-			src="https://cdn.ckeditor.com/ckeditor5/37.1.0/super-build/ckeditor.js"></script>
-		<script type="text/javascript" src="/CKeditorSuperBuild2.js"></script>
+
 
 		<script>
 			const Grid = tui.Grid;
@@ -325,49 +322,43 @@
 				},
 			});
 				
-		     reviewList.on("dblclick", (e) => {
-		            let rowData = reviewList.getRow(e.rowKey);
-		            reNo = rowData.reNo;
-		            rowKey = rowData.rowKey;
-		            $("#detailMeId").text(rowData.meId);
-		            $("#detailPrdtNm").text(rowData.prdtNm);
-		            $("#detailTitle").text(rowData.point);
-		            $("#detailContent").val(rowData.content);
+			reviewList.on("dblclick", (e) => {
+				  let rowData = reviewList.getRow(e.rowKey);
+				  reNo = rowData.reNo;
+				  rowKey = rowData.rowKey;
+				  $("#detailMeId").text(rowData.meId);
+				  $("#detailPrdtNm").text(rowData.prdtNm);
+				  $("#detailTitle").text(rowData.point);
+				  $("#detailContents").html(rowData.contents);
 
-	            
-		       $.ajax({
-            url: "reviewDetail",
-            method: "GET",
-            data: {
-              reNo: reNo,
-            },
-            success: function (data) {
-              console.log(data);
-              editor.setData(data.contents);
-              
-              
-              var point = data.point; 
-              $(".starR").removeClass("on"); 
-              
-              // 별점 값에 따라 'on' 클래스 추가
-              $(".starR").each(function (index) {
-            	  var starValue = $(this).find("input").val();
-            	  if (starValue <= point) {
-            	    $(this).addClass("on");
-            	  } else {
-            	    $(this).removeClass("on");
-            	  }
-            	});
+				  $.ajax({
+				    url: "reviewDetail",
+				    method: "GET",
+				    data: {
+				      reNo: reNo,
+				    },
+				    success: function (data) {
+				      console.log(data);
 
-            },
-             
-            error: function (reject) {
-              console.log(reject);
-            },
-          });
- 
-		  $("#detailModal").modal("show");
-		          });
+				      var point = data.point; 
+				      $(".starR").removeClass("on"); 
+				      
+				      $(".starR").each(function (index) {
+				        var starValue = $(this).find("input").val();
+				        if (starValue <= point) {
+				          $(this).addClass("on");
+				        } else {
+				          $(this).removeClass("on");
+				        }
+				      });
+				    },
+				    error: function (reject) {
+				      console.log(reject);
+				    },
+				  });
+
+				  $("#detailModal").modal("show");
+				});
 	
 
 			//검색
@@ -508,13 +499,7 @@
 	        
 	        
 	     
-	        
-	        CKeditor.disableAutoInline = true;
-
-	     // CKEditorSuperBuild2.js 파일 로드
-	     CKeditor.replace('editor', {
-	       readOnly: true
-	     });
+	      
 		</script>
 	</div>
 </body>

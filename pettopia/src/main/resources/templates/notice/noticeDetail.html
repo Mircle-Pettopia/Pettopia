@@ -44,7 +44,7 @@
 	<div layout:fragment="content">
 		<div class="container">
 			<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-				<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+				<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
 					Home <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 				</a> <span class="stext-109 cl4"> <a th:href="@{noticeList}">공지사항</a>
 				</span>
@@ -78,7 +78,7 @@
 
 					</div>
 					<div class="cont" id="contents"
-						style="font-size: 1.4rem; border-bottom: 1px solid #999;">
+						style="font-size: 1.4rem; border-bottom: 1px solid #999; MIN-HEIGHT: 300PX;">
 						<pre>[[${noticeDetail.contents }]]</pre>
 					</div>
 					<div class="info"

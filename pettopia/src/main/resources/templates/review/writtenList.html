@@ -324,8 +324,15 @@ fieldset legend {
               console.log(data);
               if (data == "success") {
                 $("#writemodal").remove(); // 모달 창 완전히 제거
-                alert("후기가 수정되었습니다.");
-                location.reload(); // 페이지 새로고침
+           	 Swal.fire({
+	                position: 'center',
+	                icon: 'success',
+	                title: '수정완료!',
+	                showConfirmButton: false,
+	                timer: 1000
+	              }).then(() => {
+	            	  location.reload();
+	              })
               }
             },
             error: function (reject) {

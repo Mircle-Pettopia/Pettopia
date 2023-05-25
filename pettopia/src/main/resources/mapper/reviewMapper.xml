@@ -23,7 +23,7 @@
 		AND ship_st = 'SS3'
 		AND not exists ( SELECT re_no from review r where r.ordt_id =
 		ordt.ordt_id)
-
+		ORDER BY 4 DESC
 
 		<!-- SELECT me_id, ordt.ordt_id, ordt.prdt_id, TO_DATE(ordr_date, 'rrrr-MM-dd') 
 			ordr_date, prdt_img, prdt_nm FROM order_header ordr JOIN order_detail ordt 
