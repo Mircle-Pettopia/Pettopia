@@ -101,4 +101,28 @@ public class ProductController {
 		return map;
 	}
 	
+	// 유저 사용하는 상품 카운트
+	@PostMapping("prdCnt")
+	@ResponseBody
+	public String prdCnt(@RequestBody ProductVO[] arr){
+		int cartCnt = 0;
+		int zzimCnt = 0;
+		int orderCnt = 0;
+		
+		if(arr != null) {
+			for(int i = 0; i < arr.length; i++) {
+				System.out.println("출력 "+ productService.prdCnt(arr[i]));
+				Map<String, Integer> product = productService.prdCnt(arr[i]);
+		        cartCnt += product.get("cartCnt");
+		        zzimCnt += product.get("zzimCnt");
+		        orderCnt += product.get("orderCnt");
+			}
+		}
+		
+		if(cartCnt > 0 || zzimCnt > 0 || orderCnt > 0) {
+			return "error";
+		} else {
+			return "success";
+		}
+	}
 }

@@ -1721,52 +1721,83 @@
             return;
           }
 
-          Swal.fire({
-            title: "삭제 하시겠습니까?",
-            text: "복구 할 수 없습니다.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소",
-          }).then((result) => {
-            if (result.value) {
-              $.ajax({
-                url: "productDel",
-                method: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(selectedRows),
-                success: function (result) {
-                  // 상품 현황 업데이트
-                  $("#currentPrd td:first-child span").text(result.allPrd);
-                  $("#currentPrd td:nth-child(2) span").text(result.salePrd);
-                  $("#currentPrd td:last-child span").text(result.stopPrd);
+          $.ajax({
+            url: "prdCnt",
+            method: "post",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(selectedRows),
+            success: function (result) {
+              if (result === "error") {
+                Swal.fire({
+                  icon: "error",
+                  title: "삭제 할 수 없습니다",
+                });
+                return;
+              } else if (result === "success") {
+                Swal.fire({
+                  title: "삭제 하시겠습니까?",
+                  text: "복구 할 수 없습니다.",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#d33",
+                  cancelButtonColor: "#3085d6",
+                  confirmButtonText: "삭제",
+                  cancelButtonText: "취소",
+                }).then((result) => {
+                  if (result.value) {
+                    $.ajax({
+                      url: "productDel",
+                      method: "post",
+                      contentType: "application/json; charset=utf-8",
+                      data: JSON.stringify(selectedRows),
+                      success: function (result) {
+                        // 상품 현황 업데이트
+                        $("#currentPrd td:first-child span").text(
+                          result.allPrd
+                        );
+                        $("#currentPrd td:nth-child(2) span").text(
+                          result.salePrd
+                        );
+                        $("#currentPrd td:last-child span").text(
+                          result.stopPrd
+                        );
 
-                  selectedRows.forEach((row) => {
-                    prdList.removeRow(row.rowKey);
-                  });
-                  let Toast = Swal.mixin({
-                    toast: true,
-                    position: "top",
-                    showConfirmButton: false,
-                    timer: 1500,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                      toast.addEventListener("mouseenter", Swal.stopTimer);
-                      toast.addEventListener("mouseleave", Swal.resumeTimer);
-                    },
-                  });
-                  Toast.fire({
-                    icon: "success",
-                    title: "삭제가 정상적으로 되었습니다.",
-                  });
-                },
-                error: function (reject) {
-                  console.log(reject);
-                },
-              });
-            }
+                        selectedRows.forEach((row) => {
+                          prdList.removeRow(row.rowKey);
+                        });
+                        let Toast = Swal.mixin({
+                          toast: true,
+                          position: "top",
+                          showConfirmButton: false,
+                          timer: 1500,
+                          timerProgressBar: true,
+                          didOpen: (toast) => {
+                            toast.addEventListener(
+                              "mouseenter",
+                              Swal.stopTimer
+                            );
+                            toast.addEventListener(
+                              "mouseleave",
+                              Swal.resumeTimer
+                            );
+                          },
+                        });
+                        Toast.fire({
+                          icon: "success",
+                          title: "삭제가 정상적으로 되었습니다.",
+                        });
+                      },
+                      error: function (reject) {
+                        console.log(reject);
+                      },
+                    });
+                  }
+                });
+              }
+            },
+            error: function (reject) {
+              console.log(reject);
+            },
           });
         });
 

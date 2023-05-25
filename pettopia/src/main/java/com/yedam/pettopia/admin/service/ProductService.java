@@ -46,4 +46,7 @@ public interface ProductService {
 	// 상품 수정
 	public int updatePrd(ProductVO vo);
 	
+	// 유저가 사용하는 상품 카운트
+	public Map<String, Integer> prdCnt(ProductVO vo);
+	
 }

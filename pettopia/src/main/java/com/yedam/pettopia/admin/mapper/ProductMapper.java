@@ -71,4 +71,13 @@ public interface ProductMapper {
 	// 상품 수정
 	public int updatePrd(ProductVO vo);
 	
+	// 장바구니 카운트
+	public int cartCnt(ProductVO vo);
+	
+	// 찜 카운트
+	public int zzimCnt(ProductVO vo);
+	
+	// 주문서 카운트
+	public int orderCnt(ProductVO vo);
+	
 }
