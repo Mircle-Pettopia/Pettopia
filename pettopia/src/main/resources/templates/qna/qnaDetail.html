@@ -4,7 +4,6 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>반려동물쇼핑몰</title>
       <div layout:fragment="content">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
@@ -287,7 +286,7 @@
     </style>
 
 
-
+	<div class="container">
     <div class="content">
 
         <!-- //board_zone_sec -->
@@ -323,14 +322,15 @@
                         <div class="board_view_qa">
                             <div class="view_question_box">
                                 <strong class="view_question_tit" >Q.</strong>
-                                <span class="Viewer" th:utext="${QnaDetail.content}"/>
+                                
                                 <div class="seem_cont">
+                                
+                                       <strong style="font-size:20px;"> <p ><span class="Viewer" th:utext="${QnaDetail.content}"/></p></strong>
                                     <div style="margin:10px 0 10px 0">
-                                        <p></p>
                                     </div>
                                 </div>
                                 <!-- //seem_cont -->
-                            </div>w
+                            </div>
 
                         </div>
                         <!-- //board_view_qa -->
@@ -350,11 +350,11 @@
                 </div>
                 <!-- //board_zone_view -->
                 <div>
-                <div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border">
-                <h5 style="display:inline-block;">작성자: [[${QnaDetail.name}]] /작성일: <span th:text="${#dates.format(QnaDetail.regDt, 'yyyy-MM-dd HH:mm')}"></span></h5> 
+                <div class="col-lg-6 col-xl-12 m-lr-auto m-b-20 p-t-20 p-b-20 border" th:each="qna: ${qnaReply}">
+                <h5 style="display:inline-block;">작성자: [[${qna.name}]] /작성일: <span th:text="${#dates.format(qna.regDt, 'yyyy-MM-dd HH:mm')}"></span></h5> 
              <!--  <button type="button" class="btn btnPush btnRed" onclick="deleteReply(${data[i].commentId},'${data[i].meId}');" style="display:inline-block; float:right; margin-top:0px">삭제</button>` : ''} -->
                 <hr>
-                <div class="Viewer">[[${QnaDetail.subject}]]
+                <div class="Viewer">[[${qna.subject}]]
                 </div>
               </div>
                 </div>
@@ -364,8 +364,8 @@
                         onclick="gd_btn_delete('qa',18060,'y')"><strong>삭제</strong></button><button type="button"
                         class="btn_board_edit"
                         onclick="gd_btn_modify_write('qa',18060,'y')"><strong>수정</strong></button> -->
-                        <a href="QnaList" class="btn_board_list">
-                        <button type="button"><strong>목록</strong></button></a>
+
+                        <button type="button" class="btn btnPush btnBlueGreen" style="float:right;" onclick="location.href='QnaList'">목록</button>
                 </div>
 
             </div>
@@ -507,7 +507,7 @@
     <!-- 절대! 지우지마세요 : Start -->
     <iframe name="ifrmProcess" src="./blank(1).html" style="display:none" width="900" height="500"></iframe>
     <!-- 절대! 지우지마세요 : End -->
-
+</div>
 
 </body>
 
