@@ -102,7 +102,7 @@
 
 					<!-- Logo desktop -->
 					<a href="/" class="logo">
-						<canvas id="canvas" width="144" height="80"></canvas>
+						<canvas id="canvas" width="180" height="60" style="display: block;"></canvas>
 						<img src="/images/icons/logoTest1.png" alt="IMG-LOGO">
 					</a>
 
@@ -171,13 +171,13 @@
 					<img src="/images/icons/icon-close2.png" alt="CLOSE">
 				</button>
 				<div class="wrap-search-header flex-w p-l-15">
-					
-				
-				<button class="flex-c-m trans-04" id="searchBtn" type="button">
-					<i class="zmdi zmdi-search"></i>
-				</button>
-				<input class="plh3" type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
-			</div>
+
+
+					<button class="flex-c-m trans-04" id="searchBtn" type="button">
+						<i class="zmdi zmdi-search"></i>
+					</button>
+					<input class="plh3" type="text" name="searchProduct" id="searchNm" placeholder="상품명을 입력하세요.">
+				</div>
 			</div>
 		</div>
 	</header>
@@ -194,7 +194,10 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-6 col-lg-3 p-b-50">
-					<img src="img/pet_footer_logo.png" width="160px" height="160px">
+					<!-- <img src="img/pet_footer_logo.png" width="160px" height="160px"> -->
+					<p style="font-size: 10pt; text-align: center;">드래그해서 직접움직여보세요!</p>
+					<canvas id="canvas2" width="384" height="256" style="outline: none; border: none;"></canvas>
+
 				</div>
 
 				<div class="col-sm-6 col-lg-3 p-b-50 ">
@@ -378,7 +381,7 @@
 	<script src="/js/main.js"></script>
 
 
-	<!-- 여기서부턴 영주작업중 -->
+	<!-- =================================================================여기서부턴 영주작업중====================================================== -->
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<!-- Vue.js -->
 	<script type="text/javascript" src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -406,49 +409,61 @@
 		var renderer = new THREE.WebGLRenderer({
 			canvas: document.querySelector('#canvas'), antialias: true
 		});
+		var renderer2 = new THREE.WebGLRenderer({
+			canvas: document.querySelector('#canvas2'), antialias: true
+		});
 		renderer.outputEncoding = THREE.sRGBEncoding;
-
+		renderer2.outputEncoding = THREE.sRGBEncoding;
 		//< !--씬 만들기-- >
 		let scene = new THREE.Scene();
 		scene.background = new THREE.Color('white');
-
+		let scene2 = new THREE.Scene();
+		scene2.background = new THREE.Color('#e6e6e6');
 		//< !--카메라 세팅하기-- >
-		var camera = new THREE.PerspectiveCamera(15, 1);
-		camera.position.set(0.5, -0.5, 7);
+		let camera = new THREE.PerspectiveCamera(12, 3);
+		let camera2 = new THREE.PerspectiveCamera(20, 1.5);
 
 		//< !--라이트 세팅하기-- >
-		var light = new THREE.DirectionalLight(0xffff00, 10);
+		let light = new THREE.DirectionalLight(0xffff00, 10);
 		scene.add(light);
 
 		//< !--로드하기-->
 		let loader = new GLTFLoader();
-		loadCatDog('dog');
-		function loadCatDog(CD) {
-			if (CD == 'cat') {
-				camera = new THREE.PerspectiveCamera(60, 1);
-				camera.position.set(0, 200, 500);
-				load3D('img/toon_cat_free/scene.gltf');
-			}
-			else {
-				camera = new THREE.PerspectiveCamera(15, 1.8);
-				camera.position.set(0, -0.5, 7);
-				load3D('img/shiba/scene.gltf')
-			}
-		}
-		function load3D(src) {
-			loader.load(src, function (gltf) {
-				scene.add(gltf.scene);
+		let loader2 = new GLTFLoader();
+		camera.position.set(0, -0.3, 7);
+		camera2.position.set(0, -0.5, 7);
 
-				//< !--시바견을 움직여보자-- >
-				function animate() {
-					requestAnimationFrame(animate)
-					gltf.scene.rotation.y -= 0.01;
-					// gltf.scene.rotation.x -= 0.1;
-					renderer.render(scene, camera);
-				}
-				animate();
-			});
-		}
+		loader.load('img/shiba/scene.gltf', function (gltf) {
+			scene.add(gltf.scene);
+			function animate() {
+				requestAnimationFrame(animate)
+				gltf.scene.rotation.y -= 0.01;
+				renderer.render(scene, camera);
+			}
+			animate();
+		});
+
+
+
+		import { OrbitControls } from "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js";
+		const controls = new OrbitControls(camera2, renderer2.domElement);
+		controls.rotateSpeed = 0.3; // 마우스로 카메라를 회전시킬 속도입니다. 기본값(Float)은 1입니다.
+		controls.zoomSpeed = 0.5; // 마우스 휠로 카메라를 줌 시키는 속도 입니다. 기본값(Float)은 1입니다.
+		controls.panSpeed = 0; // 패닝 속도 입니다. 기본값(Float)은 1입니다.
+		controls.minDistance = 0.5; // 마우스 휠로 카메라 거리 조작시 최소 값. 기본값(Float)은 0 입니다.
+		controls.maxDistance = 10; // 마우스 휠로 카메라 거리 조작시 최대 값. 기본값(Float)은 무제한 입니다.
+		loader2.load('img/shiba/scene.gltf', function (gltf) {
+			scene2.add(gltf.scene);
+
+			function animate2() {
+				requestAnimationFrame(animate2)
+				renderer2.render(scene2, camera2);
+				gltf.scene.rotation.y -= 0.01;
+				controls.update();
+			}
+			animate2();
+		});
+
 	</script>
 
 	<!-- =================펫토피아 툴즈 모달====================================-->
@@ -784,14 +799,14 @@
 
 		// 엔터키를 눌렀을 때 검색 버튼 클릭 이벤트 실행
 		$("#searchNm").on(
-            "keypress",
-            function (event) {
-              if (event.which === 13) {
-                event.preventDefault();
-                $("#searchBtn").click();
-              }
-            }
-          );
+			"keypress",
+			function (event) {
+				if (event.which === 13) {
+					event.preventDefault();
+					$("#searchBtn").click();
+				}
+			}
+		);
 	</script>
 
 

@@ -76,8 +76,14 @@
             <h1><span style="font-weight: bold; color: rgb(201, 159, 240);">| </span>주문하기</h1>
             <!-- 주문정보 -->
             <div style="margin-top: 20px;">
-              <h5 style="margin-bottom: 15px;"><strong>수령자 정보</strong></h5><span style="font-size: 15px;"><span
-                  style="color: red;">*</span>가 붙은건 필수입력정보입니다</span>
+              <h5 style="margin-bottom: 15px; display: block;"><strong>수령자 정보</strong></h5><span
+                style="font-size: 15px;"><span style="color: red; display: inline-block;">*</span>가 붙은 항목은
+                필수입력정보입니다</span>
+              <button type="button" class="btn btn-info btn-sm"
+                style="float: right;width: auto; padding: 0px 5px; display: inline-block; margin: 1px 0px 10px;"
+                onclick="getUserShipInfo()">내정보
+                불러오기</button>
+
               <table class="table">
                 <colgroup>
                   <col width="40%">
@@ -482,6 +488,25 @@
         });
       };
 
+      function getUserShipInfo() {
+        $.ajax({
+          url: "userShip",
+          method: "get",
+          async: false,
+          contentType: 'application/json',
+          success: function (data) {
+            console.log(data);
+            post.value = data.post;
+            addr.value = data.addr;
+            addrDtl.value = data.addrDetail;
+            reciever.value = data.name;
+            tel.value = data.phone;
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        })
+      }
 
       function insertOrder() { //결재성공시 주문테이블에 해당 주문건 insert
         $.ajax({
@@ -513,9 +538,9 @@
           rcvPsn: reciever.value,
           rcvPhone: tel.value,
           rcvAddr: addr.value + addrref.value + addrDtl.value,
-          ttPrc: FinalPrice.innerText,
+          ttPrc: RemoveComma(FinalPrice.innerText),
           mthd: payMethod.innerText,
-          shipPrc: shipPrice.innerText,
+          shipPrc: RemoveComma(shipPrice.innerText),
           prcSt: 'PS2',
           shipSt: 'SS1',
           point: 0,
