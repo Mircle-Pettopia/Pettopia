@@ -55,14 +55,14 @@
 			<div class="board_title">
 				<strong style="font-size: 2rem; letter-spacing: -1px; color: #161616;">공지사항</strong>
 			</div>
-			<form th:action="@{/noticeInsert}" method="post"
+			<form th:action="@{/noticeInsert}" method="post" id="frmInsert"
 				th:object="${noticeVO}" enctype="multipart/form-data">
 				<div class="board_write_wrap">
 					<div class="board_write">
 						<div class="title">
 
 							<dl>
-								<dt>제목</dt>
+								<dt style="vertical-align: top;">제목</dt>
 								<dd>
 									<input type="hidden" name="meId" th:value="*{meId}" id="meId">
 									<input type="text" placeholder="제목 입력" id="title"
@@ -72,9 +72,9 @@
 						</div>
 						<div class="info">
 							<dl>
-								<dt>첨부파일</dt>
+								<dt style="vertical-align: top;">첨부파일</dt>
 								<dd>
-									<input type="file" id="files" th:field="*{partFile}">
+									<input style="font-size: 17px;" type="file" id="files" th:field="*{partFile}">
 								</dd>
 							</dl>
 						</div>
@@ -136,6 +136,30 @@
 				return result;
 			}
 			
+		    document.getElementById('insertBtn').addEventListener('click', function(event) {
+		        var title = document.getElementById('title').value;
+		        var contents = document.getElementById('contents').value;
+
+		        if (title.trim() === '' || contents.trim() === '') {
+		            event.preventDefault(); // 등록 버튼의 기본 동작(폼 제출) 막기
+
+		            Swal.fire({
+		                title: '경고',
+		                text: '빈칸을 모두 입력해주세요.',
+		                icon: 'error',
+		                confirmButtonColor: '#3085d6',
+		                confirmButtonText: '확인'
+		            });
+		        } else {
+		        	Swal.fire({
+		                  position: 'center',
+		                  icon: 'success',
+		                  title: '등록완료!',
+		                  showConfirmButton: false,
+		                  timer: 1000
+		                })
+		        }
+		    });
 
 		</script>
 		<!--===============================================================================================-->

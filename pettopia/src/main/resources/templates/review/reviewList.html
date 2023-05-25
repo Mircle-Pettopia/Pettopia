@@ -104,6 +104,10 @@ td, tr, th {
 .ck-editor__editable {
 	min-height: 300px;
 }
+
+.swal2-container {
+    z-index: 99999 !important;
+}
 </style>
 </head>
 <body>
@@ -120,7 +124,10 @@ td, tr, th {
 							</span>작성 가능한 리뷰
 							<span style="font-size: 25px; color: darkorange;" th:text="${#lists.size(reviewList)}"></span>
 						</h1>
-						<br /> <br />
+					<!-- 	   <h3 class="noonnu_font">
+                        <img src="img/free-icon.png" style="width: 35px;"> <sapn id="name" th:text="${review.name}" ></sapn>
+                        님의 관심상품목록 <img src="img/free-icon.png" style="width: 35px;"></h3> -->
+						<br />
 
 
 						<div th:if="${reviewList.empty}"
@@ -238,6 +245,16 @@ td, tr, th {
 				var contents = document.getElementById("editor").value;
 				var reviewStar = document
 						.querySelector('input[name="reviewStar"]:checked').value;
+				
+				  if (!reviewStar || !contents) {
+				        Swal.fire({
+				            icon: 'error',
+				            title: '입력 오류',
+				            text: '별점과 내용을 모두 입력해주세요.',
+				        });
+				        return;
+				    }
+				
 				$.ajax({
 					url : "reviewInsert",
 					method : "POST",
@@ -255,7 +272,7 @@ td, tr, th {
 							 Swal.fire({
 					                position: 'center',
 					                icon: 'success',
-					                title: '작성완료!',
+					                title: '작성완료',
 					                showConfirmButton: false,
 					                timer: 1000
 					              }).then(() => {
