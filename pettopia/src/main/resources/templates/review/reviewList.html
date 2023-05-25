@@ -138,8 +138,9 @@ td, tr, th {
 							style="width: 925px; height: 150px; font-weight: bold; border-bottom: solid 1px #ddd; margin: 25px 0 0px 0;">
 							<div class="title">
 								<a th:href="@{ProductDetail(prdtId=${review.prdtId})}"> <img
-									th:src="${review.prdtImg}"
-									style="width: 120px; height: 120px; float: left; margin-right: 20px;" /></a>
+									th:src="'download/'+${review.prdtImg}"
+									style="width: 120px; height: 120px; float: left; margin-right: 20px;" />
+									</a>
 							</div>
 							<div
 								style="width: 165px; float: left; margin-right: 20px; height: 120px; line-height: 100px;">구매
@@ -246,14 +247,7 @@ td, tr, th {
 				var reviewStar = document
 						.querySelector('input[name="reviewStar"]:checked').value;
 				
-				  if (!reviewStar || !contents) {
-				        Swal.fire({
-				            icon: 'error',
-				            title: '입력 오류',
-				            text: '별점과 내용을 모두 입력해주세요.',
-				        });
-				        return;
-				    }
+				
 				
 				$.ajax({
 					url : "reviewInsert",
