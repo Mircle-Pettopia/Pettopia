@@ -281,19 +281,19 @@ fieldset legend {
 
 	<!-- Product Detail -->
 	<section class="sec-product-detail bg0 p-t-65 p-b-60">
-		<div class="container">
+		<div class="container">	
 			<div class="row">
 				<div class="col-md-6 col-lg-7 p-b-30">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
 						<div class="wrap-slick3 flex-sb flex-w">
-								<div style="margin-right: 110px;" class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+								<div style="margin-right: 120px;" class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
 
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" th:each="Img : ${productImg}"
 									data-thumb="'download/' + ${Img.prdtImg}">
 									<div class="wrap-pic-w pos-relative">
-										<img th:src="'download/'+${Img.prdtImg}" style="width:500px; height:700px;">
+										<img th:src="'download/'+${Img.prdtImg}" style="width:700px; height:700px;">
 
 										<!-- <a
 											class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
@@ -454,13 +454,13 @@ fieldset legend {
     <a href="#" id="submitBtn" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail" th:classappend="${ProductDetail.interestY}?js-addedwish-detail:_ " data-tooltip="Add to Wishlist">
         <i class="zmdi zmdi-favorite" style="font-size: 45px;"></i>
     </a>
-    <div style="float:right;">
-							
-							 </div>
-							 
-</div>
-		<span class="mtext-106 cl2" id="prdtPrc">
-							 [[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>					
+    <div style="float:right;"></div>				 
+    <div>
+    <span class="mtext-106 cl2" id="prdtPrc">[[${#numbers.formatInteger(ProductDetail.prdtPrc, 3, 'COMMA') + '원'}]]</span>
+    </div>
+  		
+		</div>
+					
 							
 						</div>
 					</div>
@@ -992,7 +992,7 @@ fieldset legend {
 				    }
 				  });
 				}); */
-				$(document).ready(function() {
+/* 				$(document).ready(function() {
 					  $("#submitBtn").click(function(e) {
 					    e.preventDefault();
 					    var prdtId = $("#prdtId").val();
@@ -1017,6 +1017,7 @@ fieldset legend {
 							productInterestCount();
 					        },
 					        error: function(xhr) {
+					        	
 					          // Handle error
 					        }
 					      });
@@ -1039,9 +1040,68 @@ fieldset legend {
 					          // Handle error
 					        }
 					      });
-					    }
+					    } 
 					  });
-					});
+					}); */
+					$(document).ready(function() {
+						  $("#submitBtn").click(function(e) {
+						    e.preventDefault();
+						    var prdtId = $("#prdtId").val();
+						    var meId = $("#meId").val();
+						    var self = $(this); // Store a reference to the clicked element
+						    console.log(prdtId);
+						    console.log(meId);
+
+						    if (!meId) {
+						      // Display an alert and redirect to SignUp page
+						      swal("회원가입이 필요합니다.", "warning").then(function() {
+						        window.location.href = "/signUp"; // Replace "/SignUp" with the actual SignUp page URL
+						      });
+						      return; // Stop further execution of the code
+						    }
+
+						    if (self.hasClass("js-addedwish-detail")) {
+						      // Send an AJAX request to delete the product
+						      $.ajax({
+						        url: "deleteProduct",
+						        type: "GET",
+						        data: {
+						          prdtId: prdtId,
+						          meId: meId
+						        },
+						        success: function(response) {
+						          swal("관심상품 삭제 !", "success");
+						          self.removeClass('js-addedwish-detail');
+						          CartCount();
+						          productInterestCount();
+						        },
+						        error: function(xhr) {
+						          // Handle error
+						        }
+						      });
+						    } else {
+						      // Send an AJAX request to add to the wishlist
+						      $.ajax({
+						        url: "InsertProduct",
+						        type: "POST",
+						        data: {
+						          prdtId: prdtId,
+						          meId: meId
+						        },
+						        success: function(response) {
+						          swal("관심상품 등록 !", "success");
+						          self.addClass('js-addedwish-detail');
+						          CartCount();
+						          productInterestCount();
+						        },
+						        error: function(xhr) {
+						          // Handle error
+						        }
+						      });
+						    } 
+						  });
+						});
+
 			  //장바구니 등록
 /* 			  $(document).ready(function() {
   // When the form is submitted
@@ -1198,7 +1258,13 @@ fieldset legend {
 		      cnt: cnt,
 		      optDetaIds: optDetaIds.join(",")
 		    };
-			
+		    if (!meId) {
+			      // Display an alert and redirect to SignUp page
+			      swal("회원가입이 필요합니다.", "warning").then(function() {
+			        window.location.href = "/signUp"; // Replace "/SignUp" with the actual SignUp page URL
+			      });
+			      return; // Stop further execution of the code
+			    }
 		    $.ajax({
   		      url: "addCart", // Replace with the actual server-side script URL
   		      method: "POST",
