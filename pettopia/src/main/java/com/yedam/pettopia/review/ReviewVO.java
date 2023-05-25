@@ -11,6 +11,7 @@ public class ReviewVO {
 
 	private int reNo;			//후기번호
 	private String contents;	//내용
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date creatDt;		//작성날짜
 	private String point;		//별점
