@@ -383,8 +383,8 @@ td, tr, th{
 										</a>
 										<br/>
 										<div style="margin:0 auto; display:inline-block;">
-											<div id="orderCancel_" + ${data[i].ordrId}>
-												<button type="button" class="btn btnPush btnRed orderCancel" id="orderCancelBtn" onclick="cancelPay('${data[i].ordrId}', '${data[i].total}')">주문취소</button>
+											<div id="orderCancel_${data[i].ordrId}">
+												<button type="button" class="btn btnPush btnRed orderCancel" id="orderCancelBtn_${data[i].ordrId}" onclick="cancelPay('${data[i].ordrId}', '${data[i].total}')">주문취소</button>
 											</div>
 										</div>
 									</td>
@@ -405,12 +405,14 @@ td, tr, th{
 								</tr>
 								`;
 
+						console.log(data[i].shipSt);
+						console.log(data[i].prcSt);
 						if(data[i].prcSt == '결제대기' || data[i].prcSt == '결제취소') {
 							$('.shipSt').css('display', 'none');
 						};
 						
 						if(data[i].prcSt == '결제취소' || data[i].shipSt == '배송중' || data[i].shipSt == '배송완료'){
-							$('.orderCancel').css('visibility', 'hidden');
+							document.getElementById('orderCancelBtn_' + data[i].ordrId).style.visibility = 'hidden';
 						};
 					};
 
