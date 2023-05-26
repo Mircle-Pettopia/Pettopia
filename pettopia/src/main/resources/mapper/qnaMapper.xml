@@ -46,23 +46,32 @@
 		ORDER BY
 		  q.reg_dt desc
   </select>
+  
   <!--  문의 등록 -->
  <insert id="insertQnA" parameterType="QnaVO">
 INSERT INTO QNA (QST_NO, TITLE, ME_ID, CONTENT, QST_STATUS, PRDT_ID)
 VALUES ((SELECT TO_NUMBER(NVL(MAX(QST_NO), 0)) + 1 QST_NO FROM QNA), #{title}, #{meId}, #{content}, 'QS1', #{prdtId})
  </insert>
+ 
  <!-- 문의글 상세 -->
  <select id="QnaCheck" resultType="QnaVO">
-
- SELECT Q."QST_NO", Q."ME_ID", Q."TITLE", Q."REG_DT", Q."QST_IMG", Q."PRDT_ID", Q."QST_STATUS", Q."QST_YN", Q."CONTENT", M."NAME"
+ SELECT Q."QST_NO",
+ 		Q."ME_ID",
+ 		Q."TITLE",
+ 		Q."REG_DT",
+	    Q."QST_IMG",
+	    Q."PRDT_ID",
+        Q."QST_STATUS",
+        Q."QST_YN",
+        Q."CONTENT",
+        M."NAME"
 FROM "QNA" Q
 LEFT JOIN "MEMBER" M ON Q."ME_ID" = M."ME_ID" 
 WHERE Q."QST_NO" = #{qstNo}
  </select>
+ 
 <!-- 댓글 -->
 <select id="QnaReply" resultType="QnaVO">
-
-
 SELECT R.COMMENT_ID, R.ME_ID, R.SUBJECT, R.REG_DT, R.DIVISION, R.BO_NO, R.RE,
        M.NAME AS NAME
 FROM REPLY R
