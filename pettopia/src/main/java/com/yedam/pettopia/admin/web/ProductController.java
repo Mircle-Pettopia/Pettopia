@@ -35,6 +35,7 @@ public class ProductController {
 		model.addAttribute("stopSaleCnt", productService.stopSalePrdCount());
 		model.addAttribute("code", codeService.getCodes("ST"));		
 		model.addAttribute("lCatList", productService.selectLcate());
+		model.addAttribute("soldOut", productService.soldOutPrd());
 		return "admin/productMag";
 	}
 	

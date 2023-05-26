@@ -74,7 +74,6 @@ public class ProductServiceImpl implements ProductService {
 
 				try {
 					OptionVO[] list = objectMapper.readValue(vo.getOption(), OptionVO[].class);
-					System.out.println(list[0]);
 					for (int i = 0; i < list.length; i++) {
 						list[i].setPrdtId(vo.getPrdtId());
 						productMapper.insertOption(list[i]);
@@ -148,6 +147,7 @@ public class ProductServiceImpl implements ProductService {
 		map.put("allPrd", productMapper.insertPrdCount());
 		map.put("salePrd", productMapper.salePrdCount());
 		map.put("stopPrd", productMapper.stopSalePrdCount());
+		map.put("soldOut", productMapper.soldOutPrdCount());
 		return map;
 	}
 
@@ -161,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
 			if (vo.getImgMain() != null) {
 				// 기존 이미지 삭제
 				productMapper.deletePrdImg(vo);
-				
+
 				// 대표 이미지 업로드
 				String filename = FileUtil.fileupload(vo.getImgMain());
 
@@ -172,10 +172,10 @@ public class ProductServiceImpl implements ProductService {
 
 			// 이미지 업로드
 			if (vo.getImg() != null) {
-				
+
 				for (int i = 0; i < vo.getImg().length; i++) {
 					String filename = FileUtil.fileupload(vo.getImg()[i]);
-					
+
 					vo.setIsMain("N");
 					vo.setPrdtImg(filename);
 					result = productMapper.insertImg(vo);
@@ -194,7 +194,7 @@ public class ProductServiceImpl implements ProductService {
 					OptionVO[] list = objectMapper.readValue(vo.getOption(), OptionVO[].class);
 					for (int i = 0; i < list.length; i++) {
 						System.out.println("옵션이다" + list[i]);
-						if(list[i].getOptNm() == "") {
+						if (list[i].getOptNm() == "") {
 							break;
 						}
 						list[i].setPrdtId(vo.getPrdtId());
@@ -226,6 +226,11 @@ public class ProductServiceImpl implements ProductService {
 		map.put("zzimCnt", productMapper.zzimCnt(vo));
 		map.put("orderCnt", productMapper.orderCnt(vo));
 		return map;
+	}
+
+	@Override
+	public int soldOutPrd() {
+		return productMapper.soldOutPrdCount();
 	}
 
 }
