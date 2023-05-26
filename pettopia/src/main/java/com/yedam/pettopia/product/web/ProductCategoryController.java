@@ -42,10 +42,9 @@ public class ProductCategoryController {
 	@PostMapping("InsertProduct")
 	@ResponseBody
 	public String InsertProduct(@RequestParam String prdtId, @RequestParam String meId) {
-		// Process the submitted data and insert into the database
+
 		productService.insertProduct(prdtId, meId);
 
-		// Return a response message indicating success
 		return "Data submitted successfully";
 	}
 
@@ -132,11 +131,11 @@ public class ProductCategoryController {
 	    int cnt = Integer.parseInt((String) requestMap.get("cnt"));
 	    Object optDetaIdsObj = requestMap.get("optDetaIds");
 
-	    // Set optDetaIds as null if it is null or empty
+
 	    String optDetaIds = (optDetaIdsObj != null && !optDetaIdsObj.toString().isEmpty())
 	            ? optDetaIdsObj.toString() : null;
 
-	    requestMap.put("optDetaIds", optDetaIds); // Update the value in the requestMap
+	    requestMap.put("optDetaIds", optDetaIds);
 
 	    int result = productService.addCart(requestMap);
 
@@ -162,9 +161,6 @@ public class ProductCategoryController {
 
 		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
 
-		// 익명사용자도 페이지 접근이 가능하도록 진행하기
-		// 참고 :
-		// https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
 		if (context != "anonymousUser") {
 			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 			if (principal.getUser().getSignPath() == "company") {
@@ -201,11 +197,6 @@ public class ProductCategoryController {
 //		System.out.println("아이디 " + meId);
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
-
-		// 익명사용자도 페이지 접근이 가능하도록 진행하기
-		// 참고 :
-		// https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
 		if (context != "anonymousUser") {
 			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 			if (principal.getUser().getSignPath() == "company") {
@@ -225,15 +216,12 @@ public class ProductCategoryController {
 			;
 		}
 		;
-		System.out.println("상품디테일출력" + productService.selectProductDetail(product1VO));
+
 		model.addAttribute("ProductDetail", productService.selectProductDetail(product1VO));
-		System.out.println("옵션출력" + productService.selectOption(prdtId));
 		model.addAttribute("OptionList", productService.selectOption(prdtId));
-		System.out.println("옵션디테일" + productService.selectOptionDetail(prdtId));
 		model.addAttribute("optionDetailList", productService.selectOptionDetail(prdtId));
 		model.addAttribute("productImg", productService.selectImg(product1VO));
 		model.addAttribute("categories", productService.selectCategoryList());
-		System.out.println("강아지"+ productService.selectCategoryList());
 		return "product/productDetail";
 	}
 
@@ -265,16 +253,10 @@ public class ProductCategoryController {
 		System.out.println("인덱스투" + productService.selectPrdFList());
 		
 
-		// ======은애
-		// Authentication 객체를 통해 유저 정보를 가져올 수 있다.
+
 		String result = "";
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
-
-		// 익명사용자도 페이지 접근이 가능하도록 진행하기
-		// 참고 :
-		// https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=phrack&logNo=80202619173
 		if (context != "anonymousUser") {
 			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 			model.addAttribute("role", principal.getUser().getRole());
