@@ -250,25 +250,31 @@ fieldset legend {
 	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
 
+
+
+
 .edi img {
 	width: 80px;
 	height: 80px;
 	vertical-align: text-top;
+	float: left;
+	margin-right: 100px;
+	overflow: visual;
 }
 
-.edi .image {
-	display: inline-block;
-}
 
 .edi p {
 	display: inline-block;
-	line-height: 12px;
+	line-height: 20px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
-	max-width: 100px;
+	white-space: normal;
+	max-width: 600px;
+	word-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 4 ;
+        -webkit-box-orient: vertical;
 }
-
 .custom-position {
 	position: absolute;
 	left: 0px;
@@ -507,7 +513,7 @@ fieldset legend {
 												</div>
 
 												<div class="edi"
-													style="height: auto; float: left; line-height: 69px"
+													style="height: auto; float: left;"
 													th:utext="${written.contents }"></div>
 											</div>
 											<tr th:if="${selectWritten1.isEmpty()}">
