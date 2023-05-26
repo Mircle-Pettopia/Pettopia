@@ -112,25 +112,25 @@
 	
 	<!-- 은애!!!!!! -->
 	<select id="getBoardAllList" resultType="BoardVO">
-		SELECT * FROM ( SELECT ROWNUM AS rn, a.*
-		                FROM(
-	                            SELECT
-	                            	get_common(bo_type) bo_type,
-	                            	bo_no,
-	                                title,
-	                                subject,
-	                                reg_dt,
-	                                view_cnt
-	                            FROM board
-	                            WHERE 1=1
-	                            AND me_id = #{meId}
-	                            AND title LIKE '%' || #{keyword} || '%'
-	                            <if test="boType != null and !boType.equals('')">
-	                            AND bo_type = #{boType}
-	                            </if>
-	                            ORDER BY bo_no DESC) a
-		                )
-		WHERE RN between (#{page}-1)*10 and #{page}*10
+		SELECT * 
+		  FROM ( SELECT ROWNUM AS rn, a.*  
+		           FROM ( SELECT get_common(bo_type) bo_type,
+			               	     bo_no,
+			                     title,
+			                     subject,
+			                     reg_dt,
+			                     view_cnt
+			                FROM board
+			               WHERE 1=1
+			                 AND me_id = #{meId}
+			                 AND title LIKE '%' || #{keyword} || '%'
+			               <if test="boType != null and !boType.equals('')">
+			                 AND bo_type = #{boType}
+			               </if>
+			               ORDER BY bo_no DESC
+			             ) a
+		         ) 
+		 WHERE RN between (#{page}-1)*10 and #{page}*10
 	</select>
 	
 	<select id="boardAllMaxPage" resultType="int">
