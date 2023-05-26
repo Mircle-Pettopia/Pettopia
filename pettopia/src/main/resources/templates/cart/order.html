@@ -190,16 +190,16 @@
                   <span class="Pnumber" id="NavShipPrice"></span><span>원</span>
                   <br>
                   <hr>
-                  <span style="text-align: left;display: inline-block; float: left;">결재금액:</span>
+                  <span style="text-align: left;display: inline-block; float: left;">결제금액:</span>
                   <span class="Pnumber" id="NavFinalPrice"></span><span>원</span>
               </div>
               </h3>
               <hr>
-              <h4>결재방식:<span id="payMethod"></span></h4>
+              <h4>결제방식:<span id="payMethod"></span></h4>
               <br>
               <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
                 <label class="btn btn-secondary btncustom active"
-                  onclick="changePayMethod('html5_inicis.INIBillTst','카드결재(Inicis)')">
+                  onclick="changePayMethod('html5_inicis.INIBillTst','카드결제(Inicis)')">
                   <input type="radio" name="payment" id="option1" autocomplete="off" checked> 카드
                 </label>
                 <label class="btn btn-warning btncustom" onclick="changePayMethod('kakaopay','카카오페이')">
@@ -211,7 +211,7 @@
                 </label>
               </div>
               <hr>
-              <button class="btn-success btn-lg btn-block" onclick="requestPayCheckExc();">결재하기!</button>
+              <button class="btn-success btn-lg btn-block" onclick="requestPayCheckExc();">결제하기!</button>
             </div>
           </div>
 
@@ -228,7 +228,7 @@
       var pay_method = 'html5_inicis.INIBillTst'; //결재방법 기본값
       var UID = GetUser()
 
-      changePayMethod('html5_inicis.INIBillTst', '카드결재(Inicis)'); //결재방법을 바꾸는 함수 (API 입력될 PG Value, DB에 들어갈 결재수단이름)
+      changePayMethod('html5_inicis.INIBillTst', '카드결제(Inicis)'); //결재방법을 바꾸는 함수 (API 입력될 PG Value, DB에 들어갈 결재수단이름)
       function changePayMethod(method, name) { //카카오페이: kakaopay, 이니시스: html5_inicis.INIBillTst, 토스페이:tosspay
         pay_method = method;
         payMethod.innerText = name;
@@ -478,7 +478,7 @@
             Respon = rsp
             console.log(Respon);
             let orderCD = insertOrder();
-            Swal.fire('결재완료!', '주문번호:' + orderCD, 'success').then(() => {
+            Swal.fire('결제완료!', '주문번호:' + orderCD, 'success').then(() => {
               location.replace("mypage");
             })
           }

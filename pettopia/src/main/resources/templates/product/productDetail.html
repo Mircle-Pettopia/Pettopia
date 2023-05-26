@@ -758,10 +758,10 @@ fieldset legend {
 
 						    $self.on('click', function() {
 						      if ($self.hasClass('js-addedwish-detail')) {
-						        swal(nameProduct, "장바구니 삭제!", "success");
+						        swal(nameProduct, "알림", "장바구니에서 삭제되었습니다.");
 						        $self.removeClass('js-addedwish-detail');
 						      } else {
-						        swal(nameProduct, "장바구니 등록!", "success");
+						        swal(nameProduct, "알림", "장바구니에 등록되었습니다.");
 						        $self.addClass('js-addedwish-detail');
 						      }
 						    });
@@ -828,7 +828,7 @@ fieldset legend {
 						          meId: meId
 						        },
 						        success: function(response) {
-						          swal("관심상품 삭제 !", "success");
+						          swal("알림", "관심상품이 삭제 되었습니다.");
 						          self.removeClass('js-addedwish-detail');
 						          CartCount();
 						          productInterestCount();
@@ -847,7 +847,7 @@ fieldset legend {
 						          meId: meId
 						        },
 						        success: function(response) {
-						          swal("관심상품 등록 !", "success");
+						          swal("알림", "관심상품이 등록 되었습니다.");
 						          self.addClass('js-addedwish-detail');
 						          CartCount();
 						          productInterestCount();
