@@ -123,7 +123,7 @@ public class ProductCategoryController {
 		}
 	}
 	*/
-	
+	//장바구니 등록
 	@PostMapping("addCart")
 	public ResponseEntity<String> addCart(@RequestBody Map<String, Object> requestMap) {
 	    String meId = (String) requestMap.get("meId");
@@ -159,8 +159,6 @@ public class ProductCategoryController {
 		String result = "";
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// System.out.println("어느소속이냐=====" + principal.getUser().getSignPath());
-
 		if (context != "anonymousUser") {
 			PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
 			if (principal.getUser().getSignPath() == "company") {
@@ -191,10 +189,8 @@ public class ProductCategoryController {
 			@AuthenticationPrincipal PrincipalDetails principalDetails, Authentication authentication) {
 		System.out.println("상세조회 " + principalDetails);
 		String result = "";
-//		String meId= principalDetails.getUser().getMeId();
 		model.addAttribute("qnaList", qnaService.qnaAllList2(prdtId));
 		model.addAttribute("selectWritten1", productService.selectWrittenList1(prdtId));
-//		System.out.println("아이디 " + meId);
 		Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		if (context != "anonymousUser") {
@@ -217,40 +213,25 @@ public class ProductCategoryController {
 		}
 		;
 
-		model.addAttribute("ProductDetail", productService.selectProductDetail(product1VO));
-		model.addAttribute("OptionList", productService.selectOption(prdtId));
+		model.addAttribute("ProductDetail", productService.selectProductDetail(product1VO)); //상품디테일정보
+		model.addAttribute("OptionList", productService.selectOption(prdtId));				
 		model.addAttribute("optionDetailList", productService.selectOptionDetail(prdtId));
 		model.addAttribute("productImg", productService.selectImg(product1VO));
 		model.addAttribute("categories", productService.selectCategoryList());
 		return "product/productDetail";
 	}
-
-	/*
-	 * @GetMapping("productDetail1")
-	 * 
-	 * @ResponseBody public Map<String, Object> productDetail(String prdtId) {
-	 * return productService1.selectDetailList(prdtId); }
-	 */
-
-	/*
-	 * @GetMapping("index")
-	 * 
-	 * @ResponseBody public List<Product1VO> productList(){ return
-	 * productService.selectPrdAllList(); }
-	 */
-	
+	//검색
 	@GetMapping("searchPrd1")
 	@ResponseBody
 	public List<ProductVO> searchPrd(ProductVO vo){
 		return productService.searchList1(vo);
 	}
+	//메인페이지
 	@GetMapping("/")
 	public String productList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
 			Authentication authentication) {
 		model.addAttribute("index", productService.selectPrdAllList());
-		System.out.println("인덱스원" + productService.selectPrdAllList());
 		model.addAttribute("index2", productService.selectPrdFList());
-		System.out.println("인덱스투" + productService.selectPrdFList());
 		
 
 
