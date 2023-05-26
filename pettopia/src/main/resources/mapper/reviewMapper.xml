@@ -120,4 +120,19 @@
 	</select>
 	
 	
+		<select id="ordtIdOptionInfo" resultType="ReviewVO">
+		SELECT
+	        DISTINCT odo.ordt_id,
+		    LISTAGG(pod.opt_deta_nm, ',')
+		    WITHIN GROUP (ORDER BY opt_deta_nm)
+		    OVER(PARTITION BY odo.ordt_id) opt_deta_nm
+		FROM
+		    ORDER_DETAIL_OPTION odo JOIN PRODUCT_OPTION_DETAIL pod
+		ON
+		    odo.OPT_DETA_ID = pod.OPT_DETA_ID
+		WHERE
+		    ORDT_ID = #{ordtId}
+	</select>
+	
+	
 </mapper>

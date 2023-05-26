@@ -63,8 +63,8 @@ public class NoticeController {
 	//공지사항 수정 처리
 	@PostMapping("noticeUpdate")
 	public String noticeUpdate(NoticeVO noticeVO) {
-		noticeService.updateNotice(noticeVO);
-		return "redirect:noticeList";
+	    noticeService.updateNotice(noticeVO);
+	    return "redirect:/noticeDetail?noNo=" + noticeVO.getNoNo();
 	}
 	//공지사항 삭제 처리
 	@GetMapping("noticeDelete/{noNo}")

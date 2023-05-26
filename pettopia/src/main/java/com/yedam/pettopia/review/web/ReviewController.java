@@ -66,5 +66,11 @@ ReviewService reviewService;
 		return reviewService.writtenDetail(reviewVO);
 	}
 	
+	@GetMapping("rOption")
+	@ResponseBody
+	public ReviewVO option(String ordtId){
+		return reviewService.ordtIdOptionInfo(ordtId);
+	}
+	
 	
 }

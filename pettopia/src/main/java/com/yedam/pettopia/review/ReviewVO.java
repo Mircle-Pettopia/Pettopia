@@ -20,6 +20,11 @@ public class ReviewVO {
 	
 	private String ordtId;		//주문디테일번호
 	private String prdtId;		//상품ID
+	
+	private String sCatNm;		//소분류명
+	private String optDetaNm;	//옵션상세명
+	private String optNm;		//옵션명
+	private String optId;
 
 	
 	private String prdtNm;		//상품이름

@@ -149,6 +149,8 @@ td, tr, th {
 							<div
 								style="width: 300px; float: left; margin-right: 20px; height: 120px; line-height: 100px; text-align: center;">
 								<a th:href="@{/ProductDetail(prdtId=${review.prdtId})}">[[${review.prdtNm}]]</a>
+									<br/>
+							
 							</div>
 							<div style="height: 120px; float: left; line-height: 100px">
 								<!--  옵션 이름 들어가기-->
@@ -233,7 +235,7 @@ td, tr, th {
 			let did;
 			let parentDiv;
 
-			$("#reviewBtn").click(function(event) {
+			$(".write-review-btn").click(function(event) {
 				oid = $(this).data("orderid");
 				pid = $(this).data("prdtid");
 				$("#writemodal").modal("show");
@@ -281,6 +283,31 @@ td, tr, th {
 				});
 			}
 
+	/* 		let ordtId = ${reviewList.ordtId};
+			$.ajax({
+				url: "rOption",
+				method: "GET",
+				data : {ordtId : ordtId},
+				success: function(data){
+					if(data){
+						// ',' 기준으로 자르기
+						var beforeStr = data.optDetaNm;
+						var afterStr = beforeStr.split(',');
+						domId(ordtId + "_option").innerHTML = '(옵션)';
+						for(let i=0;i<afterStr.length;i++){
+							domId(ordtId + "_option").innerHTML += ` ${afterStr[i]} / `;
+						}
+					}
+				},
+				error : function(rej) {
+					console.log(rej);
+				}
+			});
+			
+			function domId(id) { //id로 태그찾기 압축용
+				return document.getElementById(id);
+			} */
+			/*]]>*/
 		</script>
 	</div>
 </body>
