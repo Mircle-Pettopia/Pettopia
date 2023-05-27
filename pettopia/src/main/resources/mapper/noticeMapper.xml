@@ -5,24 +5,25 @@
 <mapper namespace="com.yedam.pettopia.notice.mapper.NoticeMapper">
 
 
-	<!-- 전체조회 -->
+	
 	<select id="NoticeListWithPaging" resultType="NoticeVO">
-
-		SELECT no_no, title, rdate, view_cnt
-		FROM
-		(
-			SELECT notice.*, ROWNUM RN
-			FROM notice
-		<![CDATA[	WHERE ROWNUM <= #{pageNo} * #{amount}  ]]>
-			<if test="keyword != null">
-             AND title like '%'||#{keyword}||'%' 
-            </if>
-			ORDER BY no_no DESC
-		)
-		<![CDATA[
-		WHERE RN > (#{pageNo} - 1) * #{amount}
-  		]]>
-	</select>
+  SELECT no_no, title, rdate, view_cnt
+  FROM (
+    SELECT notice.*, ROWNUM RN
+    FROM (
+      SELECT *
+      FROM notice
+      WHERE 1=1
+      <if test="keyword != null">
+        AND title LIKE '%'||#{keyword}||'%'
+      </if>
+      ORDER BY no_no DESC
+    ) notice
+    <![CDATA[ WHERE ROWNUM <= #{pageNo} * #{amount}]]>
+  ) notice_with_rownum
+  WHERE RN > (#{pageNo} - 1) * #{amount}
+  ORDER BY no_no DESC
+</select>
 	
 	<!-- 데이터 전체 개수 -->
 	<select id="totalCount" resultType="int">
