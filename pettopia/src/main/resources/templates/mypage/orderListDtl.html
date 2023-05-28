@@ -278,6 +278,9 @@ td, th {
 								if(afterStr[2] == undefined){
 									afterStr[2] = "-";
 								}
+								if(afterStr[1] == undefined){
+									afterStr[1] = "-";
+								}
 
 								domId(ordtId + "_option").innerHTML += `옵션정보 : ${afterStr[0]} / ${afterStr[1]} / ${afterStr[2]}`;
 							}
