@@ -232,6 +232,13 @@
                             });
                             $('#pwModify').focus();
                             return;
+                        } else if (pwModifyChk.trim() === "") {
+                            Toast.fire({
+                                icon: 'warning',
+                                title: '수정할 비밀번호 확인이 입력되지 않았습니다.'
+                            });
+                            $('#pwModifyChk').focus()
+                            return;
                         } else if(!regPass.test(pwModify) || pwModify.length < 6){
                             Toast.fire({
                                 icon: 'warning',
