@@ -288,7 +288,7 @@
             $('#list input[type=checkbox]:checked').each(function (index, item) {
                 let tr = $(item).parent().parent().parent()[0];
                 check_prdtId += $(tr).attr("id") + ',';
-                console.log($(tr).attr("id"));
+                console.log(check_prdtId);
                 //   aaa,bbb,ccc
 
                 //삭제할건지 한 번 더 물어보고 진행하기
@@ -310,7 +310,8 @@
                             success : (data) => {
                                 //헤더에 개수 확인 가능한 함수
                                 productInterestCount();
-
+                                //tabel tbody 초기화
+                                $('#list').empty();
                                 //조회 함수
                                 interestList();
 
