@@ -33,5 +33,7 @@ public class ReviewVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date ordrDate;		//주문일
 	
+	private int prdtPrc;		//상품가격
+	
 	
 }

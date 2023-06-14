@@ -234,7 +234,6 @@
                     text: '동일한 비밀번호를 입력해주세요.',
                 });
                 return;
-                //이메일(meId) 유효성검사
             } else {
                 let data = {
                     meId: id,
@@ -290,6 +289,7 @@
 
         //중복검사 이벤트
         $('#meId').on('change', function (e) {
+        	//아이디 (이메일형식)
             let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
             let id = $('#meId').val();
             $.ajax({

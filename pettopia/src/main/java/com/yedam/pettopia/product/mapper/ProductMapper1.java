@@ -50,11 +50,14 @@ public interface ProductMapper1 {
 	public void deleteProduct(String prdtId, String meId);	
 	
 	//장바구니등록
-	
-	 int addCart(Map<String, Object> requestMap);
+	int addCart(Map<String, Object> requestMap);
 	 
 	// 상품 후기 리스트
 	public List<ReviewVO> selectWrittenList1(String prdtId);
+	public List<ReviewVO> reviewList();
+	
+	//인기상품목록
+	public List<ReviewVO> popularItemList();
 
 	// 검색 조회
 	public List<ProductVO> searchList1(ProductVO vo);

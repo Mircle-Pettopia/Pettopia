@@ -1,0 +1,39 @@
+.slide_wrapper{
+    position: relative;
+    width: 1200px;
+    margin: 0 auto;
+    height: 400px;
+    overflow: hidden;
+}
+
+.slides{
+    position: absolute;
+    left: 0;
+    top: 0;
+    /* text-align: center; */
+}
+
+.slides.animated{
+    transition: 0.5s ease-out;
+}
+
+.slides li{
+    width: 370px;
+    height: 400px;
+    /* background: #ccc; */
+    float: left;
+    list-style: none;
+    border: 1px solid rgb(233, 230, 230);
+    border-radius: 15px;
+}
+
+/* 막내빼고는 다른 li에 마진 */
+.slides li:not(:last-child){ 
+    margin-right: 30px;
+}
+
+.controls{
+    text-align: center;
+    margin-top: 50px;
+}
+

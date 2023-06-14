@@ -5,10 +5,16 @@
 <head>
 	<title>Pettopia</title>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/css/slides.css">
 </head>
 
 <body>
 	<div layout:fragment="content">
+		<style>
+			.edi img {
+				display: none !important;
+			}
+		</style>
 		<!-- Slider -->
 		<section class="section-slide">
 			<div class="wrap-slick1">
@@ -84,9 +90,9 @@
 		
 		<section class="bg0 p-t-23 p-b-140">
 			<div class="container">
-			<div style="margin-bottom:50px;">
+			<div style="margin-bottom:20px;">
 				<div class="p-b-10" style="display:inline-block;">
-					<h3 class="ltext-103 cl5">
+					<h3 class="ltext-103 cl5 noonnu_font">
 						신상품
 					</h3>
 				</div>
@@ -94,92 +100,35 @@
 					<div class="flex-w flex-l-m filter-tope-group m-tb-10"></div>
 					<a href="ProductCategory">
 						<div class="flex-w flex-c-m m-tb-10">
-							<div
+							<!-- <div
 								class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
 								<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
 								더보기
-							</div>
+							</div> -->
 						</div>
 					</a>
 				</div>
 				</div>
-
-
-					<!-- Search product -->
-
-
-					<!-- Filter -->
-
-				<!-- <div class="row isotope-grid">
-				<th:Each var="product" items="${list}" begin="0" end="5">
-					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item shoes">
-						Block2
-						<div class="block2">
-							<div class="block2-pic hov-img0">
-								<img src="images/product-09.jpg" alt="IMG-PRODUCT">
-
-								<a href="#"
-									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-									Quick View
-								</a>
-							</div>
-
-							<div class="block2-txt flex-w flex-t p-t-14">
-								<div class="block2-txt-child1 flex-col-l ">
-									<a href="product-detail.html"
-										class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-										${product.prdtNm}
-									</a>
-
-									<span class="stext-105 cl3">
-										>${product.prdtPrc}원
-									</span>
-								</div>
-
-								<div class="block2-txt-child2 flex-r p-t-3">
-									<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-										<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
-											alt="ICON">
-										<img class="icon-heart2 dis-block trans-04 ab-t-l"
-											src="images/icons/icon-heart-02.png" alt="ICON">
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					</th:Each>
-				</div> -->
 <!--  신상품 목록 시작 -->
 				<div class="row">
 					<div th:each="product : ${index}" class="col-sm-6 col-md-4 col-lg-3 p-b-35">
 						<div class="block2">
-							<!-- <div class="block2-pic hov-img0">
-								<img th:src="@{${product.image}}" />
-
-								<a href="#"
-									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-									Quick View
-								</a>
-							</div> -->
 							<div class="block2-pic hov-img0">
 								<img th:src="'download/'+${product.prdtImg}" style="height:330px; width:300px;">
 
 								<a  th:href="@{/ProductDetail(prdtId=${product.prdtId})}"
-								   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
-								   Quick View
+									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+									Quick View
 								</a>
 							</div>
-
 							<div class="block2-txt flex-w flex-t p-t-14">
 								<div class="block2-txt-child1 flex-col-l ">
 									<a th:href="@{/ProductDetail(prdtId=${product.prdtId})}"
 										class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 										<span th:text="${product.prdtNm}"></span>
 									</a>
-
 									<span class="stext-105 cl3" th:text="${#numbers.formatInteger(product.prdtPrc, 3, 'COMMA') + '원'}"></span>
 								</div>
-
 								<div class="block2-txt-child2 flex-r p-t-3">
 			<!-- 						<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
 										<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
@@ -192,35 +141,109 @@
 						</div>
 					</div>
 <!--  신상품 목록 끝 --></div>
-				<div style="margin-bottom:50px;">
-				<div class="p-b-10" style="display:inline-block;">
-					<h3 class="ltext-103 cl5">
-						전체상품
-					</h3>
-				</div>
+<!-- 인기상품 -->
+				<div style="margin-bottom:20px; margin-top: 50px;">
+					<div class="p-b-10" style="display:inline-block;">
+						<h3 class="ltext-103 cl5 noonnu_font">
+							인기상품
+						</h3>
+					</div>
 
-				<div class="flex-w flex-sb-m p-b-52" style="display:inline-block; float:right; position: relative; bottom:10px; right:150px;">
-					<div class="flex-w flex-l-m filter-tope-group m-tb-10"></div>
-					<a href="ProductCategory">
-						<div class="flex-w flex-c-m m-tb-10" >
-							<div
-								class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
-								<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-								더보기
-							</div>			
-						</div>
-					</a>
+					<div class="flex-w flex-sb-m p-b-52" style="display:inline-block; float:right; position: relative; bottom:10px; right:150px;">
+						<div class="flex-w flex-l-m filter-tope-group m-tb-10"></div>
+						<a href="ProductCategory">
+							<!-- <div class="flex-w flex-c-m m-tb-10" >
+								<div
+									class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+									<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+									더보기
+								</div>			
+							</div> -->
+						</a>
 						<!-- Search product -->
-					<div class="dis-none panel-search w-full p-t-10 p-b-15">
-						<div class="bor8 dis-flex p-l-15">
-							<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-								<i class="zmdi zmdi-search"></i>
-							</button>
-							<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="searchProduct"
-								placeholder="Search">
+						<div class="dis-none panel-search w-full p-t-10 p-b-15">
+							<div class="bor8 dis-flex p-l-15">
+								<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+									<i class="zmdi zmdi-search"></i>
+								</button>
+								<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="searchProduct"
+									placeholder="Search">
+							</div>
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div th:each="item : ${popular}" class="col-sm-6 col-md-4 col-lg-3 p-b-35">
+						<div class="block2">
+							<div class="block2-pic hov-img0">
+								<img th:src="'download/'+${item.prdtImg}" style="height:330px; width:300px;">
+								<a  th:href="@{/ProductDetail(prdtId=${item.prdtId})}"
+									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+									Quick View
+								</a>
+							</div>
+
+							<div class="block2-txt flex-w flex-t p-t-14">
+								<div class="block2-txt-child1 flex-col-l ">
+									<a th:href="@{/ProductDetail(prdtId=${item.prdtId})}"
+										class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+										<span th:text="${item.prdtNm}"></span>
+									</a>
+									<span class="stext-105 cl3" th:text="${#numbers.formatInteger(item.prdtPrc, 3, 'COMMA') + '원'}"></span>
+								</div>
+								<div class="star">
+									<fieldset style="border: none; margin: 10px 10px 0px 0px; padding: 0px;">
+										<input type="hidden" name="point" th:value="${item.point}" />
+										<span class="starR" th:classappend="${item.point}>=5?on"><input
+											type="hidden" value="5" /></span> <span class="starR"
+											th:classappend="${item.point}>=4?on"><input
+											type="hidden" value="4" /></span> <span class="starR"
+											th:classappend="${item.point}>=3?on"><input
+											type="hidden" value="3" /></span> <span class="starR"
+											th:classappend="${item.point}>=2?on"><input
+											type="hidden" value="2" /></span> <span class="starR"
+											th:classappend="${item.point}>=1?on"><input
+											type="hidden" value="1" />
+										</span>
+									</fieldset>
+									<span id="starRating" style="font-weight: bold">[[${item.point}]]</span>
+								</div>
+								<div class="block2-txt-child2 flex-r p-t-3"></div>
+							</div>
+						</div>
+					</div>
+<!--  인기상품 목록 끝 --></div>
+
+
+				<div style="margin-bottom:20px; margin-top: 50px;">
+					<div class="p-b-10" style="display:inline-block;">
+						<h3 class="ltext-103 cl5 noonnu_font">
+							전체상품
+						</h3>
+					</div>
+
+					<div class="flex-w flex-sb-m" style="display:inline-block; float:right;">
+						<div class="flex-w flex-l-m filter-tope-group m-tb-10"></div>
+						<a href="ProductCategory">
+							<div class="flex-w flex-c-m m-tb-10" >
+								<div
+									class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+									<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+									더보기
+								</div>			
+							</div>
+						</a>
+							<!-- Search product -->
+						<div class="dis-none panel-search w-full p-t-10 p-b-15">
+							<div class="bor8 dis-flex p-l-15">
+								<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+									<i class="zmdi zmdi-search"></i>
+								</button>
+								<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="searchProduct"
+									placeholder="Search">
+							</div>
+						</div>
+					</div>
 				</div>
 
 					<!-- Filter -->
@@ -241,8 +264,8 @@
 								<img th:src="'download/'+${product.prdtImg}" style="height:330px; width:300px;">
 
 								<a  th:href="@{/ProductDetail(prdtId=${product.prdtId})}"
-								   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
-								   Quick View
+									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+									Quick View
 								</a>
 							</div>
 
@@ -260,6 +283,74 @@
 						</div>
 					</div>
 <!-- 전체상품 목록 끝 --></div>
+
+<!--  리뷰목록 -->
+				<div style="margin-bottom:20px; margin-top: 50px;">
+					<div class="p-b-10" style="display:inline-block;">
+						<h3 class="ltext-103 cl5 noonnu_font">
+							최신리뷰
+						</h3>
+					</div>
+
+					<div class="flex-w flex-sb-m p-b-52" style="display:inline-block; float:right; position: relative; bottom:10px; right:150px;">
+						<div class="flex-w flex-l-m filter-tope-group m-tb-10"></div>
+						<!-- <a href="#">
+							<div class="flex-w flex-c-m m-tb-10" >
+								<div
+									class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+									<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+									더보기
+								</div>			
+							</div>
+						</a> -->
+						<!-- Search product -->
+						<div class="dis-none panel-search w-full p-t-10 p-b-15">
+							<div class="bor8 dis-flex p-l-15">
+								<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+									<i class="zmdi zmdi-search"></i>
+								</button>
+								<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="searchProduct"
+									placeholder="Search">
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="slide_wrapper">
+						<ul class="slides">
+							<li th:each="temp, i : ${reviewList}">
+								<div>
+									<a th:href="@{/ProductDetail(prdtId=${temp.prdtId})}">
+										<div style="text-align: center;">
+											<img th:src="'download/' + ${temp.prdtImg}" width="100%" height="300px" style="border-radius: 15px;">
+										</div>
+									</a>
+								</div>
+								<div class="star">
+									<fieldset style="border: none">
+										<input type="hidden" name="point" th:value="${temp.point}" />
+										<span class="starR" th:classappend="${temp.point}>=5?on"><input
+											type="hidden" value="5" /></span> <span class="starR"
+											th:classappend="${temp.point}>=4?on"><input
+											type="hidden" value="4" /></span> <span class="starR"
+											th:classappend="${temp.point}>=3?on"><input
+											type="hidden" value="3" /></span> <span class="starR"
+											th:classappend="${temp.point}>=2?on"><input
+											type="hidden" value="2" /></span> <span class="starR"
+											th:classappend="${temp.point}>=1?on"><input
+											type="hidden" value="1" />
+										</span>
+									</fieldset>
+									<span id="starRating" style="font-weight: bold">[[${temp.point}]]</span>
+								</div>
+								<div class="edi" style="width: 360px; margin-left: 10px;" th:utext="${temp.contents}"></div>
+							</li>
+						</ul>
+					</div>
+					<p class="controls">
+						<button class="prev">prev</button>
+						<button class="next">next</button>
+					</p>
+<!-- 리뷰목록 끝 -->
 
 				<!-- Load more -->
 <!-- 				<div class="flex-c-m flex-w w-full p-t-45">
@@ -396,6 +487,7 @@
 				</div>
 		</div>-->
 <!--end Model-->
+	<script src="/js/slides.js"></script>
 	<script th:inline="javascript">
 /*<![CDATA[*/
 		$().ready(() =>{

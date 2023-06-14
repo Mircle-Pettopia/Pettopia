@@ -276,3 +276,75 @@ padding: 8px 22px 5px 22px;
 	margin-right: 20px;
 	margin-left: 90px;
 }
+
+/* review */
+fieldset {
+	display: inline-block;
+	direction: rtl;
+	text-align: left;
+	border: 0;
+}
+
+fieldset legend {
+	text-align: right;
+}
+
+.starR {
+	background:
+		url("http://miuu227.godohosting.com/images/icon/ico_review.png")
+		no-repeat right 0;
+	background-size: auto 100%;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+
+.starR.on {
+	background-position: 0 0;
+}
+
+.star input[type="radio"] {
+	display: none;
+}
+
+.star label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+.star label:hover {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star label:hover ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star input[type="radio"]:checked ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.edi img {
+	width: 80px;
+	height: 80px;
+	vertical-align: text-top;
+	float: left;
+	margin-right: 10px;
+	overflow: visual;
+}
+
+.edi p {
+	display: inline-block;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	max-width: 389px;
+	word-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 4 ;
+        -webkit-box-orient: vertical;
+}

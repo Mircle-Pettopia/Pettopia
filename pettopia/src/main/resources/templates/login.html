@@ -18,6 +18,8 @@
     <!--sweeZt alert-->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+    <!--w3shcool-->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <style>
         .apiBnt{
@@ -34,6 +36,10 @@
         .signupAtag:focus {
             color: rgb(231, 107, 107) !important;
         }
+        #searchBtn{
+            background-color: rgb(149, 203, 248) !important;
+            border: 1px solid rgb(149, 205, 248);
+        }
     </style>
 </head>
 
@@ -48,14 +54,7 @@
                     <div class="card fat">
                         <div class="card-body">
                             <div class="card-title">Login</div>
-                            <!--<div th:if="${param.error}">
-                                <p th:text="${exception}" class="alert alert-danger"
-                                    style="font-size: 10px;"></p>
-                            </div>-->
-                            <!--th:action="@{/login_proc}"-->
                             <form  method="post" class="needs-validation" id="login-form"> <!--novalidate-->
-                                <!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
-                                
                                 <div class="form-group">
                                     <label for="meId">Email</label>
                                     <input id="meId" type="email" class="form-control" name="meId"
@@ -86,6 +85,51 @@
                                         로그인
                                     </button>
                                 </div>
+
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-sm btn-primary btn-block" id="searchBtn" onclick="document.getElementById('id01').style.display='block'">
+                                        아이디/비번찾기
+                                    </button>
+                                </div>
+
+                                <!--https://kimfk567.tistory.com/57-->
+                                <div id="id01" class="w3-modal">
+                                    <div class="w3-modal-content w3-card-4 w3-animate-zoom">
+                                        <header class="w3-container w3-blue"> 
+                                            <span onclick="document.getElementById('id01').style.display='none'" 
+                                            class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
+                                            <h2>아이디/비번찾기</h2>
+                                        </header>
+
+                                        <div class="w3-bar w3-border-bottom">
+                                            <button class="tablink w3-bar-item w3-button" onclick="openCity(event, 'id')" type="button">아이디찾기</button>
+                                            <button class="tablink w3-bar-item w3-button" onclick="openCity(event, 'pw')" type="button">비밀번호찾기</button>
+                                        </div>
+
+                                        <div id="id" class="w3-container w3tabs">
+                                            <h1>아이디찾기</h1>
+                                            <label class="">이름</label>
+                                            <input type="text">
+                                            <br/>
+                                            <label>연락처</label>
+                                            <input type="tel">
+                                            <br/>
+                                            <button type="button">확인</button>
+                                        </div>
+
+                                        <div id="pw" class="w3-container w3tabs">
+                                            <h1>Paris</h1>
+                                            <p>Paris is the capital of France.</p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        </div>
+
+                                        <div class="w3-container w3-light-grey w3-padding">
+                                            <button class="w3-button w3-right w3-white w3-border" type="button"
+                                            onclick="document.getElementById('id01').style.display='none'">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <button type="button" class="btn btn-sm btn-primary btn-block"
                                             style="background-color: rgb(139, 137, 137); border: 1px solid rgb(139, 137, 137);"
@@ -128,7 +172,24 @@
     <!-- 카카오 스크립트 -->
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
-    <script type="text/javascript" th:inline="javascript"> 
+    <script type="text/javascript" th:inline="javascript">
+        //아이디/비번찾기 모달
+        document.getElementsByClassName("tablink")[0].click();
+        function openCity(evt, cityName) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("w3tabs");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].classList.remove("w3-light-grey");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.classList.add("w3-light-grey");
+        };
+
+
         /*<![CDATA[*/
         let exception = /*[[${param.exception}]]*/
         let error = /*[[${param.error}]]*/
@@ -152,6 +213,20 @@
         $('#naverClick').on('click',()=>{
             location.href = "/oauth2/authorization/naver";
         });
+
+        $('#formBtn').on('click',()=>{
+            let id = $('#meId').val();
+            let pw = $('#password').val();
+            console.log(id);
+            console.log(pw);
+        });
+
+        $(document).ready(function() {
+        // required 속성 없애기
+        $("[name=meId]").attr("required" , false);
+        // required 속성 추가하기
+        $("[name=password]").attr("required" , false);
+    });
     </script>
 </body>
 

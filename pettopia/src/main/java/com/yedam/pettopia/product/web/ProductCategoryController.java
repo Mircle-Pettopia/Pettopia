@@ -232,7 +232,8 @@ public class ProductCategoryController {
 			Authentication authentication) {
 		model.addAttribute("index", productService.selectPrdAllList());
 		model.addAttribute("index2", productService.selectPrdFList());
-		
+		model.addAttribute("reviewList", productService.reviewList());
+		model.addAttribute("popular", productService.popularItemList());
 
 
 		String result = "";

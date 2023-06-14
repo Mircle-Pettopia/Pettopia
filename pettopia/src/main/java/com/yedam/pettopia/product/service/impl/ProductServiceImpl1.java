@@ -15,9 +15,6 @@ import com.yedam.pettopia.product.mapper.ProductMapper1;
 import com.yedam.pettopia.product.service.ProductService1;
 import com.yedam.pettopia.review.ReviewVO;
 
-
-
-
 @Service
 public class ProductServiceImpl1 implements ProductService1{
 	
@@ -120,6 +117,16 @@ public class ProductServiceImpl1 implements ProductService1{
 	public List<Product1VO> selectImg(Product1VO product1vo) {
 
 		return productMapper.selectImg(product1vo);
+	}
+
+	@Override
+	public List<ReviewVO> reviewList() {
+		return productMapper.reviewList();
+	}
+
+	@Override
+	public List<ReviewVO> popularItemList() {
+		return productMapper.popularItemList();
 	}
 
 }
